@@ -1044,6 +1044,7 @@ def build_latest_report_section(
     recommend_exists: bool,
     deep_entries: List[Tuple[str, str, List[Tuple[str, str]]]],
     quick_entries: List[Tuple[str, str, List[Tuple[str, str]]]],
+    paper_evidence_by_id: Dict[str, str],
 ) -> str:
     effective_label = (date_label or "").strip() or format_date_str(date_str)
     run_status = "成功" if recommend_exists else "未产出 recommend 文件（视为无结果）"
@@ -1079,8 +1080,11 @@ def build_latest_report_section(
     if deep_entries:
         for idx, (paper_id, title, tags) in enumerate(deep_entries, start=1):
             safe_title = (title or "").strip() or paper_id
+            evidence = (paper_evidence_by_id.get(str(paper_id).strip(), "") or "").strip()
             lines.append(f"{idx}. [{safe_title}]({build_docsify_id_href(paper_id)})  ")
             lines.append(f"   标签：{_format_entry_tags(tags)}")
+            if evidence:
+                lines.append(f"   evidence：{evidence}")
     else:
         lines.append("- 本次无精读推荐。")
     lines.append("")
@@ -1088,8 +1092,11 @@ def build_latest_report_section(
     if quick_entries:
         for idx, (paper_id, title, tags) in enumerate(quick_entries, start=1):
             safe_title = (title or "").strip() or paper_id
+            evidence = (paper_evidence_by_id.get(str(paper_id).strip(), "") or "").strip()
             lines.append(f"{idx}. [{safe_title}]({build_docsify_id_href(paper_id)})  ")
             lines.append(f"   标签：{_format_entry_tags(tags)}")
+            if evidence:
+                lines.append(f"   evidence：{evidence}")
     else:
         lines.append("- 本次无速读推荐。")
     lines.append("")
@@ -1840,6 +1847,7 @@ def build_home_readme_content(
     recommend_exists: bool,
     deep_entries: List[Tuple[str, str, List[Tuple[str, str]]]],
     quick_entries: List[Tuple[str, str, List[Tuple[str, str]]]],
+    paper_evidence_by_id: Dict[str, str],
 ) -> str:
     notice_path, promo_path = ensure_home_module_files(docs_dir)
     notice_md = _read_module_markdown(notice_path)
@@ -1851,6 +1859,7 @@ def build_home_readme_content(
         recommend_exists=recommend_exists,
         deep_entries=deep_entries,
         quick_entries=quick_entries,
+        paper_evidence_by_id=paper_evidence_by_id,
     )
 
     lines: List[str] = []
@@ -1872,6 +1881,7 @@ def sync_home_readme_from_day_report(
     recommend_exists: bool,
     deep_entries: List[Tuple[str, str, List[Tuple[str, str]]]],
     quick_entries: List[Tuple[str, str, List[Tuple[str, str]]]],
+    paper_evidence_by_id: Dict[str, str],
 ) -> str:
     home_readme = os.path.join(docs_dir, "README.md")
     # 首页由三段模块拼接：公告栏（独立 md）+ 本次日报 + 宣传栏（独立 md）
@@ -1883,6 +1893,7 @@ def sync_home_readme_from_day_report(
         recommend_exists=recommend_exists,
         deep_entries=deep_entries,
         quick_entries=quick_entries,
+        paper_evidence_by_id=paper_evidence_by_id,
     )
     with open(home_readme, "w", encoding="utf-8") as f:
         f.write(content)
@@ -2558,6 +2569,7 @@ def main() -> None:
         recommend_exists=recommend_exists,
         deep_entries=deep_entries,
         quick_entries=quick_entries,
+        paper_evidence_by_id=sidebar_evidence_by_id,
     )
     log(f"[OK] day report saved: {day_readme}")
     log(f"[OK] home README synced: {home_readme}")
