@@ -18,19 +18,25 @@
 
 ​	该项目的所有入口均在左下角小齿轮设置处，集成了所有的功能于一处。
 
-![image-20260309204252600](./image-20260309204252600.png)
+<p align="center">
+  <img src="./tutorial-entry-panel.png" alt="使用入口面板" width="88%" />
+</p>
 
 在后台管理面板，点击新增，可以创建词条。
 
 先在检索需求里面输入自己所需要检索的内容，然后点击生成候选之后，勾选需要的专题。
 
-![image-20260309204330219](./image-20260309204330219.png)
+<p align="center">
+  <img src="./tutorial-topic-setup.png" alt="专题创建与候选生成" width="88%" />
+</p>
 
 建议关键词保存**8个以内**，自然语言query保留**5个以内**。
 
 保存查询之后，记得再次保存词条，接着可以点击右侧的搜寻论文板块，进行论文的第一次查询。
 
-![image-20260309204719315](./image-20260309204719315.png)
+<p align="center">
+  <img src="./tutorial-first-search.png" alt="首次搜寻论文" width="88%" />
+</p>
 
 ---
 
@@ -50,16 +56,24 @@
 
 4、打开zotero设置，选中Actions & Tags进行配置
 
-![image-20260309205547584](./image-20260309205547584.png)
+<p align="center">
+  <img src="./tutorial-zotero-settings.png" alt="Zotero Actions and Tags 设置" width="88%" />
+</p>
 
 5、把该脚本下载下来，导入到zotero当中
 
-![image-20260309205752284](./image-20260309205752284.png)
+<p align="center">
+  <img src="./tutorial-zotero-script-download.png" alt="下载 Zotero 脚本" width="88%" />
+</p>
 
-![image-20260309210553849](./image-20260309210553849.png)
+<p align="center">
+  <img src="./tutorial-zotero-script-import.png" alt="导入 Zotero 脚本" width="88%" />
+</p>
 
 在导入并启用该脚本之后，点开网页的zotero页面，就可以去一键保存了
 
 
 
-![image-20260309210838431](./image-20260309210838431.png)
+<p align="center">
+  <img src="./tutorial-zotero-save-entry.png" alt="网页端一键保存到 Zotero" width="88%" />
+</p>
