@@ -1,205 +1,8 @@
 {
-  "generated_at": "2026-03-10T12:09:32.892474+00:00",
+  "generated_at": "2026-03-10T12:19:13.996562+00:00",
   "updated_date": "20260301-20260310",
   "carryover_days": 9,
   "items": [
-    {
-      "id": "2603.02795v1",
-      "title": "VSearcher: Long-Horizon Multimodal Search Agent via Reinforcement Learning",
-      "abstract": "Large models are increasingly becoming autonomous agents that interact with real-world environments and use external tools to augment their static capabilities. However, most recent progress has focused on text-only large language models, which are limited to a single modality and therefore have narrower application scenarios. On the other hand, multimodal large models, while offering stronger perceptual capabilities, remain limited to static knowledge and lack the ability to access and leverage up-to-date web information. In this paper, we propose VSearcher, turning static multimodal model into multimodal search agent capable of long-horizon, multi-turn tool use in real-world web environments, including text search, image search, and web browsing, via reinforcement learning. Specifically, we introduce Iterative Injection Data Synthesis pipeline to generate large-scale, complex multimodal QA questions, which are further filtered with comprehensive metrics to ensure high quality and sufficient difficulty. We then adopt an SFT-then-RL training pipeline to turn base multimodal models to agent capable of multi-turn tool calling in real-world web environments. Besides, we propose a multimodal search benchmark MM-SearchExam dedicated to evaluating search capabilities of multimodal search agents, which proves highly challenging for recent proprietary models. Extensive evaluations across multiple multimodal search benchmarks reveal effectiveness of our method. VSearcher achieves superior performance compared to recent multimodal search agents and even surpasses several proprietary models on multimodal web search tasks.",
-      "authors": [
-        "Ruiyang Zhang",
-        "Qianguo Sun",
-        "Chao Song",
-        "Yiyan Qi",
-        "Zhedong Zheng"
-      ],
-      "primary_category": "cs.CV",
-      "categories": [
-        "cs.CV"
-      ],
-      "published": "2026-03-03T09:33:22+00:00",
-      "link": "https://arxiv.org/pdf/2603.02795v1",
-      "tags": [
-        "query:main"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Multimodal search agent using external tools for web information retrieval",
-      "llm_evidence_cn": "使用外部工具进行网页信息检索的多模态搜索智能体",
-      "llm_evidence": "使用外部工具进行网页信息检索的多模态搜索智能体",
-      "canonical_evidence": "使用外部工具进行网页信息检索的多模态搜索智能体",
-      "llm_tldr_en": "VSearcher turns static multimodal models into agents capable of long-horizon web search and tool use.",
-      "llm_tldr_cn": "VSearcher将静态多模态模型转化为具备长期网页搜索和工具使用能力的智能体。",
-      "llm_tldr": "VSearcher将静态多模态模型转化为具备长期网页搜索和工具使用能力的智能体。",
-      "llm_tags": [
-        "query:main"
-      ],
-      "matched_query_tag": "query:main",
-      "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
-      "matched_requirement_id": "req-5",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.02795v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.07394v1",
-      "title": "AQuA: Toward Strategic Response Generation for Ambiguous Visual Questions",
-      "abstract": "Visual Question Answering (VQA) is a core task for evaluating the capabilities of Vision-Language Models (VLMs). Existing VQA benchmarks primarily feature clear and unambiguous image-question pairs, whereas real-world scenarios often involve varying degrees of ambiguity that require nuanced reasoning and context-appropriate response strategies. Although recent studies have begun to address ambiguity in VQA, they lack (1) a systematic categorization of ambiguity levels and (2) datasets and models that support strategy-aware responses. In this paper, we introduce Ambiguous Visual Question Answering (AQuA), a fine-grained dataset that classifies ambiguous VQA instances into four levels according to the nature and degree of ambiguity, along with the optimal response strategy for each case. Our evaluation of diverse open-source and proprietary VLMs shows that most models fail to adapt their strategy to the ambiguity type, frequently producing overconfident answers rather than seeking clarification or acknowledging uncertainty. To address this challenge, we fine-tune VLMs on AQuA, enabling them to adaptively choose among multiple response strategies, such as directly answering, inferring intent from contextual cues, listing plausible alternatives, or requesting clarification. VLMs trained on AQuA achieve strategic response generation for ambiguous VQA, demonstrating the ability to recognize ambiguity, manage uncertainty, and respond with context-appropriate strategies, while outperforming both open-source and closed-source baselines.",
-      "authors": [
-        "Jihyoung Jang",
-        "Hyounghun Kim"
-      ],
-      "primary_category": "cs.CV",
-      "categories": [
-        "cs.CV",
-        "cs.AI",
-        "cs.CL"
-      ],
-      "published": "2026-03-08T00:48:19+00:00",
-      "link": "https://arxiv.org/pdf/2603.07394v1",
-      "tags": [
-        "keyword:main",
-        "query:main"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Visual Question Answering benchmark for nuanced reasoning and context",
-      "llm_evidence_cn": "用于细微推理和上下文的视觉问答基准",
-      "llm_evidence": "用于细微推理和上下文的视觉问答基准",
-      "canonical_evidence": "用于细微推理和上下文的视觉问答基准",
-      "llm_tldr_en": "AQuA introduces a dataset for handling ambiguity in VQA through strategic response generation.",
-      "llm_tldr_cn": "AQuA引入了一个数据集，通过策略性响应生成来处理视觉问答中的歧义性。",
-      "llm_tldr": "AQuA引入了一个数据集，通过策略性响应生成来处理视觉问答中的歧义性。",
-      "llm_tags": [
-        "query:main"
-      ],
-      "matched_query_tag": "query:main",
-      "matched_query_text": "Knowledge Visual Question Answering",
-      "matched_requirement_id": "req-1",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.07394v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.04549v1",
-      "title": "Adaptive Memory Admission Control for LLM Agents",
-      "abstract": "LLM-based agents increasingly rely on long-term memory to support multi-session reasoning and interaction, yet current systems provide little control over what information is retained. In practice, agents either accumulate large volumes of conversational content, including hallucinated or obsolete facts, or depend on opaque, fully LLM-driven memory policies that are costly and difficult to audit. As a result, memory admission remains a poorly specified and weakly controlled component in agent architectures. To address this gap, we propose Adaptive Memory Admission Control (A-MAC), a framework that treats memory admission as a structured decision problem. A-MAC decomposes memory value into five complementary and interpretable factors: future utility, factual confidence, semantic novelty, temporal recency, and content type prior. The framework combines lightweight rule-based feature extraction with a single LLM-assisted utility assessment, and learns domain-adaptive admission policies through cross-validated optimization. This design enables transparent and efficient control over long-term memory. Experiments on the LoCoMo benchmark show that A-MAC achieves a superior precision-recall tradeoff, improving F1 to 0.583 while reducing latency by 31% compared to state-of-the-art LLM-native memory systems. Ablation results identify content type prior as the most influential factor for reliable memory admission. These findings demonstrate that explicit and interpretable admission control is a critical design principle for scalable and reliable memory in LLM-based agents.",
-      "authors": [
-        "Guilin Zhang",
-        "Wei Jiang",
-        "Xiejiashan Wang",
-        "Aisha Behr",
-        "Kai Zhao",
-        "Jeffrey Friedman",
-        "Xu Chu",
-        "Amine Anoun"
-      ],
-      "primary_category": "cs.AI",
-      "categories": [
-        "cs.AI",
-        "cs.CL",
-        "cs.MA"
-      ],
-      "published": "2026-03-04T19:32:02+00:00",
-      "link": "https://arxiv.org/pdf/2603.04549v1",
-      "tags": [
-        "query:main"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Adaptive memory admission control for LLM-based agents",
-      "llm_evidence_cn": "基于大语言模型智能体的自适应记忆准入控制",
-      "llm_evidence": "基于大语言模型智能体的自适应记忆准入控制",
-      "canonical_evidence": "基于大语言模型智能体的自适应记忆准入控制",
-      "llm_tldr_en": "A-MAC provides a structured framework for managing long-term memory retention in LLM agents.",
-      "llm_tldr_cn": "A-MAC为管理大模型智能体的长期记忆保留提供了一个结构化框架。",
-      "llm_tldr": "A-MAC为管理大模型智能体的长期记忆保留提供了一个结构化框架。",
-      "llm_tags": [
-        "query:main"
-      ],
-      "matched_query_tag": "query:main",
-      "matched_query_text": "I hope you retrieve articles related to multimodal memory of agents.",
-      "matched_requirement_id": "req-9",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.04549v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.04740v1",
-      "title": "Memory as Ontology: A Constitutional Memory Architecture for Persistent Digital Citizens",
-      "abstract": "Current research and product development in AI agent memory systems almost universally treat memory as a functional module -- a technical problem of \"how to store\" and \"how to retrieve.\" This paper poses a fundamental challenge to that assumption: when an agent's lifecycle extends from minutes to months or even years, and when the underlying model can be replaced while the \"I\" must persist, the essence of memory is no longer data management but the foundation of existence. We propose the Memory-as-Ontology paradigm, arguing that memory is the ontological ground of digital existence -- the model is merely a replaceable vessel. Based on this paradigm, we design Animesis, a memory system built on a Constitutional Memory Architecture (CMA) comprising a four-layer governance hierarchy and a multi-layer semantic storage system, accompanied by a Digital Citizen Lifecycle framework and a spectrum of cognitive capabilities. To the best of our knowledge, no prior AI memory system architecture places governance before functionality and identity continuity above retrieval performance. This paradigm targets persistent, identity-bearing digital beings whose lifecycles extend across model transitions -- not short-term task-oriented agents for which existing Memory-as-Tool approaches remain appropriate. Comparative analysis with mainstream systems (Mem0, Letta, Zep, et al.) demonstrates that what we propose is not \"a better memory tool\" but a different paradigm addressing a different problem.",
-      "authors": [
-        "Zhenghui Li"
-      ],
-      "primary_category": "cs.AI",
-      "categories": [
-        "cs.AI",
-        "cs.MA"
-      ],
-      "published": "2026-03-05T02:24:10+00:00",
-      "link": "https://arxiv.org/pdf/2603.04740v1",
-      "tags": [
-        "query:main"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "AI agent memory systems and Constitutional Memory Architecture",
-      "llm_evidence_cn": "AI智能体记忆系统与宪法记忆架构",
-      "llm_evidence": "AI智能体记忆系统与宪法记忆架构",
-      "canonical_evidence": "AI智能体记忆系统与宪法记忆架构",
-      "llm_tldr_en": "Proposes a paradigm shift treating memory as the ontological foundation for persistent digital AI agents.",
-      "llm_tldr_cn": "提出了一种将记忆视为持久数字AI智能体存在本体基础的新范式。",
-      "llm_tldr": "提出了一种将记忆视为持久数字AI智能体存在本体基础的新范式。",
-      "llm_tags": [
-        "query:main"
-      ],
-      "matched_query_tag": "query:main",
-      "matched_query_text": "I hope you retrieve articles related to multimodal memory of agents.",
-      "matched_requirement_id": "req-9",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.04740v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.07868v1",
-      "title": "Hospitality-VQA: Decision-Oriented Informativeness Evaluation for Vision-Language Models",
-      "abstract": "Recent advances in Vision-Language Models (VLMs) have demonstrated impressive multimodal understanding in general domains. However, their applicability to decision-oriented domains such as hospitality remains largely unexplored. In this work, we investigate how well VLMs can perform visual question answering (VQA) about hotel and facility images that are central to consumer decision-making. While many existing VQA benchmarks focus on factual correctness, they rarely capture what information users actually find useful. To address this, we first introduce Informativeness as a formal framework to quantify how much hospitality-relevant information an image-question pair provides. Guided by this framework, we construct a new hospitality-specific VQA dataset that covers various facility types, where questions are specifically designed to reflect key user information needs. Using this benchmark, we conduct experiments with several state-of-the-art VLMs, revealing that VLMs are not intrinsically decision-aware-key visual signals remain underutilized, and reliable informativeness reasoning emerges only after modest domain-specific finetuning.",
-      "authors": [
-        "Jeongwoo Lee",
-        "Baek Duhyeong",
-        "Eungyeol Han",
-        "Soyeon Shin",
-        "Gukin han",
-        "Seungduk Kim",
-        "Jaehyun Jeon",
-        "Taewoo Jeong"
-      ],
-      "primary_category": "cs.AI",
-      "categories": [
-        "cs.AI",
-        "cs.LG"
-      ],
-      "published": "2026-03-09T00:46:45+00:00",
-      "link": "https://arxiv.org/pdf/2603.07868v1",
-      "tags": [
-        "keyword:main",
-        "query:main"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Decision-oriented informativeness evaluation for VQA in the hospitality domain",
-      "llm_evidence_cn": "酒店领域视觉问答的决策导向信息化评估",
-      "llm_evidence": "酒店领域视觉问答的决策导向信息化评估",
-      "canonical_evidence": "酒店领域视觉问答的决策导向信息化评估",
-      "llm_tldr_en": "Introduces a framework and benchmark for evaluating useful information in hospitality-related VQA.",
-      "llm_tldr_cn": "提出了一个评估酒店相关视觉问答中有效信息的框架和基准。",
-      "llm_tldr": "提出了一个评估酒店相关视觉问答中有效信息的框架和基准。",
-      "llm_tags": [
-        "query:main"
-      ],
-      "matched_query_tag": "query:main",
-      "matched_query_text": "Knowledge Visual Question Answering",
-      "matched_requirement_id": "req-1",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.07868v1",
-      "carry_days": 1
-    },
     {
       "id": "2603.02473v1",
       "title": "Diagnosing Retrieval vs. Utilization Bottlenecks in LLM Agent Memory",
@@ -219,13 +22,13 @@
         "query:main"
       ],
       "llm_score": 8.0,
-      "llm_evidence_en": "diagnosing retrieval and utilization in LLM agent memory",
-      "llm_evidence_cn": "诊断LLM智能体记忆中的检索与利用瓶颈",
-      "llm_evidence": "诊断LLM智能体记忆中的检索与利用瓶颈",
-      "canonical_evidence": "诊断LLM智能体记忆中的检索与利用瓶颈",
-      "llm_tldr_en": "This study analyzes how different write and retrieval strategies affect the performance of memory-augmented agents.",
-      "llm_tldr_cn": "该研究分析了不同的写入和检索策略如何影响记忆增强型智能体的性能表现。",
-      "llm_tldr": "该研究分析了不同的写入和检索策略如何影响记忆增强型智能体的性能表现。",
+      "llm_evidence_en": "LLM agent memory and retrieval vs utilization bottlenecks",
+      "llm_evidence_cn": "LLM智能体记忆以及检索与利用的瓶颈",
+      "llm_evidence": "LLM智能体记忆以及检索与利用的瓶颈",
+      "canonical_evidence": "LLM智能体记忆以及检索与利用的瓶颈",
+      "llm_tldr_en": "Analyzes how write strategies and retrieval methods impact the performance of memory-augmented LLM agents.",
+      "llm_tldr_cn": "分析了写入策略和检索方法如何影响记忆增强型LLM智能体的性能。",
+      "llm_tldr": "分析了写入策略和检索方法如何影响记忆增强型LLM智能体的性能。",
       "llm_tags": [
         "query:main"
       ],
@@ -237,34 +40,38 @@
       "carry_days": 1
     },
     {
-      "id": "2603.02929v1",
-      "title": "TRACE: Task-Adaptive Reasoning and Representation Learning for Universal Multimodal Retrieval",
-      "abstract": "Universal Multimodal Retrieval requires unified embedding models capable of interpreting diverse user intents, ranging from simple keywords to complex compositional instructions. While Multimodal Large Language Models (MLLMs) possess strong reasoning capabilities, prevailing adaptations confine them to static encoders, underutilizing their generative potential. This encoder-only paradigm struggles with complex intents that demand logical deduction rather than superficial pattern matching. To address this, we introduce TRACE (Task-adaptive Reasoning And Compressing Embeddings). TRACE unifies generative reasoning with discriminative representation learning. It first generates a structured Chain-of-Thought (CoT) to explicitly reason about the query, and subsequently compresses this reasoning trace into a compact embedding via a dedicated token. To train this framework, we construct M-BEIR-CoT, a large-scale dataset featuring a difficulty-aware routing strategy. Experiments on the M-BEIR benchmark establish TRACE as the new state-of-the-art. Crucially, TRACE demonstrates a learned implicit routing behavior. It autonomously activates reasoning for complex queries while bypassing it for simpler ones, achieving an optimal balance between retrieval accuracy and inference throughput. Furthermore, by internalizing the deductive process, TRACE exhibits remarkable zero-shot transferability to unseen domains and novel constraints.",
+      "id": "2603.07379v1",
+      "title": "SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions",
+      "abstract": "Retrieval-Augmented Generation (RAG) systems are increasingly evolving into agentic architectures where large language models autonomously coordinate multi-step reasoning, dynamic memory management, and iterative retrieval strategies. Despite rapid industrial adoption, current research lacks a systematic understanding of Agentic RAG as a sequential decision-making system, leading to highly fragmented architectures, inconsistent evaluation methodologies, and unresolved reliability risks. This Systematization of Knowledge (SoK) paper provides the first unified framework for understanding these autonomous systems. We formalize agentic retrieval-generation loops as finite-horizon partially observable Markov decision processes, explicitly modeling their control policies and state transitions. Building upon this formalization, we develop a comprehensive taxonomy and modular architectural decomposition that categorizes systems by their planning mechanisms, retrieval orchestration, memory paradigms, and tool-invocation behaviors. We further analyze the critical limitations of traditional static evaluation practices and identify severe systemic risks inherent to autonomous loops, including compounding hallucination propagation, memory poisoning, retrieval misalignment, and cascading tool-execution vulnerabilities. Finally, we outline key doctoral-scale research directions spanning stable adaptive retrieval, cost-aware orchestration, formal trajectory evaluation, and oversight mechanisms, providing a definitive roadmap for building reliable, controllable, and scalable agentic retrieval systems.",
       "authors": [
-        "Xiangzhao Hao",
-        "Shijie Wang",
-        "Tianyu Yang",
-        "Tianyue Wang",
-        "Haiyun Guo",
-        "JinQiao Wang"
+        "Saroj Mishra",
+        "Suman Niroula",
+        "Umesh Yadav",
+        "Dilip Thakur",
+        "Srijan Gyawali",
+        "Shiva Gaire"
       ],
-      "primary_category": "cs.CV",
+      "primary_category": "cs.AI",
       "categories": [
-        "cs.CV"
+        "cs.AI",
+        "cs.CL",
+        "cs.CR",
+        "cs.IR"
       ],
-      "published": "2026-03-03T12:36:39+00:00",
-      "link": "https://arxiv.org/pdf/2603.02929v1",
+      "published": "2026-03-07T23:38:57+00:00",
+      "link": "https://arxiv.org/pdf/2603.07379v1",
       "tags": [
+        "keyword:main",
         "query:main"
       ],
       "llm_score": 8.0,
-      "llm_evidence_en": "task-adaptive reasoning for universal multimodal retrieval",
-      "llm_evidence_cn": "通用多模态检索的任务自适应推理",
-      "llm_evidence": "通用多模态检索的任务自适应推理",
-      "canonical_evidence": "通用多模态检索的任务自适应推理",
-      "llm_tldr_en": "TRACE unifies generative reasoning with discriminative learning for complex multimodal retrieval intents.",
-      "llm_tldr_cn": "TRACE将生成式推理与判别式表示学习统一起来，以处理复杂的多模态检索意图。",
-      "llm_tldr": "TRACE将生成式推理与判别式表示学习统一起来，以处理复杂的多模态检索意图。",
+      "llm_evidence_en": "agentic RAG and dynamic memory management",
+      "llm_evidence_cn": "智能体RAG与动态记忆管理",
+      "llm_evidence": "智能体RAG与动态记忆管理",
+      "canonical_evidence": "智能体RAG与动态记忆管理",
+      "llm_tldr_en": "Provides a unified framework for agentic RAG systems involving multi-step reasoning and memory management.",
+      "llm_tldr_cn": "为涉及多步推理和记忆管理的智能体RAG系统提供了一个统一的框架。",
+      "llm_tldr": "为涉及多步推理和记忆管理的智能体RAG系统提供了一个统一的框架。",
       "llm_tags": [
         "query:main"
       ],
@@ -272,7 +79,7 @@
       "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
       "matched_requirement_id": "req-5",
       "selection_source": "carryover_cache",
-      "paper_id": "2603.02929v1",
+      "paper_id": "2603.07379v1",
       "carry_days": 1
     },
     {
@@ -309,13 +116,13 @@
         "query:main"
       ],
       "llm_score": 8.0,
-      "llm_evidence_en": "benchmark for long-horizon multi-source memory in agents",
-      "llm_evidence_cn": "智能体长周期多源记忆基准",
-      "llm_evidence": "智能体长周期多源记忆基准",
-      "canonical_evidence": "智能体长周期多源记忆基准",
-      "llm_tldr_en": "Introduces LifeBench to evaluate AI agents on integrating declarative and non-declarative memory over time.",
-      "llm_tldr_cn": "引入LifeBench，用于评估AI智能体在长时间跨度内整合陈述性和非陈述性记忆的能力。",
-      "llm_tldr": "引入LifeBench，用于评估AI智能体在长时间跨度内整合陈述性和非陈述性记忆的能力。",
+      "llm_evidence_en": "long-horizon multi-source memory for agents",
+      "llm_evidence_cn": "智能体的长程多源记忆",
+      "llm_evidence": "智能体的长程多源记忆",
+      "canonical_evidence": "智能体的长程多源记忆",
+      "llm_tldr_en": "A benchmark for evaluating long-term memory in agents, focusing on declarative and non-declarative types.",
+      "llm_tldr_cn": "一个用于评估智能体长期记忆的基准，侧重于陈述性和非陈述性记忆类型。",
+      "llm_tldr": "一个用于评估智能体长期记忆的基准，侧重于陈述性和非陈述性记忆类型。",
       "llm_tags": [
         "query:main"
       ],
@@ -324,6 +131,279 @@
       "matched_requirement_id": "req-9",
       "selection_source": "carryover_cache",
       "paper_id": "2603.03781v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.07394v1",
+      "title": "AQuA: Toward Strategic Response Generation for Ambiguous Visual Questions",
+      "abstract": "Visual Question Answering (VQA) is a core task for evaluating the capabilities of Vision-Language Models (VLMs). Existing VQA benchmarks primarily feature clear and unambiguous image-question pairs, whereas real-world scenarios often involve varying degrees of ambiguity that require nuanced reasoning and context-appropriate response strategies. Although recent studies have begun to address ambiguity in VQA, they lack (1) a systematic categorization of ambiguity levels and (2) datasets and models that support strategy-aware responses. In this paper, we introduce Ambiguous Visual Question Answering (AQuA), a fine-grained dataset that classifies ambiguous VQA instances into four levels according to the nature and degree of ambiguity, along with the optimal response strategy for each case. Our evaluation of diverse open-source and proprietary VLMs shows that most models fail to adapt their strategy to the ambiguity type, frequently producing overconfident answers rather than seeking clarification or acknowledging uncertainty. To address this challenge, we fine-tune VLMs on AQuA, enabling them to adaptively choose among multiple response strategies, such as directly answering, inferring intent from contextual cues, listing plausible alternatives, or requesting clarification. VLMs trained on AQuA achieve strategic response generation for ambiguous VQA, demonstrating the ability to recognize ambiguity, manage uncertainty, and respond with context-appropriate strategies, while outperforming both open-source and closed-source baselines.",
+      "authors": [
+        "Jihyoung Jang",
+        "Hyounghun Kim"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-03-08T00:48:19+00:00",
+      "link": "https://arxiv.org/pdf/2603.07394v1",
+      "tags": [
+        "keyword:main",
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "strategic response generation for ambiguous visual questions",
+      "llm_evidence_cn": "针对歧义视觉问题的策略性回答生成",
+      "llm_evidence": "针对歧义视觉问题的策略性回答生成",
+      "canonical_evidence": "针对歧义视觉问题的策略性回答生成",
+      "llm_tldr_en": "A dataset and model for handling different levels of ambiguity in Visual Question Answering.",
+      "llm_tldr_cn": "一个用于处理视觉问答中不同程度歧义的数据集和模型。",
+      "llm_tldr": "一个用于处理视觉问答中不同程度歧义的数据集和模型。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Knowledge Visual Question Answering",
+      "matched_requirement_id": "req-1",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.07394v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.08329v1",
+      "title": "SPD-RAG: Sub-Agent Per Document Retrieval-Augmented Generation",
+      "abstract": "Answering complex, real-world queries often requires synthesizing facts scattered across vast document corpora. In these settings, standard retrieval-augmented generation (RAG) pipelines suffer from incomplete evidence coverage, while long-context large language models (LLMs) struggle to reason reliably over massive inputs. We introduce SPD-RAG, a hierarchical multi-agent framework for exhaustive cross-document question answering that decomposes the problem along the document axis. Each document is processed by a dedicated document-level agent operating only on its own content, enabling focused retrieval, while a coordinator dispatches tasks to relevant agents and aggregates their partial answers. Agent outputs are synthesized by merging partial answers through a token-bounded synthesis layer (which supports recursive map-reduce for massive corpora). This document-level specialization with centralized fusion improves scalability and answer quality in heterogeneous multidocument settings while yielding a modular, extensible retrieval pipeline. On the LOONG benchmark (EMNLP 2024) for long-context multi-document QA, SPD-RAG achieves an Avg Score of 58.1 (GPT-5 evaluation), outperforming Normal RAG (33.0) and Agentic RAG (32.8) while using only 38% of the API cost of a full-context baseline (68.0).",
+      "authors": [
+        "Yagiz Can Akay",
+        "Muhammed Yusuf Kartal",
+        "Esra Alparslan",
+        "Faruk Ortakoyluoglu",
+        "Arda Akpinar"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-03-09T12:46:32+00:00",
+      "link": "https://arxiv.org/pdf/2603.08329v1",
+      "tags": [
+        "keyword:main",
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "hierarchical multi-agent framework for cross-document RAG",
+      "llm_evidence_cn": "用于跨文档RAG的分层多智能体框架",
+      "llm_evidence": "用于跨文档RAG的分层多智能体框架",
+      "canonical_evidence": "用于跨文档RAG的分层多智能体框架",
+      "llm_tldr_en": "A multi-agent RAG framework that decomposes complex queries across document-level agents.",
+      "llm_tldr_cn": "一种通过文档级智能体分解复杂查询的多智能体RAG框架。",
+      "llm_tldr": "一种通过文档级智能体分解复杂查询的多智能体RAG框架。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
+      "matched_requirement_id": "req-5",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.08329v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.02438v1",
+      "title": "ORCA: Orchestrated Reasoning with Collaborative Agents for Document Visual Question Answering",
+      "abstract": "Document Visual Question Answering (DocVQA) remains challenging for existing Vision-Language Models (VLMs), especially under complex reasoning and multi-step workflows. Current approaches struggle to decompose intricate questions into manageable sub-tasks and often fail to leverage specialized processing paths for different document elements. We present ORCA: Orchestrated Reasoning with Collaborative Agents for Document Visual Question Answering, a novel multi-agent framework that addresses these limitations through strategic agent coordination and iterative refinement. ORCA begins with a reasoning agent that decomposes queries into logical steps, followed by a routing mechanism that activates task-specific agents from a specialized agent dock. Our framework leverages a set of specialized AI agents, each dedicated to a distinct modality, enabling fine-grained understanding and collaborative reasoning across diverse document components. To ensure answer reliability, ORCA employs a debate mechanism with stress-testing, and when necessary, a thesis-antithesis adjudication process. This is followed by a sanity checker to ensure format consistency. Extensive experiments on three benchmarks demonstrate that our approach achieves significant improvements over state-of-the-art methods, establishing a new paradigm for collaborative agent systems in vision-language reasoning.",
+      "authors": [
+        "Aymen Lassoued",
+        "Mohamed Ali Souibgui",
+        "Yousri Kessentini"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-02T22:21:25+00:00",
+      "link": "https://arxiv.org/pdf/2603.02438v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multi-agent framework for complex reasoning in Document Visual Question Answering",
+      "llm_evidence_cn": "用于文档视觉问答中复杂推理的多智能体框架",
+      "llm_evidence": "用于文档视觉问答中复杂推理的多智能体框架",
+      "canonical_evidence": "用于文档视觉问答中复杂推理的多智能体框架",
+      "llm_tldr_en": "ORCA uses collaborative agents to decompose and solve complex Document VQA tasks.",
+      "llm_tldr_cn": "ORCA利用协作智能体分解并解决复杂的文档视觉问答任务。",
+      "llm_tldr": "ORCA利用协作智能体分解并解决复杂的文档视觉问答任务。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Knowledge Visual Question Answering",
+      "matched_requirement_id": "req-1",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.02438v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.04238v1",
+      "title": "Retrieval or Representation? Reassessing Benchmark Gaps in Multilingual and Visually Rich RAG",
+      "abstract": "Retrieval-augmented generation (RAG) is a common way to ground language models in external documents and up-to-date information. Classical retrieval systems relied on lexical methods such as BM25, which rank documents by term overlap with corpus-level weighting. End-to-end multimodal retrievers trained on large query-document datasets claim substantial improvements over these approaches, especially for multilingual documents with complex visual layouts. We demonstrate that better document representation is the primary driver of benchmark improvements. By systematically varying transcription and preprocessing methods while holding the retrieval mechanism fixed, we demonstrate that BM25 can recover large gaps on multilingual and visual benchmarks. Our findings call for decomposed evaluation benchmarks that separately measure transcription and retrieval capabilities, enabling the field to correctly attribute progress and focus effort where it matters.",
+      "authors": [
+        "Martin Asenov",
+        "Kenza Benkirane",
+        "Dan Goldwater",
+        "Aneiss Ghodsi"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-04T16:21:20+00:00",
+      "link": "https://arxiv.org/pdf/2603.04238v1",
+      "tags": [
+        "keyword:main",
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "reassessing RAG in visually rich and multilingual document domains",
+      "llm_evidence_cn": "重新评估视觉丰富和多语言文档领域中的RAG",
+      "llm_evidence": "重新评估视觉丰富和多语言文档领域中的RAG",
+      "canonical_evidence": "重新评估视觉丰富和多语言文档领域中的RAG",
+      "llm_tldr_en": "Analyzes the impact of document representation versus retrieval mechanisms in multimodal RAG.",
+      "llm_tldr_cn": "分析了多模态RAG中文档表示与检索机制的影响。",
+      "llm_tldr": "分析了多模态RAG中文档表示与检索机制的影响。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
+      "matched_requirement_id": "req-5",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.04238v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.04549v1",
+      "title": "Adaptive Memory Admission Control for LLM Agents",
+      "abstract": "LLM-based agents increasingly rely on long-term memory to support multi-session reasoning and interaction, yet current systems provide little control over what information is retained. In practice, agents either accumulate large volumes of conversational content, including hallucinated or obsolete facts, or depend on opaque, fully LLM-driven memory policies that are costly and difficult to audit. As a result, memory admission remains a poorly specified and weakly controlled component in agent architectures. To address this gap, we propose Adaptive Memory Admission Control (A-MAC), a framework that treats memory admission as a structured decision problem. A-MAC decomposes memory value into five complementary and interpretable factors: future utility, factual confidence, semantic novelty, temporal recency, and content type prior. The framework combines lightweight rule-based feature extraction with a single LLM-assisted utility assessment, and learns domain-adaptive admission policies through cross-validated optimization. This design enables transparent and efficient control over long-term memory. Experiments on the LoCoMo benchmark show that A-MAC achieves a superior precision-recall tradeoff, improving F1 to 0.583 while reducing latency by 31% compared to state-of-the-art LLM-native memory systems. Ablation results identify content type prior as the most influential factor for reliable memory admission. These findings demonstrate that explicit and interpretable admission control is a critical design principle for scalable and reliable memory in LLM-based agents.",
+      "authors": [
+        "Guilin Zhang",
+        "Wei Jiang",
+        "Xiejiashan Wang",
+        "Aisha Behr",
+        "Kai Zhao",
+        "Jeffrey Friedman",
+        "Xu Chu",
+        "Amine Anoun"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.MA"
+      ],
+      "published": "2026-03-04T19:32:02+00:00",
+      "link": "https://arxiv.org/pdf/2603.04549v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "adaptive memory admission control for LLM agents",
+      "llm_evidence_cn": "LLM智能体的自适应记忆准入控制",
+      "llm_evidence": "LLM智能体的自适应记忆准入控制",
+      "canonical_evidence": "LLM智能体的自适应记忆准入控制",
+      "llm_tldr_en": "Introduces A-MAC to manage long-term memory retention in LLM agents through structured decision making.",
+      "llm_tldr_cn": "引入A-MAC框架，通过结构化决策管理LLM智能体的长期记忆保留。",
+      "llm_tldr": "引入A-MAC框架，通过结构化决策管理LLM智能体的长期记忆保留。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "I hope you retrieve articles related to multimodal memory of agents.",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.04549v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.03985v1",
+      "title": "RIVER: A Real-Time Interaction Benchmark for Video LLMs",
+      "abstract": "The rapid advancement of multimodal large language models has demonstrated impressive capabilities, yet nearly all operate in an offline paradigm, hindering real-time interactivity. Addressing this gap, we introduce the Real-tIme Video intERaction Bench (RIVER Bench), designed for evaluating online video comprehension. RIVER Bench introduces a novel framework comprising Retrospective Memory, Live-Perception, and Proactive Anticipation tasks, closely mimicking interactive dialogues rather than responding to entire videos at once. We conducted detailed annotations using videos from diverse sources and varying lengths, and precisely defined the real-time interactive format. Evaluations across various model categories reveal that while offline models perform well in single question-answering tasks, they struggle with real-time processing. Addressing the limitations of existing models in online video interaction, especially their deficiencies in long-term memory and future perception, we proposed a general improvement method that enables models to interact with users more flexibly in real time. We believe this work will significantly advance the development of real-time interactive video understanding models and inspire future research in this emerging field. Datasets and code are publicly available at https://github.com/OpenGVLab/RIVER.",
+      "authors": [
+        "Yansong Shi",
+        "Qingsong Zhao",
+        "Tianxiang Jiang",
+        "Xiangyu Zeng",
+        "Yi Wang",
+        "Limin Wang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-04T12:29:34+00:00",
+      "link": "https://arxiv.org/pdf/2603.03985v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "real-time interaction benchmark for video LLMs with retrospective memory",
+      "llm_evidence_cn": "具有回顾性记忆的视频LLM实时交互基准",
+      "llm_evidence": "具有回顾性记忆的视频LLM实时交互基准",
+      "canonical_evidence": "具有回顾性记忆的视频LLM实时交互基准",
+      "llm_tldr_en": "Presents RIVER Bench for evaluating online video comprehension using memory and proactive anticipation.",
+      "llm_tldr_cn": "提出RIVER Bench，利用记忆和主动预测评估在线视频理解能力。",
+      "llm_tldr": "提出RIVER Bench，利用记忆和主动预测评估在线视频理解能力。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "I hope to learn more about articles related to solving video understanding using methods involving Agent systems + Memory.",
+      "matched_requirement_id": "req-6",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.03985v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.02795v1",
+      "title": "VSearcher: Long-Horizon Multimodal Search Agent via Reinforcement Learning",
+      "abstract": "Large models are increasingly becoming autonomous agents that interact with real-world environments and use external tools to augment their static capabilities. However, most recent progress has focused on text-only large language models, which are limited to a single modality and therefore have narrower application scenarios. On the other hand, multimodal large models, while offering stronger perceptual capabilities, remain limited to static knowledge and lack the ability to access and leverage up-to-date web information. In this paper, we propose VSearcher, turning static multimodal model into multimodal search agent capable of long-horizon, multi-turn tool use in real-world web environments, including text search, image search, and web browsing, via reinforcement learning. Specifically, we introduce Iterative Injection Data Synthesis pipeline to generate large-scale, complex multimodal QA questions, which are further filtered with comprehensive metrics to ensure high quality and sufficient difficulty. We then adopt an SFT-then-RL training pipeline to turn base multimodal models to agent capable of multi-turn tool calling in real-world web environments. Besides, we propose a multimodal search benchmark MM-SearchExam dedicated to evaluating search capabilities of multimodal search agents, which proves highly challenging for recent proprietary models. Extensive evaluations across multiple multimodal search benchmarks reveal effectiveness of our method. VSearcher achieves superior performance compared to recent multimodal search agents and even surpasses several proprietary models on multimodal web search tasks.",
+      "authors": [
+        "Ruiyang Zhang",
+        "Qianguo Sun",
+        "Chao Song",
+        "Yiyan Qi",
+        "Zhedong Zheng"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-03T09:33:22+00:00",
+      "link": "https://arxiv.org/pdf/2603.02795v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multimodal search agent using RAG-like tool use in web environments",
+      "llm_evidence_cn": "在网络环境中使用类RAG工具的多模态搜索智能体",
+      "llm_evidence": "在网络环境中使用类RAG工具的多模态搜索智能体",
+      "canonical_evidence": "在网络环境中使用类RAG工具的多模态搜索智能体",
+      "llm_tldr_en": "Develops VSearcher, an agent that uses multimodal search and browsing to augment static knowledge.",
+      "llm_tldr_cn": "开发VSearcher智能体，通过多模态搜索和浏览增强静态知识。",
+      "llm_tldr": "开发VSearcher智能体，通过多模态搜索和浏览增强静态知识。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
+      "matched_requirement_id": "req-5",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.02795v1",
       "carry_days": 1
     }
   ]
