@@ -134,3 +134,35 @@ subscriptions:
           source: manual
           note: ''
       updated_at: '2026-03-10T12:20:50.633Z'
+    - tag: self-evolving
+      description: Self-evolving Agent相关的研究
+      enabled: true
+      keywords:
+        - keyword: Self-evolving Agent
+          keyword_cn: 自我演化智能体
+          query: Self-evolving autonomous agents and systems
+        - keyword: Self-improving LLM
+          keyword_cn: 自我改进大模型
+          query: Large language models with self-improvement capabilities
+      intent_queries:
+        - query: Recent advances in self evolving autonomous agent architectures
+          query_cn: 自我演化自主智能体架构的最新进展
+          enabled: true
+          source: manual
+          note: ''
+        - query: Methods for recursive self improvement in large language model agents
+          query_cn: 大语言模型智能体递归自我提升的方法
+          enabled: true
+          source: manual
+          note: ''
+        - query: How agents learn and evolve through environmental interaction
+          query_cn: 智能体如何通过环境交互进行学习与演化
+          enabled: true
+          source: manual
+          note: ''
+        - query: Self correction and feedback loops in autonomous agent development
+          query_cn: 自主智能体开发中的自我纠错与反馈循环
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-03-10T12:23:06.830Z'
