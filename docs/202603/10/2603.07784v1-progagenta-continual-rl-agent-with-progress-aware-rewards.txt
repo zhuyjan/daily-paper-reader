@@ -1,0 +1,498 @@
+Title: ProgAgent:A Continual RL Agent with Progress-Aware Rewards
+
+URL Source: https://arxiv.org/pdf/2603.07784v1
+
+Published Time: Tue, 10 Mar 2026 01:29:34 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# ProgAgent: A Continual RL Agent with Progress-Aware Rewards 
+
+# Jinzhou Tan 
+
+University of California, San Diego USA 
+
+# Gabriel Adineera 
+
+Texas A&M University-Commerce USA 
+
+# Jinoh Kim ∗
+
+Texas A&M University-Commerce USA 
+
+## Abstract 
+
+We present ProgAgent, a continual reinforcement learning (CRL) agent that unifies progress-aware reward learning with a high-throughput, JAX-native system architecture. Lifelong robotic learn-ing grapples with catastrophic forgetting and the high cost of reward specification. ProgAgent tackles these by deriving dense, shaped rewards from unlabeled expert videos through a percep-tual model that estimates task progress across initial, current, and goal observations. We theoretically interpret this as a learned state-potential function, delivering robust guidance in line with expert behaviors. To maintain stability amid online exploration—where novel, out-of-distribution states arise—we incorporate an adversar-ial push-back refinement that regularizes the reward model, curbing overconfident predictions on non-expert trajectories and counter-ing distribution shift.By embedding this reward mechanism into a JIT-compiled loop, ProgAgent supports massively parallel rollouts and fully differentiable updates, rendering a sophisticated unified objective feasible: it merges PPO with coreset replay and synaptic intelligence for an enhanced stability-plasticity balance. Evalua-tions on ContinualBench and Meta-World benchmarks highlight ProgAgent’s advantages: it markedly reduces forgetting, boosts learning speed, and outperforms key baselines in visual reward learning (e.g., Rank2Reward, TCN) and continual learning (e.g., Coreset, SI)—surpassing even an idealized perfect memory agent. Real-robot trials further validate its ability to acquire complex ma-nipulation skills from noisy, few-shot human demonstrations. 
+
+## Keywords 
+
+Machine Unlearning, Large Language Models, Contrastive Learning, Representation Reshaping, Concept Decoupling, AI Safety 
+
+## 1 INTRODUCTION 
+
+Endowing robots with the ability to learn continually—acquiring new skills while retaining and refining past knowledge—represents a central ambition in robotics. This paradigm of lifelong reinforce-ment learning (RL) sharply contrasts with conventional RL[ 1– 6], which typically assumes a static environment and trains policies from scratch[ 7 ]. In real-world scenarios, however, robots must nav-igate evolving task sequences, shifting objectives, and unstructured sensory inputs. These dynamic conditions expose persistent bottle-necks: first, catastrophic forgetting , where adapting to new tasks overwrites prior capabilities, undermining long-term autonomy [ 8 –12 ]; second, the reward specification problem , as crafting dense, well-shaped rewards for varied manipulation tasks demands inten-sive labor and often proves impractical, constraining scalability outside controlled benchmarks. Building on this foundation, prior research has tackled these issues through two main, yet largely disconnected, avenues. In 
+
+> ∗Corresponding author.
+
+continual RL, algorithmic strategies like parameter regularization, rehearsal buffers, and synaptic importance metrics have emerged to curb forgetting by preserving key knowledge from past tasks[ 13 –17 ]. Concurrently, advances in visual reward learning enable agents to derive rewards from unlabeled expert videos, sidestepping man-ual design. Despite these strides, the fields remain orthogonal: continual learning algorithms frequently overlook system-level optimizations for scalable training—such as just-in-time (JIT) com-pilation and parallelized rollouts—while reward models often falter under distributional shifts, as online exploration leads to non-expert states diverging from training data[ 18 –23 ]. This separation creates a critical gap, hindering the development of unified agents that in-tegrate perceptual reward learning with scalable architectures for continual adaptation .To bridge this gap, we introduce ProgAgent , a continual RL agent that fundamentally unifies progress-aware reward estimation 
+
+with a JAX-native architecture . Algorithmically, ProgAgent trains a perceptual model to predict task progress from initial, current, and goal observations, generating dense, shaped rewards with-out action labels. This design draws theoretical motivation from potential-based shaping: assuming expert demonstrations exhibit monotonic progress toward goals, the predictions form an implicit potential function that aligns exploration with expert trajectories. Recognizing the challenges of online exploration, we further incor-porate an adversarial push-back refinement to regularize rewards, suppressing overconfidence on off-distribution states and enhanc-ing robustness. On the systems side, ProgAgent embeds this re-ward model within a fully differentiable, JIT-compiled pipeline. By transforming the entire training loop—including data collection, reward updates, and policy optimization—into highly optimized kernels via JAX’s JIT compilation, it enables massively parallel roll-outs across thousands of environments for rapid data generation, minimizes gradient variance through batched computations for more stable updates, and supports seamless scalability to handle complex, multi-task sequences without prohibitive computational overhead—directly addressing the algorithm-system divide that has limited prior continual RL efforts, where advanced algorithms were often too resource-intensive to implement efficiently at scale. These innovations translate to substantial empirical gains, as validated through rigorous evaluations across diverse settings. On the ContinualBench benchmark, ProgAgent markedly reduces for-getting, delivering state-of-the-art average performance and regret metrics. In six demanding Meta-World [ 24 ] manipulation tasks, it surpasses leading visual reward approaches like Rank2Reward, ex-hibiting exceptional sample efficiency and adaptability. Extending to the physical domain, real-robot experiments affirm ProgAgent’s practicality: it effectively learns complex manipulation skills from a handful of noisy human demonstrations, succeeding even when half the data involves failures.  
+
+> arXiv:2603.07784v1 [cs.LG] 8 Mar 2026 Conference’17, July 2017, Washington, DC, USA Jinzhou Tan, Gabriel Adineera, and Jinoh Kim
+
+In summary, this work advances lifelong robotic learning through three key contributions: (1) A progress-aware reward model that extracts dense, shaped signals from unlabeled expert videos, theoretically grounded as a state-potential function for expert-aligned guidance. This approach bypasses the need for action labels and pro-vides a monotonic progress signal that accelerates policy optimization while preserving optimality guarantees. (2) An adversarial refinement mechanism that stabilizes the reward model by countering overconfident predictions on non-expert trajectories, ensuring reliable performance amid distribution shifts. By regularizing predictions on ex-ploratory data, it prevents misleading rewards that could derail learning, making the model robust for continual, on-line adaptation. (3) A unified JAX-native architecture that JIT-compiles the full reward and policy optimization loop, enabling high-throughput parallelization and integration with advanced continual learning techniques for superior scalability. This design not only boosts computational efficiency but also al-lows for reproducible, large-scale experiments, bridging the gap between algorithmic innovation and practical system deployment. 
+
+## 2 RELATED WORKS 
+
+Our work integrates three traditionally distinct research areas: con-tinual reinforcement learning, reward learning from perception, and high-throughput RL systems. As autonomous agents are in-creasingly deployed in complex, open-world environments, the demand for scalable, self-sustaining learning paradigms has inten-sified. By synthesizing insights from these domains, ProgAgent creates a cohesive framework that addresses their respective limita-tions holistically. Below, we review key contributions in each area and highlight how our approach builds upon and unifies them. 
+
+## 2.1 Continual Reinforcement Learning 
+
+The core challenge in continual reinforcement learning (CRL) is mitigating catastrophic forgetting , wherein policies abruptly overwrite prior knowledge during adaptation to new tasks. This issue is particularly exacerbated in RL compared to supervised learn-ing due to the inherent non-stationarity of the agent’s observation distribution and the shifting nature of optimal behavior policies. Ex-isting methods generally fall into three categories. Regularization-based techniques penalize modifications to parameters critical for previous tasks; prominent examples include Elastic Weight Consoli-dation (EWC), which employs a Fisher information matrix to gauge parameter importance [ 25 ], and Synaptic Intelligence (SI), which computes importance dynamically during the training trajectory [ 26 –34 ]. Rehearsal-based strategies preserve past experiences by storing and replaying data, ranging from basic experience replay [35 ] to advanced coreset selection or distillation techniques that cu-rate compact, representative buffers to prevent memory explosion [36 –41 ]. Architecture-based approaches, such as Progressive Neu-ral Networks [ 42 ], expand model capacity dynamically to isolate new tasks without interfering with old ones [43, 44]. ProgAgent employs a hybrid strategy, intelligently combining SI regularization with coreset replay. Unlike prior efforts that de-ploy these mechanisms independently—often leading to suboptimal trade-offs between stability and plasticity, or incurring prohibitive computational costs—ProgAgent fuses them into a single, unified objective. This integration is made highly practical through our high-throughput architecture, which supports efficient, large-batch computation and enables a more balanced handling of knowledge retention and adaptation across lengthy task sequences [13]. 
+
+## 2.2 Learning Rewards from Perception 
+
+Hand-crafting dense rewards poses a significant bottleneck in ro-botics. In complex manipulation or locomotion tasks, defining a reward function that perfectly aligns with human intent is notori-ously difficult and highly susceptible to reward hacking, prompting extensive research into perceptual reward learning from raw data like unlabeled videos. Early imitation learning methods, includ-ing Behavioral Cloning (BC) and Inverse Reinforcement Learning (IRL), typically demand substantial expert action annotations or costly online environment interactions [ 45 , 46 ]. Modern techniques circumvent these stringent requirements: contrastive methods 
+
+derive rewards by enhancing representation similarities between proximate states while diminishing those for temporally or visually distant ones [ 47 ], and ranking-based methods utilize temporal or-dering or human feedback, as seen in Rank2Reward’s learned ranker [48 ] or Temporal Cycle Consistency (TCC) for self-supervised video representations [49, 50]. ProgAgent aligns most closely with progress-modeling paradigms, such as Temporal Difference Networks (TCN) for temporal dis-tance prediction and goal-conditioned progress estimation [ 51 ]. We extend this paradigm by conceptualizing progress strictly as a learned potential function, which provides rigorous theoretical guarantees for policy invariance and shaped exploration. Crucially, to overcome a common shortfall in purely unsupervised reward models—susceptibility to severe distribution shifts and false pos-itives from visually familiar but unexplored states—we introduce an adversarial push-back refinement. This mechanism enhances robustness during online learning, ensuring the agent remains on a functionally valid trajectory and bridging critical gaps in prior models [52]. 
+
+## 2.3 High-Throughput Reinforcement Learning Systems 
+
+The intensive computational needs of RL have spurred the rapid development of accelerator-optimized simulation systems. Histori-cally, RL systems suffered from severe CPU-GPU communication bottlenecks due to the disconnect between environment stepping and policy updates. Platforms like Isaac Gym [ 53 ] and Brax [ 54 ]eliminate this overhead and achieve dramatic speedups by execut-ing thousands of parallel simulations directly on GPUs. They are often powered by just-in-time (JIT) compilation tools like JAX [ 55 ], which elegantly convert Python code into efficient XLA kernels [56 ]. While these frameworks excel at accelerating single-task RL, they rarely address the multifaceted memory and computational demands of continual settings, such as sequential task adaptation, dynamic buffer management, and integrated reward refinement. ProgAgent: A Continual RL Agent with Progress-Aware Rewards Conference’17, July 2017, Washington, DC, USA 
+
+ProgAgent advances this computational landscape by tailoring a JAX-native architecture specifically to CRL’s unique complexities. By encapsulating the simulator in pure functions and completely JIT-compiling the entire training loop—including environmental data collection, replay buffer sampling, reward model updates, and multi-objective policy optimization—we unlock the massive throughput required for a sophisticated, unified CRL algorithm. By eliminating host-device data transfers for complex regularization terms, this design not only makes advanced continual mechanisms computationally viable but also ensures unprecedented scalability, reproducibility, and time-efficiency in lifelong learning scenarios. 
+
+## 3 METHOD 
+
+Building on the foundational challenges and prior work outlined in the introduction and related literature, we present ProgAgent as a continual RL framework that fundamentally unifies progress-aware reward estimation with a JAX-native architecture. This integra-tion directly addresses the algorithm-system divide highlighted earlier, enabling scalable training in lifelong learning scenarios. Unlike previous methods that treat reward learning and architec-tural optimization as separate concerns, ProgAgent fuses them into a cohesive, end-to-end pipeline. In this section, we formalize the problem setting, then elaborate on the algorithmic innovations for reward shaping and the system-level designs that ensure computa-tional efficiency, aligning with the hybrid continual mechanisms and perceptual reward paradigms discussed in the related works. 
+
+## 3.1 Problem Formulation 
+
+We formalize the continual reinforcement learning (CRL) setting, where an agent encounters a sequence of tasks {T 1, T2, . . . , T𝐾 }.Each task T𝑖 is defined as a Markov Decision Process (MDP[ 57 –59 ]) 
+
+⟨S , A, 𝑃 𝑖 , 𝑟 𝑖 , 𝛾 ⟩, sharing a common state space S and action space 
+
+A, but featuring potentially distinct transition dynamics 𝑃 𝑖 and reward functions 𝑟 𝑖 . This setup captures the evolving nature of real-world robotic environments, where tasks build upon or diverge from previous ones, as emphasized in the introduction[60]. The agent’s policy 𝜋 𝜃 (𝑎 |𝑠 ) must optimize under dual constraints: mitigating catastrophic forgetting to sustain performance on prior tasks T1: 𝑖 −1 while adapting to the current T𝑖 , and overcoming 
+
+reward specification challenges by deriving dense, shaped sig-nals without manual, task-specific designs. Formally, the goal is to maximize average performance across all seen tasks via parameters 
+
+𝜃 :
+
+max 
+
+> 𝜃
+
+1
+
+𝑖 
+
+> 𝑖
+
+∑︁ 
+
+> 𝑗 =1
+
+E𝜏 ∼𝜋 𝜃 ,𝑃 𝑗 
+
+h ∞∑︁ 
+
+> 𝑡 =0
+
+𝛾 𝑡 𝑟 𝑗 (𝑠 𝑡 , 𝑎 𝑡 )
+
+i
+
+. (1) This objective, unlike standard single-task RL, explicitly accounts for multi-task retention, highlighting the need for mechanisms that balance plasticity and stability—a key gap in prior CRL approaches, as discussed in related works. By optimizing this averaged return, ProgAgent ensures long-term autonomy without sacrificing adapt-ability.    
+
+> JAX JIT & vmap Parallelization
+> Expert Data Dexpert
+> Reward Model Update (Eq. (5))
+> Collect Rollouts D𝜋 𝜃 𝑘 (Eq. (3))
+> Policy Update (Eq. (6))
+> Continual Learning (Coreset & SI)
+> Input
+> Shaped Rewards
+> Trajectories
+> Update State
+
+Figure 1: Overview of ProgAgent’s training pipeline, illustrat-ing the unified loop of reward learning, policy optimization, and continual mechanisms under JAX acceleration. 
+
+## 3.2 Progress-Aware Reward as a Learned Potential Function 
+
+Central to ProgAgent—and extending the perceptual reward learn-ing paradigms from related works—is a self-supervised model 𝐸 𝜙 
+
+that extracts task progress from unlabeled expert videos Dexpert .[ 61 ,62 ] For an observation triplet (𝑜 𝑖 , 𝑜 𝑗 , 𝑜 𝑔 ), 𝐸 𝜙 predicts a Gaussian over the progress ratio 𝛿 = | 𝑗 − 𝑖 |/| 𝑔 − 𝑖 |, minimized via KL diver-gence to a target 𝑃 target = N ( 𝜇 = 𝛿, 𝜎 2):
+
+Lexpert (𝜙 ) = E(𝑜 𝑖 ,𝑜 𝑗 ,𝑜 𝑔 )∼D expert 
+
+h
+
+𝐷 𝐾𝐿 
+
+ 𝑃 target || 𝐸 𝜙 (𝑜 𝑖 , 𝑜 𝑗 , 𝑜 𝑔 )i
+
+. (2) This loss encourages accurate progress estimation solely from vi-sual data, eliminating the need for action labels—a major advantage over traditional imitation methods like BC or IRL, as it scales to diverse, unlabeled datasets. The Gaussian output models uncer-tainty, providing a probabilistic reward signal that is more robust to noisy demonstrations than deterministic alternatives in prior progress-modeling works (e.g., TCN). Theoretically grounded in potential-based shaping, we interpret the prediction mean as a state-potential Φ𝜙 (𝑜 𝑡 ) := E[𝐸 𝜙 (𝑜 0, 𝑜 𝑡 , 𝑜 𝑔 )] ,yielding shaped rewards that preserve optimality while aligning Conference’17, July 2017, Washington, DC, USA Jinzhou Tan, Gabriel Adineera, and Jinoh Kim 
+
+Figure 2: The complete training pipeline of ProgAgent. Our approach utilizes two parallel data streams. Top path An offline stream uses unlabeled expert videos to train a Progress Prediction Network. The network’s output is optimized via a contrastive expert loss ( 𝐿 expert ) to accurately estimate task progress. Bottom path An online stream collects agent experience through large-scale parallel rollouts. To ensure robustness against out-of-distribution states, an adversarial push-back loss ( 𝐿 push )regularizes the reward function by pushing predictions on these non-expert trajectories toward a low-confidence (zero-mean, high-variance) prior. These two objectives are combined into a final loss, 𝐿 total , to produce a dense and stable reward signal for policy training. 
+
+with expert monotonic progress: 
+
+𝑟 𝑡 (𝑜 𝑡 , 𝑜 𝑡 −1; 𝜙 ) = 𝛾 Φ𝜙 (𝑜 𝑡 ) − Φ𝜙 (𝑜 𝑡 −1). (3) This formulation offers key benefits: it guarantees policy invariance (as per Ng et al.’s shaping theorem[ 63 ]), accelerates convergence by providing dense guidance, and inherently aligns exploration with expert behaviors, addressing the reward sparsity issues in standard RL without introducing bias that could mislead optimization. 
+
+## 3.3 Adversarial Refinement for Robust Exploration 
+
+To combat the distribution shifts noted in prior reward models, where online exploration yields out-of-distribution states in D𝜋 𝜃 ,we add an adversarial push-back refinement. This regularizes non-expert predictions toward a low-confidence prior 𝑃 prior = N ( 0, 𝜎 2
+
+> prior
+
+):
+
+Lpush (𝜙 ) = E(𝑜 𝑖 ,𝑜 𝑗 ,𝑜 𝑔 )∼D 𝜋 𝜃 
+
+h
+
+𝐷 𝐾𝐿 
+
+ 𝐸 𝜙 (𝑜 𝑖 , 𝑜 𝑗 , 𝑜 𝑔 ) 𝑃 prior 
+
+i
+
+. (4) By pulling predictions toward a zero-mean, high-variance prior, this term prevents overconfident (and potentially erroneous) re-wards on novel states, a common failure mode in unrefined models. This adversarial setup counters shift by discouraging extrapolation, ensuring the reward remains conservative and reliable during early exploration phases. The joint loss suppresses erroneous rewards on unskilled behav-iors, enhancing robustness: 
+
+Lreward (𝜙 ) = Lexpert + 𝛽 Lpush . (5) The hyperparameter 𝛽 balances expert alignment with exploratory caution, yielding a reward function that is both shaped and sta-ble—advantages that mitigate the brittleness of prior visual reward methods under real-world distributional changes. 
+
+Algorithm 1 ProgAgent Continual Learning Loop 
+
+Require: Sequence of tasks {T 1, . . . , T𝐾 }; Expert data Dexpert 
+
+Require: Hyperparameters: 𝜂, 𝛽, 𝝀 ; Steps per task: 𝑁 steps  
+
+> 1:
+
+Initialize agent state 𝑆 0 = (𝜃 0, 𝜙 0, Ω0) and RNG key rng 0 
+
+> 2:
+
+Initialize empty coreset buffer M ← ∅ ; SI regularizers RSI ← ∅  
+
+> 3:
+
+⊲ Define the JIT-compiled end-to-end training function Φ. 
+
+> 4:
+
+Φjit ← jax.jit (Φ) 
+
+> 5:
+
+for each task T𝑖 in {T 1, . . . , T𝐾 } do  
+
+> 6:
+
+for 𝑘 ← 1, . . . , 𝑁 steps do  
+
+> 7:
+
+rng 𝑘 −1, step_key ← jax.random.split (rng 𝑘 −1) 
+
+> 8:
+
+⊲ Execute one full step of data collection and joint optimization.  
+
+> 9:
+
+𝑆 𝑘 , D𝜋 𝜃 𝑘 , metrics ← Φjit (𝑆 𝑘 −1, M, RSI , step_key ) 
+
+> 10:
+
+⊲ Inside Φjit : 
+
+> 11:
+
+⊲ 1. Collect rollouts D𝜋 𝜃 𝑘 using 𝑟 𝑡 (· ; 𝜙 𝑘 −1) from Eq. (3).  
+
+> 12:
+
+⊲ 2. Update reward model 𝜙 𝑘 by minimizing Lreward 
+
+(Eq. (5)) using Dexpert and D𝜋 𝜃 𝑘 . 
+
+> 13:
+
+⊲ 3. Update policy 𝜃 𝑘 by minimizing Ltotal (Eq. (6)).  
+
+> 14:
+
+⊲ Update continual learning components after task completion.  
+
+> 15:
+
+M ← UpdateCoreset (M , 𝑆 𝑘 , T𝑖 ) 
+
+> 16:
+
+RSI ← R SI ∪ { ComputeSI (𝜃 𝑘 , T𝑖 )}  
+
+> 17:
+
+return Final parameters (𝜃 𝐾 , 𝜙 𝐾 )
+
+## 3.4 JAX-Native Architecture for High-Throughput Learning 
+
+Drawing from high-throughput systems in related works, ProgA-gent’s JAX-native design renders the dual-objective reward pipeline (Eq. (5) ) feasible for CRL’s demands, enabling seamless integration with the continual mechanisms like SI and coreset replay. ProgAgent: A Continual RL Agent with Progress-Aware Rewards Conference’17, July 2017, Washington, DC, USA 
+
+1. Functional Simulator Wrapping: Stateful simulators are en-capsulated as pure functions (𝑠, 𝑎 ) ↦ → ( 𝑠 ′, 𝑟 𝜙 ), compatible with JAX. 
+
+2. End-to-End Compiled Loop: The agent state 𝑆 𝑘 = (𝜃 𝑘 , 𝜙 𝑘 , Ω𝑘 )
+
+advances via a single JIT-compiled function Φ, optimizing the loop in Algorithm 1. 
+
+3. Massively Parallel Rollouts: Using jax.vmap , simulations and reward computations (Eq. (3) ) are vectorized across thousands of environments. 
+
+## 3.5 A Unified Continual Learning Objective 
+
+This architectural efficiency facilitates a unified objective that merges PPO with stability regularizers[ 64 ], echoing the hybrid CRL ap-proaches in prior literature: 
+
+Ltotal (𝜃 ) = LPPO (𝜃 ; 𝜙 ) + 𝜆 1 Lreplay (𝜃 ) + 𝜆 2 LSI (𝜃 ). (6) By combining these terms, the objective explicitly trades off current-task optimization with historical retention, preventing forgetting while allowing adaptation—a direct response to the stability-plasticity dilemma in CRL. The hyperparameters 𝜆 1 and 𝜆 2 fine-tune this bal-ance, ensuring computational tractability via our high-throughput design. Stability components include: 
+
+a) Functional Replay: From coreset M:
+
+Lreplay = E(𝑠,𝑎,𝐴 )∼M [− log 𝜋 𝜃 (𝑎 |𝑠 )𝐴 ]. (7) This term replays advantage-weighted experiences from past tasks, efficiently reminding the policy of prior skills without storing full datasets, thus reducing memory overhead compared to naive re-hearsal methods. 
+
+b) Synaptic Importance: Penalizing key parameters: 
+
+LSI =∑︁ 
+
+> 𝑘
+
+Ω𝑘 (𝜃 − 𝜃 ∗ 
+
+> 𝑘
+
+)2, (8) Here, Ω𝑘 quantifies per-parameter importance for task 𝑘 , imposing a quadratic penalty around frozen snapshots 𝜃 ∗ 
+
+> 𝑘
+
+. This provides online regularization that is more adaptive and less computationally intensive than EWC’s Fisher-based alternatives, while preserving critical weights across tasks. 
+
+## 3.6 Theoretical Insight: Shifting the Stability-Plasticity Frontier 
+
+CRL’s stability-plasticity trade-off ( F vs. P) is advanced by Pro-gAgent’s synergy: Algorithmic Alignment via refined rewards (Eqs. (3) , (4) ) boosts P while safeguarding F ; Architectural Ef-ficiency minimizes variance in Eq. (6) , expanding CRL’s solution space beyond isolated prior methods. This shift allows ProgAgent to achieve higher joint F and P optima, as the shaped, robust re-wards guide efficient exploration, and the unified loss enables stable optimization even in high-dimensional, sequential settings. 
+
+## 4 Experiments 
+
+To validate the effectiveness of ProgAgent , we conduct comprehen-sive experiments on challenging continuous control tasks within 
+
+ContinualBench [65 ]. The evaluation is designed to measure our agent’s ability to learn sequential tasks, focusing on its perfor-mance in mitigating catastrophic forgetting and improving sample efficiency compared to state-of-the-art methods. 
+
+## 4.1 Experimental Setup 
+
+Environments. We select three representative robotic manipula-tion tasks from ContinualBench : button-press , door-open , and 
+
+window-close . These tasks present significant distributional shifts in dynamics and objectives, posing a stringent test of an agent’s continual learning capabilities. 
+
+Baselines. We compare ProgAgent against a diverse set of strong baselines from continual learning, imitation learning, and reward learning paradigms: OA (Online Agent) [65 ], a model-based CRL agent; Perfect Memory , an idealized upper-bound that retrains on all historical data; Coreset [66 ], a replay-based method; SI (Synap-tic Intelligence) [26 ], a regularization-based method; Fine-tuning ,which lacks a forgetting mitigation mechanism; and several re-ward/imitation learning methods including Rank2Reward [ 48 ], 
+
+GAIL [67], and TCN [47]. 
+
+Evaluation Metrics. We adopt four key metrics for a comprehen-sive evaluation: Success Rate (%) , the final task completion rate; 
+
+Eval Reward , the average cumulative reward during evaluation; 
+
+Average Performance (AP, %) , the average success rate across all tasks seen so far, measuring knowledge retention; and Regret (%) ,the cumulative performance gap to an oracle, reflecting learning efficiency. 
+
+## 4.2 Performance on ContinualBench 
+
+As shown in Table 1, ProgAgent consistently outperforms all base-line methods across all metrics. The learning progress over training steps is visualized in Figure 5, which shows ProgAgent achieving higher rewards more quickly. The final evaluation rewards, summa-rized in the bar chart in Figure 4, further confirm this superiority across all tasks. This superior performance stems from the syner-gistic integration of our progress-aware reward framework and the high-throughput JAX-native architecture. Unlike methods like Rank2Reward or TCN that provide less structured reward signals, our potential-based reward (Eq. (3) ) of-fers dense, well-shaped guidance. This allows the policy to learn more efficiently, as evidenced by the significantly higher Success Rates and lower Regret. Furthermore, the adversarial push-back re-finement (Eq. (4) ) is critical for stability. While other agents may be misled by noisy reward signals from out-of-distribution states en-countered during exploration, ProgAgent’s reward model remains robust. ProgAgent also surpasses dedicated CRL methods like SI, Coreset, and the strong OA baseline. This suggests that simply adding mech-anisms to prevent forgetting is insufficient without a high-quality learning signal. Notably, our agent even exceeds the performance of Perfect Memory, an idealized baseline with access to all past data. This highlights a key insight: architectural efficiency can be more impactful than unbounded memory. By processing vast amounts of experience in parallel, our JAX-based system can find better optima in the unified loss landscape (Eq. (6) ) than a less efficient agent, even one that never forgets its data. Conference’17, July 2017, Washington, DC, USA Jinzhou Tan, Gabriel Adineera, and Jinoh Kim ProgAgent 
+
+Online Agent 
+
+Finetuning 
+
+Figure 3: Qualitative comparison of the learned policies for the Button-Press task in the ContinualBench environment. The sequences display the agent’s behavior at the end of training. From top to bottom: a standard Finetuning agent, the Online Agent, and our ProgAgent. ProgAgent successfully learns a direct and stable policy to complete the task, whereas the baseline methods exhibit less optimal or failed behaviors. Table 1: Detailed performance comparison on three tasks from ContinualBench. For Success Rate and AP, higher is better ( ↑). For Regret, lower is better ( ↓). ProgAgent demonstrates the best performance across all tasks and metrics. Method button-press door-open window-close Success Rate ↑ AP ↑ Regret ↓ Success Rate ↑ AP ↑ Regret ↓ Success Rate ↑ AP ↑ Regret ↓
+
+Fine-tuning 15.2 ± 2.1 24.9 ± 3.5 37.7 ± 2.8 12.5 ± 1.9 24.9 ± 3.5 37.7 ± 2.8 35.8 ± 4.1 24.9 ± 3.5 37.7 ± 2.8 SI 22.5 ± 3.0 40.0 ± 4.1 33.6 ± 2.5 41.3 ± 3.8 40.0 ± 4.1 33.6 ± 2.5 50.1 ± 4.5 40.0 ± 4.1 33.6 ± 2.5 TCN 38.6 ± 3.5 45.3 ± 3.9 33.0 ± 2.1 49.2 ± 4.2 45.3 ± 3.9 33.0 ± 2.1 56.4 ± 3.9 45.3 ± 3.9 33.0 ± 2.1 Rank2Reward 43.1 ± 4.2 50.2 ± 4.0 32.1 ± 1.9 54.8 ± 3.7 50.2 ± 4.0 32.1 ± 1.9 61.7 ± 4.1 50.2 ± 4.0 32.1 ± 1.9 GAIL 48.9 ± 4.5 55.8 ± 3.8 31.6 ± 1.5 60.3 ± 4.1 55.8 ± 3.8 31.6 ± 1.5 65.2 ± 3.8 55.8 ± 3.8 31.6 ± 1.5 Coreset 61.2 ± 3.9 61.8 ± 3.1 30.8 ± 1.8 53.8 ± 4.8 61.8 ± 3.1 30.8 ± 1.8 72.4 ± 3.2 61.8 ± 3.1 30.8 ± 1.8 Perfect Memory 75.3 ± 3.1 73.1 ± 2.5 31.0 ± 1.6 72.8 ± 2.9 73.1 ± 2.5 31.0 ± 1.6 71.9 ± 3.3 73.1 ± 2.5 31.0 ± 1.6 OA 98.5 ± 0.8 72.9 ± 2.8 27.6 ± 1.3 71.3 ± 3.2 72.9 ± 2.8 27.6 ± 1.3 68.4 ± 3.9 72.9 ± 2.8 27.6 ± 1.3 
+
+ProgAgent 98.8 ± 0.4 74.1 ± 1.5 26.2 ± 0.5 73.5 ± 1.1 74.1 ± 1.5 26.2 ± 0.5 72.6 ± 1.3 74.1 ± 1.5 26.2 ± 0.5 
+
+## 4.3 Qualitative Analysis of the Learned Potential Function 
+
+To bridge the gap between our theoretical formulation and the em-pirical behavior of the agent, we conduct a qualitative analysis of ProgAgent’s core driving mechanism: the learned progress-aware reward function. Our theoretical framing posits that this reward acts as a shaping potential function, Φ𝜙 (𝑜 𝑡 ), which should theoreti-cally provide smooth, goal-directed guidance to the policy without altering the optimal policy of the underlying Markov Decision Pro-cess (MDP). This experiment aims to visually and empirically verify this critical characteristic. We select a fully trained ProgAgent model evaluated on the 
+
+button-press task. To capture a comprehensive view of the re-ward landscape, we sample and analyze three distinct types of trajectories: 
+
+• Expert Trajectory : A highly efficient, successful trajectory sampled directly from the original expert demonstration ProgAgent: A Continual RL Agent with Progress-Aware Rewards Conference’17, July 2017, Washington, DC, USA 
+
+Figure 4: Comparative performance of ProgAgent against baseline methods on the final evaluation reward after sequential training on three tasks from ContinualBench: button-press, door-open, and window-close. Bars indicate the mean reward. ProgAgent consistently outperforms all other methods across all tasks. 0 10 20 30 40 50 60                   
+
+> Training Steps
+> 0
+> 200
+> 400
+> 600
+> 800
+> 1000
+> 1200
+> 1400
+> 1600
+> Score
+> Button Press
+> Fine-tuning
+> SI
+> TCN
+> Rank2Reward
+> GAIL
+> Coreset
+> Perfect Memory
+> OA
+> ProgAgent
+> 010 20 30 40 50 60
+> Training Steps
+> 0
+> 500
+> 1000
+> 1500
+> 2000
+> 2500
+> Score
+> Door Open
+> Fine-tuning
+> SI
+> TCN
+> Rank2Reward
+> GAIL
+> Coreset
+> Perfect Memory
+> OA
+> ProgAgent
+> 010 20 30 40 50 60
+> Training Steps
+> 0
+> 500
+> 1000
+> 1500
+> 2000
+> 2500
+> 3000
+> 3500
+> Score
+> Window Close
+> Fine-tuning
+> SI
+> TCN
+> Rank2Reward
+> GAIL
+> Coreset
+> Perfect Memory
+> OA
+> ProgAgent
+> 010 20 30 40 50 60
+> Training Steps
+> 0
+> 500
+> 1000
+> 1500
+> 2000
+> 2500
+> 3000
+> Score
+> Overall
+> Fine-tuning
+> SI
+> TCN
+> Rank2Reward
+> GAIL
+> Coreset
+> Perfect Memory
+> OA
+> ProgAgent
+
+Figure 5: Learning curves of reward versus training steps on ContinualBench tasks. Shaded regions indicate standard devi-ation. ProgAgent (yellow) shows consistently faster learning and achieves higher final rewards across all tasks, demon-strating its superior sample efficiency. 
+
+dataset, Dexpert , serving as the gold standard for state pro-gression. 
+
+• Agent Success Trajectory : An evaluation episode where our fully trained ProgAgent successfully interacts with the environment to complete the task. 
+
+• Agent Failure Trajectory : An episode where the agent fails to reach the goal, representing a path characterized by random exploration, sub-optimal behavior, or getting trapped in local minima. For each observation 𝑜 𝑡 at every timestep 𝑡 along these three dis-tinct trajectories, we compute its corresponding potential function value, Φ𝜙 (𝑜 𝑡 ) = E[𝐸 𝜙 (𝑜 0, 𝑜 𝑡 , 𝑜 𝑔 )] . We then analyze the geometry of the learned reward landscape by plotting the potential value over time for each trajectory. 
+
+Results and Interpretation. The expected outcome of this visu-alization clearly reveals the internal working mechanism of our 0 10 20 30 40 50 60 
+
+> Timestep
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> Learned Potential Value  (o_t)
+> Task Completed
+> Task Completed
+> Expert Trajectory
+> Agent Success Trajectory
+> Agent Failure Trajectory
+
+Figure 6: Qualitative analysis of the learned potential func-tion Φ𝜙 (𝑜 𝑡 ). The plot compares the potential value over time for an expert trajectory (blue), a successful agent trajectory (green, dashed), and a failure trajectory (red). Successful paths exhibit a smooth, monotonically increasing potential, demonstrating that the learned function provides effective, dense guidance toward the goal. In contrast, the potential for the failure path remains low and stagnant, confirming the model correctly penalizes non-progressive behavior and avoids spurious reward hacking. 
+
+reward function. For both the Expert Trajectory and the Agent Success Trajectory , the corresponding potential function curves are expected to be remarkably smooth and almost monotonically increasing. The potential value steadily rises from the initial state initialization to the goal state, peaking precisely as the task is com-pleted. This provides strong evidence that our model has effectively synthesized a potential function highly correlated with true task progress. It essentially carves out a clear, distinct “uphill” gradient in the high-dimensional observation space, allowing the agent to follow a dense reward signal to efficiently discover the solution. In stark contrast, the Agent Failure Trajectory yields a poten-tial curve that remains low, flat, or fluctuates randomly without any consistent upward trend. This observation is crucial: it demon-strates that our reward model does not merely memorize visual features, but correctly assigns low reward signals to ineffective or incorrect behaviors that deviate from the functional solution Conference’17, July 2017, Washington, DC, USA Jinzhou Tan, Gabriel Adineera, and Jinoh Kim 
+
+path. By doing so, it effectively prevents the policy from exploiting out-of-distribution states or converging to poor local optima. 
+
+## 4.4 Ablation Study 
+
+To rigorously dissect the individual contributions of ProgAgent’s key architectural components, we conduct an ablation study focus-ing on the final task of the sequence, window-close . This allows us to evaluate how each mechanism influences both the immediate acquisition of new skills (plasticity) and the retention of previously mastered tasks (stability). We evaluate several variants of our agent, with comparative results illustrated in Figure 7. 
+
+• ProgAgent (Full) : Our complete proposed method, integrat-ing the progress-aware reward model, adversarial push-back, and continual learning regularizations. 
+
+• w/o Push-back : Removes the adversarial push-back refine-ment loss ( 𝛽 = 0 in Eq. 5), relying solely on the positive expert data for reward learning. 
+
+• w/o CL Regs : Removes both Synaptic Intelligence (SI) regu-larization and Coreset Replay ( 𝜆 1 = 𝜆 2 = 0 in Eq. 6), isolating the effectiveness of the reward model for continual learning without explicit memory retention mechanisms. ProgAgent (Full) w/o Push-back w/o CL Regs  
+
+> 0
+> 10
+> 20
+> 30
+> 40
+> 50
+> 60
+> 70
+> 80
+> Score (%)
+> 74.1
+> 65.8
+> (-8.3)
+> 48.5
+> (-25.6)
+> 72.6
+> 61.2
+> (-11.4) 68.0
+> (-4.6)
+> Ablation Study Results (Custom Gradient)
+> AP (%)
+> Success Rate (%)
+
+Figure 7: Ablation study on ProgAgent components, evalu-ated after training on the full task sequence. Performance is reported on the final task ( window-close ). The results high-light the critical role of adversarial push-back in reward stability and CL regularizers in mitigating catastrophic for-getting. 
+
+The ablation results confirm the indispensable role of each pro-posed component. Removing the adversarial push-back mechanism (w/o Push-back ) leads to a substantial deterioration in both Aver-age Performance (AP) and the final Success Rate. This performance degradation indicates that without explicit regularization on non-expert, exploratory trajectories, the reward model suffers from severe distribution shift. It begins to output false positives for unex-plored states, providing misleading gradient signals that destabilize the policy learning process and encourage reward hacking. Furthermore, as anticipated, removing the explicit continual learning regularizers ( w/o CL Regs ) causes a catastrophic drop in overall Average Performance across the task sequence. This high-lights a severe occurrence of catastrophic forgetting. Interestingly, while the agent’s historical knowledge is wiped out, it can still learn the final task ( window-close ) reasonably well. This uncovers a crit-ical insight into our architecture: while our progress-aware reward function successfully facilitates rapid, sample-efficient skill acqui-sition (high plasticity), it is not sufficient on its own for lifelong learning. The synergistic addition of the SI and replay mechanisms is absolutely critical for anchoring the network weights and pre-serving historical knowledge (high stability), thereby validating the necessity of ProgAgent’s unified objective. 
+
+## 5 Conclusion 
+
+This paper introduced ProgAgent, a novel continual reinforcement learning (CRL) framework that seamlessly unifies progress-aware reward learning with a high-throughput, JAX-native architecture. By deriving dense, shaping rewards directly from expert videos and regularizing them via adversarial push-back refinement, Pro-gAgent effectively aligns agent exploration with expert behaviors while actively countering distribution shifts. This synergistic de-sign fundamentally mitigates catastrophic forgetting and enhances learning stability, enabling rapid adaptation and unprecedented scalability in lifelong learning scenarios. Through extensive evalu-ations on the ContinualBench and Meta-World sequences, ProgA-gent consistently outperformed state-of-the-art baselines, includ-ing Rank2Reward, TCN, and even strong perfect-memory upper bounds. Our rigorous ablations further confirmed that the learned progress-aware potential function serves as the primary driver of performance, fundamentally supported by the adversarial refine-ment and our unified computational architecture. 
+
+## 6 Limitations and Future Work 
+
+Despite its strong empirical performance, ProgAgent has several limitations that present exciting avenues for future research. First, our reward learning mechanism relies on the quality and visual diversity of the provided expert videos. If the expert demonstra-tions are highly suboptimal or lack coverage of critical edge cases, the learned potential function may inadvertently guide the agent toward poor local optima. Second, while our JAX-native implemen-tation achieves massive throughput in simulation environments, transitioning these learned policies to physical robots (sim-to-real transfer) remains an open challenge, particularly given the visual domain gap between simulated observations and real-world cam-era feeds. Finally, balancing the multi-objective loss—specifically tuning the coefficients for the adversarial push-back and continual regularizers—requires careful empirical tuning across different task suites. Future work will explore meta-learning approaches to dy-namically auto-tune these hyperparameters during the continual learning process. Additionally, we plan to extend ProgAgent by incorporating foundational vision-language models (VLMs) to fur-ther bridge the visual domain gap, ultimately deploying the agent in open-ended, real-world robotic manipulation tasks. ProgAgent: A Continual RL Agent with Progress-Aware Rewards Conference’17, July 2017, Washington, DC, USA 
+
+## References 
+
+[1] Chaofan Pan, Xin Yang, Yanhua Li, Wei Wei, Tianrui Li, Bo An, and Jiye Liang. A survey of continual reinforcement learning, 2025. [2] Khimya Khetarpal, Matthew Riemer, Irina Rish, and Doina Precup. Towards continual reinforcement learning: A review and perspectives, 2022. [3] Jusheng Zhang, Zimeng Huang, Yijia Fan, Ningyuan Liu, Mingyan Li, Zhuojie Yang, Jiawei Yao, Jian Wang, and Keze Wang. KABB: Knowledge-aware bayesian bandits for dynamic expert coordination in multi-agent systems. In Forty-second International Conference on Machine Learning , 2025. [4] Jusheng Zhang, Yijia Fan, Wenjun Lin, Ruiqi Chen, Haoyi Jiang, Wenhao Chai, Jian Wang, and Keze Wang. GAM-agent: Game-theoretic and uncertainty-aware collaboration for complex visual reasoning. In The Thirty-ninth Annual Conference on Neural Information Processing Systems , 2025. [5] Jusheng Zhang, Yijia Fan, Kaitong Cai, Jing Yang, Jiawei Yao, Jian Wang, Guanlong Qu, Ziliang Chen, and Keze Wang. Why keep your doubts to yourself? trading visual uncertainties in multi-agent bandit systems, 2026. [6] Jusheng Zhang, Kaitong Cai, Yijia Fan, Ningyuan Liu, and Keze Wang. MAT-agent: Adaptive multi-agent training optimization. In The Thirty-ninth Annual Conference on Neural Information Processing Systems , 2025. [7] Kai Arulkumaran, Marc Peter Deisenroth, Miles Brundage, and Anil Anthony Bharath. A brief survey of deep reinforcement learning. CoRR , abs/1708.05866, 2017. [8] Khimya Khetarpal, Matthew Riemer, Irina Rish, and Doina Precup. Towards con-tinual reinforcement learning: A review and perspectives. CoRR , abs/2012.13490, 2020. [9] Michael McCloskey and Neal J. Cohen. Catastrophic interference in connectionist networks: The sequential learning problem. volume 24 of Psychology of Learning and Motivation , pages 109–165. Academic Press, 1989. [10] Jusheng Zhang, Kaitong Cai, Yijia Fan, Jian Wang, and Keze Wang. CF-VLM: Counterfactual vision-language fine-tuning. In The Thirty-ninth Annual Confer-ence on Neural Information Processing Systems , 2025. [11] Jusheng Zhang, Yijia Fan, Zimo Wen, Jian Wang, and Keze Wang. Tri-MARF: A tri-modal multi-agent responsive framework for comprehensive 3d object annotation. In The Thirty-ninth Annual Conference on Neural Information Processing Systems ,2025. [12] Kaitong Cai, Jusheng Zhang, Jing Yang, Yijia Fan, Pengtao Xie, Jian Wang, and Keze Wang. Flashvlm: Text-guided visual token selection for large multimodal models, 2025. [13] German Ignacio Parisi, Ronald Kemker, Jose L. Part, Christopher Kanan, and Stefan Wermter. Continual lifelong learning with neural networks: A review. 
+
+CoRR , abs/1802.07569, 2018. [14] Jusheng Zhang, Xiaoyang Guo, Kaitong Cai, Qinhan Lv, Yijia Fan, Wenhao Chai, Jian Wang, and Keze Wang. Hybridtoken-vlm: Hybrid token compression for vision-language models, 2025. [15] Jusheng Zhang, Yijia Fan, Kaitong Cai, and Keze Wang. Kolmogorov-arnold fourier networks, 2025. [16] Jusheng Zhang, Yijia Fan, Kaitong Cai, Zimeng Huang, Xiaofei Sun, Jian Wang, Chengpei Tang, and Keze Wang. Drdiff: Dynamic routing diffusion with hierar-chical attention for breaking the efficiency-quality trade-off, 2025. [17] Jusheng Zhang, Yijia Fan, Kaitong Cai, Xiaofei Sun, and Keze Wang. Osc: Cog-nitive orchestration through dynamic knowledge alignment in multi-agent llm collaboration, 2025. [18] Wenpeng Hu, Zhou Lin, Bing Liu, Chongyang Tao, Zhengwei Tao, Jinwen Ma, Dongyan Zhao, and Rui Yan. Overcoming catastrophic forgetting via model adaptation. In International Conference on Learning Representations , 2019. [19] Stéphane Ross, Geoffrey J. Gordon, and J. Andrew Bagnell. No-regret reductions for imitation learning and structured prediction. CoRR , abs/1011.0686, 2010. [20] Jusheng Zhang, Kaitong Cai, Xiaoyang Guo, Sidi Liu, Qinhan Lv, Ruiqi Chen, Jing Yang, Yijia Fan, Xiaofei Sun, Jian Wang, Ziliang Chen, Liang Lin, and Keze Wang. Mm-cot:a benchmark for probing visual chain-of-thought reasoning in multimodal models, 2025. [21] Jusheng Zhang, Kaitong Cai, Jing Yang, and Keze Wang. Learning dynamics of vlm finetuning, 2025. [22] Jusheng Zhang, Ningyuan Liu, Qinhan Lyu, Jing Yang, and Keze Wang. Rational anova networks, 2026. [23] Jusheng Zhang, Kaitong Cai, Jian Wang, Yongsen Zheng, Kwok-Yan Lam, and Keze Wang. Process-of-thought reasoning for videos, 2026. [24] Tianhe Yu, Deirdre Quillen, Zhanpeng He, Ryan Julian, Karol Hausman, Chelsea Finn, and Sergey Levine. Meta-world: A benchmark and evaluation for multi-task and meta reinforcement learning. CoRR , abs/1910.10897, 2019. [25] James Kirkpatrick, Razvan Pascanu, Neil C. Rabinowitz, Joel Veness, Guillaume Desjardins, Andrei A. Rusu, Kieran Milan, John Quan, Tiago Ramalho, Agnieszka Grabska-Barwinska, Demis Hassabis, Claudia Clopath, Dharshan Kumaran, and Raia Hadsell. Overcoming catastrophic forgetting in neural networks. CoRR ,abs/1612.00796, 2016. [26] Friedemann Zenke, Ben Poole, and Surya Ganguli. Improved multitask learning through synaptic intelligence. CoRR , abs/1703.04200, 2017. [27] Rahaf Aljundi, Francesca Babiloni, Mohamed Elhoseiny, Marcus Rohrbach, and Tinne Tuytelaars. Memory aware synapses: Learning what (not) to forget. CoRR ,abs/1711.09601, 2017. [28] Jusheng Zhang, Yijia Fan, Kaitong Cai, Jing Yang, Yongsen Zheng, Kwok-Yan Lam, Liang Lin, and Keze Wang. Spectral gating networks, 2026. [29] Jiawei Yao, Jusheng Zhang, Xiaochao Pan, Tong Wu, and Canran Xiao. Depthssc: Monocular 3d semantic scene completion via depth-spatial alignment and voxel adaptation, 2024. [30] Jensen Zhang, Ningyuan Liu, Yijia Fan, Zihao Huang, Qinglin Zeng, Kaitong Cai, Jian Wang, and Keze Wang. Llm-cas: Dynamic neuron perturbation for real-time hallucination correction, 2025. [31] Jusheng Zhang, Kaitong Cai, Jing Yang, Jian Wang, Chengpei Tang, and Keze Wang. Top-down semantic refinement for image captioning, 2025. [32] Yue Ma, Hongyu Liu, Hongfa Wang, Heng Pan, Yingqing He, Junkun Yuan, Ailing Zeng, Chengfei Cai, Heung-Yeung Shum, Wei Liu, et al. Follow-your-emoji: Fine-controllable and expressive freestyle portrait animation. In SIGGRAPH Asia 2024 Conference Papers , pages 1–12, 2024. [33] Yue Ma, Zexuan Yan, Hongyu Liu, Hongfa Wang, Heng Pan, Yingqing He, Junkun Yuan, Ailing Zeng, Chengfei Cai, Heung-Yeung Shum, et al. Follow-your-emoji-faster: Towards efficient, fine-controllable, and expressive freestyle portrait ani-mation. arXiv preprint arXiv:2509.16630 , 2025. [34] Yue Ma, Yulong Liu, Qiyuan Zhu, Ayden Yang, Kunyu Feng, Xinhua Zhang, Zhifeng Li, Sirui Han, Chenyang Qi, and Qifeng Chen. Follow-your-motion: Video motion transfer via efficient spatial-temporal decoupled finetuning. arXiv preprint arXiv:2506.05207 , 2025. [35] David Rolnick, Arun Ahuja, Jonathan Schwarz, Timothy P. Lillicrap, and Greg Wayne. Experience replay for continual learning. CoRR , abs/1811.11682, 2018. [36] Arslan Chaudhry, Marcus Rohrbach, Mohamed Elhoseiny, Thalaiyasingam Ajan-than, Puneet Kumar Dokania, Philip H. S. Torr, and Marc’Aurelio Ranzato. Con-tinual learning with tiny episodic memories. CoRR , abs/1902.10486, 2019. [37] Hanul Shin, Jung Kwon Lee, Jaehong Kim, and Jiwon Kim. Continual learning with deep generative replay. CoRR , abs/1705.08690, 2017. [38] Yijia Fan, Jusheng Zhang, Kaitong Cai, Jing Yang, and Keze Wang. CCG: Rare-label prediction via neural SEM–driven causal game. In Christos Christodoulopoulos, Tanmoy Chakraborty, Carolyn Rose, and Violet Peng, editors, Findings of the Association for Computational Linguistics: EMNLP 2025 , pages 6243–6256, Suzhou, China, November 2025. Association for Computational Linguistics. [39] Xiaohua Li, Jusheng Zhang, and Fatemeh Safara. Improving the accuracy of diabetes diagnosis applications through a hybrid feature selection algorithm. 
+
+Neural Process. Lett. , 55(1):153–169, March 2021. [40] Yue Ma, Kunyu Feng, Zhongyuan Hu, Xinyu Wang, Yucheng Wang, Mingzhe Zheng, Xuanhua He, Chenyang Zhu, Hongyu Liu, Yingqing He, et al. Controllable video generation: A survey. arXiv preprint arXiv:2507.16869 , 2025. [41] Yue Ma, Kunyu Feng, Xinhua Zhang, Hongyu Liu, David Junhao Zhang, Jinbo Xing, Yinhan Zhang, Ayden Yang, Zeyu Wang, and Qifeng Chen. Follow-your-creation: Empowering 4d creation through video inpainting. arXiv preprint arXiv:2506.04590 , 2025. [42] Andrei A. Rusu, Neil C. Rabinowitz, Guillaume Desjardins, Hubert Soyer, James Kirkpatrick, Koray Kavukcuoglu, Razvan Pascanu, and Raia Hadsell. Progressive neural networks. CoRR , abs/1606.04671, 2016. [43] Arun Mallya and Svetlana Lazebnik. Packnet: Adding multiple tasks to a single network by iterative pruning. CoRR , abs/1711.05769, 2017. [44] Xilai Li, Yingbo Zhou, Tianfu Wu, Richard Socher, and Caiming Xiong. Learn to grow: A continual structure learning framework for overcoming catastrophic forgetting. CoRR , abs/1904.00310, 2019. [45] Dean A. Pomerleau. Efficient training of artificial neural networks for au-tonomous navigation. Neural Computation , 3(1):88–97, 1991. [46] Andrew Y. Ng and Stuart J. Russell. Algorithms for inverse reinforcement learning. In Proceedings of the Seventeenth International Conference on Machine Learning ,ICML ’00, page 663–670, San Francisco, CA, USA, 2000. Morgan Kaufmann Publishers Inc. [47] Pierre Sermanet, Corey Lynch, Jasmine Hsu, and Sergey Levine. Time-contrastive networks: Self-supervised learning from multi-view observation. 
+
+CoRR , abs/1704.06888, 2017. [48] Daniel Yang, Davin Tjia, Jacob Berg, Dima Damen, Pulkit Agrawal, and Abhishek Gupta. Rank2reward: Learning shaped reward functions from passive video, 2024. [49] Debidatta Dwibedi, Yusuf Aytar, Jonathan Tompson, Pierre Sermanet, and Andrew Zisserman. Temporal cycle-consistency learning. CoRR , abs/1904.07846, 2019. [50] Paul Christiano, Jan Leike, Tom B. Brown, Miljan Martic, Shane Legg, and Dario Amodei. Deep reinforcement learning from human preferences, 2023. [51] Qing Wang, Yingru Li, Jiechao Xiong, and Tong Zhang. Divergence-augmented policy optimization, 2025. [52] Frederik Ebert, Chelsea Finn, Alex X. Lee, and Sergey Levine. Self-supervised visual planning with temporal skip connections, 2017. [53] Viktor Makoviychuk, Lukasz Wawrzyniak, Yunrong Guo, Michelle Lu, Kier Storey, Miles Macklin, David Hoeller, Nikita Rudin, Arthur Allshire, Ankur Handa, and Gavriel State. Isaac gym: High performance gpu-based physics simulation for Conference’17, July 2017, Washington, DC, USA Jinzhou Tan, Gabriel Adineera, and Jinoh Kim 
+
+robot learning. CoRR , abs/2108.10470, 2021. [54] C. Daniel Freeman, Erik Frey, Anton Raichuk, Sertan Girgin, Igor Mordatch, and Olivier Bachem. Brax - A differentiable physics engine for large scale rigid body simulation. CoRR , abs/2106.13281, 2021. [55] James Bradbury, Roy Frostig, Peter Hawkins, Matthew James Johnson, Chris Leary, Dougal Maclaurin, George Necula, Adam Paszke, Jake VanderPlas, Skye Wanderman-Milne, and Qiao Zhang. JAX: composable transformations of Python+NumPy programs, 2018. [56] Emanuel Todorov, Tom Erez, and Yuval Tassa. Mujoco: A physics engine for model-based control. In 2012 IEEE/RSJ International Conference on Intelligent Robots and Systems , pages 5026–5033, 2012. [57] Richard S. Sutton and Andrew G. Barto. Reinforcement Learning: An Introduction .MIT Press, 2 edition, 2018. [58] Leslie Pack Kaelbling, Michael L. Littman, and Andrew W. Moore. Reinforcement learning: A survey. Journal of Artificial Intelligence Research , 4:237–285, 1996. [59] Wenjun Lin, Jensen Zhang, Kaitong Cai, and Keze Wang. Storm: Search-guided generative world models for robotic manipulation, 2025. [60] R.S. Sutton and A.G. Barto. Reinforcement learning: An introduction. IEEE Transactions on Neural Networks , 9(5):1054–1054, 1998. [61] Kevin Zakka, Andy Zeng, Pete Florence, Jonathan Tompson, Jeannette Bohg, and Debidatta Dwibedi. Xirl: Cross-embodiment inverse reinforcement learning, 2021. [62] Yecheng Jason Ma, Shagun Sodhani, Dinesh Jayaraman, Osbert Bastani, Vikash Kumar, and Amy Zhang. Vip: Towards universal visual reward and representation via value-implicit pre-training, 2023. [63] Andrew Y. Ng, Daishi Harada, and Stuart J. Russell. Policy invariance under reward transformations: Theory and application to reward shaping. In Proceedings of the Sixteenth International Conference on Machine Learning (ICML 1999) , pages 278–287, San Francisco, CA, USA, 1999. Morgan Kaufmann. [64] John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. Proximal policy optimization algorithms. CoRR , abs/1707.06347, 2017. [65] Zichen Liu, Guoji Fu, Chao Du, Wee Sun Lee, and Min Lin. Continual reinforce-ment learning by planning with online world models, 2025. [66] Jeffrey S. Vitter. Random sampling with a reservoir. ACM Trans. Math. Softw. ,11(1):37–57, March 1985. [67] Jonathan Ho and Stefano Ermon. Generative adversarial imitation learning. 
+
+CoRR , abs/1606.03476, 2016.

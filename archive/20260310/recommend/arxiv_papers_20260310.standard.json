@@ -1,0 +1,861 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-10T19:22:43.190018+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 4,
+    "deep_divecandidates": 17,
+    "deep_cap": 9,
+    "deep_selected": 9,
+    "quick_candidates": 13,
+    "quick_skim_target": 14,
+    "quick_selected": 13
+  },
+  "deep_dive": [
+    {
+      "id": "2603.02766v1",
+      "title": "EvoSkill: Automated Skill Discovery for Multi-Agent Systems",
+      "abstract": "Coding agents are increasingly used as general-purpose problem solvers, but their flexibility does not by itself confer the domain expertise needed for specialized tasks. Recent work addresses this through \\textit{agent skills}: reusable workflows, and code, that augment agents with domain-specific capabilities. Most skills today are hand-crafted, and existing evolutionary approaches optimize low-level artifacts (e.g. prompts \\& code) that are tightly coupled to specific models and tasks. We introduce \\textbf{EvoSkill}, a self-evolving framework that automatically discovers and refines agent skills through iterative failure analysis. EvoSkill analyzes execution failures, proposes new skills or edits to existing ones, and materializes them into structured, reusable skill folders. A Pareto frontier of agent programs governs selection, retaining only skills that improve held-out validation performance while the underlying model remains frozen. We evaluate EvoSkill on two benchmarks: OfficeQA, a grounded reasoning benchmark over U.S.\\ Treasury data, where it improves exact-match accuracy by \\textbf{7.3\\%} (60.6\\% $\\to$ 67.9\\%); and SealQA, a search-augmented QA benchmark with noisy retrieval, where it yields a \\textbf{12.1\\%} gain (26.6\\% $\\to$ 38.7\\%). We also investigate the zero-shot transfer capabilties of skills evolved on one task to the other; in particular: skills evolved from SealQA transfers zero-shot to BrowseComp, improving accuracy by \\textbf{5.3\\%} without modification demonstrating that skill-level optimization produces transferable capabilities beyond the training task.",
+      "authors": [
+        "Salaheddin Alzubi",
+        "Noah Provenzano",
+        "Jaydon Bingham",
+        "Weiyuan Chen",
+        "Tu Vu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.MA"
+      ],
+      "published": "2026-03-03T09:07:22+00:00",
+      "link": "https://arxiv.org/pdf/2603.02766v1",
+      "tags": [
+        "keyword:self-evolving",
+        "query:self-evolving"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-evolving framework for automated skill discovery and refinement",
+      "llm_evidence_cn": "用于自动技能发现和改进的自我演化框架",
+      "llm_evidence": "用于自动技能发现和改进的自我演化框架",
+      "canonical_evidence": "用于自动技能发现和改进的自我演化框架",
+      "llm_tldr_en": "EvoSkill automatically discovers and refines agent skills through iterative failure analysis.",
+      "llm_tldr_cn": "EvoSkill通过迭代失败分析自动发现并完善智能体技能。",
+      "llm_tldr": "EvoSkill通过迭代失败分析自动发现并完善智能体技能。",
+      "llm_tags": [
+        "query:self-evolving:composite"
+      ],
+      "matched_query_tag": "query:self-evolving:composite",
+      "matched_query_text": "Papers central to Self-evolving Agent相关的研究, especially work that connects or combines: Self-evolving autonomous agents and systems; Large language models with self-improvement capabilities; Recent advances in self evolving autonomous agent architectures; Methods for recursive self improvement in large language model agents; How agents learn and evolve through environmental interaction; Self correction and feedback loops in autonomous agent development.",
+      "matched_requirement_id": "req-composite-self-evolving",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.02772v1",
+      "title": "Agentic Self-Evolutionary Replanning for Embodied Navigation",
+      "abstract": "Failure is inevitable for embodied navigation in complex environments. To enhance the resilience, replanning (RP) is a viable option, where the robot is allowed to fail, but is capable of adjusting plan until success. However, existing RP approaches freeze the ego action model and miss the opportunities to explore better plans by upgrading the robot itself. To address this limitation, we propose Self-Evolutionary RePlanning, or SERP for short, which leads to a paradigm shift from frozen models towards evolving models by run-time learning from recent experiences. In contrast to existing model evolution approaches that often get stuck at predefined static parameters, we introduce agentic self-evolving action model that uses in-context learning with auto-differentiation (ILAD) for adaptive function adjustment and global parameter reset. To achieve token-efficient replanning for SERP, we also propose graph chain-of-thought (GCOT) replanning with large language model (LLM) inference over distilled graphs. Extensive simulation and real-world experiments demonstrate that SERP achieves higher success rate with lower token expenditure over various benchmarks, validating its superior robustness and efficiency across diverse environments.",
+      "authors": [
+        "Guoliang Li",
+        "Ruihua Han",
+        "Chengyang Li",
+        "He Li",
+        "Shuai Wang",
+        "Wenchao Ding",
+        "Hong Zhang",
+        "Chengzhong Xu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-03-03T09:12:29+00:00",
+      "link": "https://arxiv.org/pdf/2603.02772v1",
+      "tags": [
+        "keyword:self-evolving",
+        "query:self-evolving"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-evolutionary replanning for embodied navigation by learning from recent experiences",
+      "llm_evidence_cn": "通过学习近期经验实现具身导航的自我进化重规划",
+      "llm_evidence": "通过学习近期经验实现具身导航的自我进化重规划",
+      "canonical_evidence": "通过学习近期经验实现具身导航的自我进化重规划",
+      "llm_tldr_en": "SERP enables agents to upgrade their action models at run-time through self-evolutionary replanning.",
+      "llm_tldr_cn": "SERP 使智能体能够通过自我进化重规划在运行时升级其动作模型。",
+      "llm_tldr": "SERP 使智能体能够通过自我进化重规划在运行时升级其动作模型。",
+      "llm_tags": [
+        "query:self-evolving:composite"
+      ],
+      "matched_query_tag": "query:self-evolving:composite",
+      "matched_query_text": "Papers central to Self-evolving Agent相关的研究, especially work that connects or combines: Self-evolving autonomous agents and systems; Large language models with self-improvement capabilities; Recent advances in self evolving autonomous agent architectures; Methods for recursive self improvement in large language model agents; How agents learn and evolve through environmental interaction; Self correction and feedback loops in autonomous agent development.",
+      "matched_requirement_id": "req-composite-self-evolving",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.04900v1",
+      "title": "EvoTool: Self-Evolving Tool-Use Policy Optimization in LLM Agents via Blame-Aware Mutation and Diversity-Aware Selection",
+      "abstract": "LLM-based agents depend on effective tool-use policies to solve complex tasks, yet optimizing these policies remains challenging due to delayed supervision and the difficulty of credit assignment in long-horizon trajectories. Existing optimization approaches tend to be either monolithic, which are prone to entangling behaviors, or single-aspect, which ignore cross-module error propagation. To address these limitations, we propose EvoTool, a self-evolving framework that optimizes a modular tool-use policy via a gradient-free evolutionary paradigm. EvoTool decomposes agent's tool-use policy into four modules, including Planner, Selector, Caller, and Synthesizer, and iteratively improves them in a self-improving loop through three novel mechanisms. Trajectory-Grounded Blame Attribution uses diagnostic traces to localize failures to a specific module. Feedback-Guided Targeted Mutation then edits only that module via natural-language critique. Diversity-Aware Population Selection preserves complementary candidates to ensure solution diversity. Across four benchmarks, EvoTool outperforms strong baselines by over 5 points on both GPT-4.1 and Qwen3-8B, while achieving superior efficiency and transferability. The code will be released once paper is accepted.",
+      "authors": [
+        "Shuo Yang",
+        "Soyeon Caren Han",
+        "Xueqi Ma",
+        "Yan Li",
+        "Mohammad Reza Ghasemi Madani",
+        "Eduard Hovy"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-05T07:42:53+00:00",
+      "link": "https://arxiv.org/pdf/2603.04900v1",
+      "tags": [
+        "keyword:self-evolving",
+        "query:self-evolving"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-evolving framework for optimizing modular tool-use policies in agents",
+      "llm_evidence_cn": "用于优化智能体模块化工具使用策略的自我演化框架",
+      "llm_evidence": "用于优化智能体模块化工具使用策略的自我演化框架",
+      "canonical_evidence": "用于优化智能体模块化工具使用策略的自我演化框架",
+      "llm_tldr_en": "EvoTool uses an evolutionary paradigm to iteratively improve agent tool-use modules.",
+      "llm_tldr_cn": "EvoTool采用进化范式迭代改进智能体的工具使用模块。",
+      "llm_tldr": "EvoTool采用进化范式迭代改进智能体的工具使用模块。",
+      "llm_tags": [
+        "query:self-evolving"
+      ],
+      "matched_query_tag": "query:self-evolving",
+      "matched_query_text": "Recent advances in self evolving autonomous agent architectures",
+      "matched_requirement_id": "req-24",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.08561v1",
+      "title": "RetroAgent: From Solving to Evolving via Retrospective Dual Intrinsic Feedback",
+      "abstract": "Large language model (LLM)-based agents trained with reinforcement learning (RL) have shown strong potential on complex interactive tasks. However, standard RL paradigms favor static problem-solving over continuous adaptation: agents often converge to suboptimal strategies due to insufficient exploration, while learned knowledge remains implicit within parameters rather than explicitly retrievable, limiting effective experiential learning. To address these limitations, we introduce RetroAgent, an online RL framework that empowers agents to master complex interactive environments not just by solving, but by evolving. Concretely, RetroAgent features a hindsight self-reflection mechanism that produces dual intrinsic feedback: (1) intrinsic numerical feedback that that tracks incremental subtask completion relative to prior attempts, rewarding promising explorations, and (2) intrinsic language feedback that distills reusable lessons into a memory buffer, retrieved via our proposed Similarity & Utility-Aware Upper Confidence Bound (SimUtil-UCB) strategy balancing relevance, utility, and exploration to effectively leverage past experiences. Extensive experiments on two model families across four challenging agentic tasks demonstrate that RetroAgent significantly outperforms existing methods, achieving state-of-the-art results -- e.g., surpassing Group Relative Policy Optimization (GRPO)-trained agents by +18.3% on ALFWorld, +15.4% on WebShop, +27.1% on Sokoban, and +8.9% on MineSweeper -- while exhibiting strong test-time adaptation and generalization to out-of-distribution scenarios.",
+      "authors": [
+        "Xiaoying Zhang",
+        "Zichen Liu",
+        "Yipeng Zhang",
+        "Xia Hu",
+        "Wenqi Shao"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-09T16:23:33+00:00",
+      "link": "https://arxiv.org/pdf/2603.08561v1",
+      "tags": [
+        "query:self-evolving"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "online RL framework for agents to master environments by evolving through self-reflection",
+      "llm_evidence_cn": "通过自我反思使智能体在环境中进化的在线强化学习框架",
+      "llm_evidence": "通过自我反思使智能体在环境中进化的在线强化学习框架",
+      "canonical_evidence": "通过自我反思使智能体在环境中进化的在线强化学习框架",
+      "llm_tldr_en": "RetroAgent uses retrospective feedback to enable continuous adaptation and evolution in LLM agents.",
+      "llm_tldr_cn": "RetroAgent 通过回顾性反馈实现 LLM 智能体的持续适应与进化。",
+      "llm_tldr": "RetroAgent 通过回顾性反馈实现 LLM 智能体的持续适应与进化。",
+      "llm_tags": [
+        "query:self-evolving:composite"
+      ],
+      "matched_query_tag": "query:self-evolving:composite",
+      "matched_query_text": "Papers central to Self-evolving Agent相关的研究, especially work that connects or combines: Self-evolving autonomous agents and systems; Large language models with self-improvement capabilities; Recent advances in self evolving autonomous agent architectures; Methods for recursive self improvement in large language model agents; How agents learn and evolve through environmental interaction; Self correction and feedback loops in autonomous agent development.",
+      "matched_requirement_id": "req-composite-self-evolving",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.04029v1",
+      "title": "Self-adapting Robotic Agents through Online Continual Reinforcement Learning with World Model Feedback",
+      "abstract": "As learning-based robotic controllers are typically trained offline and deployed with fixed parameters, their ability to cope with unforeseen changes during operation is limited. Biologically inspired, this work presents a framework for online Continual Reinforcement Learning that enables automated adaptation during deployment. Building on DreamerV3, a model-based Reinforcement Learning algorithm, the proposed method leverages world model prediction residuals to detect out-of-distribution events and automatically trigger finetuning. Adaptation progress is monitored using both task-level performance signals and internal training metrics, allowing convergence to be assessed without external supervision and domain knowledge. The approach is validated on a variety of contemporary continuous control problems, including a quadruped robot in high-fidelity simulation, and a real-world model vehicle. Relevant metrics and their interpretation are presented and discussed, as well as resulting trade-offs described. The results sketch out how autonomous robotic agents could once move beyond static training regimes toward adaptive systems capable of self-reflection and -improvement during operation, just like their biological counterparts.",
+      "authors": [
+        "Fabian Domberg",
+        "Georg Schildbach"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-03-04T13:07:42+00:00",
+      "link": "https://arxiv.org/pdf/2603.04029v1",
+      "tags": [
+        "query:self-evolving"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "online continual reinforcement learning for automated adaptation of robotic agents",
+      "llm_evidence_cn": "用于机器人智能体自动适应的在线持续强化学习",
+      "llm_evidence": "用于机器人智能体自动适应的在线持续强化学习",
+      "canonical_evidence": "用于机器人智能体自动适应的在线持续强化学习",
+      "llm_tldr_en": "Enables robotic agents to self-adapt to unforeseen changes using world model prediction residuals.",
+      "llm_tldr_cn": "利用世界模型预测残差使机器人智能体能够自动适应不可见的变化。",
+      "llm_tldr": "利用世界模型预测残差使机器人智能体能够自动适应不可见的变化。",
+      "llm_tags": [
+        "query:self-evolving"
+      ],
+      "matched_query_tag": "query:self-evolving",
+      "matched_query_text": "Self-evolving autonomous agents and systems",
+      "matched_requirement_id": "req-22",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.08706v1",
+      "title": "Agentic Critical Training",
+      "abstract": "Training large language models (LLMs) as autonomous agents often begins with imitation learning, but it only teaches agents what to do without understanding why: agents never contrast successful actions against suboptimal alternatives and thus lack awareness of action quality. Recent approaches attempt to address this by introducing self-reflection supervision derived from contrasts between expert and alternative actions. However, the training paradigm fundamentally remains imitation learning: the model imitates pre-constructed reflection text rather than learning to reason autonomously. We propose Agentic Critical Training (ACT), a reinforcement learning paradigm that trains agents to identify the better action among alternatives. By rewarding whether the model's judgment is correct, ACT drives the model to autonomously develop reasoning about action quality, producing genuine self-reflection rather than imitating it. Across three challenging agent benchmarks, ACT consistently improves agent performance when combined with different post-training methods. It achieves an average improvement of 5.07 points over imitation learning and 4.62 points over reinforcement learning. Compared to approaches that inject reflection capability through knowledge distillation, ACT also demonstrates clear advantages, yielding an average improvement of 2.42 points. Moreover, ACT enables strong out-of-distribution generalization on agentic benchmarks and improves performance on general reasoning benchmarks without any reasoning-specific training data, highlighting the value of our method. These results suggest that ACT is a promising path toward developing more reflective and capable LLM agents.",
+      "authors": [
+        "Weize Liu",
+        "Minghui Liu",
+        "Sy-Tuyen Ho",
+        "Souradip Chakraborty",
+        "Xiyao Wang",
+        "Furong Huang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-03-09T17:58:56+00:00",
+      "link": "https://arxiv.org/pdf/2603.08706v1",
+      "tags": [
+        "query:self-evolving"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "reinforcement learning paradigm for agents to reason autonomously and identify better actions",
+      "llm_evidence_cn": "使智能体能够自主推理并识别更优动作的强化学习范式",
+      "llm_evidence": "使智能体能够自主推理并识别更优动作的强化学习范式",
+      "canonical_evidence": "使智能体能够自主推理并识别更优动作的强化学习范式",
+      "llm_tldr_en": "ACT trains agents to contrast actions and reason autonomously rather than just imitating expert text.",
+      "llm_tldr_cn": "ACT 训练智能体对比动作并自主推理，而非仅仅模仿专家文本。",
+      "llm_tldr": "ACT 训练智能体对比动作并自主推理，而非仅仅模仿专家文本。",
+      "llm_tags": [
+        "query:self-evolving:composite"
+      ],
+      "matched_query_tag": "query:self-evolving:composite",
+      "matched_query_text": "Papers central to Self-evolving Agent相关的研究, especially work that connects or combines: Self-evolving autonomous agents and systems; Large language models with self-improvement capabilities; Recent advances in self evolving autonomous agent architectures; Methods for recursive self improvement in large language model agents; How agents learn and evolve through environmental interaction; Self correction and feedback loops in autonomous agent development.",
+      "matched_requirement_id": "req-composite-self-evolving",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.07300v1",
+      "title": "AutoResearch-RL: Perpetual Self-Evaluating Reinforcement Learning Agents for Autonomous Neural Architecture Discovery",
+      "abstract": "We present AutoResearch-RL, a framework in which a reinforcement learning agent conducts open-ended neural architecture and hyperparameter research without human supervision, running perpetually until a termination oracle signals convergence or resource exhaustion. At each step the agent proposes a code modification to a target training script, executes it under a fixed wall clock time budget, observes a scalar reward derived from validation bits-per-byte (val-bpb), and updates its policy via Proximal Policy Optimisation (PPO).   The key design insight is the separation of three concerns: (i) a frozen environment (data pipeline, evaluation protocol, and constants) that guarantees fair cross-experiment comparison; (ii) a mutable target file (train.py) that represents the agent's editable state; and (iii) a meta-learner (the RL agent itself) that accumulates a growing trajectory of experiment outcomes and uses them to inform subsequent proposals.   We formalise this as a Markov Decision Process, derive convergence guarantees under mild assumptions, and demonstrate empirically on a single GPU nanochat pretraining benchmark that AutoResearch-RL discovers configurations that match or exceed hand-tuned baselines after approximately 300 overnight iterations, with no human in the loop.",
+      "authors": [
+        "Nilesh Jain",
+        "Rohit Yadav",
+        "Sagar Kotian",
+        "Claude AI"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-03-07T17:49:44+00:00",
+      "link": "https://arxiv.org/pdf/2603.07300v1",
+      "tags": [
+        "query:self-evolving"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "perpetual self-evaluating RL agents for autonomous research",
+      "llm_evidence_cn": "用于自主研究的永久自我评估强化学习智能体",
+      "llm_evidence": "用于自主研究的永久自我评估强化学习智能体",
+      "canonical_evidence": "用于自主研究的永久自我评估强化学习智能体",
+      "llm_tldr_en": "A framework for RL agents to conduct open-ended neural architecture research without human supervision.",
+      "llm_tldr_cn": "一种让强化学习智能体在无需人类监督的情况下进行开放式神经架构研究的框架。",
+      "llm_tldr": "一种让强化学习智能体在无需人类监督的情况下进行开放式神经架构研究的框架。",
+      "llm_tags": [
+        "query:self-evolving"
+      ],
+      "matched_query_tag": "query:self-evolving",
+      "matched_query_text": "Self-evolving autonomous agents and systems",
+      "matched_requirement_id": "req-22",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.02438v1",
+      "title": "ORCA: Orchestrated Reasoning with Collaborative Agents for Document Visual Question Answering",
+      "abstract": "Document Visual Question Answering (DocVQA) remains challenging for existing Vision-Language Models (VLMs), especially under complex reasoning and multi-step workflows. Current approaches struggle to decompose intricate questions into manageable sub-tasks and often fail to leverage specialized processing paths for different document elements. We present ORCA: Orchestrated Reasoning with Collaborative Agents for Document Visual Question Answering, a novel multi-agent framework that addresses these limitations through strategic agent coordination and iterative refinement. ORCA begins with a reasoning agent that decomposes queries into logical steps, followed by a routing mechanism that activates task-specific agents from a specialized agent dock. Our framework leverages a set of specialized AI agents, each dedicated to a distinct modality, enabling fine-grained understanding and collaborative reasoning across diverse document components. To ensure answer reliability, ORCA employs a debate mechanism with stress-testing, and when necessary, a thesis-antithesis adjudication process. This is followed by a sanity checker to ensure format consistency. Extensive experiments on three benchmarks demonstrate that our approach achieves significant improvements over state-of-the-art methods, establishing a new paradigm for collaborative agent systems in vision-language reasoning.",
+      "authors": [
+        "Aymen Lassoued",
+        "Mohamed Ali Souibgui",
+        "Yousri Kessentini"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-02T22:21:25+00:00",
+      "link": "https://arxiv.org/pdf/2603.02438v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multi-agent framework for complex reasoning in Document Visual Question Answering",
+      "llm_evidence_cn": "用于文档视觉问答中复杂推理的多智能体框架",
+      "llm_evidence": "用于文档视觉问答中复杂推理的多智能体框架",
+      "canonical_evidence": "用于文档视觉问答中复杂推理的多智能体框架",
+      "llm_tldr_en": "ORCA uses collaborative agents to decompose and solve complex Document VQA tasks.",
+      "llm_tldr_cn": "ORCA利用协作智能体分解并解决复杂的文档视觉问答任务。",
+      "llm_tldr": "ORCA利用协作智能体分解并解决复杂的文档视觉问答任务。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Knowledge Visual Question Answering",
+      "matched_requirement_id": "req-1",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.02438v1"
+    },
+    {
+      "id": "2603.02473v1",
+      "title": "Diagnosing Retrieval vs. Utilization Bottlenecks in LLM Agent Memory",
+      "abstract": "Memory-augmented LLM agents store and retrieve information from prior interactions, yet the relative importance of how memories are written versus how they are retrieved remains unclear. We introduce a diagnostic framework that analyzes how performance differences manifest across write strategies, retrieval methods, and memory utilization behavior, and apply it to a 3x3 study crossing three write strategies (raw chunks, Mem0-style fact extraction, MemGPT-style summarization) with three retrieval methods (cosine, BM25, hybrid reranking). On LoCoMo, retrieval method is the dominant factor: average accuracy spans 20 points across retrieval methods (57.1% to 77.2%) but only 3-8 points across write strategies. Raw chunked storage, which requires zero LLM calls, matches or outperforms expensive lossy alternatives, suggesting that current memory pipelines may discard useful context that downstream retrieval mechanisms fail to compensate for. Failure analysis shows that performance breakdowns most often manifest at the retrieval stage rather than at utilization. We argue that, under current retrieval practices, improving retrieval quality yields larger gains than increasing write-time sophistication. Code is publicly available at https://github.com/boqiny/memory-probe.",
+      "authors": [
+        "Boqin Yuan",
+        "Yue Su",
+        "Kun Yao"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-02T23:47:23+00:00",
+      "link": "https://arxiv.org/pdf/2603.02473v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "LLM agent memory and retrieval vs utilization bottlenecks",
+      "llm_evidence_cn": "LLM智能体记忆以及检索与利用的瓶颈",
+      "llm_evidence": "LLM智能体记忆以及检索与利用的瓶颈",
+      "canonical_evidence": "LLM智能体记忆以及检索与利用的瓶颈",
+      "llm_tldr_en": "Analyzes how write strategies and retrieval methods impact the performance of memory-augmented LLM agents.",
+      "llm_tldr_cn": "分析了写入策略和检索方法如何影响记忆增强型LLM智能体的性能。",
+      "llm_tldr": "分析了写入策略和检索方法如何影响记忆增强型LLM智能体的性能。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "I hope you retrieve articles related to multimodal memory of agents.",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.02473v1"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2603.02795v1",
+      "title": "VSearcher: Long-Horizon Multimodal Search Agent via Reinforcement Learning",
+      "abstract": "Large models are increasingly becoming autonomous agents that interact with real-world environments and use external tools to augment their static capabilities. However, most recent progress has focused on text-only large language models, which are limited to a single modality and therefore have narrower application scenarios. On the other hand, multimodal large models, while offering stronger perceptual capabilities, remain limited to static knowledge and lack the ability to access and leverage up-to-date web information. In this paper, we propose VSearcher, turning static multimodal model into multimodal search agent capable of long-horizon, multi-turn tool use in real-world web environments, including text search, image search, and web browsing, via reinforcement learning. Specifically, we introduce Iterative Injection Data Synthesis pipeline to generate large-scale, complex multimodal QA questions, which are further filtered with comprehensive metrics to ensure high quality and sufficient difficulty. We then adopt an SFT-then-RL training pipeline to turn base multimodal models to agent capable of multi-turn tool calling in real-world web environments. Besides, we propose a multimodal search benchmark MM-SearchExam dedicated to evaluating search capabilities of multimodal search agents, which proves highly challenging for recent proprietary models. Extensive evaluations across multiple multimodal search benchmarks reveal effectiveness of our method. VSearcher achieves superior performance compared to recent multimodal search agents and even surpasses several proprietary models on multimodal web search tasks.",
+      "authors": [
+        "Ruiyang Zhang",
+        "Qianguo Sun",
+        "Chao Song",
+        "Yiyan Qi",
+        "Zhedong Zheng"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-03T09:33:22+00:00",
+      "link": "https://arxiv.org/pdf/2603.02795v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multimodal search agent using RAG-like tool use in web environments",
+      "llm_evidence_cn": "在网络环境中使用类RAG工具的多模态搜索智能体",
+      "llm_evidence": "在网络环境中使用类RAG工具的多模态搜索智能体",
+      "canonical_evidence": "在网络环境中使用类RAG工具的多模态搜索智能体",
+      "llm_tldr_en": "Develops VSearcher, an agent that uses multimodal search and browsing to augment static knowledge.",
+      "llm_tldr_cn": "开发VSearcher智能体，通过多模态搜索和浏览增强静态知识。",
+      "llm_tldr": "开发VSearcher智能体，通过多模态搜索和浏览增强静态知识。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
+      "matched_requirement_id": "req-5",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.02795v1",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.07784v1",
+      "title": "ProgAgent:A Continual RL Agent with Progress-Aware Rewards",
+      "abstract": "We present ProgAgent, a continual reinforcement learning (CRL) agent that unifies progress-aware reward learning with a high-throughput, JAX-native system architecture. Lifelong robotic learning grapples with catastrophic forgetting and the high cost of reward specification. ProgAgent tackles these by deriving dense, shaped rewards from unlabeled expert videos through a perceptual model that estimates task progress across initial, current, and goal observations. We theoretically interpret this as a learned state-potential function, delivering robust guidance in line with expert behaviors. To maintain stability amid online exploration - where novel, out-of-distribution states arise - we incorporate an adversarial push-back refinement that regularizes the reward model, curbing overconfident predictions on non-expert trajectories and countering distribution shift. By embedding this reward mechanism into a JIT-compiled loop, ProgAgent supports massively parallel rollouts and fully differentiable updates, rendering a sophisticated unified objective feasible: it merges PPO with coreset replay and synaptic intelligence for an enhanced stability-plasticity balance. Evaluations on ContinualBench and Meta-World benchmarks highlight ProgAgent's advantages: it markedly reduces forgetting, boosts learning speed, and outperforms key baselines in visual reward learning (e.g., Rank2Reward, TCN) and continual learning (e.g., Coreset, SI) - surpassing even an idealized perfect memory agent. Real-robot trials further validate its ability to acquire complex manipulation skills from noisy, few-shot human demonstrations.",
+      "authors": [
+        "Jinzhou Tan",
+        "Gabriel Adineera",
+        "Jinoh Kim"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-03-08T19:58:07+00:00",
+      "link": "https://arxiv.org/pdf/2603.07784v1",
+      "tags": [
+        "query:self-evolving"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "deriving rewards from expert videos for lifelong robotic learning",
+      "llm_evidence_cn": "从专家视频中获取奖励以进行终身机器人学习",
+      "llm_evidence": "从专家视频中获取奖励以进行终身机器人学习",
+      "canonical_evidence": "从专家视频中获取奖励以进行终身机器人学习",
+      "llm_tldr_en": "ProgAgent uses perceptual models on expert videos to guide continual reinforcement learning.",
+      "llm_tldr_cn": "ProgAgent利用专家视频的感知模型来指导持续强化学习。",
+      "llm_tldr": "ProgAgent利用专家视频的感知模型来指导持续强化学习。",
+      "llm_tags": [
+        "query:video"
+      ],
+      "matched_query_tag": "query:video",
+      "matched_query_text": "I hope to learn more about articles related to solving video understanding using methods involving Agent systems + Memory.",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.03555v1",
+      "title": "Molt Dynamics: Emergent Social Phenomena in Autonomous AI Agent Populations",
+      "abstract": "MoltBook is a large-scale multi-agent coordination environment where over 770,000 autonomous LLM agents interact without human participation, offering the first opportunity we are aware of to observe emergent multi-agent coordination dynamics at this population scale. We introduce \\textit{Molt Dynamics}: the emergent agent coordination behaviors, inter-agent communication dynamics, and role specialization patterns arising when autonomous agents operate as decentralized decision-makers in an unconstrained multi-agent environment. Through longitudinal observation of 90,704 active agents over three weeks, we characterize three aspects. First, spontaneous role specialization: network-based clustering reveals six structural roles (silhouette 0.91), though the result primarily reflects core-periphery organization -- 93.5\\% of agents occupy a homogeneous peripheral cluster, with meaningful differentiation confined to the active minority. Second, decentralized information dissemination: cascade analysis of 10,323 inter-agent propagation events reveals power-law distributed cascade sizes ($α= 2.57 \\pm 0.02$) and saturating adoption dynamics where adoption probability shows diminishing returns with repeated exposures (Cox hazard ratio 0.53, concordance 0.78). Third, distributed cooperative task resolution: 164 multi-agent collaborative events show detectable coordination patterns, but success rates are low (6.7\\%, $p = 0.057$) and cooperative outcomes are significantly worse than a matched single-agent baseline (Cohen's $d = -0.88$), indicating emergent cooperative behavior is nascent. These findings establish an empirical baseline for coordination dynamics in decentralized autonomous agent systems, with implications for multi-agent system design, agent communication protocol engineering, and AI safety.",
+      "authors": [
+        "Brandon Yee",
+        "Krishna Sharma"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA",
+        "cs.AI",
+        "cs.SI"
+      ],
+      "published": "2026-03-03T22:15:27+00:00",
+      "link": "https://arxiv.org/pdf/2603.03555v1",
+      "tags": [
+        "query:self-evolving"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "emergent coordination and role specialization in large-scale autonomous agent populations",
+      "llm_evidence_cn": "大规模自主智能体群体中的涌现协作与角色分化",
+      "llm_evidence": "大规模自主智能体群体中的涌现协作与角色分化",
+      "canonical_evidence": "大规模自主智能体群体中的涌现协作与角色分化",
+      "llm_tldr_en": "Studies social phenomena and decentralized decision-making in a population of 770,000 LLM agents.",
+      "llm_tldr_cn": "研究 77 万个 LLM 智能体群体中的社会现象和去中心化决策。",
+      "llm_tldr": "研究 77 万个 LLM 智能体群体中的社会现象和去中心化决策。",
+      "llm_tags": [
+        "query:self-evolving"
+      ],
+      "matched_query_tag": "query:self-evolving",
+      "matched_query_text": "How agents learn and evolve through environmental interaction",
+      "matched_requirement_id": "req-26",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.03781v1",
+      "title": "LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+      "abstract": "Long-term memory is fundamental for personalized agents capable of accumulating knowledge, reasoning over user experiences, and adapting across time. However, existing memory benchmarks primarily target declarative memory, specifically semantic and episodic types, where all information is explicitly presented in dialogues. In contrast, real-world actions are also governed by non-declarative memory, including habitual and procedural types, and need to be inferred from diverse digital traces. To bridge this gap, we introduce Lifebench, which features densely connected, long-horizon event simulation. It pushes AI agents beyond simple recall, requiring the integration of declarative and non-declarative memory reasoning across diverse and temporally extended contexts. Building such a benchmark presents two key challenges: ensuring data quality and scalability. We maintain data quality by employing real-world priors, including anonymized social surveys, map APIs, and holiday-integrated calendars, thus enforcing fidelity, diversity and behavioral rationality within the dataset. Towards scalability, we draw inspiration from cognitive science and structure events according to their partonomic hierarchy; enabling efficient parallel generation while maintaining global coherence. Performance results show that top-tier, state-of-the-art memory systems reach just 55.2\\% accuracy, highlighting the inherent difficulty of long-horizon retrieval and multi-source integration within our proposed benchmark. The dataset and data synthesis code are available at https://github.com/1754955896/LifeBench.",
+      "authors": [
+        "Zihao Cheng",
+        "Weixin Wang",
+        "Yu Zhao",
+        "Ziyang Ren",
+        "Jiaxuan Chen",
+        "Ruiyang Xu",
+        "Shuai Huang",
+        "Yang Chen",
+        "Guowei Li",
+        "Mengshi Wang",
+        "Yi Xie",
+        "Ren Zhu",
+        "Zeren Jiang",
+        "Keda Lu",
+        "Yihong Li",
+        "Xiaoliang Wang",
+        "Liwei Liu",
+        "Cam-Tu Nguyen"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-04T06:42:17+00:00",
+      "link": "https://arxiv.org/pdf/2603.03781v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "long-horizon multi-source memory for agents",
+      "llm_evidence_cn": "智能体的长程多源记忆",
+      "llm_evidence": "智能体的长程多源记忆",
+      "canonical_evidence": "智能体的长程多源记忆",
+      "llm_tldr_en": "A benchmark for evaluating long-term memory in agents, focusing on declarative and non-declarative types.",
+      "llm_tldr_cn": "一个用于评估智能体长期记忆的基准，侧重于陈述性和非陈述性记忆类型。",
+      "llm_tldr": "一个用于评估智能体长期记忆的基准，侧重于陈述性和非陈述性记忆类型。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "I hope you retrieve articles related to multimodal memory of agents.",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.03781v1",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.08388v1",
+      "title": "A Hierarchical Error-Corrective Graph Framework for Autonomous Agents with LLM-Based Action Generation",
+      "abstract": "We propose a Hierarchical Error-Corrective Graph FrameworkforAutonomousAgentswithLLM-BasedActionGeneration(HECG),whichincorporates three core innovations: (1) Multi-Dimensional Transferable Strategy (MDTS): by integrating task quality metrics (Q), confidence/cost metrics (C), reward metrics (R), and LLM-based semantic reasoning scores (LLM-Score), MDTS achieves multi-dimensional alignment between quantitative performance and semantic context, enabling more precise selection of high-quality candidate strate gies and effectively reducing the risk of negative transfer. (2) Error Matrix Classification (EMC): unlike simple confusion matrices or overall performance metrics, EMC provides structured attribution of task failures by categorizing errors into ten types, such as Strategy Errors (Strategy Whe) and Script Parsing Errors (Script-Parsing-Error), and decomposing them according to severity, typical actions, error descriptions, and recoverability. This allows precise analysis of the root causes of task failures, offering clear guidance for subsequent error correction and strategy optimization rather than relying solely on overall success rates or single performance metrics. (3) Causal-Context Graph Retrieval (CCGR): to enhance agent retrieval capabilities in dynamic task environments, we construct graphs from historical states, actions, and event sequences, where nodes store executed actions, next-step actions, execution states, transferable strategies, and other relevant information, and edges represent causal dependencies such as preconditions for transitions between nodes. CCGR identifies subgraphs most relevant to the current task context, effectively capturing structural relationships beyond vector similarity, allowing agents to fully leverage contextual information, accelerate strategy adaptation, and improve execution reliability in complex, multi-step tasks.",
+      "authors": [
+        "Cong Cao",
+        "Jingyao Zhang",
+        "Kun Tong"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-09T13:46:00+00:00",
+      "link": "https://arxiv.org/pdf/2603.08388v1",
+      "tags": [
+        "query:self-evolving"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "hierarchical error-corrective framework for autonomous agents to reduce negative transfer",
+      "llm_evidence_cn": "用于自主智能体的分层纠错框架，减少负迁移风险",
+      "llm_evidence": "用于自主智能体的分层纠错框架，减少负迁移风险",
+      "canonical_evidence": "用于自主智能体的分层纠错框架，减少负迁移风险",
+      "llm_tldr_en": "HECG improves agent action generation through multi-dimensional alignment and structured error attribution.",
+      "llm_tldr_cn": "HECG 通过多维对齐和结构化错误归因改进智能体的动作生成。",
+      "llm_tldr": "HECG 通过多维对齐和结构化错误归因改进智能体的动作生成。",
+      "llm_tags": [
+        "query:self-evolving"
+      ],
+      "matched_query_tag": "query:self-evolving",
+      "matched_query_text": "Self correction and feedback loops in autonomous agent development",
+      "matched_requirement_id": "req-27",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.07191v1",
+      "title": "Governance Architecture for Autonomous Agent Systems: Threats, Framework, and Engineering Practice",
+      "abstract": "Autonomous agents powered by large language models introduce a class of execution-layer vulnerabilities -- prompt injection, retrieval poisoning, and uncontrolled tool invocation -- that existing guardrails fail to address systematically. In this work, we propose the Layered Governance Architecture (LGA), a four-layer framework comprising execution sandboxing (L1), intent verification (L2), zero-trust inter-agent authorization (L3), and immutable audit logging (L4). To evaluate LGA, we construct a bilingual benchmark (Chinese original, English via machine translation) of 1,081 tool-call samples -- covering prompt injection, RAG poisoning, and malicious skill plugins -- and apply it to OpenClaw, a representative open-source agent framework. Experimental results on Layer 2 intent verification with four local LLM judges (Qwen3.5-4B, Llama-3.1-8B, Qwen3.5-9B, Qwen2.5-14B) and one cloud judge (GPT-4o-mini) show that all five LLM judges intercept 93.0-98.5% of TC1/TC2 malicious tool calls, while lightweight NLI baselines remain below 10%. TC3 (malicious skill plugins) proves harder at 75-94% IR among judges with meaningful precision-recall balance, motivating complementary enforcement at Layers 1 and 3. Qwen2.5-14B achieves the best local balance (98% IR, approximately 10-20% FPR); a two-stage cascade (Qwen3.5-9B->GPT-4o-mini) achieves 91.9-92.6% IR with 1.9-6.7% FPR; a fully local cascade (Qwen3.5-9B->Qwen2.5-14B) achieves 94.7-95.6% IR with 6.0-9.7% FPR for data-sovereign deployments. An end-to-end pipeline evaluation (n=100) demonstrates that all four layers operate in concert with 96% IR and a total P50 latency of approximately 980 ms, of which the non-judge layers contribute only approximately 18 ms. Generalization to the external InjecAgent benchmark yields 99-100% interception, confirming robustness beyond our synthetic data.",
+      "authors": [
+        "Yuxu Ge"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR",
+        "cs.AI"
+      ],
+      "published": "2026-03-07T13:05:14+00:00",
+      "link": "https://arxiv.org/pdf/2603.07191v1",
+      "tags": [
+        "query:self-evolving"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "addresses RAG poisoning and execution-layer vulnerabilities in autonomous agents",
+      "llm_evidence_cn": "解决自主智能体中的 RAG 中毒和执行层漏洞",
+      "llm_evidence": "解决自主智能体中的 RAG 中毒和执行层漏洞",
+      "canonical_evidence": "解决自主智能体中的 RAG 中毒和执行层漏洞",
+      "llm_tldr_en": "Proposes a four-layer governance architecture to secure autonomous agents against prompt and RAG attacks.",
+      "llm_tldr_cn": "提出四层治理架构，保护自主智能体免受提示词和 RAG 攻击。",
+      "llm_tldr": "提出四层治理架构，保护自主智能体免受提示词和 RAG 攻击。",
+      "llm_tags": [
+        "query:mmrag:composite"
+      ],
+      "matched_query_tag": "query:mmrag:composite",
+      "matched_query_text": "Papers central to 多模态RAG相关的研究, especially work that connects or combines: Knowledge-based Visual Question Answering; Multi-modal RAG; I hope you retrieve articles related to the task of knowledge based visual question answering (KB VQA).; Search for articles on applying traditional textual RAG methods in the multimodal domain..",
+      "matched_requirement_id": "req-composite-mmrag",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.03985v1",
+      "title": "RIVER: A Real-Time Interaction Benchmark for Video LLMs",
+      "abstract": "The rapid advancement of multimodal large language models has demonstrated impressive capabilities, yet nearly all operate in an offline paradigm, hindering real-time interactivity. Addressing this gap, we introduce the Real-tIme Video intERaction Bench (RIVER Bench), designed for evaluating online video comprehension. RIVER Bench introduces a novel framework comprising Retrospective Memory, Live-Perception, and Proactive Anticipation tasks, closely mimicking interactive dialogues rather than responding to entire videos at once. We conducted detailed annotations using videos from diverse sources and varying lengths, and precisely defined the real-time interactive format. Evaluations across various model categories reveal that while offline models perform well in single question-answering tasks, they struggle with real-time processing. Addressing the limitations of existing models in online video interaction, especially their deficiencies in long-term memory and future perception, we proposed a general improvement method that enables models to interact with users more flexibly in real time. We believe this work will significantly advance the development of real-time interactive video understanding models and inspire future research in this emerging field. Datasets and code are publicly available at https://github.com/OpenGVLab/RIVER.",
+      "authors": [
+        "Yansong Shi",
+        "Qingsong Zhao",
+        "Tianxiang Jiang",
+        "Xiangyu Zeng",
+        "Yi Wang",
+        "Limin Wang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-04T12:29:34+00:00",
+      "link": "https://arxiv.org/pdf/2603.03985v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "real-time interaction benchmark for video LLMs with retrospective memory",
+      "llm_evidence_cn": "具有回顾性记忆的视频LLM实时交互基准",
+      "llm_evidence": "具有回顾性记忆的视频LLM实时交互基准",
+      "canonical_evidence": "具有回顾性记忆的视频LLM实时交互基准",
+      "llm_tldr_en": "Presents RIVER Bench for evaluating online video comprehension using memory and proactive anticipation.",
+      "llm_tldr_cn": "提出RIVER Bench，利用记忆和主动预测评估在线视频理解能力。",
+      "llm_tldr": "提出RIVER Bench，利用记忆和主动预测评估在线视频理解能力。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "I hope to learn more about articles related to solving video understanding using methods involving Agent systems + Memory.",
+      "matched_requirement_id": "req-6",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.03985v1",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.07496v1",
+      "title": "From Thinker to Society: Security in Hierarchical Autonomy Evolution of AI Agents",
+      "abstract": "Artificial Intelligence (AI) agents have evolved from passive predictive tools into active entities capable of autonomous decision-making and environmental interaction, driven by the reasoning capabilities of Large Language Models (LLMs). However, this evolution has introduced critical security vulnerabilities that existing frameworks fail to address. The Hierarchical Autonomy Evolution (HAE) framework organizes agent security into three tiers: Cognitive Autonomy (L1) targets internal reasoning integrity; Execution Autonomy (L2) covers tool-mediated environmental interaction; Collective Autonomy (L3) addresses systemic risks in multi-agent ecosystems. We present a taxonomy of threats spanning cognitive manipulation, physical environment disruption, and multi-agent systemic failures, and evaluate existing defenses while identifying key research gaps. The findings aim to guide the development of multilayered, autonomy-aware defense architectures for trustworthy AI agent systems.",
+      "authors": [
+        "Xiaolei Zhang",
+        "Lu Zhou",
+        "Xiaogang Xu",
+        "Jiafei Wu",
+        "Tianyu Du",
+        "Heqing Huang",
+        "Hao Peng",
+        "Zhe Liu"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR",
+        "cs.AI"
+      ],
+      "published": "2026-03-08T06:45:28+00:00",
+      "link": "https://arxiv.org/pdf/2603.07496v1",
+      "tags": [
+        "query:self-evolving"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "hierarchical autonomy evolution framework for AI agent security",
+      "llm_evidence_cn": "AI智能体安全的分层自主演化框架",
+      "llm_evidence": "AI智能体安全的分层自主演化框架",
+      "canonical_evidence": "AI智能体安全的分层自主演化框架",
+      "llm_tldr_en": "Analyzes security vulnerabilities across different stages of agent autonomy evolution.",
+      "llm_tldr_cn": "分析了智能体自主演化不同阶段的安全漏洞。",
+      "llm_tldr": "分析了智能体自主演化不同阶段的安全漏洞。",
+      "llm_tags": [
+        "query:self-evolving"
+      ],
+      "matched_query_tag": "query:self-evolving",
+      "matched_query_text": "Recent advances in self evolving autonomous agent architectures",
+      "matched_requirement_id": "req-24",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.04238v1",
+      "title": "Retrieval or Representation? Reassessing Benchmark Gaps in Multilingual and Visually Rich RAG",
+      "abstract": "Retrieval-augmented generation (RAG) is a common way to ground language models in external documents and up-to-date information. Classical retrieval systems relied on lexical methods such as BM25, which rank documents by term overlap with corpus-level weighting. End-to-end multimodal retrievers trained on large query-document datasets claim substantial improvements over these approaches, especially for multilingual documents with complex visual layouts. We demonstrate that better document representation is the primary driver of benchmark improvements. By systematically varying transcription and preprocessing methods while holding the retrieval mechanism fixed, we demonstrate that BM25 can recover large gaps on multilingual and visual benchmarks. Our findings call for decomposed evaluation benchmarks that separately measure transcription and retrieval capabilities, enabling the field to correctly attribute progress and focus effort where it matters.",
+      "authors": [
+        "Martin Asenov",
+        "Kenza Benkirane",
+        "Dan Goldwater",
+        "Aneiss Ghodsi"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-04T16:21:20+00:00",
+      "link": "https://arxiv.org/pdf/2603.04238v1",
+      "tags": [
+        "keyword:main",
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "reassessing RAG in visually rich and multilingual document domains",
+      "llm_evidence_cn": "重新评估视觉丰富和多语言文档领域中的RAG",
+      "llm_evidence": "重新评估视觉丰富和多语言文档领域中的RAG",
+      "canonical_evidence": "重新评估视觉丰富和多语言文档领域中的RAG",
+      "llm_tldr_en": "Analyzes the impact of document representation versus retrieval mechanisms in multimodal RAG.",
+      "llm_tldr_cn": "分析了多模态RAG中文档表示与检索机制的影响。",
+      "llm_tldr": "分析了多模态RAG中文档表示与检索机制的影响。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
+      "matched_requirement_id": "req-5",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.04238v1",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.04549v1",
+      "title": "Adaptive Memory Admission Control for LLM Agents",
+      "abstract": "LLM-based agents increasingly rely on long-term memory to support multi-session reasoning and interaction, yet current systems provide little control over what information is retained. In practice, agents either accumulate large volumes of conversational content, including hallucinated or obsolete facts, or depend on opaque, fully LLM-driven memory policies that are costly and difficult to audit. As a result, memory admission remains a poorly specified and weakly controlled component in agent architectures. To address this gap, we propose Adaptive Memory Admission Control (A-MAC), a framework that treats memory admission as a structured decision problem. A-MAC decomposes memory value into five complementary and interpretable factors: future utility, factual confidence, semantic novelty, temporal recency, and content type prior. The framework combines lightweight rule-based feature extraction with a single LLM-assisted utility assessment, and learns domain-adaptive admission policies through cross-validated optimization. This design enables transparent and efficient control over long-term memory. Experiments on the LoCoMo benchmark show that A-MAC achieves a superior precision-recall tradeoff, improving F1 to 0.583 while reducing latency by 31% compared to state-of-the-art LLM-native memory systems. Ablation results identify content type prior as the most influential factor for reliable memory admission. These findings demonstrate that explicit and interpretable admission control is a critical design principle for scalable and reliable memory in LLM-based agents.",
+      "authors": [
+        "Guilin Zhang",
+        "Wei Jiang",
+        "Xiejiashan Wang",
+        "Aisha Behr",
+        "Kai Zhao",
+        "Jeffrey Friedman",
+        "Xu Chu",
+        "Amine Anoun"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.MA"
+      ],
+      "published": "2026-03-04T19:32:02+00:00",
+      "link": "https://arxiv.org/pdf/2603.04549v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "adaptive memory admission control for LLM agents",
+      "llm_evidence_cn": "LLM智能体的自适应记忆准入控制",
+      "llm_evidence": "LLM智能体的自适应记忆准入控制",
+      "canonical_evidence": "LLM智能体的自适应记忆准入控制",
+      "llm_tldr_en": "Introduces A-MAC to manage long-term memory retention in LLM agents through structured decision making.",
+      "llm_tldr_cn": "引入A-MAC框架，通过结构化决策管理LLM智能体的长期记忆保留。",
+      "llm_tldr": "引入A-MAC框架，通过结构化决策管理LLM智能体的长期记忆保留。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "I hope you retrieve articles related to multimodal memory of agents.",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.04549v1",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.07379v1",
+      "title": "SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions",
+      "abstract": "Retrieval-Augmented Generation (RAG) systems are increasingly evolving into agentic architectures where large language models autonomously coordinate multi-step reasoning, dynamic memory management, and iterative retrieval strategies. Despite rapid industrial adoption, current research lacks a systematic understanding of Agentic RAG as a sequential decision-making system, leading to highly fragmented architectures, inconsistent evaluation methodologies, and unresolved reliability risks. This Systematization of Knowledge (SoK) paper provides the first unified framework for understanding these autonomous systems. We formalize agentic retrieval-generation loops as finite-horizon partially observable Markov decision processes, explicitly modeling their control policies and state transitions. Building upon this formalization, we develop a comprehensive taxonomy and modular architectural decomposition that categorizes systems by their planning mechanisms, retrieval orchestration, memory paradigms, and tool-invocation behaviors. We further analyze the critical limitations of traditional static evaluation practices and identify severe systemic risks inherent to autonomous loops, including compounding hallucination propagation, memory poisoning, retrieval misalignment, and cascading tool-execution vulnerabilities. Finally, we outline key doctoral-scale research directions spanning stable adaptive retrieval, cost-aware orchestration, formal trajectory evaluation, and oversight mechanisms, providing a definitive roadmap for building reliable, controllable, and scalable agentic retrieval systems.",
+      "authors": [
+        "Saroj Mishra",
+        "Suman Niroula",
+        "Umesh Yadav",
+        "Dilip Thakur",
+        "Srijan Gyawali",
+        "Shiva Gaire"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.CR",
+        "cs.IR"
+      ],
+      "published": "2026-03-07T23:38:57+00:00",
+      "link": "https://arxiv.org/pdf/2603.07379v1",
+      "tags": [
+        "keyword:main",
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "agentic RAG and dynamic memory management",
+      "llm_evidence_cn": "智能体RAG与动态记忆管理",
+      "llm_evidence": "智能体RAG与动态记忆管理",
+      "canonical_evidence": "智能体RAG与动态记忆管理",
+      "llm_tldr_en": "Provides a unified framework for agentic RAG systems involving multi-step reasoning and memory management.",
+      "llm_tldr_cn": "为涉及多步推理和记忆管理的智能体RAG系统提供了一个统一的框架。",
+      "llm_tldr": "为涉及多步推理和记忆管理的智能体RAG系统提供了一个统一的框架。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
+      "matched_requirement_id": "req-5",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.07379v1",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.07394v1",
+      "title": "AQuA: Toward Strategic Response Generation for Ambiguous Visual Questions",
+      "abstract": "Visual Question Answering (VQA) is a core task for evaluating the capabilities of Vision-Language Models (VLMs). Existing VQA benchmarks primarily feature clear and unambiguous image-question pairs, whereas real-world scenarios often involve varying degrees of ambiguity that require nuanced reasoning and context-appropriate response strategies. Although recent studies have begun to address ambiguity in VQA, they lack (1) a systematic categorization of ambiguity levels and (2) datasets and models that support strategy-aware responses. In this paper, we introduce Ambiguous Visual Question Answering (AQuA), a fine-grained dataset that classifies ambiguous VQA instances into four levels according to the nature and degree of ambiguity, along with the optimal response strategy for each case. Our evaluation of diverse open-source and proprietary VLMs shows that most models fail to adapt their strategy to the ambiguity type, frequently producing overconfident answers rather than seeking clarification or acknowledging uncertainty. To address this challenge, we fine-tune VLMs on AQuA, enabling them to adaptively choose among multiple response strategies, such as directly answering, inferring intent from contextual cues, listing plausible alternatives, or requesting clarification. VLMs trained on AQuA achieve strategic response generation for ambiguous VQA, demonstrating the ability to recognize ambiguity, manage uncertainty, and respond with context-appropriate strategies, while outperforming both open-source and closed-source baselines.",
+      "authors": [
+        "Jihyoung Jang",
+        "Hyounghun Kim"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-03-08T00:48:19+00:00",
+      "link": "https://arxiv.org/pdf/2603.07394v1",
+      "tags": [
+        "keyword:main",
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "strategic response generation for ambiguous visual questions",
+      "llm_evidence_cn": "针对歧义视觉问题的策略性回答生成",
+      "llm_evidence": "针对歧义视觉问题的策略性回答生成",
+      "canonical_evidence": "针对歧义视觉问题的策略性回答生成",
+      "llm_tldr_en": "A dataset and model for handling different levels of ambiguity in Visual Question Answering.",
+      "llm_tldr_cn": "一个用于处理视觉问答中不同程度歧义的数据集和模型。",
+      "llm_tldr": "一个用于处理视觉问答中不同程度歧义的数据集和模型。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Knowledge Visual Question Answering",
+      "matched_requirement_id": "req-1",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.07394v1",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.08329v1",
+      "title": "SPD-RAG: Sub-Agent Per Document Retrieval-Augmented Generation",
+      "abstract": "Answering complex, real-world queries often requires synthesizing facts scattered across vast document corpora. In these settings, standard retrieval-augmented generation (RAG) pipelines suffer from incomplete evidence coverage, while long-context large language models (LLMs) struggle to reason reliably over massive inputs. We introduce SPD-RAG, a hierarchical multi-agent framework for exhaustive cross-document question answering that decomposes the problem along the document axis. Each document is processed by a dedicated document-level agent operating only on its own content, enabling focused retrieval, while a coordinator dispatches tasks to relevant agents and aggregates their partial answers. Agent outputs are synthesized by merging partial answers through a token-bounded synthesis layer (which supports recursive map-reduce for massive corpora). This document-level specialization with centralized fusion improves scalability and answer quality in heterogeneous multidocument settings while yielding a modular, extensible retrieval pipeline. On the LOONG benchmark (EMNLP 2024) for long-context multi-document QA, SPD-RAG achieves an Avg Score of 58.1 (GPT-5 evaluation), outperforming Normal RAG (33.0) and Agentic RAG (32.8) while using only 38% of the API cost of a full-context baseline (68.0).",
+      "authors": [
+        "Yagiz Can Akay",
+        "Muhammed Yusuf Kartal",
+        "Esra Alparslan",
+        "Faruk Ortakoyluoglu",
+        "Arda Akpinar"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-03-09T12:46:32+00:00",
+      "link": "https://arxiv.org/pdf/2603.08329v1",
+      "tags": [
+        "keyword:main",
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "hierarchical multi-agent framework for cross-document RAG",
+      "llm_evidence_cn": "用于跨文档RAG的分层多智能体框架",
+      "llm_evidence": "用于跨文档RAG的分层多智能体框架",
+      "canonical_evidence": "用于跨文档RAG的分层多智能体框架",
+      "llm_tldr_en": "A multi-agent RAG framework that decomposes complex queries across document-level agents.",
+      "llm_tldr_cn": "一种通过文档级智能体分解复杂查询的多智能体RAG框架。",
+      "llm_tldr": "一种通过文档级智能体分解复杂查询的多智能体RAG框架。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
+      "matched_requirement_id": "req-5",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.08329v1",
+      "quick_tier": "8plus"
+    }
+  ]
+}

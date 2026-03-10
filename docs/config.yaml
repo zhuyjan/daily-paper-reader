@@ -26,31 +26,45 @@ subscriptions:
     diff_threshold_pct: 15
   keyword_recall_mode: or
   intent_profiles:
-    - tag: main
-      description: 查找相关学术论文及研究文献
+    - tag: mmrag
+      description: 多模态RAG相关的研究
       enabled: true
       keywords:
         - keyword: Knowledge-based Visual Question Answering
           keyword_cn: 基于知识库的视觉问答
-          query: Knowledge Visual Question Answering
-        - keyword: Self-envolving Agent
-          keyword_cn: 自进化智能体
-          query: S
-        - keyword: Video Agent
-          keyword_cn: 视频智能体
-          query: V
+          query: Knowledge-based Visual Question Answering
         - keyword: Multi-modal RAG
           keyword_cn: 多模态 RAG
-          query: M
-        - keyword: Multi-modal Memory
-          keyword_cn: 多模态记忆
-          query: M
+          query: Multi-modal RAG
       intent_queries:
+        - query: I hope you retrieve articles related to the task of knowledge based visual question answering (KB VQA).
+          query_cn: 我希望你检索你检索基于知识库的视觉问答这个任务相关的文章。
+          enabled: true
+          source: manual
+          note: ''
         - query: Search for articles on applying traditional textual RAG methods in the multimodal domain.
           query_cn: 检索关于将传统RAG方法用于多模态领域的文章。
           enabled: true
           source: manual
           note: ''
+      updated_at: '2026-03-10T12:11:08.285Z'
+    - tag: video
+      description: 围绕使用Agent解决Video Understanding任务场景的文章，包括视频数据集和Video Memory构建。
+      enabled: true
+      keywords:
+        - keyword: Video Benchmark
+          keyword_cn: 视频数据集
+          query: V
+        - keyword: Video Memory
+          keyword_cn: 视频记忆
+          query: Long-term memory mechanisms for video processing
+        - keyword: Video Reasoning
+          keyword_cn: 视频推理
+          query: V
+        - keyword: Video Agent
+          keyword_cn: 视频智能体
+          query: Autonomous agents for video understanding and analysis
+      intent_queries:
         - query: >-
             I hope to learn more about articles related to solving video understanding using methods involving Agent
             systems + Memory.
@@ -58,19 +72,97 @@ subscriptions:
           enabled: true
           source: manual
           note: ''
-        - query: I hope to learn about research related to the self evolution of agents.
-          query_cn: 我希望能了解到Agent自进化相关的研究.
+        - query: How to build long term video memory for AI agents?
+          query_cn: 如何为AI智能体构建长期视频记忆？
           enabled: true
           source: manual
           note: ''
-        - query: I hope you retrieve articles related to the task of knowledge based visual question answering (KB VQA).
-          query_cn: 我希望你检索你检索基于知识库的视觉问答这个任务相关的文章。
+        - query: State of the art datasets for long form video understanding.
+          query_cn: 长视频理解的最先进数据集。
           enabled: true
           source: manual
           note: ''
-        - query: I hope you retrieve articles related to multimodal memory of agents.
-          query_cn: 我希望你检索与智能体多模态记忆相关的文章
+        - query: Using LLM agents for complex video reasoning tasks.
+          query_cn: 使用LLM智能体处理复杂的视频推理任务。
           enabled: true
           source: manual
           note: ''
-      updated_at: '2026-03-10T11:02:48.862Z'
+        - query: Retrieval augmented video understanding with memory modules.
+          query_cn: 带有记忆模块的检索增强视频理解。
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-03-10T12:16:19.244Z'
+    - tag: memory
+      description: 查找与多模态智能体记忆（图像、视频、音频）相关的研究文章
+      enabled: true
+      keywords:
+        - keyword: Multi-modal Memory
+          keyword_cn: 多模态记忆
+          query: Multi-modal Memory
+        - keyword: multimodal agent memory
+          keyword_cn: 多模态智能体记忆
+          query: multimodal memory architectures for autonomous agents
+        - keyword: visual memory
+          keyword_cn: 视觉记忆
+          query: visual long-term and short-term memory in agents
+        - keyword: episodic memory
+          keyword_cn: 情景记忆
+          query: episodic memory for multimodal perception
+        - keyword: semantic memory
+          keyword_cn: 语义记忆
+          query: semantic memory systems for multimodal data
+      intent_queries:
+        - query: architectures for multimodal agent memory systems
+          query_cn: 多模态智能体记忆系统架构
+          enabled: true
+          source: manual
+          note: ''
+        - query: long term multimodal memory for autonomous agents
+          query_cn: 自主智能体的长期多模态记忆
+          enabled: true
+          source: manual
+          note: ''
+        - query: memory augmented multimodal large language models
+          query_cn: 记忆增强的多模态大语言模型
+          enabled: true
+          source: manual
+          note: ''
+        - query: efficient retrieval of multimodal experiences in AI agents
+          query_cn: AI智能体中多模态经验的高效检索
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-03-10T12:20:50.633Z'
+    - tag: self-evolving
+      description: Self-evolving Agent相关的研究
+      enabled: true
+      keywords:
+        - keyword: Self-evolving Agent
+          keyword_cn: 自我演化智能体
+          query: Self-evolving autonomous agents and systems
+        - keyword: Self-improving LLM
+          keyword_cn: 自我改进大模型
+          query: Large language models with self-improvement capabilities
+      intent_queries:
+        - query: Recent advances in self evolving autonomous agent architectures
+          query_cn: 自我演化自主智能体架构的最新进展
+          enabled: true
+          source: manual
+          note: ''
+        - query: Methods for recursive self improvement in large language model agents
+          query_cn: 大语言模型智能体递归自我提升的方法
+          enabled: true
+          source: manual
+          note: ''
+        - query: How agents learn and evolve through environmental interaction
+          query_cn: 智能体如何通过环境交互进行学习与演化
+          enabled: true
+          source: manual
+          note: ''
+        - query: Self correction and feedback loops in autonomous agent development
+          query_cn: 自主智能体开发中的自我纠错与反馈循环
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-03-10T12:23:06.830Z'
