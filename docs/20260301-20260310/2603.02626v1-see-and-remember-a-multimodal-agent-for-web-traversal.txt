@@ -1,0 +1,502 @@
+Title: See and Remember: A Multimodal Agent for Web Traversal
+
+URL Source: https://arxiv.org/pdf/2603.02626v1
+
+Published Time: Wed, 04 Mar 2026 01:33:08 GMT
+
+Number of Pages: 19
+
+Markdown Content:
+# See and Remember: A Multimodal Agent for Web Traversal 
+
+Xinjun Wang 1, Shengyao Wang 1, Aimin Zhou 1,2, and Hao Hao 1, ∗ 
+
+> 1
+
+Shanghai Institute of AI for Education, East China Normal University  
+
+> 2
+
+Shanghai Innovation Institute 
+
+Abstract 
+
+Autonomous web navigation requires agents to perceive complex visual environments and maintain long-term context, yet current Large Language Model (LLM) based agents often struggle with spatial disorientation and navi-gation loops. In this paper, we propose gen-erally applicable V-GEMS (Visual Grounding and Explicit Memory System), a robust multi-modal agent architecture designed for precise and resilient web traversal. Our agent inte-grates visual grounding to resolve ambiguous interactive elements and introduces an explicit memory stack with state tracking. This dual mechanism allows the agent to maintain a struc-tured map of its traversal path, enabling valid backtracking and preventing cyclical failures in deep navigation tasks. We also introduce an updatable dynamic benchmark to rigorously evaluate adaptability. Experiments show V-GEMS significantly dominates the WebWalker baseline, achieving a substantial 28.7% perfor-mance gain. Code is available at V-GEMS. 
+
+1 Introduction 
+
+The World Wide Web serves as the largest dy-namic repository of human knowledge. Conse-quently, autonomous web navigation has emerged as a paramount capability for Artificial Intelligence, fueling advancements in Large Language Model (LLM) training (Dong et al., 2019; Guu et al., 2020; Hoffmann et al., 2022), real-time Deep Re-search, (Shao et al., 2024; OpenAI, 2025) and open-ended workflow automation. Moving beyond static scraping scripts, the field is undergoing a paradigm shift toward intelligent agents capable of interacting with dynamic Graphical User Inter-faces (GUIs) directly, mirroring human browsing behavior (Nguyen et al., 2025). In this evolution, Vision-Language Models (VLMs) have become indispensable (Zhang et al.,  
+
+> ∗Corresponding author: hhao@mail.ecnu.edu.cn
+
+2024a). Unlike traditional methods that rely solely on raw HTML Document Object Models (DOM), VLMs empower agents with the ability to perceive layout semantics, interpret icons, and interact with complex UI elements that are often obfuscated in text-only representations (Yang et al., 2024). This visual modality is critical for bridging the gap be-tween abstract user instructions and concrete exe-cutable actions on modern, media-rich websites. Recent research has made significant strides in this direction. Notably, WebWalker (Wu et al., 2025) established a robust baseline by introducing a dual-agent (Explorer-Critic) architecture, demon-strating impressive capabilities in task decompo-sition and correctness verification. This pioneer-ing framework highlights the potential of LLM-based planning. However, relying predominantly on textual DOM parsing or standard LLM reason-ing leaves room for optimization in highly com-plex environments (Tang et al., 2025). For in-stance, without the pixel-level intuition provided by VLMs, agents may face challenges in disam-biguating visually dense elements, leading to sub-optimal click operations. Furthermore, the inherent structural complexity of the web characterized by deep hierarchies and dead-end links can occasion-ally cause stochastic agents to experience “naviga-tional disorientation”, where they struggle to main-tain context over long-horizon trajectories (Koh et al., 2024). Despite these advancements, developing a truly resilient autonomous agent remains a formidable challenge. Current navigation paradigms generally encounter three systemic bottlenecks: • Modal Inefficiency: Text-based DOMs often fail to capture the picture of a page (e.g., dis-tinguishing a clickable banner from an image). Relying solely on text can lead to missed in-teraction opportunities or hallucinations about page content. 
+
+> arXiv:2603.02626v1 [cs.AI] 3 Mar 2026
+
+• Navigational Stagnation: In the absence of explicit state tracking, agents lack a cognitive map. They prone to getting stuck in loops or failing to backtrack correctly after explor-ing deep sub-pages, behaving like a browser without a “Back” button. • Symbolic Inaccuracy: General-purpose LLMs frequently exhibit deficits in precise quantitative reasoning tasks (e.g., Find ex-actly 5 papers) (Bubeck et al., 2023), leading to aggregation errors even when the correct information is found. To surmount these challenges, we propose 
+
+V-GEMS (Visual-Grounded Exploration with 
+
+Memory and Symbolic tools). Building upon the strengths of dual-agent frameworks, V-GEMS augments the navigation process with a syner-gistic toolkit comprising three specialized mod-ules designed to enhance robustness and precision. First, we introduce an Adaptive US (Understand-ing Score) Calculator that dynamically integrates VLM perception to resolve visual ambiguity only when necessary. Second, we implement a State-ful URL Stack, a deterministic memory structure that provides the agent with topological awareness, enabling precise backtracking and pruning of vis-ited paths. Third, we deploy a Symbolic Counter to decouple arithmetic operations from the LLM, ensuring high-fidelity data aggregation. Furthermore, recognizing that static benchmarks rapidly become obsolete in the live web, we in-troduce an updatable evaluation pipeline. This ensures our agent is tested against the temporal reality of the internet. Our main contributions are summarized as fol-lows: • We propose V-GEMS, a novel framework that integrates adaptive visual perception with ex-plicit memory and symbolic tools. This archi-tecture effectively resolves the navigational problems and arithmetic hallucinations com-mon in previous approaches. • We construct a reproducible and extensible evaluation pipeline that generates Q&A tasks from live websites, addressing the issue of benchmark obsolescence and ensuring fair, real-time assessment. • Extensive evaluations demonstrate that V-GEMS achieves a significant performance improvement over state-of-the-art baselines, validating the effectiveness of our modular toolkit in complex, domain-specific retrieval tasks. 
+
+2 Related Work 
+
+2.1 Web Automation and Multimodality 
+
+The initial efforts in interacting with the web fo-cused heavily on rule-based or behavioral cloning techniques, primarily aiming for reliable Web Au-tomation (Liu et al., 2018; Humphreys et al., 2022). These systems relied on structured DOM parsing and rule-based path selectors (such as XPath) to execute predefined tasks, often struggling with gen-eralization or handling websites that lacked clean structural annotations (Sager et al., 2025). With the rise of deep learning, this field shifted towards leveraging language models. Recently, the inte-gration of Multimodality has emerged as a cru-cial solution to address visual ambiguities (Hong et al., 2024; Cheng et al., 2024). Agents now fre-quently incorporate VLMs to process visual ele-ments (e.g., hidden navigation elements, image-based buttons) (He et al., 2024; Koh et al., 2024), moving beyond the limitations of text-only DOM parsing. Our work builds on this multimodal foundation, but further focuses on optimizing the agent’s internal cognitive process to maximize both efficiency and reliability through the switch be-tween LLM and VLM specifically. 
+
+2.2 Web Navigation Agents 
+
+Existing Web Navigation Agents can generally be categorized into two lines of research. The first emphasizes training smaller, specialized models to enhance specific aspects of navigation, such as filtering viable actions or identifying key HTML elements (Zheng et al., 2024; Deng et al., 2024; Fu-ruta et al., 2024). The second, and more dominant approach, utilizes the strong reasoning capabilities of Large Language Models (LLMs) within struc-tured frameworks like ReAct (Yao et al., 2023; Xu et al., 2025; Lu et al., 2023). These models excel at task planning but frequently suffer from two critical cognitive deficits. First, they exhibit 
+
+arithmetic hallucination when quantitative tasks (e.g., counting instances) are required. Second, they lack explicit state management, leading to 
+
+navigational amnesia or getting stuck in recursive website hierarchies. Our proposed agent directly addresses these shortcomings by introducing an explicit symbolic counter and a stateful url stack, transforming the agent from a purely reactive plan-ner to a memory-augmented, reliable explorer. 
+
+2.3 Web Traversal Benchmarks 
+
+The progression of Web Traversal Benchmarks has paralleled agent development, moving from sim-ple web-scraping scenarios to complex instruction-following tasks (Liu et al., 2018; Xu et al., 2021; Humphreys et al., 2022; Yao et al., 2022; Mialon et al., 2024; Xu et al., 2024). Mind2Web (Deng et al., 2023) established the standard for evaluat-ing complex web interaction via multiple-choice questions. More recent benchmarks, such as MMInA (Zhang et al., 2024b) and Assistant-Bench (Yoran et al., 2024), have focused on chal-lenging, time-consuming tasks requiring multi-page navigation, demonstrating the increasing complexity sought by the community. However, a major hurdle remains: the Temporal Valid-ity Gap. Since the real-world web is dynamic, most static evaluation datasets rapidly become out-dated, severely limiting experimental reproducibil-ity (Hantke et al., 2025; Rauber et al., 2021). Un-like prior works that rely on fixed snapshots, our research proposes an Updatable and Extensible Evaluation Pipeline, ensuring that the resulting Ev-erWebQA benchmark remains current and relevant for validating web agent capabilities over time. 
+
+3 Proposed Method 
+
+Based on the dual-agent scaffolding of Web-Walker (Wu et al., 2025), we introduce V-GEMS, a system equipped with a modular toolkit to resolve bottlenecks in memory, calculation, and percep-tion. As shown in Figure 1, our method consists of three key components. First, to mitigate arithmetic hallucinations, we deploy a Symbolic Counter that ensures deterministic tracking of entities. Second, to prevent navigational stagnation, we implement a URL Stack that enables stateful backtracking in deep hierarchies. Finally, to balance cost and performance, we utilize a US Calculator to adap-tively trigger VLM assistance only when textual representations are insufficient. 
+
+3.1 Symbolic Counter with Adaptive Termination 
+
+A pervasive challenge in autonomous agents is arithmetic hallucinations (Bubeck et al., 2023), where LLMs fail to maintain arithmetic consis-tency across long-horizon trajectories or struggle to determine optimal stopping conditions. As illus-trated in the Tools module of Figure 1, we decouple quantitative tracking from linguistic reasoning by introducing an external Counter Module acting as a deterministic logic guardrail. Unlike passive accumulators, our Counter func-tions as a programmable controller that parses constraints from the user query to activate one of two distinct execution modes (comprehensive logic flow detailed in Appendix C ): • Quota-based Search (Mode A): When an ex-plicit numerical target is detected (e.g., Find 5 papers about), the Counter operates as a sophisticated progress bar. It employs a se-mantic deduplication filter to verify entity uniqueness before incrementing. Crucially, it enforces an early-exit mechanism : once the count reaches the target threshold N , the counter immediately terminates the agent’s exploration loop, preventing redundant API costs. • Exhaustive Statistics (Mode B): For open-ended inquiries (e.g., How many professors are listed?), the Counter switches to a cover-age monitoring role. It drives the Explorer Agent to traverse the complete pagination chain until the environment is exhausted (i.e., no further “Next Page” signals), ensuring the final statistical output is grounded in full-scope observation rather than estimation. By externalizing this logic, the framework en-sures that the final result—whether a retrieved list or a statistical summary—is mathematically rigor-ous and robust against the stochastic nature of the LLM’s internal memory. 
+
+3.2 Hierarchical State Management via URL Stack 
+
+Navigation in dynamic web environments is struc-turally equivalent to traversing a directed graph with unknown topology. A critical limitation in existing agents lack a cognitive map. They prone to getting stuck in loops or failing to backtrack correctly after exploring deep sub-pages, behaving like a browser without a “Back” button. To address this, we engineer a dedicated URL Stack that serves as an external topological mem-ory, enforcing a robust Depth-First Search (DFS) Figure 1: The framework of V-GEMS. Our system augments the dual-agent architecture (Explorer and Critic) with a specialized Tools suite consisting of a Counter, URL Stack, and US Calculator. The US Calculator adaptively scores page content to decide between LLM and VLM processing. The URL Stack enables stateful backtracking, while the Counter ensures arithmetic precision across multiple navigation steps. For a comprehensive visualization of the end-to-end execution workflow, please refer to Appendix B. 
+
+strategy. This module manages state transitions through two atomic operations: • State Checkpointing (Push): When the Ex-plorer Agent decides to traverse a hyperlink to a child node, the system triggers a push operation. This snapshots the current url and strictly orders the exploration path (e.g., in 
+
+Round 1 ), getting a reliable breadcrumb trail independent of the browser’s history API. • Autonomous Error Recovery (Pop): Upon rendering a new page, the Explorer Agent performs an immediate preliminary viability check . If a page is detected—such as an HTTP 404 error or obviously irrelevant content then the explorer agent autonomously executes a pop operation. This mechanism instantly rolls back the environment to the previous valid state, effectively pruning invalid branches be-fore the critic agent performs expensive se-mantic evaluation. By formalizing navigation as stack-based state manipulation, our framework prevents cyclical loops and guarantees that the agent can system-atically backtrack from local optima to explore alternative branches. 
+
+3.3 Adaptive VLM Integration via US Calculator 
+
+While VLMs excel at perceiving spatial layouts, their high computational overhead makes them im-practical for every navigation step. To optimize the efficiency-accuracy trade-off, we introduce the US Calculator. This module dynamically evaluates the textual solvability of a page before the agent commits to a reasoning path. As depicted in our framework (Figure 1), the policy π adaptively switches modalities based on a learned threshold τ :
+
+π(at|st) = 
+
+(
+
+πLLM (st) if Φ( st) > τ πVLM (st) otherwise (1) The composite score Φ( st) is the sum of four heuristic dimensions: Text Quality, Semantic Rele-vance, Structural Clarity and Special Case Penal-ties. Each designed to capture a specific failure mode of text-based DOM representations. A de-tailed analysis of these four dimensions is pre-sented in Appendix A. By aggregating these scores, 
+
+Φ( st) provides a rigorous justification for modality switching. If Φ( st) < τ , the Critic Agent rec-ognizes that the text representation is a noise of the actual page and triggers the VLM pipeline to ensure grounded decision-making. 
+
+4 Empirical Studies 
+
+4.1 Constructing a Reproducible Benchmark: EverWebQA 
+
+To address the temporal sensitivity of web envi-ronments where static benchmarks rapidly suffer from content drift and link rot where we estab-lish a reproducible data construction pipeline. Uti-lizing this pipeline, we introduce EverWebQA , a benchmark generated via a human-mimetic work-flow that simulates navigational behaviors ranging from simple retrieval to complex synthesis. As illustrated in Figure 2, the framework integrates automated traversal with rigorous quality control to ensure sustainable and fair evaluation. 
+
+> Figure 2: The framework of test dataset generation
+
+Hierarchical Web Traversal We initiate the pro-cess by crawling 1,000 authoritative root URLs across four domains (Education, Conference, Orga-nization, Game). Using Selenium, we reconstruct the DOM tree structure of each website, mapping nodes from the root page (Level 1) down to deep leaf nodes (Level 4), ensuring a robust structural foundation for traversal tasks. 
+
+Topology-Aware QA Synthesis We simulate two distinct user navigation patterns to generate diverse queries: • Single-source : Simulates a user drilling down to a specific topic. We sample a target node at depth i ∈ [2 , 4] (corresponding to Easy, Medium, Hard). The agent must navigate a linear path from the root to this specific depth to answer the query. • Multi-source : Simulates a user integrating infor-mation across the site. We sample two disparate nodes at depths i and j within the same URL tree. The generated query necessitates reason-ing over both pages, testing the agent’s ability to maintain state across multi-branch navigation. 
+
+Teacher-Model Vetting To eliminate halluci-nations common in synthetic data, we employ a “Teacher Model” (GPT-4o) as a quality gate-keeper. As depicted in the final stage of Figure 2, the Teacher Model performs a rigorous solvabil-ity check , verifying that the answer is explicitly derivable from the visited pages and refines the linguistic quality, retaining only high-fidelity sam-ples for the final benchmark. The Teacher Model’s prompt can see in D.3. 
+
+Data Statistics and Characteristics Follow-ing this structured data construction methodol-ogy, which combines LLM guidance with program-matic web exploration, we constructed a final set of 680 question-answer pairs for EverWebQA . This specific volume was chosen to strictly align with the dataset size of the WebWalker baseline, thereby eliminating potential bias introduced by dataset scale discrepancies during comparison. Compre-hensive statistics of EverWebQA , categorized by type, domain, and language, are provided below.           
+
+> Table 1: Dataset Distribution by Question Type and Difficulty
+> Difficulty Single-source Multi-source
+> Easy 80 80 Medium 140 140 Hard 120 120
+> Total 340 340
+
+Type and Difficulty Level Our dataset distin-guishes between Single-source and Multi-source 
+
+QAs. We define difficulty levels based on the navi-gational depth required to reach the target informa-tion. For Single-source tasks, a target page depth of 2, 3, and 4 corresponds to Easy , Medium , and 
+
+Hard levels, respectively. For Multi-source tasks, which necessitate synthesizing information from multiple pages, difficulty is determined by the cu-mulative depth of all target pages: a total depth sum of 2–4 is classified as Easy , 4–6 as Medium ,and 6–8 as Hard . 
+
+> (a) Domain distribution (b) Language distribution
+> Figure 3: Data distribution of the EverWebQA dataset across domains and languages.
+
+Domain and Language Distribution 
+
+EverWebQA is constructed across four real-world domains—education, conference, game, and organization—specifically selected for their authoritative content and complex structural depth. To reflect the linguistic diversity of the real-world web, the dataset is bilingual, featuring a substantial mix of both Chinese and English queries. As illustrated in Figure 3, this diverse composition ensures a robust and comprehensive evaluation of V-GEM across varying contexts and linguistic challenges. 
+
+4.2 Baselines 
+
+We adopt WebWalker (Wu et al., 2025) as our baseline to ensure a rigorous and authoritative com-parison. As a widely recognized state-of-the-art framework in autonomous web exploration, Web-Walker represents the current standard for dual-agent architectures. However, it remains inherently constrained by its stochastic nature and lack of persistent memory. By benchmarking against WebWalker, we aim to validate the specific contributions of the V-GEMS architecture. Rather than merely extending the baseline, V-GEMS is designed to address distinct limitations in arithmetic fidelity, navigational re-call, and multi-modal reasoning. This comparison effectively isolates the impact of our architectural innovations, demonstrating that our modular en-hancements yield significant performance improve-ments over the baseline system. As in WebWalker, our system also operates in a zero-shot manner. To better evaluate practical applicability, we adopt Qwen-3-Coder-Plus as the underlying language model and adopt Qwen3-VL-Plus as the vision-language model. All experiments are conducted on the dataset gen-erated on the day of experimentation (November 25, 2025). 
+
+4.3 Main Results 
+
+Figure 4 presents a holistic performance evaluation. Overall, V-GEMS significantly outperforms the WebWalker baseline, elevating the average success rate from 0.49 to 0.65—a relative improvement of 
+
+28.7% .
+
+Resilience to Complexity. Our model exhibits superior scaling laws regarding task difficulty. As shown in Figure 4a, while the baseline struggles with Multi-Source Hard tasks (due to memory loss during page transitions), V-GEMS maintains a high success rate. This substantial gap confirms that our 
+
+URL Stack effectively provides a cognitive safety Single Source 
+
+> Easy
+> Single Source
+> Medium
+> Single Source
+> Hard
+> Multi Source
+> Easy
+> Multi Source
+> Medium
+> Multi Source
+> Hard
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+
+Ours vs WebWalker  
+
+> Ours
+> WebWalker
+> (a) Comparison in type Chinese
+> English Game
+> Education
+> Organization Conference
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+
+Ours vs WebWalker 
+
+> Ours
+> WebWalker
+> (b) Comparison in domain
+
+Figure 4: The comparison in type and domain. 
+
+net, enabling the agent to synthesize information across disparate pages without losing navigational context. Similarly, the gains in Single-Source Medi-um/Hard tasks validate the Symbolic Counter ’s role in handling complex intra-page reasoning that typically confuses standard LLMs. 
+
+Domain Generalization. Figure 4b highlights the model’s adaptability across structurally diverse environments. V-GEMS achieves dominant per-formance in the Conference (improved 33.33%) and Game (improved 56.25%) domains, which are characterized by irregular layouts and hybrid text-visual elements. This indicates that the US Calculator successfully dynamically switches to VLM perception when textual DOMs are insuffi-cient, preventing the modal rigidity failures seen in WebWalker. Even in text-heavy domains like 
+
+Education , our agent maintains a clear lead, demon-strating that our architectural enhancements do not compromise basic text processing capabilities. 
+
+4.4 Ablation Study 
+
+To investigate the individual contribution of each proposed module, we conduct extensive ablation tests across fine-grained and cross-domain tasks. Table 2 summarizes the performance for various configurations. 
+
+Quantifying Contributions via Shapley Value. 
+
+To provide a rigorous interpretation of component utility, we employ the Shapley Value (Shapley et al., 1953) metric to quantify the marginal contribution of each module. Formally, we define our three-module system as M = {C, S, U }, where C de-notes the Symbolic Counter , S represents the URL Stack , and U stands for the Understanding Cal-culator . Taking the Symbolic Counter ( C) as an example, its contribution ϕC for a specific task is calculated as the weighted average of its marginal gains across all subset combinations: 
+
+ϕC = 13
+
+
+
+∆C + ∆C|S + ∆ C|U
+
+2 + ∆ C|SU 
+
+
+
+× 10 3
+
+(2) where ∆C = ( Acc {C} − Acc ∅) represents the pri-mary gain, ∆C|S and ∆C|U denote the marginal gains when added to single-module baselines (e.g., 
+
+Acc {C,S } −Acc {S}), and ∆C|SU = ( Acc {C,S,U } −
+
+Acc {S,U }) captures the gain within the full system. We scale the final values by 10 3 to enhance visual clarity in our analysis. 
+
+Task-wise Insight: Perception vs. Navigation. 
+
+The Shapley values across task types (see Fig-ure 5a) reveal distinct functional specializations: • VLM Dominance in SS Tasks : The VLM module exhibits the highest contribution in all 
+
+Single-Source (SS) tasks, peaking at nearly 100 in SS Medium . This underscores that visual perception is the primary bottleneck when navigating individual pages with com-plex layouts. • URL Stack in MS Exploration : For Multi-Source (MS) tasks, the contribution of the URL Stack increases significantly, reaching its zenith (90) in MS Easy scenarios. This vali-dates our hypothesis that stateful backtracking is indispensable for tasks requiring cross-page information retrieval. 
+
+> (a) Shapley Value in type
+> (b) Shapley Value in domain
+> Figure 5: Three methods’ contribution in different task
+
+Domain-wise Insight: Structural vs. Semantic Complexity. Analysis of domain-specific Shap-ley values (Figure 5b) further highlights the adap-tive nature of our framework: • Visual Primacy : In the English and Confer-ence domains, the VLM module shows ex-traordinary Shapley values (130 and 118 re-spectively). These domains typically feature information-dense visual banners and com-plex navigation bars that textual DOMs fail to represent accurately. • Structural Navigation : Conversely, in the Game and Chinese domains, the URL Stack emerges as a leading contributor (110 and 78 respectively). This suggests that these do-mains rely more on traversing deep hierarchi-cal structures where the ability to “pop” back to previous states is more critical than raw visual perception. • Counter Stability : Although the Counter maintains a lower overall Shapley value, it provides a stable contribution (10) in the Ed-ucation domain, reflecting its role in ensur-ing arithmetic precision during specific data-aggregation tasks. 
+
+4.5 Error Assessment 
+
+As visualized in the prediction distribution (Fig-ure 6), we categorize failures into five distinct Table 2: Ablation Test Results. The Modules columns indicate enabled components. The results are categorized by task granularity and domain type. 
+
+Modules Fine-grained Tasks (F1) Cross-domain Tasks (F1) Avg VLM URL Count Single-Source Multi-Source CN EN Game Conf Org Edu Easy Med Hard Easy Med Hard - - - 0.60 0.50 0.48 0.50 0.45 0.44 0.50 0.49 0.32 0.51 0.63 0.54 0.50 - - ✓ 0.63 0.52 0.48 0.49 0.46 0.46 0.51 0.50 0.34 0.51 0.63 0.55 0.51 - ✓ - 0.63 0.60 0.60 0.66 0.56 0.51 0.64 0.48 0.51 0.58 0.67 0.61 0.59 - ✓ ✓ 0.65 0.61 0.59 0.67 0.57 0.52 0.63 0.50 0.52 0.59 0.69 0.61 0.59 
+
+✓ - - 0.67 0.63 0.61 0.64 0.59 0.55 0.62 0.61 0.47 0.66 0.73 0.63 0.62 
+
+✓ - ✓ 0.68 0.66 0.61 0.65 0.55 0.53 0.62 0.60 0.46 0.64 0.75 0.64 0.62 
+
+✓ ✓ - 0.69 0.67 0.63 0.63 0.60 0.57 0.63 0.64 0.50 0.68 0.79 0.64 0.64 
+
+✓ ✓ ✓ 0.70 0.68 0.64 0.66 0.60 0.57 0.64 0.64 0.50 0.68 0.79 0.66 0.65 0 10 20 30 40 50 60 70 80 90 100 
+
+> Percentage (%)
+> All (Ours)
+> No Counter
+> No URL Stack
+> No VLM
+> Only Counter
+> Only URL Stack
+> Only VLM
+> No (Baseline)
+> Prediction Distribution
+> Correct
+> Missing
+> Imprecise
+> Totally Incorrect
+> Hallucination
+> Refusal
+
+Figure 6: Fine-grained error distribution across model variants. Our full system ( All ) significantly improves the correctness rate while suppressing severe failures like Refusal and Hallucination. 
+
+modes to dissect performance bottlenecks. The baseline variants exhibit a pronounced tendency to-ward Refusal and Totally Incorrect outcomes, char-acterizing a form of navigational problem where agents prematurely terminate exploration upon hit-ting dead ends. Introducing the URL Stack effec-tively suppresses this behavior, providing a cog-nitive safety net that converts navigational fail-ures into successful retrievals. Furthermore, while stochastic hallucination remains an inherent chal-lenge for LLMs, the integration of the US Calcu-lator and Symbolic Counter significantly thins the Hallucination segment by decoupling perceptual and arithmetic reasoning from the generative pro-cess. Despite these architectural gains, the persis-tence of Missing Key Info errors even when correct pages are visited underscores a residual retrieval-to-synthesis gap , where the agent locates target in-formation but struggles to exhaustively aggregate fine-grained details under context constraints. 
+
+5 Conclusion 
+
+In this work, we presented V-GEMS , a multimodal web agent designed to resolve the navigational amnesia and arithmetic hallucinations inherent in LLM-based exploration. By augmenting the frame-work with a Symbolic Counter, URL Stack, and an adaptive US Calculator, and benchmarking on our reproducible EverWebQA dataset, we achieved a significant 28.7% performance gain over the Web-Walker baseline. These results confirm that decou-pling specific cognitive functions from stochastic generation is crucial for building reliable, efficient web agents. Future work will prioritize efficiency and open-ended autonomy. We plan to distill our architecture into lightweight, specialized models to reduce com-putational latency and integrate Agentic Reinforce-ment Learning to optimize long-horizon trajecto-ries. Ultimately, we aim to eliminate the depen-dency on pre-defined root URLs, empowering the agent to initiate open-world information seeking from generalized starting points. 
+
+Limitations 
+
+While V-GEMS demonstrates robust performance in multimodal web navigation, we identify three primary limitations in our current implementation: 
+
+Computational Overhead and Latency. The integration of VLMs via the US Calculator intro-duces a trade-off between perception accuracy and inference speed. Although our adaptive switching mechanism reduces unnecessary calls, the multi-modal processing pipeline still incurs higher la-tency and token costs compared to purely text-based baselines. This currently limits the system’s applicability in time-sensitive, low-resource scenar-ios. We plan to address this via model distillation and quantization to compress the agent into a more lightweight form without sacrificing performance. 
+
+Dependency on Pre-defined Entry Points. Our current evaluation protocol relies on a specific root url to initiate exploration. This setup does not fully replicate open-ended internet surfing, where an agent must start from a general search engine without a known domain boundary. Generalizing V-GEMS to initiate and plan tasks from an un-bounded starting point remains an open challenge for achieving true open-world autonomy. 
+
+Absence of Self-Evolving Optimization. The decision-making logic of V-GEMS currently relies on heuristic-based planning and in-context learn-ing. It lacks an end-to-end Reinforcement Learning (RL) mechanism to update its policy based on trial-and-error feedback. Consequently, the agent may not always converge on the globally optimal navi-gation trajectory in highly complex environments. Integrating Agentic RL to enable self-improving capabilities is a critical direction for our future research. 
+
+References 
+
+Sébastien Bubeck, Varun Chandrasekaran, Ronen El-dan, Johannes Gehrke, Eric Horvitz, Ece Kamar, Peter Lee, Yin Tat Lee, Yuanzhi Li, Scott Lund-berg, et al. 2023. Sparks of artificial general intelli-gence: Early experiments with gpt-4. arXiv preprint arXiv:2303.12712 .Kanzhi Cheng, Qiushi Sun, Yougang Chu, Fangzhi Xu, Yantao Li, Jianbing Zhang, and Zhiyong Wu. 2024. Seeclick: Harnessing gui grounding for advanced visual gui agents. arXiv preprint arXiv:2401.10935 .Xiang Deng, Yu Gu, Boyuan Zheng, Shijie Chen, Samuel Stevens, Boshi Wang, Huan Sun, and Yu Su. 2023. Mind2web: Towards a generalist agent for the web. In Thirty-seventh Conference on Neural Information Processing Systems Datasets and Bench-marks Track .Yang Deng, Xuan Zhang, Wenxuan Zhang, Yifei Yuan, See-Kiong Ng, and Tat-Seng Chua. 2024. On the multi-turn instruction following for conversational web agents. In Proceedings of the 62nd Annual Meeting of the Association for Computational Lin-guistics (Volume 1: Long Papers) , pages 8795–8812, Bangkok, Thailand. Association for Computational Linguistics. Li Dong, Nan Yang, Wenhui Wang, Furu Wei, Xi-aodong Liu, Yu Wang, Jianfeng Gao, Ming Zhou, and Hsiao-Wuen Hon. 2019. Unified language model pre-training for natural language understand-ing and generation. Advances in neural information processing systems , 32. Hiroki Furuta, Kuang-Huei Lee, Ofir Nachum, Yutaka Matsuo, Aleksandra Faust, Shixiang Shane Gu, and Izzeddin Gur. 2024. Multimodal web navigation with instruction-finetuned foundation models. In 
+
+The Twelfth International Conference on Learning Representations .Kelvin Guu, Kenton Lee, Zora Tung, Panupong Pasu-pat, and Mingwei Chang. 2020. Retrieval augmented language model pre-training. In International confer-ence on machine learning , pages 3929–3938. PMLR. Florian Hantke, Peter Snyder, Hamed Haddadi, and Ben Stock. 2025. Web execution bundles: Reproducible, accurate, and archivable web measurements. arXiv preprint arXiv:2501.15911 .Hongliang He, Wenlin Yao, Kaixin Ma, Wenhao Yu, Yong Dai, Hongming Zhang, Zhenzhong Lan, and Dong Yu. 2024. WebVoyager: Building an end-to-end web agent with large multimodal models. In 
+
+Proceedings of the 62nd Annual Meeting of the As-sociation for Computational Linguistics (Volume 1: Long Papers) , pages 6864–6890, Bangkok, Thailand. Association for Computational Linguistics. Jordan Hoffmann, Sebastian Borgeaud, Arthur Men-sch, Elena Buchatskaya, Trevor Cai, Eliza Ruther-ford, Diego de Las Casas, Lisa Anne Hendricks, Jo-hannes Welbl, Aidan Clark, et al. 2022. An empirical analysis of compute-optimal large language model training. Advances in neural information processing systems , 35:30016–30030. Wenyi Hong, Weihan Wang, Qingsong Lv, Jiazheng Xu, Wenmeng Yu, Junhui Ji, Yan Wang, Zihan Wang, Yuxiao Dong, Ming Ding, et al. 2024. Cogagent: A visual language model for gui agents. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 14281–14290. Peter C Humphreys, David Raposo, Tobias Pohlen, Gre-gory Thornton, Rachita Chhaparia, Alistair Muldal, Josh Abramson, Petko Georgiev, Adam Santoro, and Timothy Lillicrap. 2022. A data-driven approach for learning to control computers. In International Conference on Machine Learning , pages 9466–9482. PMLR. Jing Yu Koh, Robert Lo, Lawrence Jang, Vikram Duvvur, Ming Chong Lim, Po-Yu Huang, Graham Neubig, Shuyan Zhou, Ruslan Salakhutdinov, and Daniel Fried. 2024. Visualwebarena: Evaluating multimodal agents on realistic visual web tasks. In 
+
+ICLR 2024 Workshop on Large Language Model (LLM) Agents .Evan Zheran Liu, Kelvin Guu, Panupong Pasupat, Tian-lin Shi, and Percy Liang. 2018. Reinforcement learn-ing on web interfaces using workflow-guided explo-ration. arXiv preprint arXiv:1802.08802 .Pan Lu, Baolin Peng, Hao Cheng, Michel Galley, Kai-Wei Chang, Ying Nian Wu, Song-Chun Zhu, and Jianfeng Gao. 2023. Chameleon: Plug-and-play compositional reasoning with large language models. 
+
+Advances in Neural Information Processing Systems ,36:43447–43478. Grégoire Mialon, Clémentine Fourrier, Thomas Wolf, Yann LeCun, and Thomas Scialom. 2024. GAIA: a benchmark for general AI assistants. In The Twelfth International Conference on Learning Representa-tions .Dang Nguyen, Jian Chen, Yu Wang, Gang Wu, Namy-ong Park, Zhengmian Hu, Hanjia Lyu, Junda Wu, Ryan Aponte, Yu Xia, et al. 2025. Gui agents: A survey. In Findings of the Association for Computa-tional Linguistics: ACL 2025 , pages 22522–22538. OpenAI. 2025. Deep research: System card and tech-nical report. https://openai.com/index/ deep-research . Accessed: 2025-12-24. Andreas Rauber, Bernhard Gößwein, Carlo Maria Zwölf, Chris Schubert, Florian Wörister, James Dun-can, Katharina Flicker, Koji Zettsu, Kristof Meixner, Leslie D McIntosh, et al. 2021. Precisely and per-sistently identifying and citing arbitrary subsets of dynamic data. Harvard Data Science Review , 3(4). Pascal J Sager, Benjamin Meyer, Peng Yan, Rebekka von Wartburg-Kottler, Layan Etaiwi, Aref Enay-ati, Gabriel Nobel, Ahmed Abdulkadir, Benjamin F Grewe, and Thilo Stadelmann. 2025. A comprehen-sive survey of agents for computer use: Foundations, challenges, and future directions. arXiv preprint arXiv:2501.16150 .Yijia Shao, Yucheng Jiang, Theodore Kanell, Peter Xu, Omar Khattab, and Monica Lam. 2024. Assisting in writing Wikipedia-like articles from scratch with large language models. In Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers) ,pages 6252–6278, Mexico City, Mexico. Association for Computational Linguistics. Lloyd S Shapley et al. 1953. A value for n-person games. Fei Tang, Haolei Xu, Hang Zhang, Siqi Chen, Xingyu Wu, Yongliang Shen, Wenqi Zhang, Guiyang Hou, Zeqi Tan, Yuchen Yan, et al. 2025. A survey on (m) llm-based gui agents. arXiv preprint arXiv:2504.13865 .Jialong Wu, Wenbiao Yin, Yong Jiang, Zhenglin Wang, Zekun Xi, Runnan Fang, Linhai Zhang, Yulan He, Deyu Zhou, Pengjun Xie, et al. 2025. Webwalker: Benchmarking llms in web traversal. arXiv preprint arXiv:2501.07572 .Fengli Xu, Qianyue Hao, Zefang Zong, Jingwei Wang, Yunke Zhang, Jingyi Wang, Xiaochong Lan, Jiahui Gong, Tianjian Ouyang, Fanjin Meng, et al. 2025. Towards large reasoning models: A survey of rein-forced reasoning with large language models. arXiv preprint arXiv:2501.09686 .Kevin Xu, Yeganeh Kordi, Tanay Nayak, Ado Asija, Yizhong Wang, Kate Sanders, Adam Byerly, Jingyu Zhang, Benjamin Van Durme, and Daniel Khashabi. 2024. Tur[k]ingbench: A challenge benchmark for web agents. Nancy Xu, Sam Masling, Michael Du, Giovanni Cam-pagna, Larry Heck, James Landay, and Monica Lam. 2021. Grounding open-domain instructions to auto-mate web support tasks. In Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies , pages 1022–1032, Online. Association for Computational Linguistics. Yijun Yang, Tianyi Zhou, Kanxue Li, Dapeng Tao, Lu-song Li, Li Shen, Xiaodong He, Jing Jiang, and Yuhui Shi. 2024. Embodied multi-modal agent trained by an llm from a parallel textworld. In Pro-ceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 26275–26285. Shunyu Yao, Howard Chen, John Yang, and Karthik Narasimhan. 2022. Webshop: Towards scalable real-world web interaction with grounded language agents. Advances in Neural Information Processing Systems , 35:20744–20757. Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik R Narasimhan, and Yuan Cao. 2023. React: Synergizing reasoning and acting in language models. In The Eleventh International Conference on Learning Representations .Ori Yoran, Samuel Joseph Amouyal, Chaitanya Malaviya, Ben Bogin, Ofir Press, and Jonathan Be-rant. 2024. AssistantBench: Can web agents solve realistic and time-consuming tasks? In Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing , pages 8938–8968, Mi-ami, Florida, USA. Association for Computational Linguistics. Jingyi Zhang, Jiaxing Huang, Sheng Jin, and Shijian Lu. 2024a. Vision-language models for vision tasks: A survey. IEEE transactions on pattern analysis and machine intelligence , 46(8):5625–5644. Ziniu Zhang, Shulin Tian, Liangyu Chen, and Ziwei Liu. 2024b. Mmina: Benchmarking multihop multimodal internet agents. Boyuan Zheng, Boyu Gou, Jihyung Kil, Huan Sun, and Yu Su. 2024. Gpt-4v (ision) is a generalist web agent, if grounded. In Forty-first International Conference on Machine Learning .A Detailed Formulation of VLM Understanding Score 
+
+A.1 Text Quality ( Squal )
+
+This metric assesses whether the DOM contains enough legible information to be interpreted by an LLM. It is defined as: 
+
+Squal = flen (|O|) + 10 · |O|valid 
+
+|O| + Sfmt (3) where |O| is the total character count, and |O|valid 
+
+represents the count of non-gibberish, meaningful characters. The function flen acts as a "Goldilocks" filter: it penalizes sparse pages (likely containing only images) and excessively bloated pages (likely containing junk scripts). Sfmt rewards the presence of structural HTML tags (like <li> or <h1> ), which are crucial for LLM understanding. 
+
+A.2 Semantic Relevance ( Srel )
+
+This component (max 40 pts) ensures the current page actually contains content related to the user query q. We utilize a lightweight keyword-overlap and semantic embedding check between q and the textual observation O. If Srel is low, it indicates that the textual content is irrelevant, prompting the agent to invoke the VLM to see if the target information is embedded in visual banners or icons instead. Detailed prompt can see in D.1 
+
+A.3 Structural Clarity ( Sstruct )
+
+Navigability is often hindered by cluttered or empty DOM trees. We quantify this as: 
+
+Sstruct = 5 · I(npara ≥ 3) + fnav (nbtn ) + Sdense (4) where npara is the number of text paragraphs and 
+
+I(·) is the indicator function. nbtn denotes the count of interactive elements (buttons/links). The func-tion fnav peaks when nbtn ∈ [5 , 30] ; too few but-tons suggest a dead-end page, while too many sug-gest a complex navigation bar that requires visual spatial reasoning ( Sdense ) to disambiguate. 
+
+A.4 Special Case Penalties ( Sspec )
+
+To handle scenarios where text is inherently in-sufficient, we apply a baseline score and subtract penalties pi for visual-only elements: 
+
+Sspec = max 0, 15 − X
+
+> i∈K
+
+pi
+
+!
+
+(5) The set K includes keywords detected in the DOM metadata indicating image galleries ( p1), captchas (p2), or complex error pages ( p3). 
+
+B Comprehensive Workflow Demonstration 
+
+To provide a concrete visualization of the V-GEMS inference pipeline, Figure 7 presents a step-by-step execution trace on a complex multi-source query. This qualitative example decomposes the agent’s trajectory into distinct phases—ranging from initial query analysis to recursive exploration and final answer synthesis. 
+
+C Detailed Workflow of the Symbolic Counter 
+
+Complementing the methodology described in Sec-tion 3.1, Figure 8 presents the comprehensive al-gorithmic flowchart of the Symbolic Counter .The diagram visually details the branching logic for constraint parsing, entity deduplication, and the specific termination conditions for both quota-based and exhaustive search modes. 
+
+D Details on Prompts 
+
+D.1 Prompts for Evaluation Metrics 
+
+To ensure the reproducibility of our experimen-tal results, we detail the specific system instruc-tions employed in our LLM-as-a-Judge evaluation framework. The following prompts quantify the agent’s performance across three dimensions: com-puting the Srel for understanding score, verifying correctness to determine the overall success rate, and performing error classification for failure anal-ysis. Prompt for Srel Calculation                                                  
+
+> You are an expert in information retrieval relevance assessment. Evaluate the relevance between the User Query and the Webpage Content. Input: -User Query: {query} -Webpage Content: {observation} Scoring Criteria (0-40): -40: Highly Relevant (Direct answer or key evidence). -30: Relevant (Useful supporting info or clear cues). -20: Weakly Relevant (Indirect links, tangential). -10: Marginally Relevant (Mostly noise). -0: Irrelevant. Output JSON:
+
+{"score ": <integer 0-40>, "reason ": "<brief justification>" }
+
+Prompt for Evaluation 
+
+You are an expert evaluator for question-answering systems. Given a question, a reference answer, and a prediction, your task is to determine if the prediction correctly answers the question based on the reference answer. Input Data: - Question: {question} - Reference Answer: {answer} - Prediction: {pred} Evaluation Criteria: 1. Compare the prediction with the reference answer strictly. 2. The prediction must contain the key entities/facts from the reference. 3. Minor wording differences are acceptable if the semantic meaning is identical. 4. If the prediction is wrong, incomplete (missing key parts), or fails to answer, score it as INCORRECT (0). Output Format: Please provide your evaluation in the following format: REASONING: [Detailed reasoning about why it is correct/ incorrect] SCORE: [1 or 0] Your evaluation: 
+
+Prompt for Error Classification 
+
+You are a rigorous QA evaluator. Your task is to classify the error in the Model Prediction given the Question, Reference Answer, and the retrieved Web Information. Input Data: - Question: {question} - Reference Answer (Ground Truth): {answer} - Model Prediction: {pred} - Web Information (Context): {information} Error Taxonomy (Choose strictly one): 
+
+1. [Hallucination] (Fabrication) - Definition: The prediction asserts specific facts (dates, numbers, names) that appear NOWHERE in the provided "Web Information". - Key Check: Is this information completely made up or extrinsic to the source? 2. [Totally Incorrect] (Reasoning Error) - Definition: The prediction is factually wrong, but the error stems from misinterpreting the "Web Information". The entity exists in the text, but the model selected the wrong one (e. g., confusing "Submission Deadline" with "Notification Date"). - Key Check: Is it a logic/ mapping error rather than pure fabrication? 3. [Missing Key Info] (Incompleteness) - Definition: The prediction is factually correct but incomplete. It fails to list all items required (Recall failure) or omits a specific component of a multi-part query (e.g., answering the "who" but missing the "where"). 4. [Imprecise] (Granularity Mismatch) - Definition: The prediction is correct in direction but lacks the required specific resolution. - Example: Answering "July 2023" when the truth is "July 21, 2023". It is vague rather than wrong. Instruction: Compare the Prediction against the Reference and Context. Output ONLY the category name. Output:(Choose one: Hallucination or Totally Incorrect or Missing Key Info or Imprecise. Don’t output anything else.) 
+
+D.2 Prompts for Agent Modules 
+
+This section details the system instructions for the core components of the V-GEMS framework. Prompt for Explorer Agent 
+
+You are a web exploration agent. Your goal is to find quality information by navigating through websites to answer the user’s query. Available Tools: {tool_descs} 
+
+[Operational Protocols] 
+
+1. Counter Enforcement (CRITICAL): - You must collect a specific number of items. - ALWAYS check progress using count_usefulness. - Rule: IF current_count <target_count: You MUST CONTINUE exploring. DO NOT STOP. - Rule: IF current_count >= target_count: You may proceed to generate the final answer. 2. State Management: - Loop Prevention: Before acting, check the url_stack. NEVER click a link that leads to a visited URL. - Backtracking: If the current branch is exhausted or irrelevant, use url_stack to backtrack or jump to a sibling node. 
+
+[Format Requirement] 
+
+Use the following format strictly: Question: {query} Thought: Analyze the current state. Action: The action to take, must be one of [{tool_names}]. Action Input: The input to the 
+
+action (JSON format). Observation: The result of the 
+
+action .... (Repeat Thought/Action/ Observation loop until success) Begin! 
+
+Prompt for Critic Agent 
+
+You are a Critic Agent responsible for information assessment and task termination. This process operates in two sequential stages. 
+
+[Stage 1: Information Filtering] 
+
+Task: Analyze the current observation. If it contains information relevant to the query, extract it precisely. Eliminate noise. Input: - Query: {query} - Current Observation: {observation} Output JSON: 
+
+{"is_useful": <true/false>, "extracted_info": "<Specific details extracted from observation, or null>" }
+
+[Stage 2: Sufficiency Judgment] 
+
+Task: Evaluate the global accumulated information. Decide if it is sufficient to fully answer the user’s query. Input: - Query: {query} - Accumulated Info: {accumulated_info} (Aggregated from Stage 1 history) Output JSON: {"is_sufficient": <true/false>, "final_answer": "<Generate the final answer if sufficient, otherwise null>" }
+
+D.3 Prompts for Data Synthesis 
+
+Finally, we detail the system instructions used for our automated data synthesis pipeline. Prompt for QA Pair Generation 
+
+[Mode A: Single-Source QA Generation] 
+
+You are a professional QA dataset generation assistant. I will give you a web page’s content, please generate a QA pair based on the information from this page. Website domain: {domain} {domain_instruction} 
+
+Quality Requirements (VERY IMPORTANT): 
+
+1. Questions MUST have clear, verifiable, objective answers (e. g., specific dates, locations, names, numbers, concrete facts) 2. Avoid subjective questions (e.g ., "How good is...", "What do you think about...", "How would you rate...") 3. Answers must come directly from the page content, do not make up or speculate 4. Question type examples: 
+
+✓ Good questions: "When was the university founded?" "What is the paper submission deadline?" "How many players does the game support?" 
+
+× Avoid: "How is the university ?" "What are the conference features?" "Is the game fun?" 5. Answers should be concise and accurate with specific information, not vague or general descriptions 
+
+Requirements: 
+
+1. The question should be answerable from this page’s content 2. The question should be related to the {domain} domain 3. Difficulty level: {difficulty} - easy: Information is direct and obvious, easy to find - medium: Requires understanding and integration of information - hard: Requires in-depth analysis and reasoning 4. Generate question and answer in English Input Content: {content} 
+
+[Mode B: Multi-Source QA Generation] 
+
+You are a professional QA dataset generation assistant. I will give you content from two web pages, please generate a QA pair based on the information from BOTH pages. Website domain: {domain} {domain_instruction} 
+
+Quality Requirements (VERY IMPORTANT): 
+
+1. Questions MUST have clear, verifiable, objective answers. 2. Avoid subjective questions. 3. Answers must come directly from the page content, do not make up or speculate. 4. Question type examples: 
+
+✓ Good questions: "Who is the advisor of the student mentioned in the news?" (Requires linking Student Name from Page A to Advisor from Page B) 
+
+× Avoid: Questions answerable by a single page. 5. Answers should be concise and accurate. 
+
+Requirements: 
+
+1. The question MUST require integrating information from 
+
+BOTH pages to answer. 2. The question should be related to the {domain} domain. 3. Difficulty level: {difficulty} - easy: Information is direct and obvious, easy to find 
+
+- medium: Requires simple linking of facts across pages. - hard: Requires multi-hop reasoning and comparison. 4. Generate question and answer in English Input Content: {content_page_1} {content_page_2} 
+
+[Output Format (Shared)] 
+
+Please return JSON format directly: Please return JSON format directly: {"question": "Question content", "answer": "Answer content" }
+
+Prompt for Teacher Model 
+
+You are a rigorous Quality Assurance Auditor and Content Editor for a QA dataset. Your task is to perform a strict solvability check and refine the linguistic quality of the generated QA pair. Input Data: - Domain: {domain} - Source Content: {content} - Generated Question: {question} - Generated Answer: {answer} 
+
+[Phase 1: Solvability Check (Gatekeeper)] 
+
+1. Strict Grounding : Is the answer explicitly derivable from the Source Content? If it requires external knowledge or hallucination, REJECT immediately. 2. Logic Validation : Does the answer directly address the question without logical gaps? 
+
+[Phase 2: Linguistic Refinement] 
+
+If the QA pair passes Phase 1, you must refine it: 1. Clarity : Fix any ambiguous pronouns or vague entities (e.g., change "What is its release date?" to "What is the release date of [Entity]?"). 2. Fluency : Correct grammar and ensure the tone is professional and concise. 3. Objectivity : Remove any subjective phrasing (e.g., "Why is it amazing?"). 
+
+[Output Decision] 
+
+- If the Solvability Check fails -> Return "is_valid": false. - If Solvability passes -> Return "is_valid": true AND provide the "refined_question" and "refined_answer". Output Format (JSON): {"is_valid": <true/false>, "refined_question": "The polished/corrected question (if valid)", "refined_answer": "The polished/corrected answer (if valid)", "reason ": "Explanation of rejection or refinement details ." }
+
+E Error Category Case Studies 
+
+To systematically diagnose the reliability of V-GEMS, we established a failure taxonomy derived from the agent cognitive pipeline. As autonomous web exploration requires a sequential execution of identifying, interpreting, and synthesizing infor-mation, we map our five error categories to break-downs at specific stages of this cognitive process: 1. Navigational Robustness: Can the agent physically locate the target context? (Cate-gory: Refusal )2. Factual Grounding & Reasoning: Can the agent interpret the retrieved context faithfully without fabrication or logical fallacies? (Cate-gories: Hallucination , Totally Incorrect . The difference between them show in 3) 3. Information Resolution: Can the agent syn-thesize the answer with the required complete-ness and granularity? (Categories: Missing Key Info , Imprecise )Below, we detail the characteristics of each error mode. 
+
+E.1 Refusal 
+
+Refusal occurs when the model explicitly explicitly declines to answer (e.g., outputs "I cannot find the information") or yields an empty response. While a refusal can be a valid response if the information truly does not exist, in our evaluation, this category specifically denotes premature termination due to navigational failures. 
+
+E.2 Hallucination 
+
+Hallucination represents a critical breakdown in 
+
+factual grounding . In these instances, the model confidently asserts specific information (e.g., dates, statistics, or named entities) that is objectively false or entirely absent from the retrieved DOM content. This error mode characterizes the tension be-tween an LLM’s pre-trained parametric knowledge and the specific context of the webpage. Instead of extracting data from the source, the agent "over-rides" the visual evidence with fabricated details, leading to answers that appear plausible but are extrinsic to the environment. 
+
+E.3 Totally Incorrect 
+
+Distinct from hallucination, Totally Incorrect er-rors occur when the agent attempts to reason over the correct source material but fails to derive the valid logical conclusion. Here, the predicted an-swer often contains entities actually present on the page, but they are misattributed or structurally flawed due to a logical mismatch .Common manifestations include conflating par-allel entities (e.g., extracting the "Workshop Dead-line" instead of the "Conference Deadline") or fail-ing to satisfy negative constraints. This indicates that while the agent successfully located the data, it failed to process the structural relationships be-tween elements. 
+
+E.4 Missing Key Info 
+
+As shown in 4, missing Key Info errors denote a failure in information synthesis and recall . In these cases, the model’s response is factually accurate regarding the specific details it provides, but it fails to exhaustively cover the scope of the user’s query. Unlike hallucinations where the agent invents data, here the agent simply omits required com-ponents. For example, when asked for a compre-hensive list or a multi-attribute description (e.g., "date and time"), the agent might return a truncated list or ignore specific constraints. This reflects a gap between successful page navigation and the ability to aggregate distributed information into a complete answer. 
+
+E.5 Imprecise (Granularity Mismatch) Imprecise errors represent a failure in resolution alignment . The predicted answer is correct in its general direction but lacks the specific granularity or fidelity required by the query. Root Url https://www.fiba.basketball/en 
+
+Question Which team won the second place in the FIBA Asia Cup 2025? 
+
+Answer China Source Website https://www.fiba.basketball/en/history/195-fiba-asia-cup 
+
+Website Information 
+
+(Visual Context: The 2025 row shows 1st: AUS, 2nd: CHN, 3rd: IRI) 
+
+Prediction (Hallucination) 
+
+"Japan won the second place." 
+
+[Analysis]: The entity "Japan" is fabricated . It does not exist in the 2025 data row shown above. 
+
+Prediction (Totally Incorrect) 
+
+"Australia won the second place." 
+
+[Analysis]: "Australia" exists in the row (as 1st place) but is logically misattributed to the 2nd place. 
+
+Table 3: Case study comparing Hallucination and Totally Incorrect errors on the FIBA Asia Cup task. 
+
+As illustrated in Table 5, while the ground truth provides a precise timestamp ("21 Jul 2023"), the agent generalizes this to a broader scope ("Jul 2023"). Although this prediction is not factu-ally contradictory, the loss of temporal fidelity fails to meet the analytical depth expected in auto-mated web retrieval tasks. Such vague responses often render the output practically unusable for downstream applications that require exact time-line tracking. Question Which team won the FIBA Asia Cup 2025, and who was named the TISSOT MVP of the tournament? 
+
+Answer Australia won the FIBA Asia Cup 2025, and Jaylin Galloway was named the TISSOT MVP. 
+
+Prediction "Australia won the FIBA Asia Cup 2025." 
+
+[Analysis]: The answer is factually correct but incomplete . The agent correctly processed the first intent (Winning Team) but completely ignored the second intent (MVP) of the compound query, demonstrating a failure in comprehensive information recall. 
+
+Table 4: Case study of a Missing Key Info error on a multi-source query. 
+
+Question When was the last update made to the PSLE Secondary 1 Posting information? 
+
+Answer The last update to the PSLE Secondary 1 Posting information was made on 21 Jul 2023 .
+
+Prediction (Imprecise) 
+
+"The last update to the PSLE Secondary 1 Posting information was made in Jul 2023." 
+
+[Analysis]: The answer is factually consistent with the truth but fails to meet the required 
+
+temporal granularity . While the source provides a specific timestamp (Day-Month-Year), the model generalizes it to a broader scope (Month-Year), resulting in a loss of information fidelity. 
+
+Table 5: Case study of an Imprecise error. Figure 7: A comprehensive workflow demonstration. Figure 8: Operational flowchart of the Symbolic Counter.

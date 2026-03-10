@@ -1,0 +1,667 @@
+Title: OmniRet: Efficient and High-Fidelity Omni Modality Retrieval
+
+URL Source: https://arxiv.org/pdf/2603.02098v1
+
+Published Time: Tue, 03 Mar 2026 03:58:40 GMT
+
+Number of Pages: 19
+
+Markdown Content:
+# OmniRet: Efficient and High-Fidelity Omni Modality Retrieval 
+
+## Chuong Huynh 1,∗ Manh Luong 2,∗ Abhinav Shrivastava 1 
+
+> 1
+
+University of Maryland, College Park, USA 2 Monash University, Australia ∗ Equal contribution 
+
+## Abstract 
+
+Multimodal retrieval is the task of aggregating information from queries across heterogeneous modalities to retrieve desired targets. State-of-the-art multimodal retrieval mod-els can understand complex queries, yet they are typically limited to two modalities: text and vision. This limitation impedes the development of universal retrieval systems ca-pable of comprehending queries that combine more than two modalities. To advance toward this goal, we present OmniRet, the first retrieval model capable of handling com-plex, composed queries spanning three key modalities: text, vision, and audio. Our OmniRet model addresses two crit-ical challenges for universal retrieval: computational ef-ficiency and representation fidelity. First, feeding massive token sequences from modality-specific encoders to Large Language Models (LLMs) is computationally inefficient. We therefore introduce an attention-based resampling mecha-nism to generate compact, fixed-size representations from these sequences. This shared module is designed to main-tain representational diversity and generalization capabil-ities while remaining sensitive to modality-specific infor-mation. Second, compressing rich omni-modal data into a single embedding vector inevitably causes information loss and discards fine-grained details. We propose Attention Sliced Wasserstein Pooling to preserve these fine-grained details, leading to improved omni-modal representations. OmniRet is trained on an aggregation of approximately 6 million query-target pairs spanning 30 datasets. We bench-mark our model on 13 retrieval tasks and a MMEBv2 sub-set. Our model demonstrates significant improvements on composed query, audio and video retrieval tasks, while achieving on-par performance with state-of-the-art models on others. Furthermore, we curate a new Audio-Centric Multimodal Benchmark (ACM). This new benchmark intro-duces two critical, previously missing tasks—composed au-dio retrieval and audio-visual retrieval—to more compre-hensively evaluate a model’s omni-modal embedding ca-pacity. We believe our benchmark will facilitate the devel-opment of universal retrieval systems. Code and data is available at github.com/hmchuong/omniret .Multimodal  
+
+> Retrieval Encoder
+> OmniRet
+> (Ours)
+> Shared Vector
+> Database
+> Query
+> Embedding
+> Query Modalities
+> Query
+> Embedding
+> Target Modalities
+> Shared Media
+> Resampler
+> (Efficiency)
+> Attention Sliced
+> Wasserstein Pooling
+> (High -Fidelity)
+> (a) Multimodal Retrieval Systems (top) and our OmniRet (bottom) Textual Binding
+> Single Modality Composed Visual Text
+
++ + 
+
+> Visual -Audio Composed Audio Text
+
++
+
+> (b) Our evaluation suite with new Audio-Centric MultiModal tasks.
+
+Figure 1. (a) Comparison of retrieval systems. OmniRet is the first to handle composed queries from text, vision, and audio. It introduces a Shared Media Resampler for efficiency and Attention Sliced Wasserstein Pooling to preserve high-fidelity, fine-grained details. (b) Our Audio-Centric MultiModal evaluation suite. 
+
+We introduce two novel, audio-centric tasks: Visual-Audio Re-trieval and Composed Audio-Text Retrieval. These additions fill critical gaps in existing benchmarks, enabling a more comprehen-sive evaluation of omni-modal retrieval models. 
+
+## 1. Introduction 
+
+The landscape of information retrieval has fundamentally shifted from single-modality systems, such as traditional text search, to a complex ecosystem demanding seamless interaction across diverse data types. The proliferation of digital content requires models that can understand hetero-geneous, composed queries—for example, finding a target image using a query that combines a related image and a line of text. While pioneering cross-modal models like CLIP [57], BLIP [36, 37], and CLAP [74] have excelled at bi-modal tasks, they fall short in scenarios requiring compo-sitional understanding across multiple modalities. Further-more, the frontier of omni-modal retrieval, often relying on 1
+
+> arXiv:2603.02098v1 [cs.IR] 2 Mar 2026
+
+Multimodal LLMs (MLLMs) [27, 41, 46], reveals signifi-cant gaps. Modalities like video and, most notably, audio remain critically underserved due to a scarcity of dedicated models and comprehensive training data. The path to a universal retrieval model is obstructed by two primary challenges: representation fidelity and compu-tational efficiency . On one hand, condensing rich, multi-modal inputs into a single embedding vector creates an in-formation bottleneck that discards the fine-grained details necessary for high-fidelity retrieval [72]. Prior works [27, 41] often resort to simple average pooling or using the ‘[EOS]’ token as the final representation. These meth-ods are efficient, however, the fine-grained information ex-tracted from LLMs could be discarded due to the weighted sum operation. While sophisticated late-interaction mecha-nisms like ColBERT [28] overcome this by retaining token-level embeddings, they introduce prohibitive computational and storage costs, making them impractical for large-scale systems. On the other hand, the sheer scale of modern foundation models presents a significant efficiency chal-lenge. Feeding massive token sequences from media en-coders, often exceeding 500 tokens for a single image, into an LLM composer results in an explosion of computational cost. This computational overhead severely limits the fea-sible batch size, which in turn undermines the effectiveness of contrastive learning, a cornerstone for training state-of-the-art embedding models. To address these challenges, we introduce OmniRet, the first unified framework for omni-modal embedding, capa-ble of handling multimodal queries and targets from three primary modalities: text, vision, and audio ( Fig. 1a). Our framework makes two primary contributions. First, to tackle the efficiency bottleneck, we introduce an attention-based resampling module that intelligently condenses large sequences of media tokens into a compact, fixed-size set. This module is shared across modalities to enhance general-ization, yet maintains modality-specific sensitivity by using separate media latents. We augment this with a novel di-versity loss function, ensuring that these condensed tokens retain maximal information and thereby improve the final embedding quality. Second, to achieve high-fidelity repre-sentation without sacrificing efficiency, we propose a new pooling method called Attention Sliced Wasserstein Pool-ing (ASWP), inspired by PSWE [53]. By conceptualizing the set of LLM output tokens as a distribution, ASWP com-putes a rich embedding based on the distance to a set of learnable references. This approach preserves fine-grained, token-level information while maintaining the speed and simplicity of a single-vector system. Our extensive experi-ments demonstrate that OmniRet achieves superior perfor-mance on composed retrieval tasks, including those for im-ages, videos, and audio. We also introduce a new benchmark, the Audio-Centric Multimodal (ACM) benchmark ( Fig. 1b). This benchmark is curated from the VGG-Sound dataset to evaluate univer-sal retrieval systems that extend beyond the traditional text-vision paradigm. We leverage powerful generative models (QwenOmni2.5 [76] and Gemini2.5 [9]) to generate high-quality audio captions and modification text describing the relationship between audio pairs. We validate the quality of our synthetic benchmark via human evaluation. Our bench-mark contributes two major, previously missing retrieval tasks: composed audio retrieval and audio-visual retrieval. Our main contribution can be summarized as: (i) We introduce OmniRet, the first universal retrieval framework capable of handling text, vision, and audio. OmniRet ad-dresses the critical challenges of computational efficiency and representation fidelity through a novel attention-based resampler and our Attention Sliced Wasserstein Pooling (ASWP) technique. (ii) We propose a large-scale, multi– task training strategy to train OmniRet on a massive aggre-gation of approximately 6 million query-target pairs from 30 distinct datasets. (iii) We curate and will release the ACM benchmark, a new audio-centric benchmark featur-ing two novel tasks, to advance the evaluation of universal retrieval systems. (iv) Through extensive experiments, we demonstrate that OmniRet achieves state-of-the-art perfor-mance, particularly on composed retrieval tasks across im-age, video, and audio. 
+
+## 2. Related Works 
+
+Multimodal Embedding . Recent advances in multimodal embedding have been driven by large-scale paired datasets and self-supervised learning. Pioneering cross-modal mod-els such as CLIP variants [24, 57, 63] and BLIP [36, 37] focus on text-vision alignment, while others like CLAP [12, 48] target text-audio modalities. Beyond dataset-centric improvements, several works explore improved pretraining objectives for learning better joint embedding spaces, in-cluding SigLIP variants [66, 78] and AlignCLIP [13]. More recently, the emergence of LLMs has motivated approaches that leverage their strong representational power [17, 70] to construct unified embedding spaces. 
+
+Universal Multimodal Retrieval . Research on universal retrieval systems has rapidly advanced. UniIR [71] pio-neered a universal retriever by training a dual-encoder on 20 datasets, establishing a strong any-to-any benchmark; however, it relies on separate, specialized encoders. Other approaches adapt existing VLMs for embedding tasks [25, 26, 50, 81], achieving strong performance but often lim-its to text-vision modalities. To improve retrieval, some models [41, 46] leverage the instruction-following ability of LLMs, using generative rewards [80, 82] to refine pre-dictions. This line of work is complemented by advances in data curation [22, 79, 82] to source high-quality cross-2modal pairs for training. Moving beyond two modalities, ImageBind [16] demonstrated the feasibility of a joint em-bedding space for six modalities. While this enables omni-retrieval, it highlights a key challenge: managing mas-sive, high-dimensional media inputs from varied encoders. These methods often remain computationally inefficient by directly processing all encoder tokens. Our work directly addresses this efficiency bottleneck. 
+
+Embedding Pooling . Embedding pooling techniques are critical for aggregating a sequence of embedding vectors into a single, fixed-size vector [55]. Simple methods, like mean pooling or using the ‘[EOS]’ token’s hidden state, are fast but often suboptimal, discarding fine-grained informa-tion. More advanced techniques, such as NV-Embed [34], use learnable queries to generate a more descriptive single-vector representation. However, the entire single-vector paradigm faces theoretical limitations [72], spurring the de-velopment of late-interaction models. ColBERT [28] ex-emplifies this approach by performing expensive but highly effective token-level comparisons. Subsequent research has focused on making this paradigm more efficient, such as MetaEmbed [75]. While these advancements make late in-teraction more feasible, they still deviate from the single-vector format required for highly optimized Approximate Nearest Neighbor indexes. To bridge this gap, we introduce a new multimodal-aggregation technique, ASWP, inspired by PSWE [53]. Our method captures fine-grained relevance while remaining fully compatible with efficient, large-scale retrieval systems. 
+
+## 3. OmniRet 
+
+3.1. Problem Definition 
+
+Omni-modal information retrieval aims to match a query q
+
+to a set of candidates c, where both can be of any modal-ity. To handle diverse retrieval tasks, we prepend a natural language instruction to the query: 
+
+qinst = Instruct: {task definition } \ n Query: {q} (1) where ‘ {task definition }’ specifies the retrieval goal and domain. This instruction-tuning approach enhances the model’s generalization capabilities. The candidates c, how-ever, remain in their raw, instruction-free form. Our goal is to train a unified embedding model, f , that maps both the instructed query and the candidate to a shared 
+
+D-dimensional space: hq = f (qinst ) and hc = f (c). We train f using a Hard-negative InfoNCE loss [56] over in-batch negatives: 
+
+Lcont = − log eϕ(hq,hc+)
+
+P 
+
+> c
+
+w(hq, hc) · eϕ(hq,hc) (2) where ϕ(x, y) = 1 
+
+> τ
+
+cos( x, y) is the temperature-scaled ( τ )cosine similarity score. Here, c+ and c− denote pos-itive and negative candidates, respectively. w(·) is an adaptive weighting term for hard-negative mining where 
+
+w(hq, hc+) = 1 and: 
+
+w(hq, hc−) = |N | eβϕ (hq,hc−)
+
+P 
+
+> c−
+
+eβϕ (hq,hc−) (3) with |N | is the number of negative samples. Following prior works, we set the temperature τ = 0 .07 and weighting pa-rameter β = 0 .5.To further providing a strong discriminative learning sig-nal to the model, we also adopt the hinge-based triplet loss 
+
+Ltriplet = X
+
+> c−
+
+max[ η + ϕ(hq, hc−) − ϕ(hq, hc+)] (4) where η = 0 .1 is the margin hyper-parameter. 
+
+3.2. Model Architecture 
+
+Our model, OmniRet, employs a Large Language Model (LLM) as a universal composer to process inputs from var-ious modalities, as depicted in Fig. 2. Text inputs are pro-cessed directly by the LLM, while other modalities are first encoded by specialized encoders and then projected and re-sampled into the LLM’s token embedding space. All media tokens are then interleaved in the query template defined in Eq. (1). Finally, we produce a single embedding vector by aggregating the LLM’s output hidden states. The same model is used to encode both the query and the candidate. We keep the media encoders and the LLM frozen, training only our novel modules and a LoRA [20] adapter injected into the LLM. Our novel components are detailed below. 
+
+Shared Media Resampler . A key challenge in multi-modal systems is the high token count produced by media (visual and audio) encoders (often > 500 tokens), which limits training batch sizes and computational efficiency. To address this, we introduce a Shared Media Resampler (Fig. 3, left). This module is an intermediate layer connect-ing media tokens with the LLM input space. It condenses a large sequence of media tokens into a small, fixed number of latent vectors using the Perceiver [23] architecture. We customize this module to leverage data from differ-ent modalities. While a single perceiver module is shared across all media types, we introduce modality-specific la-tents. These are added to the shared latent queries, enabling the module to adapt to each modality type while retaining its generalization capability. We use all media tokens from the media encoders as input for the resampler, except for videos, where we first apply 3D trilinear interpolation to the video features to reduce frame-level redundancy before resampling. 
+
+Diversity on Media Resampled Tokens . To ensure the re-sampled tokens capture diverse information, we apply a di-3Visual Encoder Audio Encoder 
+
+Shared Media Resampler 
+
+Visual Projector Audio Projector 
+
+Large Language Model + LoRA 
+
+Attention Sliced Wasserstein Pooling 
+
+Query Embedding 𝐡 𝐪 
+
+OmniRet 
+
+OmniRet 
+
+Candidate Embedding 𝐡 𝐜 
+
+Contrastive & Triplet loss 
+
+ℒ#$%& & ℒ&'()*+& 
+
+Diversity loss ℒ,(-
+
+“erhu sound” 
+
+Video: 
+
+Audio: 
+
+Image: 
+
+A woman playing violin 
+
+Omni M odality Query Omni M odality Candidate 
+
+Trainable 
+
+Frozen 
+
+“violin sound” 
+
+Instruct : Finding ... 
+
+Query : Video: [VIDEO] 
+
+Image: [IMAGE] 
+
+Audio: [AUDIO] 
+
+Change to violin 
+
+𝐌 Figure 2. Overall OmniRet architecture. Our universal retrieval model integrates specialized visual and audio encoders with a Large Language Model acting as a cross-modal composer. Media inputs are processed through a Shared Media Resampler, and the final embed-ding is derived via our Attention Sliced Wasserstein Pooling. The model is optimized using Contrastive, Triplet and Diversity losses. Cross Attention                   
+
+> Feed Forward
+> +
+> Media Tokens
+> ℝ!×#
+> Resampled Tokens 𝐌 ∈ℝ$×#
+> +
+> ||
+> Hidden States ℝ%×#
+> Projection Θ
+> Sliced
+> References
+> 𝐗′ ∈ℝ&×'
+> Monge Coupling
+> Embedding 𝐡 ∈ℝ'
+> LayerNorm
+> Query
+> Key, Val
+> x 2
+> Per -Slice Max Pool
+> Shared Media Resampler Attention Sliced Wasserstein Pooling
+> Perceiver
+> 𝐙 ∈ℝ&×#
+> Shared Latents ℝ$×#
+> +
+> Media Latents ℝ$×#
+> x 3
+> +
+> ||
+> Add
+> Concat
+> ℝ&×'
+> 𝐙 ′∈ℝ&×'
+
+Figure 3. Left: Our Shared Media Resampler condenses the out-put of media encoders into a compact set of latent vectors before they are fed to the LLM. Right: Our Attention Sliced Wasser-stein Pooling (ASWP) aggregates the final LLM output hidden states into a single, high-fidelity embedding vector. Attention Re-sampler applies to both output of media encoders and LLM uni-versal encoder. 
+
+versity regularization loss, Ldiv , which encourages orthogo-nality among the output vectors M ∈ RN ×D :
+
+Ldiv = 1
+
+N 2
+
+X smooth L1
+
+ Dropout  max( MM ⊤, 0) − I 
+
+(5) Here, we compute the pairwise similarity matrix MM ⊤,clip negative values, and then remove the self-similarity scores (the identity matrix I). Crucially, we apply Dropout to the resulting matrix before the loss. This acts as a sparse sampling mechanism, ensuring that the loss is computed on only a small, randomly selected subset of token pairs in each training step. This efficiently encourages global diversity. The smooth L1 function (with γ = 0 .5) is then applied. This Huber loss is less sensitive to large similarities (out-liers) than a standard L2 loss, preventing exploding gradi-ents while still penalizing non-orthogonality. The smooth L1
+
+definition is as follows: smooth L1(x) = 
+
+(
+
+0.5x2/γ, if x < γ x − 0.5 ∗ γ, otherwise (6) 
+
+Attention Sliced Wasserstein Pooling . To aggregate the LLM’s output hidden states, we first condense the full se-quence into a compact set of S latent embeddings, Z =
+
+{z1, . . . , zS |z ∈ RD }. This is done using an attention-based resampler, which is the same architecture as the Shared Media Resampler (shown in Fig. 3, left) but applied to the LLM’s output tokens. We then pool this set Z using our Attention Sliced Wasserstein Pooling (ASWP) method, which is inspired by PSWE [53]. This approach, analogous to vector quantiza-tion [51, 83], is designed to preserve fine-grained informa-tion. It compares Z to a set of S learnable reference points, 
+
+X = {x1, . . . , xS |x ∈ RD }, across L different 1D projec-tions (projectors Θ = {θ1, . . . , θ L|θ ∈ SD−1}). This pro-cess computes an intermediate representation Z′ ∈ RS×L:
+
+Z′ = [ ψ1(X, Z; θ1); . . . ; ψL(X, Z; θL)] (7) where ψi(·) ∈ RS computes the Monge coupling [30, 69] between X and Z in the 1D space defined by θi.While Z′ effectively preserves fine-grained details, its 
+
+S × L >> D size is inefficient for a final embedding. Therefore, ASWP introduces an attention-pooling step to 4A dog barks and a smoke     
+
+> detector beeps in the
+> background of music
+> A siren blares ,a dog
+> howls , and music
+> plays in the
+> background.
+> Query Audio Target audio
+> Added
+> Changed
+> Removed
+> Modification Text: Dog's bark became a
+> howl, smoke detector beep disappears,
+> and a siren sound is added
+
+Figure 4. A composed audio retrieval example from our ACM benchmark where query composes both audio and text modalities. 
+
+aggregate information from Z′. We use a straight-through maximum (STM) trick to create a binary attention mask 
+
+m(Z′) ∈ { 0, 1}S×L. For each column ψi of Z′ (repre-senting the i-th projection), we compute a soft score y =
+
+softmax (ψi) ∈ [0 , 1] S . The corresponding column mi of the binary mask is then: 
+
+mi = OneHot 
+
+
+
+arg max 
+
+> 0≤j<S
+
+yj
+
+
+
+− StopGrad (y) + y (8) This mask m selects the single most relevant reference point for each projection. We apply it via Hadamard product: 
+
+V = Z′ ⊙ m(Z′), where ⊙ is the Hadamard product. The final L-dimensional embedding h is computed by a column-sum operation on V: hi = PSj=1 Vji . This procedure is illustrated in Fig. 3 (right). In practice, we learn the sliced references of X′ directly. 
+
+Final Loss . The final loss to train OmniRet is the linear combination of Lcont , Ltriplet and Ldiv :
+
+L = Lcont + μ1Ltriplet + μ2Ldiv (9) where μ1 = 1 and μ2 = 0 .1 is set in our experiments. 
+
+## 4. Audio-Centric Multimodal Benchmark 
+
+While composed image retrieval has been extensively in-vestigated [47, 59, 73], no curated benchmark exists for the composed audio retrieval task. Establishing such a bench-mark is essential to advance research in complex audio re-trieval. Furthermore, few benchmarks exist for audio-to-image or audio-to-video retrieval, largely due to the lim-ited capacity of most models to process such heterogeneous query modalities. To address these gaps, we introduce the Audio-Centric Multimodal (ACM) benchmark, which com-prises two new tasks: composed audio retrieval (audio-text to audio) and audio-visual retrieval (audio to image/video). 
+
+4.1. Data collection 
+
+Audio Source . We use the popular VGG-Sound dataset [6], which is widely used for audio-visual tasks. This choice is based on two rationales. First, it contains a large volume of audio-visual correspondence data in the wild, making it well-suited for our audio-visual retrieval task. Second, the composed audio retrieval task requires query-target audio 
+
+Table 1. Subjective evaluation of our ACM benchmark. For the “Gemini-2.5 w/ text only” method, the audio inputs were replaced with their corresponding generated captions.    
+
+> Evaluation Method Accuracy Human 87% Gemini-2.5 w/ text only 96%
+
+pairs that are sufficiently similar yet exhibit clear distinc-tions. VGG-Sound, which comprises 200k 10-second au-dio clips from ∼310 classes, satisfies this requirement. 
+
+Representative Audio Selection . We leverage the ground-truth class labels from VGG-Sound to randomly select 30 audio-video pairs per class. In total, we sample 9,270 pairs to form a representative subset, denoted as D. From this set, we first construct the query-target pairs for the composed audio task, and then reuse these samples for the audio-visual retrieval task. 
+
+Query-Target Filtering . Our filtering process aims to find a set of 3-5 target audios for each query audio A ∈ D 
+
+that are semantically similar but not identical. Since VGG-Sound lacks captions, we first generate a caption for every audio in VGG-Sound using QwenOmni2.5 [76]. Let κ be the Sentence-BERT [60] cosine similarity between the cap-tion of A and the caption of another audio in the dataset. To find targets for A, we first rank the top 50 audios by κ in descending order. From this ranked list, we select up to 5 audios that satisfy three criteria: (1) Similarity: The caption similarity must be in the range 0.6 < κ < 0.8, ensuring both relevance and diversity. (2) Textual Diversity: A can-didate is excluded if its κ differs by less than 0.05 from the most recently added target, thereby maintaining suffi-cient distinctiveness among selected samples. (3) Acoustic Diversity: A similar criterion to (2) is applied, but using CLAP [74] audio embeddings, ensuring distinctiveness in the acoustic information. We terminate the selection pro-cess for A once 5 targets are found and discard A entirely if fewer than 3 targets can be found. After this filtering pro-cess, we retain 1,292 audios from D as our final query set. Since each of these 1,292 query audios has 3 to 5 associated targets, we obtain a total of 4,251 target audios. 
+
+Benchmark Construction . For each (query, target) audio pair identified, we generate a modification sen-tence describing the difference between them. We em-ploy the Gemini2.5-Flash-Lite model [9] in “thinking mode”, prompting it with the captions of the query-target pair (details in supplementary). This process con-structs the composed audio benchmark as a set of triplets: 
+
+(query-audio , modification-text , target-audio ). Fig. 4shows an example. Furthermore, we construct the audio-visual retrieval task by reusing the 1,292 audio queries. The benchmark con-sists of (audio , video ) and (audio , image ) pairs. The target videos are from the original 1,292 query audio-video sam-5Table 2. Performance comparison of OmniRet with state-of-the-art baselines across 13 retrieval tasks on the extended version of M-BEIR benchmark. Our model demonstrates strong, balanced performance on established visual-text tasks while uniquely extending capabilities to the audio modality. Modalities: I (Image), V (Video), A (Audio), T (Text). Bold and green indicate the best performance in each group and overall, respectively. MMEmbed [40] is included for reference only, as it uses a larger LLM and is not directly comparable.                                                                                                                                               
+
+> Model LLM Size Uni-Modality Textual Binding Composed Visual Text I→IT→TI→TT→IV→TT→VA→TT→AT→I,T I,T →TI,T →II,T →I,T V,T →V
+> Text-Binding Pretrained Models
+> CLIP [57] -25.9 40.5 43.1 37.5 14.2 15.9 -------SigLIP [78] -25.9 34.0 56.5 52.1 19.7 22.5 -------PE-Core [3] -32.0 56.8 58.0 53.4 32.3 29.5 -------MMT [54] -------49.8 46.8 -----CLAP [74] -------63.9 56.6 -----
+> Multi-Task Finetuning Models
+> CLIP SF [71] -28.4 83.7 50.0 45.1 ----63.6 41.0 26.4 60.6 -MMEmbed [40] 7B 32.1 96.7 49.9 44.2 ----77.2 47.2 38.5 68.5 -VLM2VecV2 [50] 1.5B 30.0 81.1 43.4 39.8 17.6 18.4 --61.6 24.5 28.7 33.6 76.4 OmniRet 1.5B 24.4 86.7 50.6 46.9 43.8 43.2 66.8 62.4 70.5 44.4 36.5 64.8 86.2
+
+ples, and the target images are extracted from their middle frames. The remaining audio-video samples from D (that were not selected as queries) are added to the candidate pool, resulting in 1,292 queries and 5,480 total candidates. 
+
+4.2. Data Quality Analysis 
+
+We conducted a subjective evaluation to verify the quality of our generated captions and modification texts. We tasked three human annotators with answering 100 multiple-choice questions, each created from a randomly sampled query au-dio. Each question presented the query audio and the modi-fication text; the answer choices consisted of the correct tar-get audio and two random distractor audios from the same candidate subset. As shown in Table 1, human annotators achieved 87% accuracy, indicating the task is solvable but non-trivial. In contrast, the Gemini-2.5 model (using text-only inputs) achieved 96% accuracy. These results confirm that our generated audio captions and modification texts are high-quality and sufficiently descriptive for the composed audio retrieval task. 
+
+## 5. Experiments 
+
+5.1. Implementation Details 
+
+Training Datasets . We extend M-BEIR [71] with ad-ditional text, image, video, and audio retrieval datasets. Specifically, we added 7 datasets (MSMarco [2], Hot-potQA [77], NaturalQuestion [32], PAQ [35], StackEx-change [62], NLI [4], SQuAD [58]) from MTEB [64] for text retrieval following MMEmbed [41]; 3 datasets (LLaVA-558K [44], CC-CoIR [67], MTCIR [22]) to en-hance the interaction between image and text; 5 video and text datasets (TGIF [38], Charades [61], WebVid2M [1], PE-Video [3], WebCoVR [67]); 4 datasets for audio and text retrieval (AudioCaps [29], ClothoV2.1 [11], Wav-Text5K [10], WavCaps [49]) and VGGSound [6] for audio-visual retrieval. In total, we use 30 datasets for training, to-taling approximately 6.2 million query-candidate pairs. The distribution and details of the training datasets can be found in the supplementary material. 
+
+Benchmarks and Evaluation Metrics . Besides our pro-posed ACM benchmark, we also evaluate models on an extended version of M-BEIR and a subset of the bench-marks from MMEBv2 [50]. For M-BEIR, we extended it to include additional interactions between the audio-text and video-text modalities. Following MMEBv2, we test each benchmark individually and average the results for each group instead of using a global candidate pool. We use Recall@ k with k = 5 for most benchmarks, except for FashionIQ [73] and Fashion200K [18], which use k = 10 .On MMEBv2, we compare performance on classification (CLS), retrieval (RET), and video moment retrieval tasks (MRET). Recall@1 is used as the metric for MMEBv2, while on our proposed benchmark, we report Recall@5. We follow the evaluation protocols of prior works for all models and baselines. 
+
+Baselines . On the extended M-BEIR, we evaluate against dual-encoder models trained on text-binding tasks ( e.g ., image-to-text) and recent baselines finetuned on multi-modal (image and video) data. For MMEBv2 baselines, we gather results for models with LLM backbones smaller than 4B parameters to be comparable with our model. On our benchmark with the audio modality, we choose to com-pare with ImageBind [16], CLAP [74], and Gemma Embed-ding [68]. While ImageBind [16] is a strong baseline for audio-image-video alignment, the Gemma encoding cap-tions from QwenOmni [76] serves as an alternative solution for the composed audio retrieval task. Details of each base-line are discussed in the supplementary material. 
+
+Model Architecture and Training Details . At the core of our architecture, we employ GTE-Qwen2-1.5B-Instruct [39] as the universal LLM for processing and 6Table 3. Generalization performance of OmniRet against lead-ing models ( <7B parameters) on a subset of MMEBv2. Our model achieves outstanding performance on video tasks. No-tably, it maintains competitive performance on image retrieval tasks without being fully fine-tuned on their training sets. Bold 
+
+highlights the best score in each group.                                                             
+
+> Model LLM Size Image Video CLS RET CLS RET MRET
+> Image-Text Embedding Models
+> UniME [17] 1.5B 59.0 64.9 ---LLaVE [33] 1.5B 62.1 65.2 ---B3++ [65] 1.5B 67.0 70.9 ---MetaEmbed [75] 2B 68.1 71.9 ---
+> Video-Image-Text Embedding Models
+> ColPaliv1.3 [14] 2B 40.3 48.1 26.7 21.6 25.5 GME [81] 1.5B 54.4 66.9 34.9 25.6 32.4 VLM2VecV1 [27] 1.5B 58.7 65.0 33.4 20.6 33.0 VLM2VecV2 [50] 1.5B 62.9 69.5 39.3 28.8 38.5 OmniRet 1.5B 51.7 65.3 48.6 36.5 43.3
+
+fusing omnimodal information into a coherent embedding space. Each media input is processed by a different en-coder. While visual inputs are handled by SigLIP-SO400M-Patch14-384 [78], audio files are processed by QwenAu-dio Encoder [8]. Our entire implementation is built upon the publicly available LLaVA [44] codebase. To balance task performance and maintain a large number of in-batch hard negatives, we customized a data sampler that balances the number of samples between tasks within the same batch and randomly selecting one or two datasets per task. With the majority of parameters remaining frozen, our model has only ∼84M trainable parameters in total. Our training protocol is divided into two distinct stages: • Stage 1: Warm-up. We first warm up the model on a curriculum of simple uni-modality and textual binding retrieval tasks, excluding video-related and composed-query datasets. Only the projectors, resampler, and pool-ing layer are trained while the LLM is kept frozen. We train the model on 2M samples with the batch size of 
+
+2048 , approximately 341 in-batch samples per task. • Stage 2: Fine-tuning. We continue to train the model on all datasets and tasks for approximately 18M training samples. The video media latents are initialized from the weights of image media latents. Besides trainable mod-ules from stage 1, LoRA with a rank of 16 and alpha of 64 is applied to the LLM. We train with a batch size of 
+
+3072 , but select only 4 random tasks per batch and apply gradient accumulation in 2 steps to keep training stable and robust across all tasks. More details on the training hyper-parameters can be found in the supplementary material. 
+
+5.2. Quantitative Results 
+
+Table 2 compares our OmniRet with other methods, both with and without training on the M-BEIR datasets. The first group includes methods trained only on textual binding 
+
+Table 4. Performance comparison on our novel ACM bench-mark. OmniRet illustrats promising results over baselines on both the composed audio and audio-visual retrieval tasks. Modalities: I (Image), V (Video), A (Audio), T (Text). Bold and underline indicate the best and second-best performance, respectively.                          
+
+> Model A,T →AA→VV→AA→II→AQwenOmni [76] + Gemma [68] 44.6 3.3 6.3 4.4 5.4 CLAP [74] 16.1 ----ImageBind [16] 7.32 35.5 36.3 30.1 29.7
+> OmniRet 23.0 35.5 34.4 24.5 26.0
+
+tasks; while they show strong performance on those specific tasks, their ability is limited as they cannot handle complex data structures or different modality types. For visual-text retrieval, PE-Core [3] is presented as the strongest baseline, with leading performance on most tasks. For audio, we compare our model with two strong baselines, CLAP [74] and MMT [54]. Among models fine-tuned on multi-task re-trieval, CLIP SF [71] and MMEmbed [41] are fine-tuned on the M-BEIR dataset. VLM2VecV2 [50] is another strong baseline, which is fine-tuned on a broader set of datasets that includes the video modality. In comparison with mod-els of a similar size, OmniRet achieves leading performance on all tasks except for image-to-image retrieval, often by a large margin. Notably, on audio and video tasks, OmniRet also outperforms all specialized models, even those trained on larger amounts of in-domain data. We then evaluate OmniRet’s generalization on a sub-set of tasks from MMEBv2, shown in Table 3. Since our model was not fine-tuned on the training sets for the Visual Question Answering or Visual Document Retrieval tasks, we only compare performance on classification (CLS) and retrieval (RET) tasks. Our model maintains highly com-petitive performance on image retrieval, achieving a score (approximately 65) that is within the median range of mod-els fully fine-tuned on this data. For video, OmniRet achieves state-of-the-art performance even without being fully trained on all datasets, demonstrating the strong gen-eralization ability of our framework. Finally, on our new ACM benchmark (Table 4), we com-pare OmniRet with three baselines. For composed au-dio retrieval (A,T →A), the strongest baseline is a multi-stage text-to-text retrieval pipeline (using Gemma [68] with QwenOmni2.5 [76]-generated captions). Although it shows promising results, this multi-stage pipeline incurs signif-icant additional computational cost. On this same task, we also show the performance of CLAP [74] and Image-Bind [16] (with features fused as per UniIR [71]), both of which OmniRet outperforms by a large margin while remaining an efficient single-stage method. The Gemma-based pipeline, while strong on the composed audio task, fails to work well on other tasks in our benchmark. This is likely because converting audio and images/videos to tex-tual descriptions breaks the modality binding between audio 7Table 5. Ablation study of our proposed components. We re-port the impact on Average Recall (across 6 tasks, trained on 1M samples) when each component is removed or modified.                                            
+
+> Avg. Recall ∆
+> Our Baseline 50.2 0.0
+> (a) Embedding Vector
+> Single [EOS ]Vector 43.4 -6.8 Multi (16) Vectors 49.8 -0.4
+> (b) Number of Projections (L) and References (S)
+> L= 1536 , S = 128 47.5 -2.7
+> L= 1024 , S = 128 48.7 -1.5
+> L= 4096 , S = 64 48.7 -1.5
+> L= 4096 , S = 32 48.1 -2.1
+> (c) Pooling in ASWP
+> Average Pooling 20.7 -29.5 Learnable Weighted Sum 48.5 -1.7 Maximum Pooling 49.2 -1.0
+> (d) Media Resampler
+> No Resampler 46.7 -3.5 Separated Resamplers 49.9 -0.3 Shared Resampler W/o Media Latents 49.8 -0.4
+> (e) Loss Functions
+> W/o Ltriplet 49.7 -0.5 W/o Ldiv 47.1 -3.1
+
+and vision, thereby substantially degrading audio-visual re-trieval performance. In contrast, ImageBind has the capac-ity to align visual and audio embeddings, achieving strong performance on all audio-visual retrieval tasks. However, this model lacks the capacity to understand the complex, composed queries in the A,T →A task. Our model, Om-niRet, demonstrates a promising ability to align both visual and audio modalities, achieving performance similar to Im-ageBind on audio-to-video retrieval and remaining compet-itive on other audio-visual tasks, all while dominating the complex composed retrieval task. 
+
+5.3. Ablation Studies 
+
+We conduct comprehensive ablation studies, training each configuration for 1M samples and reporting the Average Recall across 6 tasks in Table 5. For resource-intensive set-tings (no resampler and multi-vectors), we halved the batch size and doubled the steps (with gradient accumulation) for a fair comparison. Our default model uses a Shared Media Resampler, ASWP pooling ( L = 4096 , S = 128 ) with the Straight-Through Maximum (STM) estimator, and all three loss functions ( Lcont , Ltriplet , Ldiv ). 
+
+(a) ASWP Improves Embedding Quality . Using a sin-gle ‘[EOS]’ vector as the embedding cuts performance by 6.8%. Late interaction (16 vectors) is better than ‘[EOS]’ but slightly worse than ASWP, likely due to the required smaller batch size limiting hard-negative sampling. 
+
+(b) More Projectors and References are Beneficial . In-creasing projections L and references S improves results at the cost of computation. We find L = 4096 , S = 128 offers the best tradeoff. 
+
+(c) STM is the Best for ASWP . Average pooling performs poorly, as it cancels out informative positive distances to the references with other negative values. Our STM estima-tor is the best, outperforming standard max pooling and a learnable weighted sum by enabling better gradient flow. 
+
+(d) Shared Media Resampler is the Best Choice . Remov-ing the resampler degrades performance (due to a smaller batch size). Adding our resampler brings a +3% recall boost. Using separate resamplers or a shared one without our modality-specific latents both perform worse, showing that sharing data and maintaining specificity is key. 
+
+(e) Triplet and Diversity Losses are Essential . The result is slightly degraded (0.5% drop) when removing the Ltriplet 
+
+loss. In contrast, performance drops significantly (3.1% drop) without the Ldiv loss. This highlights the critical im-portance of maintaining diversity on the resampled media tokens before they are fed to the LLM. 
+
+## 6. Limitations and Conclusion 
+
+Despite promising results, OmniRet has clear limitations that open avenues for future work. First, due to re-source constraints, we leave scaling the model with a larger LLM backbone and more training data for future investi-gation, which we expect would significantly boost perfor-mance. Second, our work focuses on expanding modali-ties, whereas other works ( e.g ., MMEBv2) have expanded retrieval tasks. A key future direction is to train a single, unified model on a large-scale dataset incorporating both more tasks and more diverse input types ( e.g ., depth maps, 3D point clouds, and speech). Finally, while we introduce a new benchmark for audio retrieval, it could be extended to more complex scenarios, such as retrieval over interleaved, mixed-media documents. In conclusion, we present a novel approach to omni-modality retrieval where image, video, audio, and text are encoded into a unified embedding space by a single model. Our contributions include:(1) An innovative architecture that encodes any modality into a shared embedding space, considering both the diversity and efficiency of the extracted information; (2) A new Sliced Wasserstein embedding pooling method that overcomes the limitations of coarse– grained, single-vector embeddings; (3) A new training strategy and dataset combination that improve the model’s generalization across many retrieval tasks; (4) New ACM benchmark for evaluating interactions between audio and other modalities. Notably, OmniRet achieves superior re-sults with 12/13 leading performance on extended M-BEIR, outstanding results on video benchmarks on MMEBv2 and promising performance on our ACM. These advancements collectively push the boundaries of omni-modality retrieval, offering more efficient and effective solutions for real-world applications like RAG or recommendation systems. 8References 
+
+[1] Max Bain, Arsha Nagrani, G¨ ul Varol, and Andrew Zisser-man. Frozen in time: A joint video and image encoder for end-to-end retrieval. In ICCV , 2021. 6, 4 [2] Payal Bajaj, Daniel Campos, Nick Craswell, Li Deng, Jian-feng Gao, Xiaodong Liu, Rangan Majumder, Andrew Mc-Namara, Bhaskar Mitra, Tri Nguyen, et al. Ms marco: A human generated machine reading comprehension dataset. 
+
+arXiv preprint arXiv:1611.09268 , 2016. 6, 4 [3] Daniel Bolya, Po-Yao Huang, Peize Sun, Jang Hyun Cho, Andrea Madotto, Chen Wei, Tengyu Ma, Jiale Zhi, Jathushan Rajasegaran, Hanoona Rasheed, et al. Perception encoder: The best visual embeddings are not at the output of the net-work. arXiv preprint arXiv:2504.13181 , 2025. 6, 7, 4, 5, 8[4] Samuel R Bowman, Gabor Angeli, Christopher Potts, and Christopher D Manning. A large annotated corpus for learning natural language inference. arXiv preprint arXiv:1508.05326 , 2015. 6, 4 [5] Yingshan Chang, Mridu Narang, Hisami Suzuki, Guihong Cao, Jianfeng Gao, and Yonatan Bisk. Webqa: Multihop and multimodal qa. In CVPR , 2022. 4 [6] Honglie Chen, Weidi Xie, Andrea Vedaldi, and Andrew Zis-serman. Vggsound: A large-scale audio-visual dataset. In 
+
+ICASSP . IEEE, 2020. 5, 6, 4 [7] Yang Chen, Hexiang Hu, Yi Luan, Haitian Sun, So-ravit Changpinyo, Alan Ritter, and Ming-Wei Chang. Can pre-trained vision and language models answer vi-sual information-seeking questions? arXiv preprint arXiv:2302.11713 , 2023. 4 [8] Yunfei Chu, Jin Xu, Xiaohuan Zhou, Qian Yang, Shil-iang Zhang, Zhijie Yan, Chang Zhou, and Jingren Zhou. Qwen-audio: Advancing universal audio understanding via unified large-scale audio-language models. arXiv preprint arXiv:2311.07919 , 2023. 7 [9] Gheorghe Comanici, Eric Bieber, Mike Schaekermann, Ice Pasupat, Noveen Sachdeva, Inderjit Dhillon, Marcel Blis-tein, Ori Ram, Dan Zhang, Evan Rosen, et al. Gemini 2.5: Pushing the frontier with advanced reasoning, multimodality, long context, and next generation agentic capabilities. arXiv preprint arXiv:2507.06261 , 2025. 2, 5 [10] Soham Deshmukh, Benjamin Elizalde, and Huaming Wang. Audio retrieval with wavtext5k and clap training. arXiv preprint arXiv:2209.14275 , 2022. 6, 4 [11] Konstantinos Drossos, Samuel Lipping, and Tuomas Virta-nen. Clotho: An audio captioning dataset. In ICASSP . IEEE, 2020. 6, 4 [12] Benjamin Elizalde, Soham Deshmukh, Mahmoud Al Ismail, and Huaming Wang. Clap learning audio concepts from nat-ural language supervision. In ICASSP . IEEE, 2023. 2 [13] Sedigheh Eslami and Gerard de Melo. Mitigate the gap: Im-proving cross-modal alignment in CLIP. In ICLR , 2025. 2 [14] Manuel Faysse, Hugues Sibille, Tony Wu, Bilel Omrani, Gautier Viaud, C´ eline Hudelot, and Pierre Colombo. Col-pali: Efficient document retrieval with vision language mod-els. arXiv preprint arXiv:2407.01449 , 2024. 7, 5 [15] Stephanie Fu, Netanel Tamir, Shobhita Sundaram, Lucy Chai, Richard Zhang, Tali Dekel, and Phillip Isola. Dream-sim: Learning new dimensions of human visual similar-ity using synthetic data. arXiv preprint arXiv:2306.09344 ,2023. 4 [16] Rohit Girdhar, Alaaeldin El-Nouby, Zhuang Liu, Mannat Singh, Kalyan Vasudev Alwala, Armand Joulin, and Ishan Misra. Imagebind: One embedding space to bind them all. In CVPR , 2023. 3, 6, 7 [17] Tiancheng Gu, Kaicheng Yang, Ziyong Feng, Xingjun Wang, Yanzhao Zhang, Dingkun Long, Yingda Chen, Wei-dong Cai, and Jiankang Deng. Breaking the modality bar-rier: Universal embedding learning with multimodal llms. In 
+
+ACM MM , 2025. 2, 7, 5 [18] Xintong Han, Zuxuan Wu, Phoenix X Huang, Xiao Zhang, Menglong Zhu, Yuan Li, Yang Zhao, and Larry S Davis. Au-tomatic spatially-aware fashion concept discovery. In ICCV ,2017. 6, 4 [19] D Hendrycks. Gaussian error linear units (gelus). arXiv preprint arXiv:1606.08415 , 2016. 1 [20] Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, Weizhu Chen, et al. Lora: Low-rank adaptation of large language models. ICLR ,2022. 3 [21] Hexiang Hu, Yi Luan, Yang Chen, Urvashi Khandelwal, Mandar Joshi, Kenton Lee, Kristina Toutanova, and Ming-Wei Chang. Open-domain visual entity recognition: Towards recognizing millions of wikipedia entities. In ICCV , 2023. 4 [22] Chuong Huynh, Jinyu Yang, Ashish Tawari, Mubarak Shah, Son Tran, Raffay Hamid, Trishul Chilimbi, and Abhinav Shrivastava. Collm: A large language model for composed image retrieval. In CVPR , 2025. 2, 6, 4 [23] Andrew Jaegle, Felix Gimeno, Andy Brock, Oriol Vinyals, Andrew Zisserman, and Joao Carreira. Perceiver: General perception with iterative attention. In International Confer-ence on Machine Learning , 2021. 3 [24] Chao Jia, Yinfei Yang, Ye Xia, Yi-Ting Chen, Zarana Parekh, Hieu Pham, Quoc Le, Yun-Hsuan Sung, Zhen Li, and Tom Duerig. Scaling up visual and vision-language representa-tion learning with noisy text supervision. In International Conference on Machine Learning . PMLR, 2021. 2 [25] Ting Jiang, Minghui Song, Zihan Zhang, Haizhen Huang, Weiwei Deng, Feng Sun, Qi Zhang, Deqing Wang, and Fuzhen Zhuang. E5-v: Universal embeddings with multimodal large language models. arXiv preprint arXiv:2407.12580 , 2024. 2 [26] Ziyan Jiang, Rui Meng, Xinyi Yang, Semih Yavuz, Yingbo Zhou, and Wenhu Chen. Vlm2vec: Training vision-language models for massive multimodal embedding tasks. arXiv preprint arXiv:2410.05160 , 2024. 2, 5 [27] Ziyan Jiang, Rui Meng, Xinyi Yang, Semih Yavuz, Yingbo Zhou, and Wenhu Chen. VLM2vec: Training vision-language models for massive multimodal embedding tasks. In ICLR , 2025. 2, 7, 5 [28] Omar Khattab and Matei Zaharia. Colbert: Efficient and effective passage search via contextualized late interaction over bert. In Proceedings of the 43rd International ACM SI-
+
+9GIR conference on research and development in Information Retrieval , pages 39–48, 2020. 2, 3 [29] Chris Dongjoo Kim, Byeongchang Kim, Hyunmin Lee, and Gunhee Kim. Audiocaps: Generating captions for audios in the wild. In Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Lin-guistics: Human Language Technologies , 2019. 6, 4 [30] Soheil Kolouri, Se Rim Park, Matthew Thorpe, Dejan Slepcev, and Gustavo K Rohde. Optimal mass transport: Signal processing and machine-learning applications. IEEE signal processing magazine , 2017. 4 [31] Aditya Kusupati, Gantavya Bhatt, Aniket Rege, Matthew Wallingford, Aditya Sinha, Vivek Ramanujan, William Howard-Snyder, Kaifeng Chen, Sham Kakade, Prateek Jain, et al. Matryoshka representation learning. NeurIPS , 2022. 5 [32] Tom Kwiatkowski, Jennimaria Palomaki, Olivia Redfield, Michael Collins, Ankur Parikh, Chris Alberti, Danielle Ep-stein, Illia Polosukhin, Jacob Devlin, Kenton Lee, et al. Natural questions: a benchmark for question answering re-search. ACL , 2019. 6, 4 [33] Zhibin Lan, Liqiang Niu, Fandong Meng, Jie Zhou, and Jinsong Su. Llave: Large language and vision embedding models with hardness-weighted contrastive learning. arXiv preprint arXiv:2503.04812 , 2025. 7, 5 [34] Chankyu Lee, Rajarshi Roy, Mengyao Xu, Jonathan Raiman, Mohammad Shoeybi, Bryan Catanzaro, and Wei Ping. NV-embed: Improved techniques for training LLMs as generalist embedding models. In ICLR , 2025. 3 [35] Patrick Lewis, Yuxiang Wu, Linqing Liu, Pasquale Min-ervini, Heinrich K¨ uttler, Aleksandra Piktus, Pontus Stene-torp, and Sebastian Riedel. Paq: 65 million probably-asked questions and what you can do with them. ACL , 2021. 6, 4 [36] Junnan Li, Dongxu Li, Caiming Xiong, and Steven Hoi. Blip: Bootstrapping language-image pre-training for unified vision-language understanding and generation. In Interna-tional Conference on Machine Learning . PMLR, 2022. 1, 2[37] Junnan Li, Dongxu Li, Silvio Savarese, and Steven Hoi. Blip-2: Bootstrapping language-image pre-training with frozen image encoders and large language models. In In-ternational Conference on Machine Learning . PMLR, 2023. 1, 2 [38] Yuncheng Li, Yale Song, Liangliang Cao, Joel Tetreault, Larry Goldberg, Alejandro Jaimes, and Jiebo Luo. Tgif: A new dataset and benchmark on animated gif description. In 
+
+CVPR , 2016. 6, 4 [39] Zehan Li, Xin Zhang, Yanzhao Zhang, Dingkun Long, Pengjun Xie, and Meishan Zhang. Towards general text embeddings with multi-stage contrastive learning. arXiv preprint arXiv:2308.03281 , 2023. 6 [40] Sheng-Chieh Lin, Chankyu Lee, Mohammad Shoeybi, Jimmy Lin, Bryan Catanzaro, and Wei Ping. Mm-embed: Universal multimodal retrieval with multimodal llms. In 
+
+ICLR , 2024. 6, 8 [41] Sheng-Chieh Lin, Chankyu Lee, Mohammad Shoeybi, Jimmy Lin, Bryan Catanzaro, and Wei Ping. MM-EMBED: UNIVERSAL MULTIMODAL RETRIEVAL WITH MUL-TIMODAL LLMS. In ICLR , 2025. 2, 6, 7, 5 [42] Tsung-Yi Lin, Michael Maire, Serge Belongie, James Hays, Pietro Perona, Deva Ramanan, Piotr Doll´ ar, and C Lawrence Zitnick. Microsoft coco: Common objects in context. In 
+
+ECCV , 2014. 4 [43] Fuxiao Liu, Yinghan Wang, Tianlu Wang, and Vicente Or-donez. Visual news: Benchmark and challenges in news image captioning. arXiv preprint arXiv:2010.03743 , 2020. 4[44] Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong Jae Lee. Visual instruction tuning. NeurIPS , 2023. 6, 7, 4 [45] Siqi Liu, Weixi Feng, Tsu-jui Fu, Wenhu Chen, and William Yang Wang. Edis: Entity-driven image search over multimodal web content. arXiv preprint arXiv:2305.13631 ,2023. 4 [46] Yikun Liu, Yajie Zhang, Jiayin Cai, Xiaolong Jiang, Yao Hu, Jiangchao Yao, Yanfeng Wang, and Weidi Xie. Lamra: Large multimodal model as your advanced retrieval assistant. In 
+
+CVPR , 2025. 2 [47] Zheyuan Liu, Cristian Rodriguez-Opazo, Damien Teney, and Stephen Gould. Image retrieval on real-life images with pre-trained vision-and-language models. In ICCV , 2021. 5, 4 [48] Manh Luong, Khai Nguyen, Nhat Ho, Gholamreza Haffari, Dinh Phung, and Lizhen Qu. Revisiting deep audio-text re-trieval through the lens of transportation. In ICLR , 2024. 2 [49] Xinhao Mei, Chutong Meng, Haohe Liu, Qiuqiang Kong, Tom Ko, Chengqi Zhao, Mark D Plumbley, Yuexian Zou, and Wenwu Wang. Wavcaps: A chatgpt-assisted weakly-labelled audio captioning dataset for audio-language multi-modal research. IEEE/ACM Transactions on Audio, Speech, and Language Processing , 2024. 6, 4 [50] Rui Meng, Ziyan Jiang, Ye Liu, Mingyi Su, Xinyi Yang, Yuepeng Fu, Can Qin, Zeyuan Chen, Ran Xu, Caiming Xiong, et al. Vlm2vec-v2: Advancing multimodal em-bedding for videos, images, and visual documents. arXiv preprint arXiv:2507.04590 , 2025. 2, 6, 7, 8 [51] Fabian Mentzer, David Minnen, Eirikur Agustsson, and Michael Tschannen. Finite scalar quantization: VQ-VAE made simple. In ICLR , 2024. 4 [52] Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean. Efficient estimation of word representations in vector space. 
+
+arXiv preprint arXiv:1301.3781 , 2013. 5 [53] Navid Naderializadeh, Joseph F Comer, Reed Andrews, Heiko Hoffmann, and Soheil Kolouri. Pooling by sliced-wasserstein embedding. NeurIPS , 2021. 2, 3, 4 [54] Andreea-Maria Oncescu, A Koepke, Joao F Henriques, Zeynep Akata, and Samuel Albanie. Audio retrieval with natural language queries. arXiv preprint arXiv:2105.02192 ,2021. 6, 7, 5, 8 [55] Khoi Pham, Chuong Huynh, Ser-Nam Lim, and Abhinav Shrivastava. Composing object relations and attributes for image-text matching. In CVPR , 2024. 3 [56] Filip Radenovic, Abhimanyu Dubey, Abhishek Kadian, Todor Mihaylov, Simon Vandenhende, Yash Patel, Yi Wen, Vignesh Ramanathan, and Dhruv Mahajan. Filtering, distil-lation, and hard negatives for vision-language pre-training. In CVPR , 2023. 3 
+
+10 [57] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learn-ing transferable visual models from natural language super-vision. In International Conference on Machine Learning .PmLR, 2021. 1, 2, 6, 3, 5, 8 [58] Pranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and Percy Liang. Squad: 100,000+ questions for machine com-prehension of text. arXiv preprint arXiv:1606.05250 , 2016. 6, 4 [59] Arijit Ray, Filip Radenovic, Abhimanyu Dubey, Bryan Plummer, Ranjay Krishna, and Kate Saenko. Cola: A bench-mark for compositional text-to-image retrieval. NeurIPS ,2023. 5 [60] Nils Reimers and Iryna Gurevych. Sentence-bert: Sentence embeddings using siamese bert-networks. In EMNLP . Asso-ciation for Computational Linguistics, 2019. 5 [61] Gunnar A Sigurdsson, Abhinav Gupta, Cordelia Schmid, Ali Farhadi, and Karteek Alahari. Charades-ego: A large-scale dataset of paired third and first person videos. arXiv preprint arXiv:1804.09626 , 2018. 6, 4 [62] Stack-Exchange-Community. Stack exchange data dump. 
+
+ACL , 2023. 6, 4 [63] Quan Sun, Jinsheng Wang, Qiying Yu, Yufeng Cui, Fan Zhang, Xiaosong Zhang, and Xinlong Wang. Eva-clip-18b: Scaling clip to 18 billion parameters. ArXiv , abs/2402.04252, 2024. 2 [64] Nandan Thakur, Nils Reimers, Andreas R¨ uckl´ e, Abhishek Srivastava, and Iryna Gurevych. Beir: A heterogenous benchmark for zero-shot evaluation of information retrieval models. arXiv preprint arXiv:2104.08663 , 2021. 6 [65] Raghuveer Thirukovalluru, Rui Meng, Ye Liu, Mingyi Su, Ping Nie, Semih Yavuz, Yingbo Zhou, Wenhu Chen, Bhuwan Dhingra, et al. Breaking the batch barrier (b3) of contrastive learning via smart batch mining. arXiv preprint arXiv:2505.11293 , 2025. 7, 5 [66] Michael Tschannen, Alexey Gritsenko, Xiao Wang, Muham-mad Ferjad Naeem, Ibrahim Alabdulmohsin, Nikhil Parthasarathy, Talfan Evans, Lucas Beyer, Ye Xia, Basil Mustafa, et al. Siglip 2: Multilingual vision-language en-coders with improved semantic understanding, localization, and dense features. arXiv preprint arXiv:2502.14786 , 2025. 2, 4 [67] Lucas Ventura, Antoine Yang, Cordelia Schmid, and G¨ ul Varol. Covr-2: Automatic data construction for composed video retrieval. IEEE TPAMI , 2024. 6, 4 [68] Henrique Schechter Vera, Sahil Dua, Biao Zhang, Daniel Salz, Ryan Mullins, Sindhu Raghuram Panyam, Sara Smoot, Iftekhar Naim, Joe Zou, Feiyang Chen, et al. Embed-dinggemma: Powerful and lightweight text representations. 
+
+arXiv preprint arXiv:2509.20354 , 2025. 6, 7, 1 [69] C´ edric Villani et al. Optimal transport: old and new .Springer, 2008. 4 [70] Ziyang Wang, Heba Elfardy, Markus Dreyer, Kevin Small, and Mohit Bansal. Unified embeddings for multimodal re-trieval via frozen llms. In Findings of the Association for Computational Linguistics: EACL 2024 , 2024. 2 [71] Cong Wei, Yang Chen, Haonan Chen, Hexiang Hu, Ge Zhang, Jie Fu, Alan Ritter, and Wenhu Chen. Uniir: Training and benchmarking universal multimodal information retriev-ers. In ECCV . Springer, 2024. 2, 6, 7, 1, 3, 5, 8 [72] Orion Weller, Michael Boratko, Iftekhar Naim, and Jinhyuk Lee. On the theoretical limitations of embedding-based re-trieval. arXiv preprint arXiv:2508.21038 , 2025. 2, 3 [73] Hui Wu, Yupeng Gao, Xiaoxiao Guo, Ziad Al-Halah, Steven Rennie, Kristen Grauman, and Rogerio Feris. Fashion iq: A new dataset towards retrieving images by natural language feedback. In CVPR , 2021. 5, 6, 4 [74] Yusong Wu, Ke Chen, Tianyu Zhang, Yuchen Hui, Taylor Berg-Kirkpatrick, and Shlomo Dubnov. Large-scale con-trastive language-audio pretraining with feature fusion and keyword-to-caption augmentation. In ICASSP . IEEE, 2023. 1, 5, 6, 7, 3, 8 [75] Zilin Xiao, Qi Ma, Mengting Gu, Chun-cheng Jason Chen, Xintao Chen, Vicente Ordonez, and Vijai Mohan. Metaem-bed: Scaling multimodal retrieval at test-time with flexible late interaction. arXiv preprint arXiv:2509.18095 , 2025. 3, 7, 5 [76] Jin Xu, Zhifang Guo, Jinzheng He, Hangrui Hu, Ting He, Shuai Bai, Keqin Chen, Jialin Wang, Yang Fan, Kai Dang, et al. Qwen2.5-omni technical report. arXiv preprint arXiv:2503.20215 , 2025. 2, 5, 6, 7, 1 [77] Zhilin Yang, Peng Qi, Saizheng Zhang, Yoshua Bengio, William W Cohen, Ruslan Salakhutdinov, and Christo-pher D Manning. Hotpotqa: A dataset for diverse, ex-plainable multi-hop question answering. arXiv preprint arXiv:1809.09600 , 2018. 6, 4 [78] Xiaohua Zhai, Basil Mustafa, Alexander Kolesnikov, and Lucas Beyer. Sigmoid loss for language image pre-training. In ICCV , 2023. 2, 6, 7, 8 [79] Kai Zhang, Yi Luan, Hexiang Hu, Kenton Lee, Siyuan Qiao, Wenhu Chen, Yu Su, and Ming-Wei Chang. Magiclens: self-supervised image retrieval with open-ended instructions. In 
+
+International Conference on Machine Learning , 2024. 2 [80] Lunjun Zhang, Arian Hosseini, Hritik Bansal, Mehran Kazemi, Aviral Kumar, and Rishabh Agarwal. Generative verifiers: Reward modeling as next-token prediction. In 
+
+ICLR , 2025. 2 [81] Xin Zhang, Yanzhao Zhang, Wen Xie, Mingxin Li, Ziqi Dai, Dingkun Long, Pengjun Xie, Meishan Zhang, Wenjie Li, and Min Zhang. Gme: Improving universal multimodal retrieval by multimodal llms. arXiv preprint arXiv:2412.16855 , 2024. 2, 7, 5 [82] Junjie Zhou, Yongping Xiong, Zheng Liu, Ze Liu, Shitao Xiao, Yueze Wang, Bo Zhao, Chen Jason Zhang, and Defu Lian. MegaPairs: Massive data synthesis for universal mul-timodal retrieval. In ACL , pages 19076–19095, Vienna, Aus-tria, 2025. Association for Computational Linguistics. 2 [83] Yongxin Zhu, Bocheng Li, Yifei Xin, Zhihua Xia, and Linli Xu. Addressing representation collapse in vector quantized models with one linear layer. In ICCV , 2025. 4 
+
+11 OmniRet: Efficient and High-Fidelity Omni Modality Retrieval 
+
+# Supplementary Material 
+
+In this supplementary material, we provide additional details regarding our proposed OmniRet model and the newly introduced ACM benchmark, which complement the findings in the main paper. Specifically, Sec. 7 details the instructions used for data generation, the architecture of the Shared Media Resampler, and the pseudo-code for ASWP. Sec. 8 describes the full statistics of our benchmark and the specifics of the baseline settings employed. Fi-nally, Sec. 9 outlines all datasets and baselines utilized in our experiments, including the chosen hyper-parameters for each training stage. We conclude with detailed quantitative results on all benchmarks and provide additional ablation studies on the proposed modules, including a comparative analysis of the computational costs across different models. 
+
+## 7. Additional Method Details 
+
+We leverage the instructions introduced in M-BEIR [71] and extend them to cover the specific requirements of our new datasets. We provide a complete list of all in-structions used during model training in the included file, 
+
+instructions.csv . Note that the first instruction in this file is the one employed during inference and testing. We provide further details regarding our architecture. The media projectors within OmniRet employ the standard design adopted by LLaVA, utilizing two-layer Multi-Layer Perceptrons with GELU [19] non-linear activations inter-leaved between them. For the shared media resampler, we utilize a module consisting of two cross-attention blocks. The hidden dimension throughout the resampler is kept con-sistent and equal to the dimension of both the input and out-put features. In our experiments, we set the number of learn-able latent vectors to N = 64 . This constraint was imposed by our available computational resources, as increasing N
+
+beyond this limit would require a corresponding decrease in batch size and significantly extend the training time. While a larger N may potentially yield improved performance, we found N = 64 to be the maximum trainable size within our resource limits. For video processing, we incorporate learnable frame embeddings to capture temporal informa-tion. These embeddings are initialized using a standard si-nusoidal pattern. The ASWP layer follows the standard Perceiver archi-tecture for its main components. It consists of two cross-attention blocks where the hidden dimension is consistently maintained to match the input and output dimensionality of the layer. The procedural steps of the ASWP mechanism are formally detailed in Algorithm 1. 
+
+Algorithm 1: Attention Sliced Wasserstein Pooling 
+
+Data: Pooled LLM Hidden States: 
+
+Z = {zi ∈ RD }Si=1 
+
+Result: Embedding vector: h ∈ RL
+
+Trainable parameters: 
+
+Sliced Reference Set: X′ = {xi ∈ RD }Si=1 ;Slicers (Projectors): Θ = {θl ∈ RD }Ll=1 ;
+
+for l = 1 to L do 
+
+Calculate sliced input: SZ 
+
+> l
+
+= {ziθl}Si=1 ∈ RS ;Sort the distributions: πZ = argsort (SZ 
+
+> l
+
+) and 
+
+πX = argsort (X′);Let π−1 
+
+> X
+
+: indices that permutes the sorted reference set back to the origin; Compute per-slice embedding: 
+
+ψl = {S Z 
+
+> l
+
+[πZ[π−1 
+
+> X
+
+[i]] − S X 
+
+> l
+
+[i]}Si=1 ∈ RS ;
+
+end 
+
+Set of embeddings: Z′ = {ψl}Ll=1 ∈ RS×L;Pooled embedding h computed via STM; 
+
+## 8. Additional Benchmark Details             
+
+> Table 6. The Statistics of the Audio-Centric Modality Benchmark
+> Task No. Queries No. Candidates A,T →A1292 4251 A→I1292 5480 I→A1292 5480 A→V1292 5480 V→A1292 5480
+
+The statistics for the five retrieval tasks in the ACM benchmark are presented in Table 6. We used the prompts specified in Table 7 and Table 8 to generate the audio cap-tions and modification texts, respectively. To ensure data quality, a subjective evaluation was conducted using the Qualtrics survey platform to verify the quality of the gener-ated audio captions and modification texts. Fig. 5 illustrates the structure of the survey used for this verification process. To comprehensively evaluate the effectiveness of the OmniRet model on the ACM benchmark, we compare it against three strong baselines: a text-to-text retrieval method, CLAP, and ImageBind. 
+
+Text-to-Text Retrieval Baseline . We benchmark against a standard text-to-text retrieval approach using the Gemma embedding model [68]. For this baseline, we utilize au-dio and video captions generated by the Qwen Omni2.5 model [76]. 1Table 7. Prompt structure to generate audio captions in the Audio-Centric Multimodal Benchmark. 
+
+System You are a language assistant that helps to generate audio captions. 
+
+Prompt Help me generate a concise audio caption, which does not exceed 30 words. The generated audio should focus on describing acoustic events within the audio and their temporal relationships. Only generate the caption without explanation. [AUDIO] 
+
+> Table 8. Prompt structure to generate modification texts in the Audio-Centric Multimodal Benchmark.
+
+System You are a language assistant that helps to generate the modification text between two audio captions. 
+
+Prompt Generate the modification text for the following pair of audio captions: Caption 1: [CAPTION 1] Caption 2: [CAPTION 2] <Good example> 
+
+... 
+
+</Good example> <Bad example> 
+
+... 
+
+</Bad example> You need to answer the changes from audio 1 to audio 2. The text needs to be concise and details as you can hear the audio, not as you are reading the text. The modification text should not exceed 20 words. You should not add words "details, specific, description, context, clarify, description, and caption" to the text. Also, you should not focus on the sound location, only focus on the acoustic sounds and their temporal relationship. You should focus on the coustic aspect of these captions, which can only be heard, do not focus on the visual aspect which can only be seen, such as "large, small, big, or a specific object/subject name". 
+
+• Composed Audio Retrieval : The query is formed by con-catenating the query audio caption tcap with the corre-sponding modification text tmod :
+
+q = tcap || tmod (10) The candidates are the candidate audio captions provided in the benchmark. • Audio-Visual Retrieval Tasks : We directly use the au-dio and video captions generated by the Qwen Omni2.5 model to perform these retrieval tasks. 2Figure 5. The Qualtric survey for verifying the quality of generated texts in our ACM benchmark. 
+
+CLAP Baseline . We also benchmark against the CLAP model [74]. We adapt the fusion method from the UniIR framework [71] to handle the composed audio retrieval task. Specifically, the query is modeled as a linear combination of the query audio embedding and the modification text em-bedding: 
+
+hq 
+
+> CLAP
+
+= λ · gA(a) + (1 − λ) · gT (tmod ) (11) Here, gA(a) and gT (tmod ) represent the embedding vectors from the audio and text encoders of the CLAP model, re-spectively, with the mixing weight 0 < λ < 1. We set 
+
+λ = 0 .5 in our experiments to obtain the results reported in Table 4. The candidates are the audio embeddings of the candidate audios, encoded by the CLAP audio encoder. Note that we do not evaluate CLAP on the audio-visual tasks, as the model is not designed to handle visual modali-ties. 
+
+ImageBind Baseline . Our final baseline is the ImageBind model [16], which learns a joint embedding space across six different modalities. • Composed Audio Retrieval : We follow the identical ex-perimental setup described for the CLAP baseline. • Audio-Visual Retrieval Tasks : We extract embeddings us-ing ImageBind’s audio and visual encoders and compute the cross-modal similarities directly within the shared embedding space. 
+
+## 9. Additional Experimental Details 
+
+9.1. Training Datasets 
+
+Table 9 provides the comprehensive details of all datasets used for training and testing. In total, the training set com-prises 6.4 million query-candidate pairs, while the testing set involves approximately 300 K queries and a large pool of 5.7 million candidates. 
+
+9.2. Baselines 
+
+CLIP [57] is a seminal dual-encoder framework trained on a dataset of 400 million image-text pairs using a contrastive language-image pretraining objective. It learns a shared em-bedding space by maximizing the cosine similarity between 3Table 9. Analytics of dataset use to train and test OmniRet. 
+
+Task Dataset Training Testing No. Queries No. Candidates No. Queries No. Candidates I→I NIGHTS [15] 15.9K 15.9K 2.1K 40K T→TWebQA [5] 16K 27K 2.5K 544K MSMarco [2] 100K 99K - -HotpotQA [77] 84.5K 84.5K - -NaturalQuestion [32] 100K 100K - -PAQ [35] 100K 100K - -StackExchange [62] 100K 100K - -NLI [4] 100K 100K - - -SQuAD [58] 87.3K 87.3K - -I→TVisualNews [43] 100K 99.9K 20K 537.6K Fashion200K [18] 15K 12.2K 4.9K 61.7K MSCOCO [42] 113K 543K 5K 24.8K LLaVA-558K [44] 272K 272K -T→IVisualNews [43] 99.9K 100K 20K 542K Fashion200K [18] 15K 48.9K 1.7K 202K MSCOCO [42] 100K 72.4K 24.8K 5K LLaVA-558K [44] 272K 272K - -V→TTGIF [38] 78K 78K 33K 33K Charades [61] 8K 8K 8K 8K WebVid2M [1] 500K 500K - -PE-Video [3] 104K 45K - -T→VTGIF [38] 78K 78K 33K 33K Charades [61] 8K 8K 8K 8K WebVid2M [1] 500K 500K - -PE-Video [3] 45K 104K - -A→TAudioCaps [29] 91.3K 91.3K 975 4.9K ClothoV2.1 [11] 3.8K 3.8K 1K 5.2K WavText5K [10] 4.3K 4.3K - -WavCaps [49] 403K 403K - -T→AAudioCaps [29] 91.3K 91.3K 4.9K 975 ClothoV2.1 [11] 3.8K 3.8K 5.2K 1K WavText5K [10] 4.3K 4.3K - -WavCaps [49] 403K 403K - -T→I,T WebQA [5] 17.2K 17.1K 2.5K 403K EDIS [45] 25.9K 66.2K 3.2K 1M I,T →T OVEN [21] 151K 54K 50K 677K InfoSeek [7] 141K 22.4K 11.3K 612K I,T →IFashionIQ [73] 16.2K 16.2K 6K 74.4K CIRR [47] 26.1K 15.7K 4.2K 21.6K CC-CoIR [67] 250K 250K - -MTCIR [22] 208K 208K - -I,T →I,T OVEN [21] 154K 32.6K 14.7K 335K InfoSeek [7] 143K 17.9K 17.6K 488K V,T →V WebCoVR [67] 500K 500K 2.6K 2.6K A→V VGGSound [6] 192.5K 192.5K - -V→A VGGSound [6] 192.5K 192.5K - -
+
+Total 6.4M 6.4M 287K 5.7M 
+
+matched pairs while minimizing it for mismatched ones, en-abling robust zero-shot generalization across various visual tasks. 
+
+SigLIP [66] introduces a pairwise sigmoid loss for language-image pretraining, replacing the standard softmax normalization used in contrastive learning. This objective decouples the batch size from the loss computation, al-lowing for greater scalability and more stable training with larger batch sizes, ultimately yielding superior performance on multimodal retrieval benchmarks. 4PE-Core [3] proposes extracting visual embeddings from intermediate layers of a pretrained vision transformer rather than the final output layer, demonstrating that these deeper, high-quality feature maps provide superior semantic infor-mation. The framework is inherently capable of encoding videos by applying its efficient encoder frame-by-frame, ensuring high-fidelity, perceptually rich representations for video understanding and retrieval tasks. 
+
+MMT [54] is the first work that introduced text-to-audio re-trieval tasks on the AudioCaps and Clotho datasets. The MMT framework leverages the dual towers paradigm to perform audio-text retrieval tasks, where the audio encoder is the ResNet18 pretrained on the VGG-Sound dataset and the text encoder is the word2vec model [52] 
+
+CLAP [74] is a dual-encoder model pretrained with a con-trastive learning objective on a large amount of audio-caption pairs, about 630k pairs. Its learned representa-tion demonstrates a strong alignment across audio and text modalities, enabling Zero-shot and supervised audio classi-fication capabilities. 
+
+CLIP SF [71] is an instruction-guided multimodal re-triever which is further finetuned from the pretrained CLIP model [57] on the training set of the M-BEIR dataset. The model adopts two fusion approaches, score-level and feature-level fusions, to handle eight multimodal retrieval tasks. 
+
+MM-Embed [41] is the first work to introduce an MLLM-based universal multimodal retrieval framework. It fine-tunes a strong text retrieval LLM together with a pretrained visual encoder using modality-aware hard negatives and MLLMs as zero-shot rerankers to achieve strong perfor-mance for composed retrieval tasks. 
+
+VLM2Vec-V1 [26] is a Vision Language model trained with a contrastive learning objective to generate multimodal rep-resentation vectors. It demonstrates a strong embedding space and can handle any composition of image and text to perform composed retrieval tasks on the MMEB bench-mark. 
+
+VLM2Vec-V2 [27] is the second version of the VLM2Vec-V1 model. It is trained with a flexible and scalable data sam-pling procedure to achieve a strong generalization across multimodal tasks. 
+
+UniME [17] is the a novel two-stage framework which adopts MLLMs to learn a universal representative embed-ding space for multimodal downstream tasks. It proposed two key techniques, textual discriminative knowledge dis-tillation and hard negative enhanced instruction tuning, to achieve robust discriminative and compositional abilities in multimodal retrieval tasks. 
+
+LLaVE [33] is a universal multimodal LLM-based retriever which adapts hardness-weighted contrastive learning to ad-dress the high overlap in similarity distribution between positive and negative pairs. This model shows not only a strong performance in the MMEB benchmark but also good generalization in text-video retrieval in a zero-shot manner. 
+
+B3++ [65] is a novel batch construction pipeline which is able to harvest high-quality batches from a pretrained teacher model for contrastive learning. The retrieval model trained with this pipeline demonstrates superior perfor-mance in the MMEB benchmark with a strong teacher model while achieves a good generalization across domains and tasks with weaker teacher models. 
+
+MetaEmbed [75] is a universal multimodal framework which employs the Matryoshka MultiVector training tech-nique [31] to organize information by granularity across multiple latent vectors. This framework is capable of per-forming test-time scaling for multimodal retrieval tasks, en-abling trade-off between efficiency and effectiveness. 
+
+ColPaliv1.3 [14] is a specialized Vison Language Model trained with late interaction matching objetive for produc-ing high-quality embedding vectors from image of docu-ment pages. This model is a simple yet effective approach which outperforms traditional pipelines for document re-trieval tasks. 
+
+GME [81] is a general embedding model which is trained on a large amount of synthetic query-target pairs spanning across diverse multimodal tasks. This modal proposes the fused-modal training techniques to enable universal modal-ity retrieval. 
+
+9.3. Training Hyper-parameters and Procedure 
+
+Table 10 summarizes the complete set of hyperparameters used in the two distinct training stages of our OmniRet. 
+
+Stage 1: Warm-up . The first training stage focuses on uni-modality and text-binding tasks, excluding all video-related tasks. • Data and Batching: Each batch is constructed to contain samples from 6 tasks spanning 17 unique datasets. This stage utilizes approximately 2 million total samples. • Optimization: We employ a cosine learning rate (LR) scheduler. The LR is warmed up over 100 steps before decreasing to a minimum value of 1 × 10 −4.• Hardware: All experiments were conducted using 64 NVIDIA RTX 2080 Ti GPUs with mixed precision (FP16) enabled for computational efficiency. 
+
+Stage 2: Fine-tuning . Stage 2 continues the training pro-cess using the model weights initialized from Stage 1, in-corporating all tasks, including the video-related ones. • Initialization: Training begins by resuming the model with a constant learning rate of 1 × 10 −4 for all modules, with no further warm-up applied. • LLM Fine-tuning (LoRA): We fine-tune the LLM compo-nents using LoRA, setting the rank to r = 16 and the scaling factor α = 64 .• Batch Adjustment: To increase the diversity and quality of training signals, we double the number of intra-dataset 5Table 10. Training Hyper-parameters in Stage 1 and Stage 2 .                                        
+
+> Stage 1 Stage 2 Batch size 2,048 3,072 No. Tasks 615 No. Datasets 17 28 No. Dataset/Batch 64No. Intra-Dataset Samples ≈341 768 No. GPUs 64 128 No. iterations 1,000 6,000 No. training samples ≈2M ≈18.4M Optimizer AdamW Visual Projector LR 5e-4 1e-4 Audio Projector LR 5e-4 1e-4 ASWP LR 5e-4 1e-4 LoRA LR -1e-4 LoRA Rank -16 LoRA Alpha -64 No. Grad. Accum. Steps 12LR Scheduler Cosine No. Warmup Steps 100 0Min LR 1e-4 0
+
+samples per batch. This is achieved by decreasing the number of distinct tasks included in each batch while si-multaneously increasing the overall batch size. • Stabilization: Gradient accumulation is applied through-out this stage to ensure training stability between tasks despite the increased batch size. • Data Scale: The model is trained on a substantially larger scale in this stage, using around 18 .4 million total sam-ples. • Minimum LR: The minimum learning rate for all modules is set to zero. • Hardware: We trained on the same system with 128 GPUs. 
+
+9.4. Extended Quantitative Results 
+
+The performance breakdown across all datasets is detailed in Table 14. This table also includes the results achieved by OmniRet after the first training stage, demonstrating the impact of the full training curriculum. To evaluate on the video tasks, video media tokens are initialized with the im-age media tokens within the Shared Media Resampler. While the model exhibits large performance improve-ments after the second stage, particularly across new tasks, we observe only a marginal decrease in performance on the original uni-modality tasks as the model adapts to the expanded task complexity. On the text-binding tasks, our method achieves outstanding performance on audio and video modalities, alongside comparable performance to state-of-the-art methods on all image-text tasks. Further-more, in composed visual-text tasks, OmniRet achieves the best score on 6 out of 9 datasets, often establishing a sub-stantial margin over the second-best competitor. 
+
+Table 11. MMEBv2 Details with VLM2VecV2 and Om-niRet . Bold indicates the best performance in each dataset while underline indices the performance from training on the datasets.                                                                          
+
+> Task Dataset VLM2VecV2 [50] OmniRet I-CLS ImageNet-1K 80.8 57.0 N24News 72.9 40.6 HatefulMemes 56.3 49.9 VOC2007 85.0 68.1 SUN397 71.0 68.7 Place365 35.9 38.3
+> ImageNet-A 47.4 39.1 ImageNet-R 89.3 79.0 ObjectNet 65.2 63.6 Country211 25.2 12.8 I-RET VisDial 82.7 49.2 CIRR 57.5 52.4 VisualNews t2i 74.5 73.5 VisualNews i2t 78.2 76.5 MSCOCO t2i 75.3 68.2 MSCOCO i2t 71.4 68.7 NIGHTS 68.6 59.3 WebQA 90.6 84.9 FashionIQ 19.5 35.9
+> Wiki-SS-NQ 66.9 41.9 OVEN 64.3 80.1
+> EDIS 84.1 92.5
+> V-CLS K700 38.0 45.3
+> SmthSmthV2 42.8 52.3
+> HMDB51 40.9 48.5
+> UCF101 60.0 65.7
+> Breakfast 14.8 31.4
+> V-RET DiDeMo 30.4 35.8
+> MSR-VTT 28.3 38.7
+> MSVD 48.1 64.9
+> VATEX 26.5 33.6
+> YouCook2 10.6 9.6 V-MRET QVHighlight 49.4 66.9
+> Charades-STA 20.2 22.4
+> MomentSeeker 40.8 40.5
+
+Table 11 presents a focused comparison of our OmniRet with the VLM2VecV2 baseline on a subset of the MMEBv2 benchmark. We note that direct comparison on image-text tasks may be compromised due to potential misalignment in the training datasets used by the respective models. Cru-cially, however, on video-text benchmarks, which primar-ily employ zero-shot evaluation settings, our model consis-tently outperforms VLM2VecV2 by a very large margin. This strong performance differential effectively validates the effectiveness of our architecture design and specialized training paradigm for robust video information encoding. 
+
+9.5. Additional Ablation Studies 
+
+We perform three additional ablation studies to rigorously demonstrate the effectiveness of our proposed modules and 6Table 12. Additional Ablation Studies on Proposed Modules. 
+
+We report the impact on Average Recall (across 6 tasks, trained on 1M samples) when each component is removed or modified.                             
+
+> Avg. Recall ∆
+> Batch size = 1024
+> Our Baseline 49.7 0.0 Multi (16) Vectors 49.8 +0.1 No Resampler 46.7 -3.0 Batch size = 2048
+> Our Baseline 50.2 0.0 W/o Dropout in Ldiv 48.7 -1.5 Replace smooth L1with L1 in Ldiv 48.0 -2.2 Replace smooth L1with L2 in Ldiv 48.5 -1.7 Sampled media tokens: N= 32 48.1 -2.1 Sampled media tokens: N= 16 47.7 -2.5
+
+hyperparameter choices. We first isolate the contribution of our proposed resam-pler and pooling design against strong baselines. Extending from Table 5, we match the batch size of 1024 (half of the standard size), which is identical to the batch size used for the “Multi-Vector (Late Attention)” setting. As shown in Table 12, our proposed solution, even with this reduced batch size, remains significantly more effective than com-pletely removing the resampler. While the “Multi-Vector” approach performs slightly better under the same batch size, this experiment validates the crucial role and effectiveness of our pooling and resampler in extracting useful, high-quality information for the retrieval tasks. We then investigate the components within our diversity loss, Ldiv (Eq. (5)). We first remove the Dropout mechanism from the loss function calculation. This resulted in a perfor-mance decrease of 1.5 score points. This result suggests that the unregularized diversity loss is overly aggressive when applied uniformly to all token pairs, indicating that some tokens must retain partial similarity to others. Additional experiments were conducted to determine the optimal re-gression target, comparing smooth L1 against standard L1
+
+and L2 norms. The use of smooth L1 proved optimal, lead-ing to an increase in recall of over 1.5 points, confirming its suitability for balancing distance and robustness in the diversity objective. To understand the sensitivity of the Shared Media Re-sampler to feature dimensionality, we analyze the effect of decreasing the number of latents N . Instead of the opti-mal N = 64 tokens, we tested reduced sizes of N = 32 
+
+and N = 16 . The corresponding performance dropped sig-nificantly by 2.1 and 2.5 score points, respectively. This clear correlation demonstrates that employing a larger num-ber of media tokens is essential for successfully capturing the fine-grained information required for high-performance multimodal tasks. 
+
+Table 13. Speed and Memory Usage of Retrieval Models on MSCOCO T2I. The performance is measured on RTXA6000 with SDPA attention.               
+
+> Model Speed (samples/s) Mem (GB) CLIP 114.35 1.62 SigLIP 53.43 3.36 PE-Core 79.05 2.54 CLIP SF 116.04 1.62 VLM2VecV2 10.21 4.39 OmniRet 35.69 6.01
+
+9.6. Computational Cost 
+
+Table 13 presents the speed and memory usage of various retrieval models evaluated on the MSCOCO Text-to-Image (T →I) evaluation set. All models were benchmarked on the same NVIDIA RTX A6000 GPU utilizing SDPA (Scaled Dot-Product Attention) for consistent measurement. As expected, dual-encoder architectures, such as CLIP and SigLIP, demonstrate superior inference speed and signifi-cantly lower memory utilization. While VLM2Vec-V2 uses less memory than our OmniRet, our model achieves a sub-stantial encoding speedup of 3.5× compared to it. The larger memory footprint observed in OmniRet is primarily attributed to the Perceiver blocks used to process the media tokens and the LLM hidden states. 7Table 14. Details of Table 2 with OmniRet’s Stage 1 included . Modalities: I (Image), V (Video), A (Audio), T (Text). Bold and green 
+
+indicate the best performance in each group and overall, respectively. MMEmbed [40] is included for reference only, as it uses a larger LLM and is not directly comparable. 
+
+Task Dataset Text-Binding Pretrained Models Multi-Task Finetuning Models CLIP SigLIP PE-Core MMT CLAP CLIP SF MMEmbed VLM2VecV2 OmniRet OmniRet [57] [78] [3] [54] [74] [71] [40] [50] (stage 1) (stage 2) 
+
+Uni-Modality Tasks 
+
+I→I NIGHTS 25.9 25.9 32.0 - - 28.4 32.1 30.0 27.3 25.0 T→T WebQA 40.5 34.0 56.8 - - 83.7 96.7 81.1 91.7 87.8 
+
+Text-Binding Tasks 
+
+I→TVisualNews 42.0 43.2 50.8 - - 41.4 40.4 28.7 23.5 30.3 Fashion200K 7.7 36.1 31.9 - - 18.1 18.4 12.1 28.5 29.9 
+
+MSCOCO 79.7 90.2 91.3 - - 90.6 90.9 89.4 84.7 87.8 T→IVisualNews 44.4 42.8 48.2 - - 40.7 35.4 26.9 26.3 30.2 Fashion200K 7.2 36.4 32.8 - - 15.2 16.5 13.2 28.9 30.9 
+
+MSCOCO 61.0 77.0 79.4 - - 79.3 80.7 79.3 74.4 76.8 V→T TGIF 20.6 25.1 35.8 - - - - 17.3 14.7 33.8 
+
+Charades 7.9 14.3 28.8 - - - - 17.8 9.9 52.0 
+
+T→V TGIF 19.8 27.5 34.2 - - - - 18.2 14.4 33.4 
+
+Charades 11.9 17.6 24.7 - - - - 18.6 10.7 50.7 
+
+A→T AudioCaps - - - 76.8 76.7 - - - 76.9 81.9 
+
+ClothoV2.1 - - - 22.7 51.1 - - - 52.8 52.6 T→A AudioCaps - - - 72.0 70.3 - - - 73.8 76.5 
+
+ClothoV2.1 - - - 21.6 42.9 - - - 50.1 50.4 
+
+Composed Visual-Text Tasks 
+
+T→I,T WebQA - - - - - 75.9 85.2 77.4 52.1 80.8 
+
+EDIS - - - - - 51.2 69.1 45.8 50.5 58.6 I,T →T OVEN - - - - - 48.8 46.6 28.4 15.8 45.9 INFOSEEK - - - - - 33.2 47.9 20.6 22.0 40.7 
+
+I,T →I FashionIQ - - - - - 16.5 25.5 15.2 3.4 27.3 
+
+CIRR - - - - - 36.3 51.5 42.1 12.1 46.8 
+
+I,T →I,T OVEN - - - - - 69.9 71.2 44.6 32.8 69.5 INFOSEEK - - - - - 51.4 65.9 22.5 25.5 58.1 
+
+V,T →V WebCoVR - - - - - - - 76.4 66.3 85.7 
+
+8

@@ -1,0 +1,596 @@
+Title: PinCLIP: Large-scale Foundational Multimodal Representation at Pinterest
+
+URL Source: https://arxiv.org/pdf/2603.03544v1
+
+Published Time: Thu, 05 Mar 2026 01:18:49 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# PinCLIP: Large-scale Foundational Multimodal Representation at Pinterest 
+
+## Josh Beal 
+
+jbeal@pinterest.com Pinterest Inc. San Francisco, CA, USA 
+
+## Eric Kim 
+
+erickim@pinterest.com Pinterest Inc. San Francisco, CA, USA 
+
+## Jinfeng Rao 
+
+marquisrao@pinterest.com Pinterest Inc. San Francisco, CA, USA 
+
+## Rex Wu 
+
+rexwu@pinterest.com Pinterest Inc. San Francisco, CA, USA 
+
+## Dmitry Kislyuk 
+
+dkislyuk@pinterest.com Pinterest Inc. San Francisco, CA, USA 
+
+## Charles Rosenberg 
+
+crosenberg@pinterest.com Pinterest Inc. San Francisco, CA, USA 
+
+## Abstract 
+
+While multi-modal Visual Language Models (VLMs) have demon-strated significant success across various domains, the integration of VLMs into recommendation and retrieval systems remains a challenge, due to issues like training objective discrepancies and serving efficiency bottlenecks. This paper introduces PinCLIP, a large-scale visual representation learning approach developed to enhance retrieval and ranking models at Pinterest by leveraging VLMs to learn image-text alignment. We propose a novel hybrid Vision Transformer architecture that utilizes a VLM backbone and a hybrid fusion mechanism to capture multi-modality content rep-resentation at varying granularities. Beyond standard image-to-text alignment objectives, we introduce a neighbor alignment objective to model the cross-fusion of multi-modal representations within the Pinterest Pin-Board graph. Offline evaluations show that PinCLIP outperforms state-of-the-art baselines, such as Qwen [ 31 ], by 20% in multi-modal retrieval tasks. Online A/B testing demonstrates significant business impact, including substantial engagement gains across all major surfaces in Pinterest. Notably, PinCLIP significantly addresses the "cold-start" problem, enhancing fresh content distri-bution with a 15% Repin increase in organic content and 8.7% higher click for new Ads. 
+
+## CCS Concepts 
+
+• Information systems → Retrieval models and ranking .
+
+## Keywords 
+
+PinCLIP, Visual Representation Learning, Visual Language Model, Multi-Modality, Recommendation Systems 
+
+## 1 Introduction 
+
+Large Language Models (LLMs) have achieved great success in re-cent years on revolutionizing a vast number of domains starting with the introduction of GPT [ 41 ]. The introduction of the Trans-former architecture [ 47 ] provides a more effective way to handle long-range dependencies in text, which led to the development of models like BERT [ 15 ], T5 [ 42 ], and GPT [ 41 ] that pioneered the use of large-scale, unsupervised pre-training to generate co-herent and contextually relevant text. Subsequent breakthroughs, such as instruction tuning [ 10 ] and reinforcement learning from human feedback (RLHF) [ 38 ], have further refined these models, enabling them to follow complex instructions and produce safer, more helpful responses. Inspired by the generative design of LLMs, early research, such as SASRec [ 25 ] or BERT4Rec [ 45 ], brings generative modeling with unidirectional or bidirectional attention through transformers [ 47 ]to sequential recommendation, though not directly leveraging the pretrained LLMs for content representations. Subsequent research, such as ZesRec [ 16 ], UniSRec [ 24 ], and others [ 23 , 30 , 43 ], advanced this by leveraging pre-trained LLMs to encode textual descriptions of items and user behaviors. A separate line of work [ 22 , 39 , 50 ]has explored using prompt-tuning [ 27 ] to directly elicit recommen-dations from LLMs based on user history or conversations. More recently, a trend has emerged toward pre-training large, GPT-style generative models on user interaction sequences for representation learning in recommender systems [7, 48, 51, 55]. Despite this progress, existing approaches have notable limita-tions. First, many models adopt LLM architectures or pre-training strategies [ 7, 25 , 45 , 48 , 55 , 59 ] without directly harnessing the rich semantic representations from pre-trained foundation mod-els. Second, the primary focus has remained on textual data [ 16 ,23 , 24 , 30 , 43 ], with other modalities such as images and video be-ing largely underexplored. Finally, most studies are conducted on small-scale academic datasets, providing insufficient insight into the challenges of deploying these models scalably in real-world production environments. Overall, we believe that there are several fundamental challenges that impede the integration of LLMs into production recommender systems (RecSys). Primarily, the optimization objectives differ be-tween the two paradigms. Modern LLMs like GPT [ 41 ] are gen-erative models trained to predict the next token, whereas RecSys models are typically trained for discriminative tasks – such as pre-dicting user engagement with a video – utilizing cross-entropy loss functions. Secondly, the operational requirements of RecSys necessitate high throughput and low latency to serve live traffic. The substantial model sizes of LLMs, which can contain billions of parameters, pose a practical challenge for deployment in pro-duction RecSys due to their considerable computational cost and inherent latency. Finally, LLMs and large vision models (VLMs) are trained on multi-modal data, where inputs are tokenized into granular units like text tokens or image patches. In contrast, Rec-Sys models leverage manually engineered features and learn from sparse implicit feedback derived from a potentially vast corpus 
+
+> arXiv:2603.03544v1 [cs.CV] 3 Mar 2026 Beal et al.
+
+of items. These critical architectural and data-centric differences present substantial technical hurdles for the seamless integration of LLMs into RecSys. This paper introduces PinCLIP , a large-scale visual representa-tion learning approach developed to enhance retrieval and ranking models at Pinterest. We develop a novel hybrid Vision Transformer architecture, leveraging a VLM backbone and a multi-level fusion process to characterize diverse content granularities. To enrich the representation space, we supplement standard image-to-text align-ment objectives with a neighbor alignment objective. This allows the model to capture the complex interplay of multi-modal signals within the structural context of the Pinterest Pin-Board graph. We also leveraged Matryoshka Representation Learning (MRL) [ 26 ]to reduce the dimension of learned PinCLIP representation for more efficient downstream adoption. To scale the training and in-ference of PinCLIP, we employed multiple optimization techniques, including Flash Attention [ 14 , 44 ], funneling operations [ 9, 12 ], and activation checkpointing to enable multi-node training on billions of images. The resulting representations are integrated into dozens of machine learning production models, significantly enhancing user engagement across different surfaces in Pinterest. The key contributions of this work are as follows: 
+
+• We introduce a novel hybrid vision transformer architec-ture that leverages pretrained VLMs to learn multi-modal representations from a massive, real-world product with hundreds of millions of users. 
+
+• We present a practical recipe on how to build an effec-tive multi-modality content signal on a large-scale image dataset, including our best practices on data selection, model architecture, learning objectives, efficiency enhancements and full productionization. 
+
+• Our proposed visual representations demonstrate over 20% offline metric gains against strong baselines like Qwen [ 31 ]. surfaces in Pinterest, including Homefeed, Search and Re-lated Pins. More importantly, online A/B testing demon-strates significant business impact, including substantial engagement gains across all major surfaces in Pinterest, including Homefeed, Search and Related Pins. 
+
+• We also show that our learned multi-modality content rep-resentations are highly effective at promoting fresh content on the platform with up to 15% more Repins on organic content and 8.7% more clicks on new Ads, which is a crucial step toward solving the longstanding cold-start problem in recommender systems. 
+
+## 2 Related Work 2.1 Visual Language Models 
+
+The evolution of visual-language models (VLMs) began with a foun-dational shift from CNNs to powerful Transformer-based vision backbones like the Vision Transformer (ViT) [ 17 ], which treated image patches as sequential tokens, and the more efficient Swin Transformer [ 35 ], which introduced a hierarchical, windowed self-attention mechanism. These architectures paved the way for large-scale pre-training strategies, exemplified by OpenAI’s CLIP [ 40 ], which pioneered contrastive learning on massive web-scale image-text pairs to achieve remarkable zero-shot generalization. Subse-quent models like BLIP [ 28 ] refined this approach by introduc-ing image-to-text generation tasks, and SigLIP [ 56 ] simplified con-trastive learning with sigmoid loss to achieve substantial efficiency gains. The current frontier is defined by scaling, with public models such as InternVL [ 8 , 60 ] and Alibaba’s Qwen-VL [ 3 , 31 ], and closed models like Gemini [ 11 ], pushing parameter counts into the billions. These state-of-the-art systems demonstrate that increasing model and data scale continues to yield significant gains, enabling more sophisticated and fine-grained multimodal reasoning capabilities. 
+
+## 2.2 LLMs for Recommender Systems 
+
+Drawing inspiration from the generative capabilities of LLMs, ini-tial studies in sequential recommendation adopted Transformer architectures. Models like SASRec [ 25 ], BERT4Rec [ 45 ], and 𝑆 3-Rec [ 59 ] utilized generative modeling with either unidirectional or bidirectional attention, although they did not use pre-trained LLMs for content understanding. A later wave of research, includ-ing ZesRec [ 16 ], UniSRec [ 24 ] and others [ 23 , 30 , 43 ], advanced the field by employing pre-trained LLMs to encode the textual fea-tures of items and user interactions. Concurrently, another research direction explored prompt-tuning LLMs to directly generate recom-mendations from user histories or dialogues, as seen in works by [22 , 39 , 50 ]. More recently, the field has shifted towards pre-training large, GPT-style generative models directly on sequences of user behavior to learn powerful representations for recommendation tasks [ 7, 48 , 51 , 55 ]. Fu et al. [ 19 ] utilize multi-modality models as item encoders for sequential recommendation and introduce a decoupled PEFT mechanism to boost efficiency. Their approach still requires multi-modality model inferences for each item in the user sequence, which could lead to significant scalability challenges when scaling to a production environment with hundreds of mil-lions of users and items. A concurrent work from Giahi et al. [ 20 ] also learns multi-modal embeddings using a CLIP-style objective by aligning object-level image crops with LLM-generated text summaries. Our approach differs in several critical aspects. First, unlike their method which models vision and text through separate encoders, our model em-ploys a cross-modal fusion architecture to learn a richer, unified semantic representation. Second, we introduce a novel neighbor alignment task that is critical for learning effective representations. Consequently, our approach produces a holistic image embedding not explicitly defined in their object-centric method, demonstrating strong performance on both retrieval and ranking tasks, whereas their evaluation is focused primarily on retrieval. 
+
+## 3 Method 
+
+Pinterest, as a visual-centric platform, is primarily used by its users to discover visual inspiration across a wide spectrum of topics. To enhance the functionality of the platform, our objective is to con-struct a general and effective multimodal representation learning system. This system is designed to benefit numerous downstream machine learning models in production, spanning various surface areas such as Homefeed, Related Pins, Search, and Ads. To achieve PinCLIP: Large-scale Foundational Multimodal Representation at Pinterest Hybrid Vision Transformer Pin-to-Pin Alignment 
+
+> Text Encoder
+> Image Encoder
+
++
+
++
+
+M 5 M 6 M 7 M 8
+
+M 1
+
+M 2
+
+M 3
+
+M 4
+
++
+
++
+
+- - -
+
+- -
+
+-
+
+-
+
+-
+
+- -
+
+- -
+
+> Transformer Aggregator
+
++
+
++
+
+T 1 T 2 T 3 T 4
+
+I 1
+
+I 2
+
+I 3
+
+I 4
+
++
+
++
+
+- - -
+
+- -
+
+-
+
+-
+
+-
+
+- -
+
+- -
+
+> Convolutional Stem: InceptionNext-T
+> …
+> Block 1
+> …
+> Block 2
+> Block 3
+> …
+> Golden retriever, dogs, and puppies
+> Golden retriever, dogs, and puppies
+> Golden retriever, dogs, and puppies
+> White record spinning on a vintage stereo
+> Golden retriever, dogs, and puppies
+> Golden retriever, dogs, and puppies
+> Golden retriever, dogs, and puppies
+> Record player and retro lamp on cabinet
+
+Figure 1: Overview of the PinCLIP fusion model architecture, highlighting the design of the Hybrid Vision Transformer backbone and the multimodal contrastive objectives for jointly learning image-text alignment and Pin-to-Pin alignment. 
+
+this goal, we develop a novel hybrid Vision Transformer architec-ture, leveraging a VLM backbone and a multi-level fusion process to learn the multi-modality content representation at various level of granularities. Our model architecture is detailed in the following section. 
+
+## 3.1 Model Architecture 
+
+This model architecture includes an image encoder 𝐸 img (·) and a text encoder 𝐸 txt (·) , where the same text encoder is used to process different text sources. The fusion encoder 𝐸 fsn (·) computes the image and text representations of the Pin. Given a Pin 𝑗 with image 
+
+𝐼 𝑗 and an associated text field 𝑇 𝑗 (e.g., title/description), the image encoder 𝐸 img produces a sequence of visual tokens and the text encoder 𝐸 txt produces a sequence of textual tokens: 
+
+˜𝑉 𝑗 = 𝐸 img (𝐼 𝑗 ) ∈ R𝑁 𝑣 ×𝑑 , (1) 
+
+˜𝑆 𝑗 = 𝐸 txt (𝑇 𝑗 ) ∈ R𝑁 𝑡 ×𝑑 , (2) where 𝑁 𝑣 is the number of visual tokens and 𝑁 𝑡 is the number of textual tokens. 
+
+3.1.1 Multi-Modality Encoder. We consider two in-house pretrained image encoders [ 4] of varying sizes, which significantly outper-form leading open-source vision models for this application. These in-house models consist of a convolutional neural network stem and a Funnel Vision Transformer trunk [ 12 , 17 ]. Prior work has shown that early convolutions accelerate and stabilize training, while improving classification accuracy [ 49 ]. We find that the usage of funneling operations can significantly reduce the computational cost and memory usage of pretraining while maintaining strong retrieval quality. We pretrain the image encoder using the billion-scale, weakly-supervised classification task that was proposed in our prior work [ 4]. We additionally consider two open-source text encoders of varying sizes, specifically the SigLIP multilingual text encoders [ 56 ], which outperformed other pretrained text encoders in end-to-end training. 
+
+3.1.2 Multi-Modality Fusion. The fusion encoder 𝐸 fsn (·) computes the image and text representations of the Pin, and applies a Trans-former aggregator, consisting of 2 layers, to the unpooled visual and textual tokens, yielding a multimodal embedding 𝑀 ′
+
+𝑗 = 𝐸 fsn (𝐼 𝑗 ,𝑇 𝑗 ).For this task, we use the descriptive text associated with the Pin. To enable deep modality integration, we fuse unpooled visual and textual tokens with a small Transformer aggregator of 𝐿 𝑓 layers. We first concatenate modality token sequences: 
+
+𝑍 (0)
+
+𝑗 = [ ˜𝑉 𝑗 ∥ ˜𝑆 𝑗 ] ∈ R𝑁 ×𝑑 , 𝑁 = 𝑁 𝑣 + 𝑁 𝑡 . (3) We then apply 𝐿 𝑓 standard Transformer layers with vanilla self-attention: 
+
+𝑍 (ℓ+1)
+
+𝑗 = TransformerLayer 
+
+
+
+𝑍 (ℓ )
+
+𝑗 
+
+
+
+, ℓ = 0, . . . , 𝐿 𝑓 − 1. (4) Finally, we compress the multimodal token sequence into a single embedding 𝑟 𝑗 ∈ R𝑑 using a single multi-head attention pooler. Let 
+
+𝑞 ∈ R1×𝑑 be a learned pooling query; then 
+
+𝑟 𝑗 = MHA (𝑞, 𝑍 (𝐿 𝑓 )
+
+𝑗 , 𝑍 (𝐿 𝑓 )
+
+𝑗 ) ∈ R1×𝑑 . (5) We denote the fused Pin embedding by 𝑀 ′
+
+𝑗 (and use ℓ2 normalization before matching) where: 
+
+𝑀 ′
+
+𝑗 = 𝑟 𝑗 
+
+∥𝑟 𝑗 ∥2
+
+. (6) 
+
+3.1.3 Objectives. We consider using multiple contrastive loss terms to capture multi-modality feature alignment in varying granularity. 
+
+Image-to-text Alignment : We start with image-to-text alignment that captures interactions between the query image and different text source signals. We consider two text signals: 1) the descriptive text; 2) the keyword text. The descriptive text consists of the Pin title, the detailed Pin description, or the synthetic caption (generated by an open-source VLM [ 29 , 32 ]), selected in order of availability. Likewise, the keyword text consists of the engaged search keywords or the extracted Pin keywords, selected in order of availability. The Beal et al. 
+
+descriptive text is usually much longer than the keyword text. We found that it was more effective to coalesce the text sources as described above, rather than concatenate all of the available text into a single text string. Several works have observed that CLIP text encoders exhibit relatively short effective context length [ 58 ], and highly detailed image descriptions can negatively affect contrastive learning performance [34]. We adopt the sigmoid loss from SigLIP, which is a simple pairwise loss that outperforms the traditional softmax loss used in previous work [ 40 ]. This objective yields better downstream performance, especially at smaller batch sizes, while also improving training efficiency. By processing each image-text pair independently, it avoids the heavy communication between nodes that is required to compute the global normalization factor. We describe the effi-cient “chunked” implementation below, which further reduces the significant communication costs of multi-node training. Consider a mini-batch B = (( 𝐼 1,𝑇 1), . . . , (𝐼 𝑛 ,𝑇 𝑛 )) of image-text pairs, and let B′ = (( 𝐼 ′
+
+> 1
+
+,𝑇 ′ 
+
+> 1
+
+), . . . , (𝐼 ′
+
+> 𝑛
+
+,𝑇 ′ 
+
+> 𝑛
+
+)) be the encoded represen-tations where 𝑉 ′ 
+
+> 𝑗
+
+= 𝐸 img (𝐼 𝑗 ) and 𝑆 ′ 
+
+> 𝑗
+
+= 𝐸 txt (𝑇 𝑗 ) for 𝑗 ∈ { 1, . . . , 𝑛 },which are the image and text representations from Equation (1) and (2). For a set of devices of size 𝐷 , we let 𝑏 = | B |  
+
+> 𝐷
+
+be the per-device batch size. We define the per-instance loss as: 
+
+L𝑖 𝑗 = log (1 + 𝑒 z𝑖 𝑗 (− 𝑡 x𝑖 ·y𝑗 +𝑐 ) ) (7) where x𝑖 = 𝑉 ′   
+
+> 𝑖
+> ∥𝑉 ′
+> 𝑖 ∥2
+
+and y𝑗 = 𝑆 ′  
+
+> 𝑗
+> ∥𝑆 ′
+> 𝑗 ∥2
+
+are the normalized image/text representations, and z𝑖 𝑗 is the label for a given image-text pair, equaling 1 if they originate from the same Pin and −1 otherwise, 𝑡 
+
+is the temperature, and 𝑐 is the bias. To improve convergence, we set 𝑡 = log 10 and 𝑐 = −10 at initialization. We define the image-to-text alignment loss as follows: 
+
+LI2T = − 1
+
+|B| 
+
+> 𝐷
+
+∑︁  
+
+> 𝑑 𝑖 =1
+> 𝐷
+
+∑︁    
+
+> 𝑑 𝑗 =1
+> 𝑏 (𝑑 𝑖 +1)
+
+∑︁    
+
+> 𝑖 =𝑏𝑑 𝑖
+> 𝑏 (𝑑 𝑗 +1)
+
+∑︁ 
+
+> 𝑗 =𝑏𝑑 𝑗
+
+L𝑖 𝑗 . (8) 
+
+Pin-to-Pin Alignment : Besides the image-to-text alignment, we introduce a new objective that aligns the representations of Pin pairs (i.e., between query Pins and target Pins). These Pin pairs are sampled from a large-scale (pruned) Pin-Board graph, where an edge exists between a Pin and a Board if a user has saved the Pin to a given Board, which is a collection of Pins on the same topic. This manual curation signal yields an extremely valuable bipartite graph, which has been widely used at Pinterest for efficient candidate generators [18] and engagement-based embeddings [2, 18, 52]. We adapt the sigmoid loss to enforce the similarity of the paired multimodal representations. As above, we normalize the resulting multimodal embedding. We let u𝑖 = 𝑀 ′  
+
+> 𝑖
+> ∥𝑀 ′
+> 𝑖 ∥2
+
+and v𝑗 = 𝑀 ′    
+
+> 𝑗 +𝑛 /2
+> ∥𝑀 ′
+> 𝑗 +𝑛 /2∥2
+
+are the normalized multimodal representations for 𝑖, 𝑗 ∈ [ 𝑛  
+
+> 2
+
+] and w𝑖 𝑗 is the label for a given pair of Pins, equaling 1 for neighbor Pins and 
+
+−1 otherwise, 𝑡 is the temperature, and 𝑐 is the bias. We extend the pairwise loss from [ 56 ] and define the Pin-to-Pin alignment loss as: 
+
+L𝑖 𝑗 = log (1 + 𝑒 w𝑖 𝑗 (− 𝑡 u𝑖 ·v𝑗 +𝑐 ) ) (9) 
+
+LP2P =
+
+> 𝐷
+
+∑︁ 
+
+> 𝑖 𝐷
+
+∑︁ 
+
+> 𝑗
+
+L𝑖 𝑗 (10) Text Source Text Sample      
+
+> Pin Title Sporty Skate Shoes For Men, Metallic Gold Glitter Detail Lace-up Front Sneakers
+> Pin Description The sparkling glitter adds a touch of glamour to any outfit. The shimmering effect of the glitter catches the attention of onlookers...
+> Auto Image Caption a person wearing gold sneakers with white soles and black pants, standing on the street
+> Navboost Search Query sneakers men gold
+> Annotations ["men shoes", "men's sneaker", "sneaker culture", "streetwear", ...]
+
+Figure 2: Illustration of the text-image dataset. Each image (“Pin”) is associated with multiple text signals. We use longer-form descriptive text signals (title, description, image cap-tion) and shorter-form keyword text signals (navboost search query, annotations). 
+
+The total loss is a sum of the image-to-text and Pin-to-Pin align-ment loss: 
+
+L = LI2T + L P2P (11) 
+
+## 3.2 Data Curation 
+
+On Pinterest, each Pin is associated with an image and title, along with an optional text (known as description) and link. We curate a large dataset from our platform to enable large-scale multi-modality representation learning. The dataset contains about 890 M unique images (aka. Pins) with high quality text sources for training Pin-CLIP. Since there is a significant volume of Pins on Pinterest (about 30%) lack associated titles or descriptions, or have noisy and/or ir-relevant title or description, we consider multiple ways to augment the quality of our text signals. See Figure 2 for an illustration of the text signals we use. Specifically, we consider the following text sources. 
+
+• Pin title: the native title associated with an image. 
+
+• Pin description: the native description of an image. 
+
+• Image caption: we employ an off-the-shelf image captioning model (BLIP [ 28 ] and LLaVA [ 33 ]) to generate a synthetic description of the image. 
+
+• Navboost query: On Pinterest, users can search different topics and save their liked Pins on the Search feed. We link the saved Pins with the search queries, and use the search queries as keywords to enhance the textual representation of Pins. 
+
+• Annotation: Each Pin is associated with multiple short-text annotations. These annotations are produced based on n-grams of user queries and Pin text sources, along with a learned ranking score. To further improve the data quality, we calculated image-text alignment scores (via the CLIPScore [ 40 ] method using OpenAI’s CLIP-L as the reference model) and filtered out all pairs whose alignment score was below a tuned threshold. 
+
+3.2.1 Neighbor Pairs. To overcome the limitations of contrastive learning with the basic image-to-text alignment objective, which only focuses on alignment over an individual Pin, we construct a dataset that contains pairs of Pins that are engaged by the same set of users. For each query Pin, we sample 𝑁 = 5 positive Pins from the logs to produce 𝑁 query-positive pairs. The intent is that PinCLIP: Large-scale Foundational Multimodal Representation at Pinterest 
+
+each query Pin and positive Pin should be semantically similar to each other. The sampling is done by performing random walks over the Pin-Board graph, starting at the query node, aggregating the visited nodes, and choosing the top 𝑁 visited nodes. For context, the Pin-Board graph is a graph data structure where each node is a Pin or a Board, and an (undirected) edge connects a Pin to a Board if a Pin is present in a Board. For efficiency, we first compute the top 𝐾 = 50 pairs for each query offline, and then sample 𝑁 pairs from the cached results. We observed a small benefit to weighted sampling by the visit count vs. uniform random sampling. In total, we sampled around 2.4B Pin pairs for training PinCLIP. It’s worth noting that the above neighbor pair dataset can also be sampled from standard user engagement data, such as from Pin pairs that are engaged by the same user in one session. 
+
+## 3.3 Training Efficiency 
+
+The vision encoder design is a critical factor in improving the training efficiency. Adopting a simple Vision Transformer backbone dramatically increases the GPU resource requirements (by a factor of 2-4x) to achieve the same level of performance. Furthermore, we observed benefits from partial freezing of the vision encoder. This approach resulted in no degradation of the model quality in our experiments. In fact, freezing several Transformer layers was found to improve the downstream performance, similar to prior findings on locked image-tuning (LiT) [ 57 ]. We attribute this result to the high quality of the pretrained in-house image encoder, which is trained on a multi-label classification task [ 4 ]. To further improve the training efficiency, we adopted FlashAttention-2 [ 13 ]and activation checkpointing techniques, which improved training throughput by 15% and reduced GPU memory usage by 32%. 
+
+## 3.4 Signal Productionization 
+
+Matryoshka Representation Learning : To reduce serving costs and ease signal adoption for downstream consumers, we explored reducing the embedding dimensionality via Matryoshka Represen-tation Learning (MRL) [ 26 ]. MRL is a training paradigm that encodes information at multiple granularities within a single embedding vector, much like the nested structure of Russian Matryoshka dolls. By optimizing the loss across different prefix lengths of the same vector, MRL ensures that the first 𝑘 dimensions of an embedding are themselves a representative and performant latent space. This allows for adaptive retrieval; a system can use smaller, truncated embeddings for high-speed initial candidate generation (coarse-to-fine) and only utilize the full-dimensional vector when maximum precision is required, significantly reducing computational over-head and memory usage without requiring separate models for different scales. We train MRL with the following loss: 
+
+L𝑀𝑅𝐿 (𝑥 ; 𝜃 ) =∑︁  
+
+> 𝑘 ∈ K
+
+𝑐 𝑘 · L( 𝑓 (𝑥 ; 𝜃 )1: 𝑘 ; W𝑘 ) (12) where 𝑓 (𝑥 ; 𝜃 )1: 𝑘 represents the first 𝑘 dimensions of the output embedding, 𝑊 𝑘 is a linear classifier/projection head specific to the 
+
+𝑘 -dimensional representation, 𝑐 𝑘 is the weight assigned to each scale, and L is the contrastive loss function. We train the PinCLIP model with the MRL loss with the following prefix and weight settings: (𝑘, 𝑐 𝑘 )𝑖 = [(64, 0.1), (128, 0.1), (256, 1.0)]. The MRL losses for all prefixes were added to the total loss in Equation (11). We publish the reduced-dimensionality embeddings for downstream consumers to ingest, since ingesting the full 256d embeddings could be infeasible for cost and resource reasons. We found that the 64d prefix embedding offers an acceptable tradeoff between representation quality and serving costs. To ensure that the embeddings can be easily utilized for downstream retrieval systems like approximate nearest neighbor search via inner-product distance, we perform L2 normalization of the prefix embedding. 
+
+𝑥 𝑞 = round 
+
+ 𝑥 𝑠 + 𝑧 
+
+
+
+𝑥 𝑑𝑞 = (𝑥 𝑞 − 𝑧 ) · 𝑥 
+
+Figure 3: Global affine embedding quantization. 𝑥 is the original full-precision embedding. 𝑥 𝑞 is the quantized (lower-precision) embedding. 𝑥 𝑑𝑞 is the reconstructed embedding used in downstream tasks. Scalar 𝑠, 𝑧 are the scale and zero-point parameters respectively. Embedding Quantization : To reduce serving costs, we imple-mented post-training quantization (PTQ) using int8 global affine quantization. Specifically, we transform the PinCLIP embedding vec-tor from float16 into int8 representations via the quantization and dequantization transformations shown in Figure 3. The 𝑠, 𝑧 scalar parameters are determined empirically to maximize reconstruction and retrieval recall on a representative sample of embeddings. We used 𝑠 = 0.5127 , and 𝑧 = 0. This approach compresses a 256d vector from 4096 bits to 2048 bits—reducing the total embedding size to 50% of its original footprint and delivering a proportional reduction to serving costs. We verified that this affine quantization results in negligible impact on offline evaluation metrics. 
+
+## 4 Experiments 4.1 Evaluation Setup 
+
+We design our offline evaluation suite to reflect the real-world per-formance of the model in the production systems at Pinterest. We consider five key evaluation tasks: PinText image-text retrieval, Re-lated Pins image-image retrieval, Related Pins multimodal retrieval, Search text-image retrieval and Search multimodal retrieval. For the multimodal retrieval tasks, we use the fusion embedding as the Pin representation, whereas the image embedding is used for the other surface evaluations. We sample 30k pairs from the PinText training dataset to form the PinText evaluation dataset. For Related Pins and Search, we sample 80k engaged pairs, where a user saved the target Pin for a given text search query or query Pin. We include a 1.5M distractor set for the surface evaluations. For a proper evaluation, we ensure that the evaluation sets are disjoint from the training sets. We compute the Recall@K metric for each evaluation task. Specif-ically, we evaluate whether the proposed method can retrieve the correct positive embedding among a set of random negative em-beddings, given the query embedding. Given a set of query embed-dings 𝑄 , positive embeddings 𝑃 , and negative embeddings 𝑁 , the Recall@K metric is defined below, where |𝑄 | denotes the number Beal et al. 
+
+of query embeddings and the similarity metric is 𝑠 (𝑛 1, 𝑛 2) = 𝑛 𝑇  
+
+> 1
+
+𝑛 2.
+
+Recall 𝐾 (𝑄, 𝑃, 𝑁 ) = 1
+
+|𝑄 | 
+
+> |𝑄 |
+
+∑︁ 
+
+> 𝑖 =1
+
+1{|{ 𝑛 ∈ 𝑁 | 𝑠 (𝑄 𝑖 , 𝑛 ) ≥ 𝑠 (𝑄 𝑖 , 𝑃 𝑖 ) }| < 𝐾 }
+
+## 4.2 Training Procedure 
+
+We train with a global batch size of 32,768 for the image-text align-ment task and 4,096 for the neighbor alignment task using 64 H100 GPUs. We train for 150,000 steps, processing ≈6B images in total. We use a warmup phase of 6,000 steps, followed by cosine decay of the learning rate to zero. The base learning rate is 2 × 10 −4, and the optimizer is Lion [ 6]. We found it beneficial to employ a 10x lower learning rate for the text encoder. We used a weight decay value of 
+
+5 × 10 −4 for the image encoder and fusion aggregator and a weight decay value of 5 × 10 −1 for the text encoder based on grid search. 
+
+## 4.3 Main Results 
+
+The main results are presented in Figure 4. We find that the PinCLIP Fusion model significantly outperforms the PinCLIP image-text model on the surface retrieval tasks (+34% Search, +44% Related Pins) due to the introduction of (1) the cross-modal fusion architec-ture and (2) the neighbor alignment objective. Our method signifi-cantly outperforms prior internal content-only embedding models, such as OmniSearchSage [ 1 ] and Unified Embedding [ 54 ], and state-of-the-art public multimodal embedding models [5, 31, 40, 46, 56]. 
+
+## 4.4 Ablation Studies 
+
+For these experiments, we train with a shorter training schedule consisting of 30k steps ( ≈1B examples seen) using the PinCLIP Fusion model architecture, unless otherwise stated. 
+
+4.4.1 Impact of Model Size. To understand the impact of model size on the task performance, we trained models at four scales. We train with two different in-house image encoders, each of which is pretrained on a multi-label classification task [ 4 ]. “Hybrid-ViT-B” (130M) is a smaller image encoder consisting of a ResNet-9 [ 21 ] stem and a “Funnel-ViT-Base-6x3” trunk. Specifically, the Vision Transformer consists of 3 modules with 2 intermediate fun-neling operations. The hidden dimension is 768, the MLP dimension is 3072, the layers per module is 6, and the number of heads is 12. “Hybrid-ViT-g” (922M) is a larger image encoder consisting of an InceptionNeXt-Tiny [ 53 ] stem and a “Funnel-ViT-giant-12x3” trunk. In this case, the hidden dimension is 1408, the MLP dimension is 6144, the layers per module is 12, and the number of heads is 16. We train with two different multilingual pretrained text encoders from SigLIP [ 56 ]. “Transformer-B” (278M) is a smaller text encoder consisting of 12 layers with width of 768 and 12 heads. “Transformer-L” (700M) is a larger text encoder consisting of 27 layers with width of 1152 and 16 heads. The vocabulary size is 250k for each model. The results are presented in Table 1. We observe consistent gains from increased model capacity for each modality.                                   
+
+> (a) PinText
+> Method Name R@1 Image-to-Text Retrieval CLIP-B [40] 29 .4
+> CLIP-L [40] 35 .7
+> mSigLIP-So [56] 58 .6
+> PEcore-G [5] 60 .5
+> SigLIP2-g [46] 62 .0
+> MetaCLIP2-g [37] 63 .8
+> Qwen3-VL-Embedding-8B [31] 32 .0
+> PinCLIP Image-Text 76.7
+> PinCLIP Fusion 76.4
+> (b) Search
+> Method Name R@10 Text-to-Image Retrieval CLIP-B [40] 9.3
+> CLIP-L [40] 12 .4
+> mSigLIP-So [56] 24 .3
+> PEcore-G [5] 23 .6
+> SigLIP2-g [46] 26 .7
+> MetaCLIP2-g [37] 27 .4
+> PinCLIP Image-Text 35 .1
+> PinCLIP Fusion 44.5
+> Multimodal Retrieval OmniSearchSage [1] 34 .9
+> Qwen3-VL-Embedding-8B [31] 26 .2
+> PinCLIP Fusion 47.1 (c) Related Pins
+> Method Name R@10 Image-to-Image Retrieval CLIP-B [40] 19 .7
+> CLIP-L [40] 22 .7
+> mSigLIP-So [56] 35 .1
+> PEcore-G [5] 35 .3
+> SigLIP2-g [46] 35 .7
+> MetaCLIP2-g [37] 33 .8
+> Unified Embedding [54] 31 .4
+> PinCLIP Image-Text 39 .6
+> PinCLIP Fusion 44.5
+> Multimodal Retrieval Qwen3-VL-Embedding-8B [31] 23 .6
+> PinCLIP Fusion 57.2
+
+Figure 4: Retrieval results (Recall@K) for the key evaluation tasks of PinText, Related Pins, and Search. PinCLIP: Large-scale Foundational Multimodal Representation at Pinterest                     
+
+> Image Encoder Text Encoder R@1 R@5 R@10 Image-to-Text Retrieval Hybrid-ViT-B (130M) Transformer-B (278M) 56 .271 .175 .7
+> Hybrid-ViT-B (130M) Transformer-L (700M) 60 .373 .978 .3
+> Hybrid-ViT-g (922M) Transformer-B (278M) 67 .279 .382 .7
+> Hybrid-ViT-g (922M) Transformer-L (700M) 70 .381 .884 .9
+
+Table 1: Assessment of the impact of model scaling per modality on PinText image-to-text retrieval performance. 
+
+30M 100M 300M 900M 
+
+0.5
+
+0.55 
+
+0.6
+
+0.65 
+
+0.7
+
+0.75 
+
+0.8
+
+0.85 
+
+0.9
+
+PinText Dataset Size 
+
+> Recall@K
+> R@1
+> R@5
+> R@10
+
+Figure 5: Assessment of the impact of dataset scaling on PinText image-to-text retrieval performance. 
+
+4.4.2 Impact of Dataset Size. We study the impact of dataset size, varying the dataset sampling ratio from 3% to 100% and observ-ing the impact on image-text retrieval performance. In these ex-periments, the number of samples seen is held constant, with ap-proximately 1B samples seen in these experiments. The results are presented in Figure 5, showing a clear benefit to larger datasets. 
+
+4.4.3 Impact of Freezing Layers. In the contrastive tuning para-digm explored by LiT [ 57 ], a strong, pretrained image encoder is used as the image tower. Over the course of training, the image tower and text tower weights may be locked or unlocked. While LiT [ 57 ] proposes locking all of the image tower weights, we find that unlocking several of the final layers yields better performance. We study the optimal number of image encoder layers to unlock in Figure 6. We find that unlocking the final 12 layers of the image encoder yields the best downstream performance while also sig-nificantly improving the training efficiency. Consistent with the findings in LiT [ 57 ], we saw no benefit to locking layers of the text tower. In Table 2, we report the impact on GPU memory usage and training throughput for a single-node training benchmark setup. 
+
+## 4.5 Online A/B Testing 
+
+To evaluate the utility of our proposed multi-modal embeddings, we perform online A/B experiments across the major surfaces at Pinterest, including Homefeed, Related Pins and Search. 
+
+4.5.1 Organic Ranking Models. We added PinCLIP as a new feature into the organic ranking models, which rank non-Ads (aka. organic) content in different surfaces. We ran A/B online experiments over more than 2 weeks of data to collect the online impact. The control group is the production ranking model without the PinCLIP feature, and the treatment group is the production model with PinCLIP. For 0% 33% 67% 100% 
+
+0.5
+
+0.55 
+
+0.6
+
+0.65 
+
+0.7
+
+0.75 
+
+0.8
+
+0.85 
+
+0.9
+
+Frozen Vision Transformer Depth Recall@K 
+
+> R@1
+> R@5
+> R@10
+
+Figure 6: Assessment of the impact of freezing image encoder layers on PinText image-to-text retrieval performance. 
+
+Locked Layers GPU Memory (GB) Throughput (img/s) 
+
+0 69 .37 1223 12 58 .19 (-16.1%) 1418 (+15.9%) 
+
+24 48 .67 (-29.8%) 1572 (+28.5%) 
+
+36 41 .38 (-40.3%) 1658 (+35.5%) 
+
+Table 2: Assessment of the impact of freezing image encoder layers on 1-node training efficiency (memory/throughput). 
+
+Online Metric Homefeed Related Pins Search Surface Repins +0.91% +1.84% +0.96% 
+
+Surface Fresh Repins +5.02% +14.15% +15.35% Table 3: Online A/B tests by adding PinCLIP as a feature into the ranking models in Homefeed, Related Pins and Search. 
+
+Online Metric Improvement Click-Through Rate (CTR) +5.02% 
+
+Cost Per Click (CPC) -0.59% 
+
+New Ads (14d) Click Volume +8.67% Table 4: Online A/B tests by adding PinCLIP as a feature into the Ads ranking model. 
+
+the metrics, we measure surface-level Repins, which is the most common user action type at Pinterest. Meanwhile, we also measure the number of user Repins on fresh content on each surface, where fresh content is defined as new content with age less than 28 days. The online results are shown in Table 3. We see significant gains in surface Repins for all three main surfaces on Pinterest, which also led to significant site-wide Repin gains on Homefeed and Related Pins. The sitewide Repins for Search is not significant as the surface contributes fewer Repins, relative to the other surfaces. We also see PinCLIP is extremely effective on distributing fresh content, leading to about 15% fresh Repin gains on Related Pins and Search. 
+
+4.5.2 Ads Ranking Models. We also added PinCLIP as feature into our Ads ranking models, as shown in Table 4. We see a significant online impact in a single experiment, including a +5.02% increase on Ads click-through rate (CTR) and a 0.59% reduction on cost per click (CPC) for advertisers. Consistent with the organic ranking models, Beal et al. Query Text   
+
+> "black handbag on a wooden chair"
+> PinCLIP Results
+> OmniSearchSage Results
+> Query Text
+> "woman wearing a yellow floral long summer dress and a hat outside next to the ocean"
+> PinCLIP Results
+> OmniSearchSage Results
+> (a) (b)
+> Query Image PinCLIP Results
+> Visual Similarity Results
+> (c)
+
+Figure 7: Qualitative comparison of PinCLIP and OmniSearchSage [ 1] retrieved candidates on production-scale search corpus. Relevant candidates are highlighted in blue, whereas irrelevant candidates are highlighted in red. PinCLIP produces more semantically similar results compared to competitive baselines for both using text queries or image as inputs. Related Pins Search 
+
+Sitewide Repins Sitewide Fresh Repins Fulfillment Rate +0.36% +2.3% +0.34% Table 5: Online A/B tests by using PinCLIP-based candidate generator in Related Pins and Search. 
+
+we see significant improvement on fresh metrics – an increase of 8.67% on click volume for new Ads with age less than 14 days. 
+
+4.5.3 Candidate Generators. We study how to leverage PinCLIP as a new candidate generator to retrieve candidates on Search and Related Pins. On Search, we used the text embedding produced by the PinCLIP model to encode the search query, and used the fusion embedding from the PinCLIP model to encode the image corpus. On Related Pins, we used the fusion embedding to encode both the query Pin and the image corpus. For all candidate generator exper-iments, we used the approximate nearest neighbor (HNSW) [ 36 ]algorithm to retrieve the top 𝑘 candidates based on the similari-ties of the dot product between the candidate embedding and the context embedding (search query or query Pin). As we can see in Table 5, the addition of the PinCLIP candidate generator in Related Pins led to a significant improvement in the number of Repins throughout the site and the number of fresh Repins throughout the site. In Search, the fulfillment rate is defined as the percentage of search sessions with positive user engagement actions, such as Repins, shares, long-clicks, etc. We also observed a significant gain in the search fulfillment rate. These experiments have demonstrated the general effectiveness of PinCLIP on both early-stage retrieval and late-stage ranking models. 
+
+## 4.6 Qualitative Study 
+
+In Figure 7, we compare the retrieved results between the Om-niSearchSage [ 1] and our PinCLIP fusion model, when using both text queries or image as input. As we can see, in Figure 7(a), Pin-CLIP successfully preserves object attributes (color, material) along with object-level relationships (“bag on a chair”). In (b) PinCLIP successfully handles long text queries with multiple details. In (c), we compare PinCLIP results against our existing image embedding retrieval system. While both embeddings perform well on visual queries, we generally find that PinCLIP can yield better results. These qualitative studies further validate the general effectiveness of our proposed approach. 
+
+## 5 Conclusion 
+
+This paper introduces PinCLIP, a large-scale visual representation learning approach developed by Pinterest to enhance its retrieval and ranking recommendation models. We introduce a new hybrid Vision Transformer that leverages a VLM backbone and a spe-cialized fusion and alignment mechanism to extract multi-modal representations at multiple scales. Experimental results indicate that PinCLIP exceeds the performance of leading models like Qwen by 20% in retrieval benchmarks. Furthermore, the real-world im-pact is substantial: online testing showed widespread engagement growth across all major surfaces at Pinterest. Additionally, PinCLIP excels at surfacing fresh content—solving the "cold-start" issue with a 15% jump in organic Repins and an 8.7% increase in clicks for newly launched Ads. PinCLIP: Large-scale Foundational Multimodal Representation at Pinterest 
+
+## References 
+
+[1] Prabhat Agarwal, Minhazul Islam Sk, Nikil Pancha, Kurchi Subhra Hazra, Jiajing Xu, and Chuck Rosenberg. 2024. OmniSearchSage: Multi-Task Multi-Entity Embeddings for Pinterest Search. In Companion Proceedings of the ACM Web Conference 2024 . 121–130. [2] Anirudhan Badrinath, Alex Yang, Kousik Rajesh, Prabhat Agarwal, Jaewon Yang, Haoyu Chen, Jiajing Xu, and Charles Rosenberg. 2025. OmniSage: Large scale, multi-entity heterogeneous graph representation learning. In Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining V. 2 .4261–4272. [3] Jinze Bai, Shuai Bai, Yunfei Chu, Zeyu Cui, Kai Dang, Xiaodong Deng, Yang Fan, Wenbin Ge, Yu Han, Fei Huang, et al . 2023. Qwen technical report. arXiv preprint arXiv:2309.16609 (2023). [4] Josh Beal, Hao-Yu Wu, Dong Huk Park, Andrew Zhai, and Dmitry Kislyuk. 2022. Billion-scale pretraining with vision transformers for multi-task visual representations. In Proceedings of the IEEE/CVF winter conference on applications of computer vision . 564–573. [5] Daniel Bolya, Po-Yao Huang, Peize Sun, Jang Hyun Cho, Andrea Madotto, Chen Wei, Tengyu Ma, Jiale Zhi, Jathushan Rajasegaran, Hanoona Rasheed, et al . 2025. Perception encoder: The best visual embeddings are not at the output of the network. arXiv preprint arXiv:2504.13181 (2025). [6] Xiangning Chen, Chen Liang, Da Huang, Esteban Real, Kaiyuan Wang, Hieu Pham, Xuanyi Dong, Thang Luong, Cho-Jui Hsieh, Yifeng Lu, et al . 2023. Sym-bolic discovery of optimization algorithms. Advances in neural information processing systems 36 (2023), 49205–49233. [7] Xiangyi Chen, Kousik Rajesh, Matthew Lawhon, Zelun Wang, Hanyu Li, Haomiao Li, Saurabh Vishwas Joshi, Pong Eksombatchai, Jaewon Yang, Yi-Ping Hsu, et al .2025. PinFM: Foundation Model for User Activity Sequences at a Billion-scale Visual Discovery Platform. arXiv preprint arXiv:2507.12704 (2025). [8] Zhe Chen, Weiyun Wang, Yue Cao, Yangzhou Liu, Zhangwei Gao, Erfei Cui, Jinguo Zhu, Shenglong Ye, Hao Tian, Zhaoyang Liu, et al . 2024. Expanding performance boundaries of open-source multimodal models with model, data, and test-time scaling. arXiv preprint arXiv:2412.05271 (2024). [9] DongHyun Choi, Lucas Spangher, Chris Hidey, Peter Grabowski, and Ramy Eskander. 2025. Revisiting Funnel Transformers for Modern LLM Architectures with Comprehensive Ablations in Training and Inference Configurations. arXiv preprint arXiv:2504.02877 (2025). [10] Hyung Won Chung, Le Hou, Shayne Longpre, Barret Zoph, Yi Tay, William Fedus, Yunxuan Li, Xuezhi Wang, Mostafa Dehghani, Siddhartha Brahma, et al . 2024. Scaling instruction-finetuned language models. Journal of Machine Learning Research 25, 70 (2024), 1–53. [11] Gheorghe Comanici, Eric Bieber, Mike Schaekermann, Ice Pasupat, Noveen Sachdeva, Inderjit Dhillon, Marcel Blistein, Ori Ram, Dan Zhang, Evan Rosen, et al . 2025. Gemini 2.5: Pushing the frontier with advanced reasoning, multi-modality, long context, and next generation agentic capabilities. arXiv preprint arXiv:2507.06261 (2025). [12] Zihang Dai, Guokun Lai, Yiming Yang, and Quoc Le. 2020. Funnel-transformer: Filtering out sequential redundancy for efficient language processing. Advances in neural information processing systems 33 (2020), 4271–4282. [13] Tri Dao. 2023. Flashattention-2: Faster attention with better parallelism and work partitioning. arXiv preprint arXiv:2307.08691 (2023). [14] Tri Dao, Dan Fu, Stefano Ermon, Atri Rudra, and Christopher Ré. 2022. Flashat-tention: Fast and memory-efficient exact attention with io-awareness. Advances in neural information processing systems 35 (2022), 16344–16359. [15] Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2019. Bert: Pre-training of deep bidirectional transformers for language understanding. In 
+
+Proceedings of the 2019 conference of the North American chapter of the association for computational linguistics: human language technologies, volume 1 (long and short papers) . 4171–4186. [16] Hao Ding, Yifei Ma, Anoop Deoras, Yuyang Wang, and Hao Wang. 2021. Zero-shot recommender systems. arXiv preprint arXiv:2105.08318 (2021). [17] Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xi-aohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Sylvain Gelly, et al . 2020. An image is worth 16x16 words: Transformers for image recognition at scale. arXiv preprint arXiv:2010.11929 (2020). [18] Chantat Eksombatchai, Pranav Jindal, Jerry Zitao Liu, Yuchen Liu, Rahul Sharma, Charles Sugnet, Mark Ulrich, and Jure Leskovec. 2018. Pixie: A system for recommending 3+ billion items to 200+ million users in real-time. In Proceedings of the 2018 world wide web conference . 1775–1784. [19] Junchen Fu, Xuri Ge, Xin Xin, Alexandros Karatzoglou, Ioannis Arapakis, Jie Wang, and Joemon M Jose. 2024. IISAN: Efficiently adapting multimodal repre-sentation for sequential recommendation with decoupled PEFT. In Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval . 687–697. [20] Ramin Giahi, Kehui Yao, Sriram Kollipara, Kai Zhao, Vahid Mirjalili, Jianpeng Xu, Topojoy Biswas, Evren Korpeoglu, and Kannan Achan. 2025. VL-CLIP: Enhancing Multimodal Recommendations via Visual Grounding and LLM-Augmented CLIP Embeddings. arXiv preprint arXiv:2507.17080 (2025). [21] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. 2016. Deep residual learning for image recognition. In Proceedings of the IEEE conference on computer vision and pattern recognition . 770–778. [22] Zhankui He, Zhouhang Xie, Rahul Jha, Harald Steck, Dawen Liang, Yesu Feng, Bodhisattwa Prasad Majumder, Nathan Kallus, and Julian McAuley. 2023. Large language models as zero-shot conversational recommenders. In Proceedings of the 32nd ACM international conference on information and knowledge management .720–730. [23] Yupeng Hou, Jiacheng Li, Zhankui He, An Yan, Xiusi Chen, and Julian McAuley. 2024. Bridging language and items for retrieval and recommendation. arXiv preprint arXiv:2403.03952 (2024). [24] Yupeng Hou, Shanlei Mu, Wayne Xin Zhao, Yaliang Li, Bolin Ding, and Ji-Rong Wen. 2022. Towards universal sequence representation learning for recom-mender systems. In Proceedings of the 28th ACM SIGKDD conference on knowledge discovery and data mining . 585–593. [25] Wang-Cheng Kang and Julian McAuley. 2018. Self-attentive sequential recom-mendation. In 2018 IEEE international conference on data mining (ICDM) . IEEE, 197–206. [26] Aditya Kusupati, Gantavya Bhatt, Aniket Rege, Matthew Wallingford, Aditya Sinha, Vivek Ramanujan, William Howard-Snyder, Kaifeng Chen, Sham Kakade, Prateek Jain, et al . 2022. Matryoshka representation learning. Advances in Neural Information Processing Systems 35 (2022), 30233–30249. [27] Brian Lester, Rami Al-Rfou, and Noah Constant. 2021. The power of scale for parameter-efficient prompt tuning. arXiv preprint arXiv:2104.08691 (2021). [28] Junnan Li, Dongxu Li, Silvio Savarese, and Steven Hoi. 2023. Blip-2: Bootstrapping language-image pre-training with frozen image encoders and large language models. In International conference on machine learning . PMLR, 19730–19742. [29] Junnan Li, Dongxu Li, Caiming Xiong, and Steven Hoi. 2022. Blip: Bootstrapping language-image pre-training for unified vision-language understanding and generation. In International conference on machine learning . PMLR, 12888–12900. [30] Jiacheng Li, Ming Wang, Jin Li, Jinmiao Fu, Xin Shen, Jingbo Shang, and Julian McAuley. 2023. Text is all you need: Learning language representations for sequential recommendation. In Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining . 1258–1267. [31] Mingxin Li, Yanzhao Zhang, Dingkun Long, Keqin Chen, Sibo Song, Shuai Bai, Zhibo Yang, Pengjun Xie, An Yang, Dayiheng Liu, et al . 2026. Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for State-of-the-Art Multimodal Retrieval and Ranking. arXiv preprint arXiv:2601.04720 (2026). [32] Haotian Liu, Chunyuan Li, Yuheng Li, and Yong Jae Lee. 2024. Improved baselines with visual instruction tuning. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition . 26296–26306. [33] Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong Jae Lee. 2023. Visual In-struction Tuning. arXiv:2304.08485 [cs.CV] https://arxiv.org/abs/2304.08485 [34] Yanqing Liu, Xianhang Li, Zeyu Wang, Bingchen Zhao, and Cihang Xie. 2024. Clips: An enhanced clip framework for learning with synthetic captions. arXiv preprint arXiv:2411.16828 (2024). [35] Ze Liu, Yutong Lin, Yue Cao, Han Hu, Yixuan Wei, Zheng Zhang, Stephen Lin, and Baining Guo. 2021. Swin transformer: Hierarchical vision transformer using shifted windows. In Proceedings of the IEEE/CVF international conference on computer vision . 10012–10022. [36] Yu A Malkov and Dmitry A Yashunin. 2018. Efficient and robust approximate nearest neighbor search using hierarchical navigable small world graphs. IEEE transactions on pattern analysis and machine intelligence 42, 4 (2018), 824–836. [37] Jean de Dieu Nyandwi, Yueqi Song, Simran Khanuja, and Graham Neubig. 2025. Grounding Multilingual Multimodal LLMs With Cultural Knowledge. arXiv preprint arXiv:2508.07414 (2025). [38] Long Ouyang, Jeffrey Wu, Xu Jiang, Diogo Almeida, Carroll Wainwright, Pamela Mishkin, Chong Zhang, Sandhini Agarwal, Katarina Slama, Alex Ray, et al . 2022. Training language models to follow instructions with human feedback. Advances in neural information processing systems 35 (2022), 27730–27744. [39] Gustavo Penha and Claudia Hauff. 2020. What does bert know about books, movies and music? probing bert for conversational recommendation. In Proceed-ings of the 14th ACM conference on recommender systems . 388–397. [40] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sand-hini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al .2021. Learning transferable visual models from natural language supervision. In 
+
+International conference on machine learning . PmLR, 8748–8763. [41] Alec Radford, Karthik Narasimhan, Tim Salimans, Ilya Sutskever, et al . 2018. Improving language understanding by generative pre-training. (2018). [42] Colin Raffel, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan Narang, Michael Matena, Yanqi Zhou, Wei Li, and Peter J Liu. 2020. Exploring the limits of transfer learning with a unified text-to-text transformer. Journal of machine learning research 21, 140 (2020), 1–67. [43] Xubin Ren, Wei Wei, Lianghao Xia, Lixin Su, Suqi Cheng, Junfeng Wang, Dawei Yin, and Chao Huang. 2024. Representation learning with large language models for recommendation. In Proceedings of the ACM web conference 2024 . 3464–3475. Beal et al. 
+
+[44] Jay Shah, Ganesh Bikshandi, Ying Zhang, Vijay Thakkar, Pradeep Ramani, and Tri Dao. 2024. Flashattention-3: Fast and accurate attention with asynchrony and low-precision. Advances in Neural Information Processing Systems 37 (2024), 68658–68685. [45] Fei Sun, Jun Liu, Jian Wu, Changhua Pei, Xiao Lin, Wenwu Ou, and Peng Jiang. 2019. BERT4Rec: Sequential recommendation with bidirectional encoder rep-resentations from transformer. In Proceedings of the 28th ACM international conference on information and knowledge management . 1441–1450. [46] Michael Tschannen, Alexey Gritsenko, Xiao Wang, Muhammad Ferjad Naeem, Ibrahim Alabdulmohsin, Nikhil Parthasarathy, Talfan Evans, Lucas Beyer, Ye Xia, Basil Mustafa, et al . 2025. Siglip 2: Multilingual vision-language encoders with improved semantic understanding, localization, and dense features. arXiv preprint arXiv:2502.14786 (2025). [47] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. 2017. Attention is all you need. Advances in neural information processing systems 30 (2017). [48] Chunqi Wang, Bingchao Wu, Zheng Chen, Lei Shen, Bing Wang, and Xiaoyi Zeng. 2025. Scaling transformers for discriminative recommendation via generative pretraining. In Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining V. 2 . 2893–2903. [49] Tete Xiao, Mannat Singh, Eric Mintun, Trevor Darrell, Piotr Dollár, and Ross Girshick. 2021. Early convolutions help transformers see better. Advances in neural information processing systems 34 (2021), 30392–30400. [50] Bowen Yang, Cong Han, Yu Li, Lei Zuo, and Zhou Yu. 2021. Improving con-versational recommendation systems’ quality with context-aware item meta information. arXiv preprint arXiv:2112.08140 (2021). [51] Chao Yi, Dian Chen, Gaoyang Guo, Jiakai Tang, Jian Wu, Jing Yu, Sunhao Dai, Wen Chen, Wenjun Yang, Yuning Jiang, et al . 2025. RecGPT Technical Report. 
+
+arXiv preprint arXiv:2507.22879 (2025). [52] Rex Ying, Ruining He, Kaifeng Chen, Pong Eksombatchai, William L Hamilton, and Jure Leskovec. 2018. Graph convolutional neural networks for web-scale recommender systems. In Proceedings of the 24th ACM SIGKDD international conference on knowledge discovery & data mining . 974–983. [53] Weihao Yu, Pan Zhou, Shuicheng Yan, and Xinchao Wang. 2024. Inceptionnext: When inception meets convnext. In Proceedings of the IEEE/cvf conference on computer vision and pattern recognition . 5672–5683. [54] Andrew Zhai, Hao-Yu Wu, Eric Tzeng, Dong Huk Park, and Charles Rosenberg. 2019. Learning a unified embedding for visual search at pinterest. In Proceedings of the 25th ACM SIGKDD international conference on knowledge discovery & data mining . 2412–2420. [55] Jiaqi Zhai, Lucy Liao, Xing Liu, Yueming Wang, Rui Li, Xuan Cao, Leon Gao, Zhaojie Gong, Fangda Gu, Michael He, et al . 2024. Actions speak louder than words: Trillion-parameter sequential transducers for generative recommenda-tions. arXiv preprint arXiv:2402.17152 (2024). [56] Xiaohua Zhai, Basil Mustafa, Alexander Kolesnikov, and Lucas Beyer. 2023. Sigmoid loss for language image pre-training. In Proceedings of the IEEE/CVF international conference on computer vision . 11975–11986. [57] Xiaohua Zhai, Xiao Wang, Basil Mustafa, Andreas Steiner, Daniel Keysers, Alexander Kolesnikov, and Lucas Beyer. 2022. Lit: Zero-shot transfer with locked-image text tuning. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition . 18123–18133. [58] Beichen Zhang, Pan Zhang, Xiaoyi Dong, Yuhang Zang, and Jiaqi Wang. 2024. Long-clip: Unlocking the long-text capability of clip. In European conference on computer vision . Springer, 310–325. [59] Kun Zhou, Hui Wang, Wayne Xin Zhao, Yutao Zhu, Sirui Wang, Fuzheng Zhang, Zhongyuan Wang, and Ji-Rong Wen. 2020. S3-rec: Self-supervised learning for sequential recommendation with mutual information maximization. In Pro-ceedings of the 29th ACM international conference on information & knowledge management . 1893–1902. [60] Jinguo Zhu, Weiyun Wang, Zhe Chen, Zhaoyang Liu, Shenglong Ye, Lixin Gu, Hao Tian, Yuchen Duan, Weijie Su, Jie Shao, et al . 2025. Internvl3: Exploring advanced training and test-time recipes for open-source multimodal models. 
+
+arXiv preprint arXiv:2504.10479 (2025).

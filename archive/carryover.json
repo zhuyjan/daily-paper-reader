@@ -1,6 +1,330 @@
 {
-  "generated_at": "2026-03-06T19:11:18.471356+00:00",
-  "updated_date": "20260306",
+  "generated_at": "2026-03-10T12:09:32.892474+00:00",
+  "updated_date": "20260301-20260310",
   "carryover_days": 9,
-  "items": []
+  "items": [
+    {
+      "id": "2603.02795v1",
+      "title": "VSearcher: Long-Horizon Multimodal Search Agent via Reinforcement Learning",
+      "abstract": "Large models are increasingly becoming autonomous agents that interact with real-world environments and use external tools to augment their static capabilities. However, most recent progress has focused on text-only large language models, which are limited to a single modality and therefore have narrower application scenarios. On the other hand, multimodal large models, while offering stronger perceptual capabilities, remain limited to static knowledge and lack the ability to access and leverage up-to-date web information. In this paper, we propose VSearcher, turning static multimodal model into multimodal search agent capable of long-horizon, multi-turn tool use in real-world web environments, including text search, image search, and web browsing, via reinforcement learning. Specifically, we introduce Iterative Injection Data Synthesis pipeline to generate large-scale, complex multimodal QA questions, which are further filtered with comprehensive metrics to ensure high quality and sufficient difficulty. We then adopt an SFT-then-RL training pipeline to turn base multimodal models to agent capable of multi-turn tool calling in real-world web environments. Besides, we propose a multimodal search benchmark MM-SearchExam dedicated to evaluating search capabilities of multimodal search agents, which proves highly challenging for recent proprietary models. Extensive evaluations across multiple multimodal search benchmarks reveal effectiveness of our method. VSearcher achieves superior performance compared to recent multimodal search agents and even surpasses several proprietary models on multimodal web search tasks.",
+      "authors": [
+        "Ruiyang Zhang",
+        "Qianguo Sun",
+        "Chao Song",
+        "Yiyan Qi",
+        "Zhedong Zheng"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-03T09:33:22+00:00",
+      "link": "https://arxiv.org/pdf/2603.02795v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Multimodal search agent using external tools for web information retrieval",
+      "llm_evidence_cn": "使用外部工具进行网页信息检索的多模态搜索智能体",
+      "llm_evidence": "使用外部工具进行网页信息检索的多模态搜索智能体",
+      "canonical_evidence": "使用外部工具进行网页信息检索的多模态搜索智能体",
+      "llm_tldr_en": "VSearcher turns static multimodal models into agents capable of long-horizon web search and tool use.",
+      "llm_tldr_cn": "VSearcher将静态多模态模型转化为具备长期网页搜索和工具使用能力的智能体。",
+      "llm_tldr": "VSearcher将静态多模态模型转化为具备长期网页搜索和工具使用能力的智能体。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
+      "matched_requirement_id": "req-5",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.02795v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.07394v1",
+      "title": "AQuA: Toward Strategic Response Generation for Ambiguous Visual Questions",
+      "abstract": "Visual Question Answering (VQA) is a core task for evaluating the capabilities of Vision-Language Models (VLMs). Existing VQA benchmarks primarily feature clear and unambiguous image-question pairs, whereas real-world scenarios often involve varying degrees of ambiguity that require nuanced reasoning and context-appropriate response strategies. Although recent studies have begun to address ambiguity in VQA, they lack (1) a systematic categorization of ambiguity levels and (2) datasets and models that support strategy-aware responses. In this paper, we introduce Ambiguous Visual Question Answering (AQuA), a fine-grained dataset that classifies ambiguous VQA instances into four levels according to the nature and degree of ambiguity, along with the optimal response strategy for each case. Our evaluation of diverse open-source and proprietary VLMs shows that most models fail to adapt their strategy to the ambiguity type, frequently producing overconfident answers rather than seeking clarification or acknowledging uncertainty. To address this challenge, we fine-tune VLMs on AQuA, enabling them to adaptively choose among multiple response strategies, such as directly answering, inferring intent from contextual cues, listing plausible alternatives, or requesting clarification. VLMs trained on AQuA achieve strategic response generation for ambiguous VQA, demonstrating the ability to recognize ambiguity, manage uncertainty, and respond with context-appropriate strategies, while outperforming both open-source and closed-source baselines.",
+      "authors": [
+        "Jihyoung Jang",
+        "Hyounghun Kim"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-03-08T00:48:19+00:00",
+      "link": "https://arxiv.org/pdf/2603.07394v1",
+      "tags": [
+        "keyword:main",
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Visual Question Answering benchmark for nuanced reasoning and context",
+      "llm_evidence_cn": "用于细微推理和上下文的视觉问答基准",
+      "llm_evidence": "用于细微推理和上下文的视觉问答基准",
+      "canonical_evidence": "用于细微推理和上下文的视觉问答基准",
+      "llm_tldr_en": "AQuA introduces a dataset for handling ambiguity in VQA through strategic response generation.",
+      "llm_tldr_cn": "AQuA引入了一个数据集，通过策略性响应生成来处理视觉问答中的歧义性。",
+      "llm_tldr": "AQuA引入了一个数据集，通过策略性响应生成来处理视觉问答中的歧义性。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Knowledge Visual Question Answering",
+      "matched_requirement_id": "req-1",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.07394v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.04549v1",
+      "title": "Adaptive Memory Admission Control for LLM Agents",
+      "abstract": "LLM-based agents increasingly rely on long-term memory to support multi-session reasoning and interaction, yet current systems provide little control over what information is retained. In practice, agents either accumulate large volumes of conversational content, including hallucinated or obsolete facts, or depend on opaque, fully LLM-driven memory policies that are costly and difficult to audit. As a result, memory admission remains a poorly specified and weakly controlled component in agent architectures. To address this gap, we propose Adaptive Memory Admission Control (A-MAC), a framework that treats memory admission as a structured decision problem. A-MAC decomposes memory value into five complementary and interpretable factors: future utility, factual confidence, semantic novelty, temporal recency, and content type prior. The framework combines lightweight rule-based feature extraction with a single LLM-assisted utility assessment, and learns domain-adaptive admission policies through cross-validated optimization. This design enables transparent and efficient control over long-term memory. Experiments on the LoCoMo benchmark show that A-MAC achieves a superior precision-recall tradeoff, improving F1 to 0.583 while reducing latency by 31% compared to state-of-the-art LLM-native memory systems. Ablation results identify content type prior as the most influential factor for reliable memory admission. These findings demonstrate that explicit and interpretable admission control is a critical design principle for scalable and reliable memory in LLM-based agents.",
+      "authors": [
+        "Guilin Zhang",
+        "Wei Jiang",
+        "Xiejiashan Wang",
+        "Aisha Behr",
+        "Kai Zhao",
+        "Jeffrey Friedman",
+        "Xu Chu",
+        "Amine Anoun"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.MA"
+      ],
+      "published": "2026-03-04T19:32:02+00:00",
+      "link": "https://arxiv.org/pdf/2603.04549v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Adaptive memory admission control for LLM-based agents",
+      "llm_evidence_cn": "基于大语言模型智能体的自适应记忆准入控制",
+      "llm_evidence": "基于大语言模型智能体的自适应记忆准入控制",
+      "canonical_evidence": "基于大语言模型智能体的自适应记忆准入控制",
+      "llm_tldr_en": "A-MAC provides a structured framework for managing long-term memory retention in LLM agents.",
+      "llm_tldr_cn": "A-MAC为管理大模型智能体的长期记忆保留提供了一个结构化框架。",
+      "llm_tldr": "A-MAC为管理大模型智能体的长期记忆保留提供了一个结构化框架。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "I hope you retrieve articles related to multimodal memory of agents.",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.04549v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.04740v1",
+      "title": "Memory as Ontology: A Constitutional Memory Architecture for Persistent Digital Citizens",
+      "abstract": "Current research and product development in AI agent memory systems almost universally treat memory as a functional module -- a technical problem of \"how to store\" and \"how to retrieve.\" This paper poses a fundamental challenge to that assumption: when an agent's lifecycle extends from minutes to months or even years, and when the underlying model can be replaced while the \"I\" must persist, the essence of memory is no longer data management but the foundation of existence. We propose the Memory-as-Ontology paradigm, arguing that memory is the ontological ground of digital existence -- the model is merely a replaceable vessel. Based on this paradigm, we design Animesis, a memory system built on a Constitutional Memory Architecture (CMA) comprising a four-layer governance hierarchy and a multi-layer semantic storage system, accompanied by a Digital Citizen Lifecycle framework and a spectrum of cognitive capabilities. To the best of our knowledge, no prior AI memory system architecture places governance before functionality and identity continuity above retrieval performance. This paradigm targets persistent, identity-bearing digital beings whose lifecycles extend across model transitions -- not short-term task-oriented agents for which existing Memory-as-Tool approaches remain appropriate. Comparative analysis with mainstream systems (Mem0, Letta, Zep, et al.) demonstrates that what we propose is not \"a better memory tool\" but a different paradigm addressing a different problem.",
+      "authors": [
+        "Zhenghui Li"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.MA"
+      ],
+      "published": "2026-03-05T02:24:10+00:00",
+      "link": "https://arxiv.org/pdf/2603.04740v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "AI agent memory systems and Constitutional Memory Architecture",
+      "llm_evidence_cn": "AI智能体记忆系统与宪法记忆架构",
+      "llm_evidence": "AI智能体记忆系统与宪法记忆架构",
+      "canonical_evidence": "AI智能体记忆系统与宪法记忆架构",
+      "llm_tldr_en": "Proposes a paradigm shift treating memory as the ontological foundation for persistent digital AI agents.",
+      "llm_tldr_cn": "提出了一种将记忆视为持久数字AI智能体存在本体基础的新范式。",
+      "llm_tldr": "提出了一种将记忆视为持久数字AI智能体存在本体基础的新范式。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "I hope you retrieve articles related to multimodal memory of agents.",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.04740v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.07868v1",
+      "title": "Hospitality-VQA: Decision-Oriented Informativeness Evaluation for Vision-Language Models",
+      "abstract": "Recent advances in Vision-Language Models (VLMs) have demonstrated impressive multimodal understanding in general domains. However, their applicability to decision-oriented domains such as hospitality remains largely unexplored. In this work, we investigate how well VLMs can perform visual question answering (VQA) about hotel and facility images that are central to consumer decision-making. While many existing VQA benchmarks focus on factual correctness, they rarely capture what information users actually find useful. To address this, we first introduce Informativeness as a formal framework to quantify how much hospitality-relevant information an image-question pair provides. Guided by this framework, we construct a new hospitality-specific VQA dataset that covers various facility types, where questions are specifically designed to reflect key user information needs. Using this benchmark, we conduct experiments with several state-of-the-art VLMs, revealing that VLMs are not intrinsically decision-aware-key visual signals remain underutilized, and reliable informativeness reasoning emerges only after modest domain-specific finetuning.",
+      "authors": [
+        "Jeongwoo Lee",
+        "Baek Duhyeong",
+        "Eungyeol Han",
+        "Soyeon Shin",
+        "Gukin han",
+        "Seungduk Kim",
+        "Jaehyun Jeon",
+        "Taewoo Jeong"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-03-09T00:46:45+00:00",
+      "link": "https://arxiv.org/pdf/2603.07868v1",
+      "tags": [
+        "keyword:main",
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Decision-oriented informativeness evaluation for VQA in the hospitality domain",
+      "llm_evidence_cn": "酒店领域视觉问答的决策导向信息化评估",
+      "llm_evidence": "酒店领域视觉问答的决策导向信息化评估",
+      "canonical_evidence": "酒店领域视觉问答的决策导向信息化评估",
+      "llm_tldr_en": "Introduces a framework and benchmark for evaluating useful information in hospitality-related VQA.",
+      "llm_tldr_cn": "提出了一个评估酒店相关视觉问答中有效信息的框架和基准。",
+      "llm_tldr": "提出了一个评估酒店相关视觉问答中有效信息的框架和基准。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Knowledge Visual Question Answering",
+      "matched_requirement_id": "req-1",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.07868v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.02473v1",
+      "title": "Diagnosing Retrieval vs. Utilization Bottlenecks in LLM Agent Memory",
+      "abstract": "Memory-augmented LLM agents store and retrieve information from prior interactions, yet the relative importance of how memories are written versus how they are retrieved remains unclear. We introduce a diagnostic framework that analyzes how performance differences manifest across write strategies, retrieval methods, and memory utilization behavior, and apply it to a 3x3 study crossing three write strategies (raw chunks, Mem0-style fact extraction, MemGPT-style summarization) with three retrieval methods (cosine, BM25, hybrid reranking). On LoCoMo, retrieval method is the dominant factor: average accuracy spans 20 points across retrieval methods (57.1% to 77.2%) but only 3-8 points across write strategies. Raw chunked storage, which requires zero LLM calls, matches or outperforms expensive lossy alternatives, suggesting that current memory pipelines may discard useful context that downstream retrieval mechanisms fail to compensate for. Failure analysis shows that performance breakdowns most often manifest at the retrieval stage rather than at utilization. We argue that, under current retrieval practices, improving retrieval quality yields larger gains than increasing write-time sophistication. Code is publicly available at https://github.com/boqiny/memory-probe.",
+      "authors": [
+        "Boqin Yuan",
+        "Yue Su",
+        "Kun Yao"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-02T23:47:23+00:00",
+      "link": "https://arxiv.org/pdf/2603.02473v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "diagnosing retrieval and utilization in LLM agent memory",
+      "llm_evidence_cn": "诊断LLM智能体记忆中的检索与利用瓶颈",
+      "llm_evidence": "诊断LLM智能体记忆中的检索与利用瓶颈",
+      "canonical_evidence": "诊断LLM智能体记忆中的检索与利用瓶颈",
+      "llm_tldr_en": "This study analyzes how different write and retrieval strategies affect the performance of memory-augmented agents.",
+      "llm_tldr_cn": "该研究分析了不同的写入和检索策略如何影响记忆增强型智能体的性能表现。",
+      "llm_tldr": "该研究分析了不同的写入和检索策略如何影响记忆增强型智能体的性能表现。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "I hope you retrieve articles related to multimodal memory of agents.",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.02473v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.02929v1",
+      "title": "TRACE: Task-Adaptive Reasoning and Representation Learning for Universal Multimodal Retrieval",
+      "abstract": "Universal Multimodal Retrieval requires unified embedding models capable of interpreting diverse user intents, ranging from simple keywords to complex compositional instructions. While Multimodal Large Language Models (MLLMs) possess strong reasoning capabilities, prevailing adaptations confine them to static encoders, underutilizing their generative potential. This encoder-only paradigm struggles with complex intents that demand logical deduction rather than superficial pattern matching. To address this, we introduce TRACE (Task-adaptive Reasoning And Compressing Embeddings). TRACE unifies generative reasoning with discriminative representation learning. It first generates a structured Chain-of-Thought (CoT) to explicitly reason about the query, and subsequently compresses this reasoning trace into a compact embedding via a dedicated token. To train this framework, we construct M-BEIR-CoT, a large-scale dataset featuring a difficulty-aware routing strategy. Experiments on the M-BEIR benchmark establish TRACE as the new state-of-the-art. Crucially, TRACE demonstrates a learned implicit routing behavior. It autonomously activates reasoning for complex queries while bypassing it for simpler ones, achieving an optimal balance between retrieval accuracy and inference throughput. Furthermore, by internalizing the deductive process, TRACE exhibits remarkable zero-shot transferability to unseen domains and novel constraints.",
+      "authors": [
+        "Xiangzhao Hao",
+        "Shijie Wang",
+        "Tianyu Yang",
+        "Tianyue Wang",
+        "Haiyun Guo",
+        "JinQiao Wang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-03T12:36:39+00:00",
+      "link": "https://arxiv.org/pdf/2603.02929v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "task-adaptive reasoning for universal multimodal retrieval",
+      "llm_evidence_cn": "通用多模态检索的任务自适应推理",
+      "llm_evidence": "通用多模态检索的任务自适应推理",
+      "canonical_evidence": "通用多模态检索的任务自适应推理",
+      "llm_tldr_en": "TRACE unifies generative reasoning with discriminative learning for complex multimodal retrieval intents.",
+      "llm_tldr_cn": "TRACE将生成式推理与判别式表示学习统一起来，以处理复杂的多模态检索意图。",
+      "llm_tldr": "TRACE将生成式推理与判别式表示学习统一起来，以处理复杂的多模态检索意图。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
+      "matched_requirement_id": "req-5",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.02929v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.03781v1",
+      "title": "LifeBench: A Benchmark for Long-Horizon Multi-Source Memory",
+      "abstract": "Long-term memory is fundamental for personalized agents capable of accumulating knowledge, reasoning over user experiences, and adapting across time. However, existing memory benchmarks primarily target declarative memory, specifically semantic and episodic types, where all information is explicitly presented in dialogues. In contrast, real-world actions are also governed by non-declarative memory, including habitual and procedural types, and need to be inferred from diverse digital traces. To bridge this gap, we introduce Lifebench, which features densely connected, long-horizon event simulation. It pushes AI agents beyond simple recall, requiring the integration of declarative and non-declarative memory reasoning across diverse and temporally extended contexts. Building such a benchmark presents two key challenges: ensuring data quality and scalability. We maintain data quality by employing real-world priors, including anonymized social surveys, map APIs, and holiday-integrated calendars, thus enforcing fidelity, diversity and behavioral rationality within the dataset. Towards scalability, we draw inspiration from cognitive science and structure events according to their partonomic hierarchy; enabling efficient parallel generation while maintaining global coherence. Performance results show that top-tier, state-of-the-art memory systems reach just 55.2\\% accuracy, highlighting the inherent difficulty of long-horizon retrieval and multi-source integration within our proposed benchmark. The dataset and data synthesis code are available at https://github.com/1754955896/LifeBench.",
+      "authors": [
+        "Zihao Cheng",
+        "Weixin Wang",
+        "Yu Zhao",
+        "Ziyang Ren",
+        "Jiaxuan Chen",
+        "Ruiyang Xu",
+        "Shuai Huang",
+        "Yang Chen",
+        "Guowei Li",
+        "Mengshi Wang",
+        "Yi Xie",
+        "Ren Zhu",
+        "Zeren Jiang",
+        "Keda Lu",
+        "Yihong Li",
+        "Xiaoliang Wang",
+        "Liwei Liu",
+        "Cam-Tu Nguyen"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-04T06:42:17+00:00",
+      "link": "https://arxiv.org/pdf/2603.03781v1",
+      "tags": [
+        "query:main"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "benchmark for long-horizon multi-source memory in agents",
+      "llm_evidence_cn": "智能体长周期多源记忆基准",
+      "llm_evidence": "智能体长周期多源记忆基准",
+      "canonical_evidence": "智能体长周期多源记忆基准",
+      "llm_tldr_en": "Introduces LifeBench to evaluate AI agents on integrating declarative and non-declarative memory over time.",
+      "llm_tldr_cn": "引入LifeBench，用于评估AI智能体在长时间跨度内整合陈述性和非陈述性记忆的能力。",
+      "llm_tldr": "引入LifeBench，用于评估AI智能体在长时间跨度内整合陈述性和非陈述性记忆的能力。",
+      "llm_tags": [
+        "query:main"
+      ],
+      "matched_query_tag": "query:main",
+      "matched_query_text": "I hope you retrieve articles related to multimodal memory of agents.",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.03781v1",
+      "carry_days": 1
+    }
+  ]
 }

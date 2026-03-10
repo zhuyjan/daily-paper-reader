@@ -1,0 +1,248 @@
+Title: BRIDGE: Benchmark for multi-hop Reasoning In long multimodal Documents with Grounded Evidence
+
+URL Source: https://arxiv.org/pdf/2603.07931v1
+
+Published Time: Tue, 10 Mar 2026 01:43:49 GMT
+
+Number of Pages: 5
+
+Markdown Content:
+# BRIDGE: Benchmark for multi-hop Reasoning In long multimodal Documents with Grounded Evidence 
+
+# Biao Xiang 
+
+The University of Melbourne Melbourne, Australia biaox@student.unimelb.edu.au 
+
+# Soyeon Caren Han 
+
+The University of Melbourne Melbourne, Australia Caren.Han@unimelb.edu.au 
+
+# Yihao Ding 
+
+The University of Western Australia Perth, Australia yihao.ding@uwa.edu.au 
+
+## Abstract 
+
+Multi-hop question answering (QA) is widely used to evaluate the reasoning capabilities of large language models, yet most bench-marks focus on final answer correctness and overlook intermediate reasoning, especially in long multimodal documents. We introduce BRIDGE, a benchmark for multi-hop reasoning over long scientific papers that require integrating evidence across text, tables, and figures. The dataset supports both chain-like and fan-out struc-tures and provides explicit multi-hop reasoning annotations for step-level evaluation beyond answer accuracy. Experiments with state-of-the-art LLMs and multimodal retrieval-augmented gen-eration (RAG) systems reveal systematic deficiencies in evidence aggregation and grounding that remain hidden under conventional answer-only evaluation. BRIDGE provides a targeted testbed for diagnosing reasoning failures in long multimodal documents. 
+
+## CCS Concepts 
+
+• Information systems → Information retrieval .
+
+## Keywords 
+
+Document Understanding, Information Retrieving, Multi-hop 
+
+ACM Reference Format: 
+
+Biao Xiang, Soyeon Caren Han, and Yihao Ding. 2026. BRIDGE: Benchmark for multi-hop Reasoning In long multimodal Documents with Grounded Evidence. In Proceedings of Make sure to enter the correct conference title from your rights confirmation email (Conference acronym ’XX). ACM, New York, NY, USA, 5 pages. https://doi.org/XXXXXXX.XXXXXXX 
+
+## 1 Introduction 
+
+Recent advances in Large Language Models (LLMs) have signifi-cantly improved document-based question answering (QA). How-ever, in high-stakes domains such as finance [3, 22, 13], healthcare [20, 8], and academic research [18], answers are rarely explicitly stated and must be derived through multi-hop reasoning over het-erogeneous evidence distributed across long documents. Existing multi-hop QA benchmarks are typically framed as either fan-out or chain-like [26], differing in how reasoning structure is enforced and  
+
+> Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for components of this work owned by others than the author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee. Request permissions from permissions@acm.org.
+> Conference acronym ’XX, Woodstock, NY
+> ©2026 Copyright held by the owner/author(s). Publication rights licensed to ACM. ACM ISBN 978-1-4503-XXXX-X/2018/06 https://doi.org/XXXXXXX.XXXXXXX
+
+Table 1: Comparison with existing multi-hop QA bench-marks. MH: Multi-hop; Type: Question types (Ab: Abstrac-tive; Cp: Comparative; Re: Causal Reasoning); Ann.: Explicit multi-hop annotation; Evl.: Step-by-step multi-hop evalua-tion; MM: Multimodal evidence.     
+
+> Dataset MH Type Ann. Evl. MM Doc. Scope Scale
+> MultiTabQA [16]
+
+✓ Cp × × × Relational DB 9k MEQA [10] ✓ Cp+Re × × × Multi-doc text 2,243 SPIQA [18] × — × × ✓ Sci. papers 270k DBQR-QA [14] ✓ Cp+Re × × ✓ Finance reports 400 JEMHopQA [7] ✓ Cp+Re ✓ × × Wikipedia (JP) 1179 Complex-TR [21] ✓ Cp+Re × × × Temporal facts 60k FanOutQA [26] ✓ Cp × × × Wikipedia 1894 MultiHoax [19] ✓ Cp+Re × × × Wikipedia 6,944 BioHopR [9] ✓ Re × × × Biomed. KG 10k Cofca [24] ✓ Re ✓ ✓ × Short passages 3.6k MMQA [23] ✓ Cp × × ✓ Relational tables 3.3k  
+
+> BRIDGE (Ours)
+
+✓ Ab+Cp+Re ✓ ✓ ✓ Sci. papers 11k 
+
+evaluated. Fan-out formulations emphasize parallel evidence col-lection with answer-level aggregation, often without constraining intermediate reasoning. In contrast, chain-like formulations impose sequential dependency, where errors propagate along the reasoning path and shortcut behaviors can be exposed [2]. Nevertheless, as summarized in Table 1, most benchmarks lack explicit supervision and step-level evaluation of intermediate reasoning [24]. This limi-tation becomes more pronounced in multimodal settings. Although several datasets incorporate multiple modalities [23, 14, 7, 21, 9], modalities are frequently treated as independent or redundant in-formation sources. As a result, models can rely primarily on textual cues while underutilizing tables or figures, reducing multimodal reasoning to shallow pattern matching rather than structured ev-idence aggregation. We argue that long scientific papers provide a natural and challenging testbed for structured multi-hop multi-modal reasoning. Unlike loosely connected Wikipedia passages [25, 6], scientific documents exhibit coherent discourse structures in which claims introduced in text are quantified in tables and vali-dated in figures, forming intrinsic cross-modal dependency chains. Evaluating reasoning in such settings requires not only answer correctness, but also verification of intermediate evidence usage and cross-modal consistency. Our main contributions can be summarized as: (1). We intro-duce a Benchmark for multi-hop Reasoning In long multimodal 
+
+Documents with Grounded Evidence (BRIDGE), that supports both chain-like and fan-out question formulations. The benchmark cov-ers diverse question types, including comparative, causal reasoning, and abstractive questions. (2). We construct a multimodal multi-hop QA benchmark grounded in long scientific documents, requiring explicit reasoning across text, tables, and figures within long docu-ments. (3). We provide explicit multi-hop reasoning annotations and  
+
+> arXiv:2603.07931v1 [cs.CL] 9 Mar 2026 Conference acronym ’XX, June 03–05, 2018, Woodstock, NY Biao Xiang, Soyeon Caren Han, and Yihao Ding
+
+Type Questions (and Mod.) Answers (shorter version) 
+
+Cp In Fig 3, which task sets a larger “Ann” size, task 1 or 3? (F+T) They are the same. Both of them are 110. Ab Based on the whole paper, how do explanation types shift with subjectivity? (T) Justification dominates, while ar-gument increases as tasks be-come more subjective. Re Why use only a subset of fallacy types? (T+Tb) To reduce label ambiguity, and make annotation and evaluation reliable in Table 2. .. . .. .
+
+Figure 1: Representative examples of comparative (Cp), ab-stractive (Ab), and causal reasoning (Re) questions (top), and the corresponding pages where evidences locate (bottom). Mod.: involved modalities (T: text; Tb: table; F: figure). 
+
+evaluation protocols that assess intermediate reasoning states and evidence usage, going beyond final answer correctness. In addition, we introduce a structured error taxonomy to facilitate fine-grained analysis of reasoning failures. 
+
+## 2 Dataset 
+
+We present the BRIDGE dataset, supporting both fan-out and chain-like multi-hop QA over long multimodal scientific documents. 
+
+Task Definition. The BRIDGE task is formally defined as follows: given a question 𝑞 and a multi-page scientific document 𝐷 —a long-form scientific paper comprising heterogeneous and interdependent modalities such as textual passages, tables, and figures—the goal is to generate a final answer 𝑎 along with a set of supporting evidences 
+
+𝐸 = {𝑒 1, 𝑒 2, . . . , 𝑒 𝑘 }. The document is represented as a collection of semantic entities, each associated with a specific location (e.g., page index and region) and consisting of text spans, table entries, or visual figures. The objective is to require the model F to perform grounded reasoning over 𝐷 , such that F ( 𝑞, 𝐷 ) → ( 𝑎, 𝐸 ). The task typically demands multi-hop reasoning , where answering 𝑞 necessi-tates synthesizing information from multiple evidences, potentially across modalities. Two types of reasoning structures are considered: 
+
+chain-like , where evidences must be followed in a sequential, de-pendent manner; and fan-out , where multiple evidences contribute in parallel to the final answer. This formulation allows for com-prehensive evaluation of a model’s capacity to perform complex, modality-spanning reasoning within scientific documents. 
+
+Data Collection and Preprocessing We construct the dataset from 262 research papers on ArXiv 1, including PDF files and avail-able LaTeX sources. To ensure structural quality, we focus on papers published at top-tier venues. The corpus spans recent computer science research (2023–2025), primarily in NLP and computer vision (e.g., ACL, EMNLP, CVPR, ICCV). Each paper is parsed using the                              
+
+> 1https://info.arxiv.org/help/api/index.html 123+
+> Hop depth
+> 0
+> 2500
+> 5000
+> 7500
+> 1200 1515
+> 2466
+> 4500 650
+> 1271
+> 239
+> 4316
+> 7286
+> 1234+
+> Distinct pages involved
+> 0
+> 2000
+> 4000
+> 1171 1204 382
+> 1833
+> 3305
+> 1557
+> 1118
+> 704
+> 4122
+> 5213
+> 2051
+> 418
+> F-T Tb-T F-T-T Tb-Tb Tb-
+> T-T
+> T-T-T T-T F-F Tb-
+> Tb-Tb
+> Tb-
+> Tb-T
+> Hop Pattern
+> 0
+> 250
+> 500
+> 750
+> 1000
+> 224 362
+> 151 281
+> 80 200 88 98
+> 680
+> 630
+> 672 251
+> 480 300
+> 313
+> 90 134
+> 148
+> 152
+> 102
+> 1052 1038
+> 872
+> 684
+> 565 505
+> 389
+> 280 245 236
+> Abstractive Causal Comparative
+
+Figure 2: Distribution of QA instances by hop depth, number of distinct pages involved, and hop pattern, broken down by question type (Abstractive, Causal, Comparative) 
+
+Adobe PDF Extract API 2 to extract text, tables, and figures with page indices and bounding-box metadata, enabling layout-aware document representations. 
+
+## 2.1 QA Pair Generation 
+
+We generate multi-hop question–answer pairs using a chain-of-thought (CoT) prompting strategy with LLMs. 
+
+Defining Question Types We define three types of multi-hop questions based on the underlying reasoning patterns: (1) Causal-reasoning questions , where hops are connected through causal rela-tions between entities or events; (2) Comparative questions , where multiple hops involve comparisons across entities, primarily nu-merical values, and occasionally concepts; (3) Abstractive questions ,which require a holistic understanding of the entire paper to pro-duce a summary-style answer. 
+
+Question Type Guided Prompt Designing We adopt a two-stage prompting framework: Stage 1 (Structure Mining) extracts question-type-specific entity structures, and Stage 2 (Constraint-Guided Generation), conditions on these structures, formal question definitions, and multi-hop constraints to generate structured multi-hop QA pairs with explicit evidence hops. 
+
+Dual-Stage QA Quality Filtering To ensure high data reliability, we employ a two-stage filtering pipeline: (1) a rule-based pre-filter that eliminates malformed instances, unresolved references, and instances lacking numeric grounding or metadata; and (2) an LLM-as-a-judge framework that evaluates grounding, faithfulness, and reasoning depth. By utilizing structured PDF anchors to flag hallu-cinations and "single-hop shortcuts," this process ensures a scalable, reproducible collection of high-confidence multi-hop QA pairs. 
+
+## 2.2 Dataset Analysis 
+
+BRIDGE contains 11,857 QA pairs with annotated evidence chains, spanning three task types and diverse hop patterns (e.g., table–text, figure–table–text). We summarize its structural properties along  
+
+> 2https://developer.adobe.com/document-services/apis/pdf-extract/ BRIDGE: Benchmark for multi-hop Reasoning In long multimodal Documents with Grounded Evidence Conference acronym ’XX, June 03–05, 2018, Woodstock, NY
+
+Table 2: Unified evaluation results. LLM-based judge metrics (Audit, Accuracy, Fidelity) and N-gram-based lexical metrics (ROUGE-L, BLEU). Higher is better for all metrics.                                                                    
+
+> Model Strategy LLM as Judge N-gram Metrics Audit Acc Fidelity ROUGE-L BLEU
+> ChatGPT Direct 4.379 4.528 4.567 0.247 0.048 CoT 4.404 4.524 4.610 0.192 0.038 Reflection 4.387 4.539 4.587 0.243 0.047 Gemma Direct 4.131 4.373 4.291 0.292 0.069 CoT 4.175 4.413 4.403 0.292 0.069 Reflection 4.170 4.415 4.390 0.291 0.068 Gemini Direct 3.989 4.154 4.281 0.288 0.078 CoT 3.791 3.929 4.166 0.268 0.073 Reflection 3.728 3.861 4.131 0.260 0.071 Qwen Direct 3.489 3.578 3.508 0.266 0.058 CoT 3.605 3.685 3.549 0.224 0.043 Reflection 3.594 3.666 3.517 0.219 0.045
+
+three dimensions. i) Hop Depth. Most questions require two reason-ing steps, with a substantial portion involving three or more hops. It indicates a broader range of reasoning depths. ii) Cross-Page Scope. 
+
+A large proportion of questions aggregate evidence from multiple pages, commonly two to three and extending beyond, reflecting the long-document nature. iii) Modality Transitions. We observe diverse modality transitions, including text–table, text–figure, and multi-step cross-modal chains. While purely unimodal reasoning forms only a subset. 
+
+## 3 Experimental Setup 
+
+We evaluate representative MLLMs, including closed-source sys-tems (Gemini-3 [5], ChatGPT-5[15]) and open-weight models (Qwen3 [1], Gemma-3 [4]), under a unified evaluation pipeline. All models are tested with standardized input formatting and identical de-coding settings (temperature = 0.2, max tokens = 2048) to ensure fair comparison. For retrieval-augmented experiments, we employ ColPali as a multimodal retriever at the page level, retrieving top-
+
+𝑘 = 3 relevant pages per query. Retrieved content is concatenated with the prompt before generation. Then for result evaluation, we adopt Qwen-Plus (temperature = 0.2) as an LLM-as-a-judge to score final answer correctness and evidence alignment on a 0–5 scale. We further analyze reasoning behaviors using a structured error taxonomy. In addition, we report ROUGE [11] and BLEU [17] as complementary automatic metrics. 
+
+## 4 Results and Discussion 4.1 Overall Performance 
+
+Table 2 summarizes judge-based metrics. Using audit_score as the primary metric, ChatGPT performs best across strategies (4.379– 4.404), followed by Gemma (4.131–4.175), Gemini (3.728–3.989), and Qwen (3.489–3.605). Strategy effects are model-dependent: Gemini performs best with direct prompting and degrades under CoT/reflection (audit drops by 0.198 and 0.261, respectively), while Qwen improves with CoT/reflection (audit +0.116/+0.105). Gemma yields fewer valid generations in certain subsets compared to other 
+
+Table 3: End-to-end impact of Colpali-RAG relative to Gemini-only baselines. Negative Δ indicates degradation (Colpali minus Gemini).                     
+
+> Comparison ΔAudit ΔAcc ΔFid ΔR-L ΔBLEU
+> Colpali – Gemini Direct -1.700 -1.775 -0.741 -0.037 -0.026 Colpali – Gemini CoT -1.502 -1.551 -0.626 -0.017 -0.022 Colpali – Gemini Reflection -1.439 -1.483 -0.591 -0.008 -0.019
+
+models. To ensure transparency in coverage, we explicitly report the number of evaluated instances N in subsequent breakdown tables. 
+
+## 4.2 Performance on Various Evaluation Metrics 
+
+Table 2 reports lexical overlap. Strategy-induced stylistic drift is visible even when judge metrics remain stable. For ChatGPT, CoT does not materially change audit/accuracy but substantially reduces ROUGE-L (0.247 →0.192), indicating more paraphrastic or verbose generations. For Qwen, CoT/reflection improve judge-based cor-rectness but decrease ROUGE-L/BLEU (e.g., ROUGE-L drops by 0.042 under CoT), suggesting that reasoning prompts yield answers that are judged more correct yet less surface-aligned with the GT wording. In contrast, Gemma’s ROUGE/BLEU are nearly invariant across strategies, matching its minimal stylistic drift. Colpali was originally proposed for visually-rich, page-level mul-timodal document retrieval (e.g., ViDoRe [12]) and demonstrates strong retrieval performance in that setting. However, Table 3 shows that, in our long multimodal document QA setting requiring multi-hop evidence, Colpali-RAG substantially degrades end-to-end an-swer quality even when Gemini is used as the downstream genera-tor. Compared to Gemini direct prompting, Colpali reduces audit by 1.700 and accuracy by 1.775, with a concurrent fidelity drop of 0.741. The smaller reductions in ROUGE-L/BLEU (e.g., ROUGE-L -0.037) indicate that the dominant failure mode is not merely paraphrasing, but incorrect or weakly grounded answers, which is consistent with retrieval mismatch and difficulty of locating multi-hop evidence across long documents. 
+
+## 4.3 Breakdown Analysis 
+
+We conduct a comprehensive breakdown analysis across multiple dimensions, including question type, number of pages, and evidence modality, to systematically evaluate the capabilities of existing MLLMs and baseline configurations. 
+
+Question-Type Analysis. Table 4 reveals systematic differences across task types. Causal-Reasoning is generally the most stable cat-egory for strong models (ChatGPT audit 4.766; Gemini audit 4.366), with high accuracy and fidelity, suggesting that causal questions are often directly supported by localized evidence. Comparative ques-tions are the hardest across settings: even ChatGPT drops to 3.691 audit, and Colpali-RAG collapses to 1.002 audit and 1.017 accuracy, indicating difficulty in aligning multiple entities/conditions across distant evidence. Abstractive questions show the largest spread across models, where Gemma remains strong (audit 4.484) while Qwen and RAG underperform substantially. Conference acronym ’XX, June 03–05, 2018, Woodstock, NY Biao Xiang, Soyeon Caren Han, and Yihao Ding 
+
+Table 4: Question-type breakdown. We normalize variant labels (e.g., TABLE/FIGURE-first) into three core types. We report judge-based metrics: audit_score (Audit), answer accu-racy (Acc), and evidence fidelity (Fid).                                                                                  
+
+> Question Type Model Best Strat. Audit Acc Fid N
+> Abstractive ChatGPT Reflection 4.233 4.353 4.456 2766 Gemma Reflection 4.484 4.784 4.730 538 Gemini Direct 3.848 3.982 4.098 2258 Qwen CoT 2.682 2.556 2.435 162 RAG Colpali 2.008 2.060 3.442 2807 Causal-Reasoning ChatGPT CoT 4.766 4.944 4.947 5065 Gemma CoT 4.351 4.633 4.615 741 Gemini Direct 4.366 4.586 4.665 4183 Qwen CoT 3.658 3.749 3.611 5483 RAG Colpali 2.936 3.074 3.825 5145 Comparative ChatGPT CoT 3.691 3.706 3.925 1908 Gemma Direct 3.594 3.679 3.639 418 Gemini Direct 3.217 3.279 3.554 1579 Qwen Reflection 2.874 2.843 2.657 102 RAG Colpali 1.002 1.017 2.954 1951
+
+Table 5: Performance across page-depth bins, grouped by the furthest evidence page involved (best strategy per model by audit_score). 
+
+Page Bin Model Best Strat. Audit Acc Fid N
+
+1–2 ChatGPT CoT 4.692 4.867 4.881 3338 Qwen CoT 3.731 3.844 3.706 2417 3–5 ChatGPT CoT 4.417 4.538 4.632 2739 Qwen CoT 3.552 3.617 3.472 1659 6–10 ChatGPT CoT 4.240 4.319 4.455 2636 Qwen CoT 3.518 3.559 3.430 1333 11–20 ChatGPT CoT 3.879 3.942 4.123 1399 Qwen Reflection 3.453 3.565 3.142 822 21+ ChatGPT CoT 3.321 3.303 3.521 33 Qwen Reflection 3.570 3.484 3.124 23 
+
+Cross-Page Evidence Distribution Analysis. Table 5 shows a clear degradation as the required evidence moves deeper into the docu-ment. For all models, performance is highest when evidence appears early (pages 1–2) and drops for later bins (pages 11–20 and 21+). For example, ChatGPT decreases from 4.692 (pages 1–2) to 3.879 (11–20) and 3.321 (21+), while Gemini drops from 4.370 to 3.349 and 3.109. This trend is consistent with long-context search be-coming harder and multi-hop evidence coverage decreasing with page depth. Notably, Qwen is comparatively less monotonic at 21+ (3.570), but the sample size is very small (N=23), suggesting high variance in the tail bins. 
+
+Hop Depth Analysis. Table 6 shows that performance remains comparable between 2-hop and 3+-hop questions for strong models, suggesting that hop depth alone does not fully determine difficulty. However, smaller models exhibit higher variance across hop bins. 
+
+Table 6: Performance by hop depth (1-hop, 2-hop, 3+-hop). 
+
+Hop Bin Model Best Strat. Audit Acc Fid N
+
+1-hop ChatGPT CoT 3.692 3.656 3.966 212 Gemma Direct 2.952 3.000 3.317 25 Gemini Direct 2.888 2.978 3.245 180 Qwen Reflection 2.649 2.729 2.602 59 2-hop ChatGPT CoT 4.425 4.548 4.641 3344 Gemma CoT 4.200 4.454 4.408 817 Gemini Direct 4.004 4.179 4.283 2820 Qwen CoT 3.415 3.447 3.310 1742 3+-hop ChatGPT CoT 4.418 4.541 4.615 6075 Gemma CoT 4.194 4.421 4.429 850 Gemini Direct 4.020 4.181 4.317 5030 Qwen Reflection 3.719 3.808 3.668 3954 
+
+Table 7: Performance by primary evidence modality (Text, Table, Figure), aggregated over prompting strategies. N de-notes the number of instances whose dominant supporting evidence belongs to each modality. 
+
+Evidence Model Audit Acc Fid N
+
+Text ChatGPT 4.629 4.812 4.816 6933 Gemma 4.384 4.699 4.643 1859 Gemini 4.250 4.447 4.564 5643 Qwen 3.496 3.557 3.437 5145 Table ChatGPT 4.096 4.180 4.323 11217 Gemma 3.816 3.955 3.950 1794 Gemini 3.368 3.458 3.789 9314 Qwen 3.492 3.571 3.448 5091 Figure ChatGPT 4.537 4.706 4.712 11163 Gemma 4.360 4.644 4.577 1376 Gemini 4.066 4.238 4.385 8724 Qwen 3.682 3.777 3.662 6711 
+
+Diverse Evidence Modality Analysis. Across all models, questions whose supporting evidence primarily comes from tables are the most challenging. Judge-based performance drops when evidence is presented in tables compared to text or figures. For example, Gem-ini’s audit score decreases from 4.250 on text evidence to 3.368 on tables (a drop of 0.882 ), and ChatGPT drops from 4.629 to 4.096 
+
+(a drop of 0.533 ). In contrast, figure-based evidence is relatively easier for stronger models: ChatGPT achieves an audit score of 
+
+4.537 on figures, close to its text performance ( 4.629 ), suggesting improved robustness when evidence is presented visually rather than in dense tabular form. Notably, Qwen exhibits nearly identi-cal audit scores on text and tables ( 3.496 vs. 3.492 ) but remains substantially below the stronger models overall, indicating that its dominant bottleneck may be general evidence alignment and reasoning accuracy rather than table-specific difficulty. 
+
+## 5 Conclusion 
+
+We introduce BRIDGE, a benchmark for long multimodal docu-ment QA that explicitly stresses multi-hop evidence aggregation across visually-rich PDFs, and address a gap not covered by prior BRIDGE: Benchmark for multi-hop Reasoning In long multimodal Documents with Grounded Evidence Conference acronym ’XX, June 03–05, 2018, Woodstock, NY 
+
+evaluations that focus on short-context QA or page-level retrieval. Our results show that strong LLMs can achieve high judge-based correctness under direct access to evidence, but performance varies substantially with prompting, and lexical overlap (ROUGE/BLEU) can diverge from factual grounding. More importantly, a Colpali-based RAG pipeline degrades markedly in end-to-end multi-hop QA, which highlights retrieval mismatch and evidence-missing as dominant failure modes. Overall, the benchmark provides a new, targeted testbed for diagnosing grounding, comparison reversal, and evidence coverage errors in current LLM systems, and moti-vates future work on retrieval calibration, evidence verification, and citation-faithful generation for long multimodal documents. 
+
+## References 
+
+[1] Alibaba Group. 2023. Qwen technical report. https : / / qwen . ai / qwenchat. Accessed: 2025-02-09. (2023). [2] Jifan Chen and Greg Durrett. 2019. Understanding dataset design choices for multi-hop reasoning. In Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers) . Jill Burstein, Christy Doran, and Thamar Solorio, (Eds.) Association for Computational Linguistics, Minneapolis, Minnesota, (June 2019), 4026–4032. doi:10.18653/v1/N19-1405. [3] Yihao Ding, Siqu Long, Jiabin Huang, Kaixuan Ren, Xingxiang Luo, Hyunsuk Chung, and Soyeon Caren Han. 2023. Form-nlu: dataset for the form natural language understanding. (2023). https : / / arxiv . org / abs / 2304 . 01577 arXiv: 2304.01577 [cs.IR] .[4] Google. 2024. Gemma: open models based on gemini research and technology. https://ai.google.dev/gemma. Accessed: 2025-02-09. (2024). [5] Google DeepMind. 2023. Gemini: a family of highly capable multimodal models. https://deepmind.google/technologies/gemini/. Accessed: 2025-02-09. (2023). [6] Xanh Ho, Anh-Khoa Duong Nguyen, Saku Sugawara, and Akiko Aizawa. 2020. Constructing a multi-hop qa dataset for comprehensive evaluation of reasoning steps. (2020). https://arxiv.org/abs/2011.01060 arXiv: 2011.01060 [cs.CL] .[7] Ai Ishii, Naoya Inoue, Hisami Suzuki, and Satoshi Sekine. 2024. JEMHopQA: dataset for Japanese explainable multi-hop question answering. In Proceed-ings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024) . Nicoletta Calzolari, Min-Yen Kan, Veronique Hoste, Alessandro Lenci, Sakriani Sakti, and Nianwen Xue, (Eds.) ELRA and ICCL, Torino, Italia, (May 2024), 9515–9525. https://aclan thology.org/2024.lrec-main.831/. [8] Qiao Jin, Bhuwan Dhingra, Zhengping Liu, William Cohen, and Xinghua Lu. 2019. PubMedQA: a dataset for biomedical research question answering. In 
+
+Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP) . Kentaro Inui, Jing Jiang, Vincent Ng, and Xiaojun Wan, (Eds.) Association for Computational Linguistics, Hong Kong, China, (Nov. 2019), 2567–2577. doi:10.18653/v1/D19-1259. [9] Yunsoo Kim, Yusuf Abdulle, and Honghan Wu. 2025. Biohopr: a benchmark for multi-hop, multi-answer reasoning in biomedical domain. (2025). https://ar xiv.org/abs/2505.22240 arXiv: 2505.22240 [cs.CL] .[10] Ruosen Li, Zimu Wang, Son Quoc Tran, Lei Xia, and Xinya Du. 2024. Meqa: a benchmark for multi-hop event-centric question answering with explanations. In Advances in Neural Information Processing Systems . A. Globerson, L. Mackey, D. Belgrave, A. Fan, U. Paquet, J. Tomczak, and C. Zhang, (Eds.) Vol. 37. Curran Associates, Inc., 126835–126862. doi:10.52202/079017-4028. [11] Chin-Yew Lin. 2004. ROUGE: a package for automatic evaluation of summaries. In Text Summarization Branches Out . Association for Computational Linguistics, Barcelona, Spain, (July 2004), 74–81. https://aclanthology.org/W04-1013/. [12] António Loison et al. 2026. Vidore v3: a comprehensive evaluation of retrieval augmented generation in complex real-world scenarios. (2026). https://arxiv.or g/abs/2601.08620 arXiv: 2601.08620 [cs.AI] .[13] Minesh Mathew, Dimosthenis Karatzas, and C. V. Jawahar. 2021. Docvqa: a dataset for vqa on document images. (2021). https://arxiv.org/abs/2007.00398 arXiv: 2007.00398 [cs.CV] .[14] Rungsiman Nararatwong, Chung-Chi Chen, Natthawut Kertkeidkachorn, Hi-roya Takamura, and Ryutaro Ichise. 2024. DBQR-QA: a question answering dataset on a hybrid of database querying and reasoning. In Findings of the As-sociation for Computational Linguistics: ACL 2024 . Lun-Wei Ku, Andre Martins, and Vivek Srikumar, (Eds.) Association for Computational Linguistics, Bangkok, Thailand, (Aug. 2024), 15169–15182. doi:10.18653/v1/2024.findings-acl.900. [15] OpenAI. 2024. Chatgpt. https://openai.com/chatgpt. Accessed: 2025-02-09. (2024). [16] Vaishali Pal, Andrew Yates, Evangelos Kanoulas, and Maarten de Rijke. 2023. MultiTabQA: generating tabular answers for multi-table question answering. In Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) . Anna Rogers, Jordan Boyd-Graber, and Naoaki Okazaki, (Eds.) Association for Computational Linguistics, Toronto, Canada, (July 2023), 6322–6334. doi:10.18653/v1/2023.acl-long.348. [17] Kishore Papineni, Salim Roukos, Todd Ward, and Wei-Jing Zhu. 2002. Bleu: a method for automatic evaluation of machine translation. In Proceedings of the 40th Annual Meeting of the Association for Computational Linguistics . Pierre Isabelle, Eugene Charniak, and Dekang Lin, (Eds.) Association for Compu-tational Linguistics, Philadelphia, Pennsylvania, USA, (July 2002), 311–318. doi:10.3115/1073083.1073135. [18] Shraman Pramanick, Rama Chellappa, and Subhashini Venugopalan. 2025. Spiqa: a dataset for multimodal question answering on scientific papers. (2025). https://arxiv.org/abs/2407.09413 arXiv: 2407.09413 [cs.CL] .[19] Mohammadamin Shafiei, Hamidreza Saffari, and Nafise Sadat Moosavi. 2025. Multihoax: a dataset of multi-hop false-premise questions. (2025). https://arxiv .org/abs/2506.00264 arXiv: 2506.00264 [cs.CL] .[20] Sarvesh Soni, Meghana Gudala, Atieh Pajouhi, and Kirk Roberts. 2022. RadQA: a question answering dataset to improve comprehension of radiology reports. In Proceedings of the Thirteenth Language Resources and Evaluation Conference .Nicoletta Calzolari et al., (Eds.) European Language Resources Association, Marseille, France, (June 2022), 6250–6259. https://aclanthology.org/2022.lrec-1 .672/. [21] Qingyu Tan, Hwee Tou Ng, and Lidong Bing. 2024. Towards robust temporal reasoning of large language models via a multi-hop qa dataset and pseudo-instruction tuning. (2024). https://arxiv.org/abs/2311.09821 arXiv: 2311.09821 
+
+[cs.CL] .[22] Rubèn Tito, Dimosthenis Karatzas, and Ernest Valveny. 2023. Hierarchical multimodal transformers for multipage docvqa. Pattern Recognition , 144, 109834. doi:https://doi.org/10.1016/j.patcog.2023.109834. [23] Jian Wu, Linyi Yang, Dongyuan Li, Yuliang Ji, Manabu Okumura, and Yue Zhang. 2025. MMQA: evaluating LLMs with multi-table multi-hop complex questions. In The Thirteenth International Conference on Learning Representa-tions . https://openreview.net/forum?id=GGlpykXDCa. [24] Jian Wu, Linyi Yang, Zhen Wang, Manabu Okumura, and Yue Zhang. 2024. Cofca: a step-wise counterfactual multi-hop qa benchmark. (2024). https://arxi v.org/abs/2402.11924 arXiv: 2402.11924 [cs.CL] .[25] Zhilin Yang, Peng Qi, Saizheng Zhang, Yoshua Bengio, William W. Cohen, Ruslan Salakhutdinov, and Christopher D. Manning. 2018. Hotpotqa: a dataset for diverse, explainable multi-hop question answering. (2018). https://arxiv.or g/abs/1809.09600 arXiv: 1809.09600 [cs.CL] .[26] Andrew Zhu, Alyssa Hwang, Liam Dugan, and Chris Callison-Burch. 2024. Fanoutqa: a multi-hop, multi-document question answering benchmark for large language models. (2024). https : / / arxiv . org / abs / 2402 . 14116 arXiv: 2402.14116 [cs.CL] .
+
+Received 20 February 2007; revised 12 March 2009; accepted 5 June 2009

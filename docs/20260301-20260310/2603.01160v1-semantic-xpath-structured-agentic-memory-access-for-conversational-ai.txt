@@ -1,0 +1,603 @@
+Title: Semantic XPath: Structured Agentic Memory Access for Conversational AI
+
+URL Source: https://arxiv.org/pdf/2603.01160v1
+
+Published Time: Tue, 03 Mar 2026 02:50:57 GMT
+
+Number of Pages: 9
+
+Markdown Content:
+# Semantic XPath: Structured Agentic Memory Access for Conversational AI 
+
+Yifan Simon Liu *1 , Ruifan Wu *1 , Liam Gallagher *1 , Jiazhou Liang *1 
+
+Armin Toroghi 1, Scott Sanner 1,2 1University of Toronto, Canada 
+
+> 2
+
+Vector Institute of Artificial Intelligence, Toronto, Canada 
+
+Abstract 
+
+Conversational AI (ConvAI) agents increas-ingly maintain structured memory to sup-port long-term, task-oriented interactions. In-context memory approaches append the grow-ing history to the model input, which scales poorly under context-window limits. RAG-based methods retrieve request-relevant infor-mation, but most assume flat memory collec-tions and ignore structure. We propose S EMAN - 
+
+> TIC
+
+XP ATH , a tree-structured memory module to access and update structured conversational memory. SEMANTIC XP ATH improves per-formance over flat-RAG baselines by 176.7% while using only 9.1% of the tokens required by in-context memory. We also introduce S EMAN -
+
+> TIC
+
+XP ATH CHAT , an end-to-end ConvAI demo system that visualizes the structured memory and query execution details. Overall, this paper demonstrates a candidate for the next genera-tion of long-term, task-oriented ConvAI sys-tems built on structured memory. 
+
+1 Introduction 
+
+Conversational AI (ConvAI) agents aim to sup-port long-term, task-oriented interactions in which users manage multiple tasks (e.g., travel itinerary planning, to do list management, meal kit recipe recommendation) and repeatedly inspect and revise their evolving artifacts across many versions. To en-able such interactions, ConvAI agents increasingly maintain structured memory that preserves the con-versation history, revision history, and hierarchical organization of each task artifact (Rezazadeh et al. 2024; Sun and Zeng 2025). Early ConvAI agents rely on an in-context ap-proach that appends the growing conversation his-tory to the model input (Figure 1, left; Zhang et al. 2020). However, this approach scales poorly un-der context-window limits and incurs higher token costs and latency. Long contexts also lead to poor 
+
+> *Equal contribution
+
+Figure 1: A travel-planning ConvAI agent for a 3-day ACL conference trip in San Diego. Left: in-context memory appends the full conversation. Middle: flat RAG retrieves from a flattened collection of memory items. Right: SEMANTIC XP ATH retrieves and updates the relevant substructure from structured memory. 
+
+reasoning and hallucinated outputs, thus reducing reliability (Liu et al., 2024; Zhang et al., 2024). Our empirical results show that the in-context memory approach fails to satisfy half of user requests after only five interaction turns. To address these limitations, RAG-based sys-tems have been proposed to retrieve information rel-evant to the current user request (Lewis et al., 2020; Packer et al., 2023). Many of these approaches treat memory as a flat collection of items during retrieval, which ignores natural hierarchical structure often present in memory (Rezazadeh et al., 2024; Sarthi et al., 2024). For example, in a 3-day ACL trip plan, when a user asks to “add a coffee break on the day that is packed with conference sessions,” flat RAG approaches may retrieve conference-related activi-ties from the wrong day due to a lack of structured memory organization (Figure 1, middle). These limitations motivate a structure-aware RAG method that retrieves relevant structured data 1             
+
+> arXiv:2603.01160v1 [cs.AI] 1 Mar 2026 Figure 2: End-to-end S EMANTIC XP ATH pipeline on an ACL 2026 trip plan illustrated in both the conversation view (blue) and the memory view (grey). Step 1: The user requests to “add a coffee break on the day that is packed with conference sessions.” is translated into a S EMANTIC XP ATH query based on the memory schema. Step 2: The query is executed with structural matching and semantic relevance scoring, selecting Day 2 .Step 3: The retrieved substructure is passed to downstream generation to insert a coffee-break POI and respond to the user.
+
+from memory. A well-known solution for structure-aware retrieval in hierarchical tree-structured data is the XPath query language (Clark and DeRose, 1999), but it lacks semantic awareness and relies on exact matches. Therefore, in this paper: 1. We propose S EMANTIC XP ATH (Figure 1, right), a tree-structured memory module that uses an XPath-style query language to retrieve only the relevant memory substructure for effi-cient memory access and updates. 2. We empirically show that S EMANTIC XP ATH 
+
+improves performance over flat-RAG baselines by 176.7% while using only 9.1% of the tokens required by in-context memory. 3. We introduce S EMANTIC XP ATH CHAT 1, an end-to-end ConvAI system for long-term, task-oriented interaction that demonstrates S EMAN - 
+
+> TIC
+
+XP ATH with visualizations of the structured memory and query execution details. 
+
+2 System Description 
+
+Overview. To support long-term, task-oriented interaction between users and agents, we introduce SEMANTIC XP ATH CHAT , an end-to-end ConvAI system that maintains task-specific, tree-structured memory. This system uses a tree-structured mem-ory module supported by S EMANTIC XP ATH to retrieve only the relevant structured data at the ap-propriate level of granularity, which in turn enables efficient memory access and updates.   
+
+> 1Try live demo at https://semanticxpathchat.com .
+
+Figure 2 shows an example workflow. After cre-ating a 3-day ACL conference trip, the user asks to “ add a coffee break on the day packed with con-ference sessions .” The system first translates the request into a S EMANTIC XP ATH query grounded in the memory schema, then executes it to rank candidates. The top-ranked result is Day 2 , which contains three conference-related activities. The system then takes the retrieved node and the cor-responding subtree for downstream generation, in-serts a coffee-break activity into Day 2 , and records the update by creating a new version branch in structured memory. 
+
+Features. Figure 3 shows a screenshot from the SEMANTIC XP ATH CHAT system to illustrate key features on the same running example. We refer the reader to the demonstration video 2 for a detailed walkthrough of the system. 
+
+Conversation View (left) shows the conversa-tion history. Each turn includes action buttons bringing the user to the structured memory view and the execution view in the right panels. 
+
+Memory View (middle) visualizes the struc-tured memory. The highlighted path indicates the relevant path for the current user request. (e.g., 
+
+Day 2 and added coffee break are highlighted.) 
+
+Execution View (right) visualizes the step-by-step execution and socring. Users can select a query step to inspect its execution details and click candi-date nodes to view semantic relevance scores. We present S EMANTIC XP ATH query language and execution details in Section 3. 
+
+> 2https://www.youtube.com/watch?v=l-DrEr4P5JA
+
+2Figure 3: S EMANTIC XP ATH CHAT demonstration 1. Left: Conversation view, where the user asks to add a coffee break on the day packed with conference sessions . Middle: Memory view, highlighting the retrieved Day 2 and the newly inserted coffee break. Right: Execution view, showing step-by-step query execution and scoring details. 
+
+3 Semantic XPath 
+
+SEMANTIC XP ATH is a tree-structured memory module that uses an XPath-style query language to retrieve only the relevant structured data for effi-cient memory access and updates. Figure 2 illus-trates the overall pipeline. 
+
+3.1 Data Model 
+
+We represent structured conversation memory as a rooted tree 
+
+T = ( V, E, r ),
+
+where each node v ∈ V corresponds to a unit of conversational state, E denotes parent–child rela-tions, and r ∈ V is the root. Each node is associ-ated with a node type and a set of textual attributes associated with the node. The data model is governed by a schema derived from the natural hierarchy of the conversation and task information, which specifies the node types and their attributes. 
+
+ACL Trip Example: The schema for “3-day ACL conference trip” example (Figure 2) is: 
+
+Itinerary → Version → Day → POI .• Itinerary is the task-instance root. • Version captures revision history (e.g., the ini-tial plan and an updated version after adding a coffee break). • Day and POI are task-specific. Each day con-tains conference activities (e.g., “welcome re-ception” ). 
+
+3.2 Query Grammar 
+
+Semantic XPath Grammar 
+
+Query 
+
+Q ::= ∅ | S ∅ | S Q 
+
+Step 
+
+S ::= A N [R] [ P ]
+
+Axis navigator 
+
+A ::= / | // 
+
+Node selector 
+
+N ::= NodeType | ∗ 
+
+Positional selector 
+
+R ::= [ i] | [−i] | [i:j]
+
+Semantic Relevance Operator 
+
+P ::= (P +P )2 | P · P | min( P, P ) |
+
+max( P, P ) | 1 − P | Local | Agg (S)
+
+Local Semantic Relevance 
+
+Local ::= [ attr_name ≈ String ] | [node ≈
+
+String ]
+
+Aggregation Semantic Relevance 
+
+Agg ::= avg | min | max | gmean 
+
+A query Q (symbol Q ) is a sequence of steps. Each step (symbol S ) contains four components: • An axis navigator (symbol A ) that deter-mines how the structured memory is traversed. 
+
+/ selects children and // selects descendants. • A node selector (symbol N ), which specifies either a concrete node type or the wildcard. 3• An optional positional selector (symbol R ). • An optional semantic relevance operator (sym-bol P ), which assigns a semantic relevance score to matched nodes. We walk through two concrete examples. 
+
+ACL Trip Example (cont.): The query Q1 for a request “add a coffee break on the day packed with conference sessions” can be translated into: 
+
+//Day[avg(/POI[node~="conference"])] 
+
+Q1 first matches all Day nodes at any depth (A = // , N = Day ). To reflect the notion of a day being “packed” with conference sessions, it scores each day with an aggregation semantic relevance operator Agg (S′), which aggregates POI-level lo-cal evidence S′ = POI [Local ]. Using avg yields a density-style measure of how conference-heavy the day is. 
+
+ACL Trip Example (cont.). The query Q2 for 
+
+“On the third day, remove all activities except the workshop.” can be translated into: 
+
+//Day[3]/POI[1-[node~="workshop"]] 
+
+Q2 first uses a positional selector , //Day[3] , to match the third day in the structured memory. It then applies a local semantic relevance operator 
+
+at the POI level ( Local = [node ≈ “workshop”]), to score each POI by how closely its description matches “workshop” . Finally, the semantic rele-vance operator 1 − P then inverts this score to target all POIs that do not match “workshop”, iden-tifying the activities to be removed. 
+
+3.3 Query Execution 
+
+SEMANTIC XP ATH query execution maintains a weighted node set W ⊆ V × [0 , 1] , where each pair (u, w ) assigns a weight w to a node u ∈ V .
+
+Evaluation function. A query is executed by a single recursive evaluation function E : X × W → W, where X ranges over well-formed syntax ob-jects induced by the grammar (e.g., queries, steps, and step components). Execution is initialized at the root as 
+
+E(Q, {(r, 1) }). Query-level recursion is then: 
+
+E(Q, W ) = 
+
+
+
+W, if Q = ∅,
+
+E(S, W ), if Q = S∅,
+
+E Q′, E(S, W ), if Q = SQ ′.
+
+The remaining cases for the step S and step com-ponents ( A, N , R, P ) are defined in Appendix A. 
+
+ACL Trip Example (cont.). Consider the S E- 
+
+> MANTIC
+
+XP ATH query Q1 :
+
+//Day[avg(POI[node~="conference"])] 
+
+Q1 is parsed as a single-step query with an empty suffix, Q1 = S ∅, where the step S = AN P 
+
+with A = // , N = Day , P = avg (S′), and 
+
+S′ =POI[node~="conference"] . Execution then proceeds as follows (Figure 2): 1. Initialize: Let W0 = {(r, 1) }. Initialize exe-cution as E(Q, W 0).
+
+2. Reduce the query: E(Q, W 0) = E(S, W 0)
+
+3. Apply axis navigator: Let W1 = E(// , W 0)
+
+E(Q, W 0) = E N P, E(// , W 0)
+
+= E(N P, W 1).
+
+Here, axis navigator maps the root node to all its descendant nodes. 4. Apply node selector: Let W2 = E(Day , W 1)
+
+E(N P, W 1) = E P, E(Day , W 1)
+
+= E(P, W 2).
+
+Here, the node selector restricts the root node’s descendants to the Day node only. 5. Apply semantic relevance: 
+
+E(P, W 2) = E avg (S′), W 2
+
+.
+
+6. Evaluate inner recursion: 
+
+E avg (S′), W 2
+
+ yields POI-level relevance scores for each day d (i.e., how conference-related its child POIs are). For Day 2 , the POIs receive semantic relevance scores of 
+
+0.603 , 0.482 , and 0.608 for POI[node~= "conference"] , whose average gives a day-level score of 0.565 .7. Terminate: Recursion ends at the base case 
+
+E(∅, ·), selecting Day 2 with three confer-ence activities as the top-ranked match. 
+
+4 Evaluation 
+
+We evaluate S EMANTIC XP ATH against two base-lines (in-context memory and flat RAG) on two metrics: (1) average pass rate , the fraction of test requests for which the system retrieves the correct structured data and produces an output that satisfies the ground-truth constraints, and (2) token usage ,the total LLM token cost per request. 4Figure 4: Example of structured memory for three ConvAI scenarios: Travel Itinerary, To Do List, and Meal Kit Recommendation, with representative user requests covering Memory Read, Memory Write, and Memory Delete. 
+
+RQ1: In a single-turn setting with a static struc-tured memory snapshot, how does S EMANTIC 
+
+XP ATH compare against existing methods on various ConvAI tasks (e.g., Figure 4)? RQ2: In a multi-turn setting that requires dynamic memory maintenance, how does each method perform on interactions that require retrieving revision history across versions, and how does the number of turns affect token usage? 
+
+4.1 Setup Evaluation Domains. We consider three ConvAI scenarios involving structured long-term memory, with a simplified structure for each in Figure 4. • Travel itinerary : Seven-day travel plan, with each day consisting of restaurant and point-of-interest options annotated with descriptions, estimated costs, and preferences. • To-do list : Structured to-do list with task orga-nization spanning 5 categories such as work, household, and personal categories. Each cat-egory contains related projects consisting of tasks annotated with a description, progress status, priority level, and deadline. • Meal kit recommendation : 7-day meal plans for a family, where each member is offered three options per meal time, each of which is annotated with ingredients and nutrition. Each domain has a domain-specific schema and a curated interaction set consisting of 20 single-turn conversations and 5 multi-turn conversations. 
+
+Configurations. We evaluate all methods us-ing GPT-5 mini and Gemini-3 flash as LLM backbones. For flat RAG, we use the 
+
+Qwen3-Embedding-8B embedding model. For S EMANTIC XP ATH , we consider two seman-tic relevance scorers: (1) the semantic similarity-based scorer , which computes cosine similarity between the node content and the semantic rele-vance condition using Qwen3-Embedding-8B em-beddings, and (2) the entailment-based scorer ,which estimates the probability that the node content entails the relevance condition using 
+
+facebook/bart-large-mnli .
+
+4.2 Evaluation Results RQ1: single-turn evaluation. We report single-turn conversation results averaged across three domains (Figure 5, see Appendix B for domain-specific results). As shown on the left of Figure 5, SEMANTIC XP ATH achieves a comparable pass rate to the in-context method, with both signifi-cantly outperforming the flat RAG baseline. Flat RAG tends to return surface-level semantic matches that lack hierarchical reasoning. For ex-ample, for the request “ The weather forecast shows heavy rain on Day 7. Which activities are out-doors? ”, it retrieves outdoor POI across the entire trip rather than scoping results to Day 7. The in-context method requires roughly 5 ×
+
+higher token usage than the other two methods (Figure 5, right). Therefore, we can conclude that SEMANTIC XP ATH achieves comparable effective-ness to the in-context baseline while requiring sub-stantially fewer tokens. 
+
+RQ2: Multi-turn evaluation. In Figure 6, the in-context baseline shows a drop in pass rate on requests that require accessing prior conversation history, as longer and more complex contexts in-crease the chance of misidentifying relevant infor-mation. In contrast, S EMANTIC XP ATH retrieves only the relevant structured data, maintaining pass rates close to the single-turn setting. In Figure 7, we evaluate token usage across turns. 50      
+
+> 20
+> 40
+> 60
+> 80 70.0%
+> 30.0%
+> 83.0% 79.0%
+> 37.7%
+> 70.7%
+> gpt-5 mini gemini-3 flash
+> (a) Pass Rate
+> 0
+> 5000
+> 10000
+> 15000
+> 20000
+> 25000
+> 30000
+> 26,216
+> 3,250
+> 5,691
+> 25,387
+> 3,361
+> 5,830
+> gpt-5 mini gemini-3 flash
+> (b) Token Usage
+> In-context Flat RAG Semantic XPath
+
+Figure 5: Single-turn evaluation across three meth-ods. We report average pass rate ( left ) and token usage (right ) averaged over three domains. 0    
+
+> 20
+> 40
+> 60
+> 80
+> 100
+> 80.0%
+> 26.7%
+> 83.3%
+> 56.7%
+> 26.7%
+> 80.0%
+> gpt-5 mini gemini-3 flash
+> (a) Pass Rate
+> 0
+> 20000
+> 40000
+> 60000
+> 80000
+> 69,097
+> 3,327 5,850
+> 76,603
+> 3,240 5,993
+> gpt-5 mini gemini-3 flash
+> (b) Token Usage
+> In-context Flat RAG Semantic XPath
+
+Figure 6: Multi-turn evaluation across three methods. We report average pass rate ( left ) and token usage (right ) averaged over three domains. 
+
+The in-context method shows a steady increase as it appends each user request and agent response to the input at every turn, whereas S EMANTIC XP ATH 
+
+maintains stable token usage by filtering out infor-mation irrelevant to the current request. 
+
+5 Related Work 
+
+External corpus vs. conversational memory. 
+
+Prior work on memory for LLM agents often treats memory as an external corpus , namely a static col-lection of documents or passages that exists inde-pendently of the conversation (Sarthi et al., 2024; Chen et al., 2023; Li et al., 2025; Gupta et al., 2025; Wen et al., 2024, 2025; Liu et al., 2025). This setting differs from conversational memory ,where memory represents the agent’s current work-ing state for a task and is updated through inter-action, making it inherently dynamic and mutable (Sun and Zeng, 2025; Rezazadeh et al., 2024). Our focus is the conversational memory. 
+
+Flat vs. structured conversation memory. 
+
+Within conversational memory, early approaches primarily store interaction history as flat textual records with lightweight formatting or compressed summaries of past interactions (Zhong et al., 2024; Wang et al., 2025; Packer et al., 2023; Lu et al., 2023). More recent work introduces structured 1 2 3 4 5 6 7      
+
+> Turn Number
+> 0
+> 10000
+> 20000
+> 30000
+> 40000
+> 50000
+> 60000
+> Average Tokens
+> gemini-3-flash
+> 1234567
+> Turn Number
+> 0
+> 10000
+> 20000
+> 30000
+> 40000
+> 50000
+> 60000
+> gpt5-mini
+> In-context
+> Flat RAG
+> Semantic Xpath
+
+Figure 7: Token usage vs. number of turns in a multi-turn ConvAI setting. Our proposed S EMANTIC 
+
+XP ATH maintains stable token consumption across turns, whereas the in-context baseline exhibits steadily increas-ing token usage as the conversation history grows. 
+
+memory representations that organize information into hierarchies to support interaction across mul-tiple abstraction levels (Sarthi et al., 2024; Chen et al., 2023; Rezazadeh et al., 2024; Sun and Zeng, 2025; Li et al., 2025; Gupta et al., 2025). Our work focuses on structured conversational memory. 
+
+Abstractive vs. compositional hierarchies in structured memory. Structured conversational memory can be organized as an abstractive hierar-chy, where higher-level units are lossy summaries of lower-level content, or as a compositional hierar-chy that structurally organizes task-relevant infor-mation (e.g., itinerary → day → activity). While most prior methods focus on abstractive hierarchies (Sarthi et al., 2024; Chen et al., 2023; Rezazadeh et al., 2024; Sun and Zeng, 2025; Li et al., 2025; Gupta et al., 2025), compositional hierarchies are often more natural in task-oriented ConvAI because they reflect the hierarchical representation of inter-action and tasks, with each level storing distinct information (e.g., an itinerary vs. individual activi-ties). We thus focus on compositional hierarchies .
+
+6 Conclusion 
+
+This paper proposes S EMANTIC XP ATH , a tree-structured memory module for ConvAI agents. Ex-periments show that S EMANTIC XP ATH outper-forms flat RAG baselines while using substantially fewer tokens than in-context memory. We also introduce S EMANTIC XP ATH CHAT , a live demo for S EMANTIC XP ATH that visualizes structured memory and query execution details. Beyond pro-viding an engaging long-term user experience for task-oriented settings such as itinerary planning, SEMANTIC XP ATH serves as a practical frame-work for ConvAI developers to build more efficient structure-aware memory systems. 6Ethical Considerations 
+
+Our proposed method, S EMANTIC XPATH , is a tree-structured memory module for ConvAI systems. As with any LLM-based approach, the system may inherit biases, factual inaccuracies, or reasoning er-rors from the underlying LLM. Furthermore, while the structured retrieval approach adopted in our work improves efficiency and relevance, it does not guarantee factual correctness. Users should there-fore avoid over-reliance on generated outputs in high-stakes or safety-critical contexts. 
+
+References 
+
+Howard Chen, Ramakanth Pasunuru, Jason Weston, and Asli Celikyilmaz. 2023. Walking down the mem-ory maze: Beyond context limit through interactive reading. arXiv preprint arXiv:2310.05029 .James Clark and Steve DeRose. 1999. XML Path Lan-guage (XPath) Version 1.0. W3C Recommendation. Nilesh Gupta, Wei-Cheng Chang, Ngot Bui, Cho-Jui Hsieh, and Inderjit S Dhillon. 2025. Llm-guided hier-archical retrieval. arXiv preprint arXiv:2510.13217 .Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Hein-rich Küttler, Mike Lewis, Wen-tau Yih, Tim Rock-täschel, and 1 others. 2020. Retrieval-augmented gen-eration for knowledge-intensive nlp tasks. Advances in neural information processing systems , 33:9459– 9474. Rui Li, Zeyu Zhang, Xiaohe Bo, Zihang Tian, Xu Chen, Quanyu Dai, Zhenhua Dong, and Ruiming Tang. 2025. Cam: A constructivist view of agentic memory for llm-based reading comprehension. In Advances in Neural Information Processing Systems (NeurIPS) .Nelson F Liu, Kevin Lin, John Hewitt, Ashwin Paran-jape, Michele Bevilacqua, Fabio Petroni, and Percy Liang. 2024. Lost in the middle: How language mod-els use long contexts. Transactions of the association for computational linguistics , 12:157–173. Yifan Liu, Qianfeng Wen, Jiazhou Liang, Mark Zhao, Justin Cui, Anton Korikov, Armin Toroghi, Junyoung Kim, and Scott Sanner. 2025. Multimodal item scor-ing for natural language recommendation via gaus-sian process regression with llm relevance judgments. 
+
+Preprint , arXiv:2510.22023. Junru Lu, Siyu An, Mingbao Lin, Gabriele Pergola, Yu-lan He, Di Yin, Xing Sun, and Yunsheng Wu. 2023. Memochat: Tuning llms to use memos for consis-tent long-range open-domain conversation. Preprint ,arXiv:2308.08239. Charles Packer, Vivian Fang, Shishir_G Patil, Kevin Lin, Sarah Wooders, and Joseph_E Gonzalez. 2023. Memgpt: towards llms as operating systems. Alireza Rezazadeh, Zichao Li, Wei Wei, and Yujia Bao. 2024. From isolated conversations to hierarchical schemas: Dynamic tree memory representation for llms. arXiv preprint arXiv:2410.14052 .Parth Sarthi, Salman Abdullah, Aditi Tuli, Shubh Khanna, Anna Goldie, and Christopher D Manning. 2024. Raptor: Recursive abstractive processing for tree-organized retrieval. In The Twelfth International Conference on Learning Representations .Haoran Sun and Shaoning Zeng. 2025. Hierarchical memory for high-efficiency long-term reasoning in llm agents. arXiv preprint arXiv:2507.22925 .Qingyue Wang, Yanhe Fu, Yanan Cao, Shuai Wang, Zhiliang Tian, and Liang Ding. 2025. Recur-sively summarizing enables long-term dialogue mem-ory in large language models. Neurocomputing ,639:130193. Qianfeng Wen, Yifan Liu, Justin Cui, Joshua Zhang, Anton Korikov, George-Kirollos Saad, and Scott San-ner. 2025. A simple but effective elaborative query reformulation approach for natural language recom-mendation. Preprint , arXiv:2510.02656. Qianfeng Wen, Yifan Liu, Joshua Zhang, George Saad, Anton Korikov, Yury Sambale, and Scott Sanner. 2024. Elaborative subtopic query reformulation for broad and indirect queries in travel destination rec-ommendation. Preprint , arXiv:2410.01598. Xuechen Zhang, Xiangyu Chang, Mingchen Li, Amit Roy-Chowdhury, Jiasi Chen, and Samet Oymak. 2024. Selective attention: Enhancing transformer through principled context control. Advances in Neural Information Processing Systems , 37:11061– 11086. Yizhe Zhang, Siqi Sun, Michel Galley, Yen-Chun Chen, Chris Brockett, Xiang Gao, Jianfeng Gao, Jingjing Liu, and William B Dolan. 2020. Dialogpt: Large-scale generative pre-training for conversational re-sponse generation. In Proceedings of the 58th an-nual meeting of the association for computational linguistics: system demonstrations , pages 270–278. Wanjun Zhong, Lianghong Guo, Qiqi Gao, He Ye, and Yanlin Wang. 2024. Memorybank: Enhancing large language models with long-term memory. In Pro-ceedings of the AAAI Conference on Artificial Intelli-gence .
+
+7A Query Execution 
+
+A.1 Step Evaluation 
+
+E(S, W ) = 
+
+
+
+E N RP, E(A, W ), if S= 
+
+> AN RP
+
+,
+
+E N P, E(A, W ), if S= 
+
+> AN P
+
+,
+
+E N R, E(A, W ), if S=
+
+> AN R
+
+,
+
+E N, E(A, W ), if S= 
+
+> AN
+
+.
+
+A.2 Axis Selector Evaluation 
+
+Define the axis expansion operators: 
+
+E(/, W ) = 
+
+n
+
+(u, w ) ∃(v,w )∈W, u∈C(v)
+
+o
+
+,
+
+E(// , W ) = 
+
+n
+
+(u, w ) ∃(v,w )∈W, u∈D(v)
+
+o
+
+.
+
+where C(v) and D(v) denote the child and descen-dant sets of node v, respectively. The evaluation function for the axis selector is then defined as: 
+
+E(A, W ) = 
+
+
+
+E(/, W ), if A = /,
+
+E(// , W ), if A = // .
+
+A.3 Node Selector Evaluation 
+
+Define the node selector operators: 
+
+E(NodeType , W ) = 
+
+n
+
+(u, w ) (u,w )∈W, κ(u)= NodeType 
+
+o
+
+,
+
+E(*, W ) = W. 
+
+where κ(u) returns the node type of u.The evaluation function for the node selector is then defined as: 
+
+E(N, W ) = 
+
+
+
+E(NodeType , W ), if N =
+
+> NodeType
+
+,
+
+E(*, W ), if N = *.
+
+A.4 Positional Selector Evaluation 
+
+Define the positional selector operators: 
+
+E([ i], W ) = [ i]( W ),
+
+E([ −i], W ) = [ −i]( W ),
+
+E([ i:j], W ) = [ i:j]( W ),
+
+where [i]( ·), [−i]( ·), and [i:j]( ·) apply positional selection to W in the topological order. The evaluation function for the positional selec-tor is then defined as: 
+
+E(R, W ) = 
+
+
+
+E([ i], W ), if R = [ i],
+
+E([ −i], W ), if R = [ −i],
+
+E([ i:j], W ), if R = [ i:j].
+
+A.5 Semantic Relevance Operator Evaluation 
+
+We define a semantic relevance scoring function 
+
+Rel : V × Φ → [0 , 1] , which assigns a graded rele-vance score to a node u under a semantic relevance condition P ∈ Φ.
+
+Local semantic relevance. Define the relevance scoring function for local semantic relevance: 
+
+Rel (u, Local ) = Atom loc (u, Local ),
+
+where Atom loc (u, Local ) ∈ [0 , 1] is computed from either a specific attribute or the full node rep-resentation via a semantic scoring function. 
+
+Aggregation semantic relevance. If P := 
+
+Agg (S′), where the inner step S′ has the surface form S′ := N R P ′, let E(u) 
+
+> S′
+
+⊆ V denote the evidence node set obtained by structurally execut-ing S′ from u. The aggregation relevance scoring function is defined recursively as 
+
+Rel (u, Agg (S′)) = Agg 
+
+
+
+{ Rel (x, P ′) | x ∈ E (u) 
+
+> S′
+
+}
+
+
+
+,
+
+where Agg is an aggregation operator such as min ,
+
+max , avg , or gmean .The evaluation function for the semantic rele-vance operator is then defined as: 
+
+E(P, W ) = {(u, w · Rel (u, P )) | (u, w ) ∈ W }.
+
+Compositional semantic relevance. For the unary operator 1 − P , we define 
+
+Rel (u, 1 − P ) = 1 − Rel (u, P ),
+
+and the corresponding semantic relevance operator 
+
+E(1 −P, W ) = 
+
+n
+
+(u, w ·Rel (u, 1−P )) (u,w )∈W
+
+o
+
+.
+
+For binary compositional conditions, let ⊙ ∈ {avg , prod , min , max } be a binary operator on 
+
+[0 , 1] , and for any node u and relevance conditions 
+
+P1, P 2, define 
+
+Rel (u, P 1 ⊙ P2) = ⊙ Rel (u, P 1), Rel (u, P 2).
+
+The corresponding compositional semantic rele-vance operator is 
+
+E(P1⊙P2, W ) = 
+
+n
+
+(u, w ·Rel (u, P 1⊙P2)) (u,w )∈W
+
+o
+
+.
+
+The evaluation function for the semantic rele-vance operator is then defined as: 
+
+E(P, W ) = 
+
+
+
+E(Local , W ), if P =
+
+> Local
+
+,
+
+E(Agg (S′), W ), if P =
+
+> Agg (S′)
+
+,
+
+E(1 − P ′, W ), if P =1−P ′,
+
+E(P1 ⊙ P2, W ), if P =
+
+> P1⊙P2
+
+,
+
+8Model Method Scorer Itinerary To Do List Meal Kit Avg. Pass Tokens Pass Tokens Pass Tokens Pass Tokens GPT-5 mini In-context – 55.0 12,136 80.0 5,444 75.0 61,069 70.0 26,216 Flat RAG – 25.0 3,137 40.0 2,722 25.0 3,892 30.0 3,250 GPT-5 mini Semantic XPath Sem 75.0 5,548 64.0 5,937 60.0 7,013 66.3 6,166 Semantic XPath Entail 85.0 5,161 84.0 5,184 80.0 6,728 83.0 5,691 Gemini 3 Flash In-context – 95.0 12,846 72.0 10,465 70.0 52,849 79.0 25,387 Flat RAG – 35.0 3,349 48.0 2,934 30.0 3,800 37.7 3,361 Gemini 3 Flash Semantic XPath Sem 65.0 5,454 68.0 5,710 60.0 6,966 64.3 6,043 Semantic XPath Entail 75.0 5,240 72.0 5,605 65.0 6,644 70.7 5,830 
+
+Table 1: Single-turn evaluation across methods. Sem denotes the Semantic Similarity scorer and Entail denotes the Entailment scorer for S EMANTIC XP ATH . We report average pass rate and token usage with GPT-5 mini and Gemini 3 Flash as backbones across three domains: Travel Itinerary, To Do List, and Meal Kit Recommendation.                                                                                        
+
+> Model Method Scorer Itinerary To Do List Meal Kit Avg. Pass Tokens Pass Tokens Pass Tokens Pass Tokens GPT-5 mini In-context –90.0 28,342 70.0 20,398 80.0 158,552 80.0 69,097 Flat RAG –20.0 3,250 50.0 3,043 10.0 3,686 26.7 3,327 GPT-5 mini Semantic XPath Sem 50.0 5,664 100.0 6,132 60.0 7,087 70.0 6,294 Semantic XPath Entail 80.0 5,820 100.0 5,649 70.0 6,079 83.3 5,850 Gemini 3 Flash In-context –60.0 31,639 70.0 23,602 40.0 174,567 56.7 76,603 Flat RAG –20.0 3,164 50.0 2,959 10.0 3,596 26.7 3,240 Gemini 3 Flash Semantic XPath Sem 60.0 5,451 100.0 5,872 70.0 6,954 76.7 6,092 Semantic XPath Entail 60.0 5,671 100.0 5,526 80.0 6,782 80.0 5,993
+
+Table 2: Multi-turn evaluation across methods. Sem denotes the Semantic Similarity scorer and Entail denotes the Entailment scorer for S EMANTIC XP ATH . We report average pass rate and token usage with GPT-5 mini and Gemini 3 Flash as backbones across three domains: Travel Itinerary, To Do List, and Meal Kit Recommendation. 
+
+B Additional Results 
+
+Across both single-turn and multi-turn results (Ta-ble 1 and Table 2), in-context memory achieves strong pass rates but incurs very high token usage, especially on meal kit recommendation queries. SEMANTIC XP ATH substantially reduces token cost while maintaining competitive accuracy, and the entailment scorer consistently outperforms the semantic similarity scorer in pass rate for both GPT-5 mini and Gemini 3 Flash. Flat RAG remains the lowest-cost baseline but with noticeably lower pass rates. 
+
+C Case Study 
+
+Beyond the single-turn requests shown in Figure 2, a real ConvAI system must support long-term, task-oriented interactions. Users may revise a plan over many turns and later return to earlier versions or even different plans. The key challenge is whether the system can reliably retrieve the right informa-tion across revisions and plans despite ongoing edits and growing history. Below, we demonstrate a case with example plan revision requests from users using the same ACL trip example: 
+
+ACL Trip Example (cont.) We illustrate two requests that interact with revision history. 
+
+Request 1: “Cancel the poster session visit cause I need to take a client meeting.” 
+
+Query: 
+
+//POI[node~="poster"] 
+
+10 follow-up requests omitted: · · · 
+
+Request 2: “Wait, what was the poster session time again? I might be able to make it.” 
+
+Query: 
+
+//Version[node~="deletepostersession"] //POI[node~="poster"] 
+
+Result: SEMANTIC XP ATH retrieves the ver-sion created by the deletion edit, recovers the removed poster-session entry from that revision context, and returns its scheduled time. In con-trast, in-context memory fails under the longer context. 9

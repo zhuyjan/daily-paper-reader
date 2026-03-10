@@ -25,3 +25,52 @@ subscriptions:
     stage: A
     diff_threshold_pct: 15
   keyword_recall_mode: or
+  intent_profiles:
+    - tag: main
+      description: 查找相关学术论文及研究文献
+      enabled: true
+      keywords:
+        - keyword: Knowledge-based Visual Question Answering
+          keyword_cn: 基于知识库的视觉问答
+          query: Knowledge Visual Question Answering
+        - keyword: Self-envolving Agent
+          keyword_cn: 自进化智能体
+          query: S
+        - keyword: Video Agent
+          keyword_cn: 视频智能体
+          query: V
+        - keyword: Multi-modal RAG
+          keyword_cn: 多模态 RAG
+          query: M
+        - keyword: Multi-modal Memory
+          keyword_cn: 多模态记忆
+          query: M
+      intent_queries:
+        - query: Search for articles on applying traditional textual RAG methods in the multimodal domain.
+          query_cn: 检索关于将传统RAG方法用于多模态领域的文章。
+          enabled: true
+          source: manual
+          note: ''
+        - query: >-
+            I hope to learn more about articles related to solving video understanding using methods involving Agent
+            systems + Memory.
+          query_cn: 我希望了解到更多的关于使用Agent系统+Memory相关的方法解决视频理解相关的文章。
+          enabled: true
+          source: manual
+          note: ''
+        - query: I hope to learn about research related to the self evolution of agents.
+          query_cn: 我希望能了解到Agent自进化相关的研究.
+          enabled: true
+          source: manual
+          note: ''
+        - query: I hope you retrieve articles related to the task of knowledge based visual question answering (KB VQA).
+          query_cn: 我希望你检索你检索基于知识库的视觉问答这个任务相关的文章。
+          enabled: true
+          source: manual
+          note: ''
+        - query: I hope you retrieve articles related to multimodal memory of agents.
+          query_cn: 我希望你检索与智能体多模态记忆相关的文章
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-03-10T11:02:48.862Z'
