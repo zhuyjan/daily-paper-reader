@@ -1,0 +1,614 @@
+Title: Seeing as Experts Do: A Knowledge-Augmented Agent for Open-Set Fine-Grained Visual Understanding
+
+URL Source: https://arxiv.org/pdf/2603.03762v1
+
+Published Time: Thu, 05 Mar 2026 01:40:00 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# Seeing as Experts Do: A Knowledge-Augmented Agent for Open-Set Fine-Grained Visual Understanding 
+
+Junhan Chen †, Zilu Zhou †, Yujun Tong †, Dongliang Chang*, Yitao Luo, and Zhanyu Ma 
+
+School of Artificial Intelligence, Beijing University of Posts and Telecommunications, China 
+
+{chenjunhan, zhouzilu2019, tongyujun, changdongliang, lyt2022, mazhanyu }@bupt.edu.cn Question: 
+
+> Which of these birds is male?
+
+Grounding 
+
+Dino 
+
+Image 
+
+Searcher 
+
+> Similar images of bird A
+> Similar images of bird B
+> Downy
+> Woodpecker
+> Red -cockaded
+> Woodpecker
+
+Web 
+
+Searcher 
+
+Summarize                                                  
+
+> Red -cockaded
+> Woodpecker
+> Nuttall’s
+> Woodpecker
+> [A] Nuttall's woodpecker has black wings and tail
+> feathers with white barring .On the ventral surface,
+> color is white with black spots and barring, …
+> [A] The red -cockaded woodpecker's back is barred
+> with black and white horizontal stripes .Its most
+> distinguishing feature is ablack cap and nape that
+> encircle large white cheek paches, …“Find the bird’s head, back and underparts.”
+
+Global -to -Local Focusing 
+
+Discriminative Regions 
+
+Super 
+
+Resolution 
+
+Discriminative Regions Localisation 
+
+> Convert regions
+> with low resolution
+
+Candidate List Generation 
+
+> Bird A’s Candidates:
+> 1. Red -cockaded Woodpecker
+> 2. Nuttal’s Woodpecker
+
+Knowledge and Region Guided Inference          
+
+> Bird A Bird B
+> With candidates’ knowledge
+> and discriminative regions
+> Bird A Bird B
+> Convert to image url
+> Bird A’s Candidates:
+> 1. Red -cockaded Woodpecker
+> 2. Nuttal’s Woodpecker
+> Bird B ‘s Candidates:
+> 1. Downy Woodpecker
+> 2. Red -cockaded Woodpecker
+> [A] The bird exhibits a black cap and nape with
+> prominent white cheek patches with a red streak , which is
+> a distinctive feature of the Red -cockaded Woodpecker , …
+> [B] The bird has a black and white pattern on its head,
+> back, and underparts, which aligns with the description of
+> Red -cockaded Woodpecker , …
+> Knowledge of Question:
+> The male has a small red streak on each side of its black
+> cap called a cockade, hence its name, …
+> Answer:
+> The upper bird is male.
+
+Caption  Cross -Object 
+
+Correlation                   
+
+> Both two birds share ablack
+> nape and large white cheek
+> patches ;The bird Ashows a
+> faint red streak ,…
+> Bird A Bird B
+
+Inference 
+
+LMMs LMMs LMMs 
+
+LMMs 
+
+Figure 1. Overview of the Knowledge-Augmented Fine-Grained Reasoning Agent (KFRA). The agent operates through a three-stage closed reasoning loop that emulates expert analysis. (1) Candidate List Generation : KFRA performs open-vocabulary detection and web-scale retrieval to propose category hypotheses. (2) Discriminative Regions Localisation : For each hypothesis, it retrieves relevant textual knowledge and aligns distinctive cues such as colour, structure, or behaviour with corresponding visual regions through a global-to-local focusing mechanism. (3) Knowledge and Region Guided Inference : The agent integrates all multimodal evidence to perform factual and interpretable reasoning across objects and tasks. 
+
+Abstract 
+
+Fine-grained visual understanding is shifting from static classification to knowledge-augmented reasoning, where models must justify as well as recognise. Existing ap-proaches remain limited by closed-set taxonomies and single-label prediction, leading to significant degradation under open-set or context-dependent conditions. We present the Knowledge-Augmented Fine-Grained Reasoning Agent (KFRA), a unified framework that transforms fine-grained perception into evidence-driven reasoning. KFRA oper-ates through a three-stage closed reasoning loop that em-
+
+† Equal contributions. * Corresponding author. 
+
+ulates expert analysis. It first performs open-vocabulary detection and web-scale retrieval to generate category hy-potheses. It then conducts discriminative regions locali-sation by aligning textual knowledge with visual evidence through a global-to-local focusing mechanism. Finally, it integrates all multimodal evidence within a large multi-modal model to perform interpretable reasoning. Unlike existing agents that treat retrieval and reasoning as inde-pendent processes, KFRA establishes a retrieval–grounding coupling that converts retrieved knowledge into spatially grounded evidence for verification. This design enables fac-tual, interpretable, and task-agnostic reasoning across di-verse fine-grained scenarios. To evaluate this capability, 
+
+1
+
+> arXiv:2603.03762v1 [cs.CV] 4 Mar 2026
+
+we construct FGExpertBench, a benchmark designed to as-sess reasoning depth and cross-task generalisation across six knowledge dimensions. Extensive experiments demon-strate that KFRA consistently surpasses both standalone large multimodal models and current agent frameworks, achieving up to 19 percent improvement in reasoning ac-curacy and delivering evidence-grounded interpretability in open-set fine-grained visual understanding. 
+
+1. Introduction 
+
+Fine-grained visual understanding is no longer about nam-ing what an object is, but about explaining why it is what it is. The challenge is not recognition but reasoning, connect-ing perceptual evidence to the structured knowledge that de-fines expert understanding [47]. Despite years of progress, most fine-grained systems still behave like refined classi-fiers [11, 44, 52], accurate within a closed taxonomy but incapable of reasoning beyond it. Recent advances in transformer architectures [3, 17], large multimodal models post-training [15, 25, 46], and retrieval-augmented generation [14, 39] have extended per-ception to open-vocabulary settings. Yet, the optimisation goal remains unchanged: predict a single label from a fixed taxonomy (as shown in Figure 2). External cues such as at-tributes, hierarchies, or prompts enrich semantics but do not alter this objective [4, 5]. Compressing a complex instance into one categorical token collapses expert knowledge into a flat decision boundary and leaves no capacity for reason-ing about unseen subtypes, abnormal states, or contextual variations. In practice, existing fine-grained models lose up to 30–40% accuracy [6] when confronted with unseen species or domains, exposing the fragility of closed-set for-mulations. This motivates a paradigm shift from label pre-diction to evidence-driven reasoning. Fine-grained understanding is evolving from static clas-sification to knowledge-grounded reasoning, where models must justify as well as recognise. Human experts, when faced with ambiguous or novel instances, do not rely on memory alone—they hypothesise candidate categories, re-trieve references, focus on discriminative traits, and verify these hypotheses against factual knowledge before conclud-ing. This iterative process of observing, hypothesising, and verifying forms a chain of evidence that connects perception with external knowledge. Reproducing this process compu-tationally requires a system that can perceive, retrieve, lo-calise, and reason across multiple tasks rather than a single classification objective. Existing approaches fall short of constructing such reasoning chains. To bridge this gap, we introduce the Knowledge-Augmented Fine-Grained Rea-soning Agent (KFRA), which reformulates fine-grained un-derstanding as an open-set reasoning process grounded in open-world knowledge (as shown in Figure 1). KFRA generalises beyond recognition to a spectrum CNNs              
+
+> Traditional Fine -Grained Models
+> Red -cockaded Woodpecker
+> Close Set, Single Task, Simple Foreground
+> Large Multimodal Models
+> Shallow Reasoning, Static Knowledge, Hallucination
+> LMMs
+> Question:
+> Which of these birds is male?
+> Icannot determine the gender of these birds .
+> Perceive, Retrieve, Localise
+> Candidate List
+> FG -Knowledge
+> Discriminative
+> Region
+> Complex Fine -Grained Scenario
+> LMMs
+> Fine -Grained Visual Understanding
+> Object, Attribute, Action, Count, Reason, Knowledge
+> Evidence -Driven, Dynamic Knowledge, Factuality
+> Knowledge -Augmented
+> Fine -Grained Reasoning Agent
+
+Figure 2. Comparison of Fine-Grained Paradigms. KFRA advances fine-grained understanding from static classification to evidence-driven reasoning, leveraging dynamic knowledge and re-trieval–grounding coupling to achieve factual, interpretable, and task-agnostic understanding. 
+
+of fine-grained reasoning tasks, including object identifi-cation, attribute comparison, action understanding, count-ing, causal analysis, and knowledge inference. It operates through a three-stage closed reasoning loop that emulates expert analysis: (1) Candidate List Generation: KFRA per-forms open-vocabulary detection to isolate visual entities and conducts web-scale image retrieval to gather visually similar examples, forming candidate hypotheses. (2) Dis-criminative Regions Localisation: For each hypothesis, it retrieves relevant textual knowledge describing distinctive cues such as colour, structure, or behaviour, and aligns these descriptions with image regions through a global-to-local focusing mechanism. When critical details are missing, an automatic detail-enhancement tool refines local regions for higher discriminability. (3) Knowledge and Region Guided Inference: KFRA integrates all available evidence, including hypotheses, textual knowledge, and grounded re-gions, within a large multimodal model to reason across objects and modalities and to produce interpretable con-clusions. This closed-loop design ensures coherence be-tween retrieval, localisation, and inference, allowing KFRA to adapt across fine-grained tasks without retraining. Unlike general-purpose agents [22, 40, 48] that treat re-trieval and inference as loosely connected steps, KFRA establishes a retrieval–grounding coupling that transforms large multimodal models from passive label predictors into active evidence builders. Retrieved knowledge is not aux-iliary context but an actionable signal that guides spatial grounding and hypothesis verification. This coupling en-ables factual, spatially-grounded, and task-agnostic reason-ing across diverse fine-grained scenarios. To quantify these capabilities, we construct FGExpert-Bench , a benchmark that measures reasoning depth and cross-task generalisation rather than recognition accuracy. It comprises 300 images and 1,500 question–answer pairs across six knowledge dimensions: object recognition, at-Fine -Grained Object Recognition      
+
+> Which species does the bird belong to?
+> (A) Phoebastria Immutabilis
+> (B) Black -footed Albatross
+> (C) Diomedea Exulans
+> (D) Thalassarche Melanophris
+> Are the two dogs in the same breed?
+> (A) Yes
+> (B) No
+> (C) Not sure
+> Fine -Grained Attribute Extraction Fine -Grained Action Understanding
+> Which headlights are on both cars?
+> (A) Standard fixed headlights
+> (B) Pop -up headlights
+> (C) LED matrix headlights
+> (D) Hidden headlights behind the grille
+> What is the arrangement of the plant?
+> (A) Arranging alternately up the stem
+> (B) Forming a whorl around the stem
+> (C) Growing in opposite pairs
+> (D) Gathering in a rosette at the base
+> What are these two birds doing?
+> (A) Playing
+> (B) Grabbing food
+> (C) Courtship rituals
+> (D) Fighting
+> What is this aircraft combination doing?
+> (A) Cruising at high altitude
+> (B) Taking off
+> (C) Landing
+> (D) Being refueled in the air
+> Fine -Grained Counting
+> How many petals do each flower have?
+> (A) 1
+> (B) 2
+> (C) 3
+> (D) 4
+> How many male birds in the image?
+> (A) Two
+> (B) Three
+> (C) Four
+> (D) Five
+> Fine -Grained Reasoning Analysis
+> Why the aircraft have a unique nose?
+> (A) Extra fuel storage
+> (B) Better visibility for takeoff/landing
+> (C) Less drag at low speeds
+> (D) In -flight refueling
+> Why the breed different from Samoyed?
+> (A) Fur color
+> (B) Body size
+> (C) Ear shape
+> (D) Tail shape
+> What season is most likely in the picture?
+> (A) Spring
+> (B) Summer
+> (C) Autumn
+> (D) Winter
+> Fine -Grained Knowledge Inference
+> Which of the car is German -made?
+> (A) The background
+> (B) The middle
+> (C) The foreground
+> (D) None
+
+Figure 3. Overview of FGExpertBench . The benchmark introduces a structured taxonomy of fine-grained visual understanding tasks that span multiple perception and reasoning dimensions. Each category includes representative examples illustrating its task type, while the overall design enables systematic evaluation of large multimodal models in terms of reasoning depth, cross-task generalisation, and evidence grounding. 
+
+tribute extraction, action understanding, counting, reason-ing analysis, and knowledge inference (Figure 3). Each task requires synthesising perceptual cues with external knowl-edge to produce a justified answer. Experiments show that KFRA consistently surpasses both standalone large multi-modal models and existing agentic frameworks. When inte-grated with strong backbones such as GLM-4.5V [42] or Qwen3-VL [51], KFRA improves reasoning accuracy by up to 19% and delivers evidence-grounded interpretability across all dimensions. In summary, this work makes three key contributions: (1) It introduces KFRA, a knowledge-augmented reason-ing framework that unifies diverse fine-grained tasks un-der a single evidence-driven paradigm. (2) It develops a closed-loop pipeline that couples retrieval, grounded local-isation, and multimodal inference, enabling zero-shot rea-soning across tasks and domains. (3) It releases FGEx-pertBench , a benchmark for evaluating reasoning depth and cross-task generalisation in fine-grained understanding. To-gether, these advances move fine-grained vision beyond static taxonomy recognition toward dynamic, knowledge-grounded reasoning—bringing machine perception one step closer to expert-level cognition. 
+
+2. Related Work 
+
+Understanding how fine-grained reasoning emerges from perception and knowledge has long been a central challenge in visual understanding. Existing research can be grouped into three threads that our work builds upon and extends. 
+
+Fine-Grained Visual Understanding. Early work on fine-grained recognition [9, 10] largely treated the prob-lem as classification within a fixed taxonomy, focusing on distinguishing visually similar subcategories through lo-cal part detection or attention-based feature aggregation. While effective on benchmarks, such models relied heavily on category-specific supervision and lacked interpretabil-ity beyond label prediction. Recent research has begun to move toward richer understanding through hierarchical rea-soning [28, 29], multi-view perception [12, 53], and vi-sual–semantic alignment [7, 8]. These approaches intro-duce attributes, hierarchies, or textual cues to enhance se-mantics, yet the optimisation target remains unchanged: predict a single label. As a result, they struggle to rea-son about unseen subtypes or contextual variations, reveal-ing the limits of closed-set paradigms. Our work departs from these data-driven formulations by reformulating fine-grained understanding as an open-set reasoning process that constructs an explicit chain of evidence connecting percep-tion and knowledge. 
+
+Large Multimodal Models. Large multimodal mod-els (LMMs) [16, 26] have reshaped visual understand-ing by jointly learning vision–language representations through large-scale pre-training. Modern LMMs such as BLIP [27], LLaVA [30], and Qwen3-VL [51] integrate vi-sual encoders and cross-modal attention to perform open-vocabulary recognition [31], instruction following [30], and compositional reasoning [19]. However, most LMMs are designed for perception-oriented tasks and lack mecha-nisms for evidence construction or knowledge-grounded verification. Their predictions remain pattern-based rather than reason-based, limiting generalisation in fine-grained or domain-shifted settings. KFRA leverages LMMs not as static recognisers but as active reasoning engines that in-Fine -Grained Categories  
+
+> Web
+> Search
+> GPT -4o
+> Generate
+> Related Professions List:
+> 1. Ornithologist
+> 2. Animal Behavior Researcher
+> 3. Wildlife Biologist
+> 4. Bird Bander
+> 5. Birdwatcher
+> 6. ...And Many More
+> Professions Related to Images
+> Domain
+> Expert
+> Knowledge with Different Professions
+> Knowledge with Professions:
+> Ornithologist:
+> Taxonomy, Morphology, Phylogeny
+> Researcher:
+> Vocalizations, Courtship, Foraging, Aggression
+> Biologist:
+> Habitat, Distribution, Threats, Conservation
+> ...And Many More
+> Images with Profession Knowledge
+> Fine -Grained
+> Expert Benchmark
+> Q: What is the species of these birds?
+> A: Yellow -Crowned Night Heron
+> Q: What color are the eyes of a juvenile?
+> A: Yellowish or orange
+> Q: What is the primary interaction?
+> A: In an aggressive, physical conflict
+> ...And Many More
+> Fine -Grained Images
+> Yellow -Crowned Night Heron
+> Ornithologist:
+> Taxonomy, Morphology, …
+> Researcher:
+> Vocalizations, Courtship, …
+> ...And Many More
+> GPT -4o
+> Generate
+> Fine -Grained QA Pairs
+> Data
+> Filter
+> Benchmark Construction Process
+
+Figure 4. The construction pipeline of FGExpertBench . We first collect diverse fine-grained categories followed by retrieving corre-sponding images through web search. GPT-4o is then used to identify potential professional communities relevant to the image content, and domain experts check these professions while providing the corresponding knowledge scopes they focus on. Based on the curated knowledge, GPT-4o generates domain-oriented question-answer pairs. After data filtering and quality control, the finalized benchmark is produced for evaluating large multimodal models on fine-grained visual understanding. 
+
+teract with external knowledge sources. Through dynamic retrieval and grounded verification, it enables factual and interpretable reasoning beyond the capacity of monolithic LMMs. 
+
+Web and Knowledge-Augmented Agents. With the rapid progress of large language models in tool use, autonomous agents have become a promising paradigm for external knowledge acquisition. Early agents [32, 36] were limited to text-only question answering, while later systems [18, 48, 55] introduced multimodal search and reinforcement learn-ing to perform multi-step reasoning. Nevertheless, most existing agents treat retrieval and inference as independent stages and fail to ground retrieved information in visual evi-dence. Our work advances this line by introducing a closed reasoning loop that couples retrieval with grounded veri-fication. Unlike prior agents that retrieve knowledge pas-sively, KFRA integrates web-scale search, textual ground-ing, and multimodal inference into a unified process. This retrieval–grounding coupling transforms fine-grained rea-soning from label prediction into evidence construction, en-abling factual, interpretable, and task-agnostic understand-ing across diverse visual domains. 
+
+3. Methodology 
+
+We formulate fine-grained understanding as a closed rea-soning loop that connects perception, knowledge, and infer-ence. Given an input image X and a natural-language ques-tion q, the proposed Knowledge-Augmented Fine-Grained Reasoning Agent (KFRA) performs three sequential stages: 
+
+candidate list generation , discriminative regions localisa-tion , and knowledge and region guided inference , which together emulate the analytical process of human experts. To enable systematic evaluation, we also introduce a new benchmark, FGExpertBench , as described in Section 3.1.                              
+
+> Dimensions FOCI Bench FG BMK KVG Bench Naut Data FGExpert Bench
+> Object
+> Attribute ✗✗✗
+> Action ✗✗✗✗
+> Count ✗✗✗
+> Reason ✗✗
+> Knowledge ✗✗✗✗
+> ✓✓✓✓✓
+> ✓✓
+> ✓
+> ✓✓
+> ✓✓✓
+> ✓
+
+Table 1. Comparison with Similar Benchmarks. FGExpert-Bench provides broader and more comprehensive coverage of fine-grained understanding dimensions than existing benchmarks. 
+
+3.1. Benchmark Construction 
+
+FGExpertBench is designed to evaluate the capability of models to bridge perceptual understanding with domain-specific knowledge. Unlike conventional visual question answering datasets, it adopts a category-based reasoning 
+
+setting, where correct answers depend on recognising the depicted instance and reasoning with its corresponding ex-pert knowledge. The benchmark is constructed through a semi-automated pipeline combining open-set data sam-pling, model-assisted generation, and expert verification. 
+
+Benchmark Dimensions and Taxonomy. The benchmark covers six reasoning dimensions that reflect the progressive nature of fine-grained understanding: object recognition, at-tribute extraction, action understanding, counting, reason-ing analysis, and knowledge inference. Each dimension evaluates a distinct aspect of perception and reasoning, as illustrated in Figure 3. • Object Recognition: Identify the object’s fine-grained category or determine whether instances belong to the same superclass. • Attribute Extraction: Perceive discriminative attributes (e.g., colour, texture, morphology) and reason about their semantic implications. • Action Understanding: Interpret subject behaviours and infer purpose (e.g., feeding, courtship). • Counting: Identify and enumerate fine-grained visual or conceptual entities. • Reasoning Analysis: Explain causal or functional rela-tionships underlying visual phenomena. • Knowledge Inference: Integrate external knowledge for higher-level reasoning, such as environment, geography, or culture. We analyse the coverage of reasoning dimensions across existing fine-grained benchmarks, as shown in Table 1. The comparison reveals a clear gap. Current datasets such as 
+
+FOCI-Bench [13], FG-BMK [54], KVG-Bench [34], and 
+
+NautData [50] focus mainly on object recognition, with limited support for attributes, actions, or reasoning. FG-ExpertBench is designed to fill this gap by providing bal-anced coverage across all dimensions and enabling a more systematic evaluation of fine-grained reasoning. 
+
+Benchmark Construction Pipeline. As shown in Fig-ure 4, we first assemble a broad category space from both traditional fine-grained datasets (e.g., CUB-200-2011 [43], FGVC-Aircraft [35], Stanford Dogs [20]) and open-world web sources to ensure diverse coverage. Unlike conven-tional datasets featuring single-object scenes, FGExpert-Bench deliberately includes multi-object and complex con-texts to evaluate reasoning robustness. For each category, web retrieval is performed, followed by automatic semantic analysis using GPT-4o to iden-tify related professional communities (e.g., ornithologists, botanists) and their focus dimensions. Domain experts then refine this mapping and guide GPT-4o to generate accu-rate question–answer pairs based on verified domain knowl-edge. All samples are further reviewed to ensure factual accuracy and conceptual diversity. This process reduces annotation effort while maintain-ing expert-level quality. The final benchmark contains 300 images and 1,500 QA pairs distributed across six reasoning dimensions, offering a balanced and challenging testbed for knowledge-grounded reasoning. The statistics of the bench-mark are provided in Supplementary Material .
+
+3.2. Model Architecture 
+
+KFRA operationalises expert reasoning through a three-stage closed reasoning loop , where each stage progres-sively refines and verifies the previous one. This architec-ture redefines fine-grained understanding as an evidence-driven reasoning process that connects perception, retrieval, and knowledge grounding within a unified framework (as shown in Figure 1). The agent is implemented through a set of specialised perception and reasoning tools coordinated by a large multimodal controller, whose implementation de-tails are provided in Section 4.1. 
+
+Stage 1: Candidate List Generation. The first stage constructs an open-set hypothesis space guided by vi-sual–semantic retrieval. Given an input image X and ques-tion q, KFRA first performs open-vocabulary detection via 
+
+Fdet (·):
+
+{xi}Ni=1 = Fdet (X), (1) where xi denotes the i-th detected entity (i.e., an object re-gion), and N is the total number of detected objects in X.For each xi, the image retriever Simg (·) searches the web for visually similar examples and associated captions: 
+
+Rimg  
+
+> i
+
+= {(Iij , T ij )}Mj=1 , (2) where Iij and Tij denote the j-th retrieved image and its ac-companying textual description, respectively, and M is the number of top-ranked retrieval results retained as visual ev-idence. A large multimodal model Flmm (·) then integrates these results with the query q to generate a ranked list of category hypotheses: 
+
+Ci = {(c, p i(c)) | c ∈ Y i}, (3) where Yi represents the open-set label space inferred from the retrieved content, c is a candidate category, and pi(c) de-notes the confidence assigned to hypothesis c by Flmm (·).This stage departs from conventional closed-set classifi-cation by constructing a retrieval-augmented hypothesis space, enabling open-world generalisation without dataset-specific supervision. 
+
+Stage 2: Discriminative Regions Localisation. The sec-ond stage grounds retrieved knowledge to spatial evidence through knowledge-guided localisation. For each candidate hypothesis c ∈ Ci, the textual retriever Stex (·) extracts rel-evant factual descriptions: 
+
+Ki,c = Stex (c), (4) where Ki,c is a set of textual knowledge related to category 
+
+c, typically describing morphological, behavioural, or con-textual cues (e.g., “red beak”, “striped wings”). The textual knowledge Ki,c is then parsed into a structured set of dis-criminative attributes: 
+
+Ai,c = {a(k) 
+
+> i,c
+
+}mi,c  
+
+> k=1
+
+, (5) where each a(k) 
+
+> i,c
+
+denotes the k-th discriminative cue (such as a body part or distinctive colour) and mi,c is the num-ber of cues extracted from Ki,c . A global-to-local focusing module Ff oc (·) then aligns each cue with its corresponding visual region: 
+
+(M(k) 
+
+> i,c
+
+, s (k) 
+
+> i,c
+
+) = Ff oc (xi, a (k) 
+
+> i,c
+
+), (6) where M(k) 
+
+> i,c
+
+∈ [0 , 1] h×w is the attention mask indicating the spatial distribution of cue a(k) 
+
+> i,c
+
+on region xi, and s(k)
+
+> i,c
+
+is the alignment confidence. The focusing module oper-ates in a coarse-to-fine manner: the global stage employs CLIP-style semantic similarity to roughly locate relevant regions, while the local stage applies patch-level attention refinement to delineate precise boundaries. When fine de-tails are missing or misaligned (i.e., max k s(k) 
+
+> i,c
+
+< τ ), the OseDiff super-resolution enhancer Fsr (·) reconstructs the most confident region to recover high-frequency details: 
+
+˜xi = Fsr (xi ⊙ M (k⋆) 
+
+> i,c
+
+), k⋆ = arg max  
+
+> k
+
+s(k) 
+
+> i,c
+
+, (7) where ˜xi is the enhanced region centred on the most re-liable cue a(k⋆) 
+
+> i,c
+
+, and ⊙ denotes element-wise masking. The enhanced patch is reprocessed by Ff oc (·) to refine localisation. Through this stage, KFRA realises a re-trieval–grounding coupling mechanism: textual knowledge directs attention localisation, while visual evidence itera-tively refines retrieved cues, forming a bidirectional link be-tween semantics and perception. 
+
+Stage 3: Knowledge and Region Guided Inference. The final stage integrates multimodal evidence into a unified rea-soning process. For each object, an evidence tuple is con-structed: 
+
+Ei = {(c, p i(c), Ki,c , Ai,c , Mi,c ) | c ∈ Ci}, (8) where Ei aggregates all available information for the i-th object, including category hypotheses c, their confidence scores pi(c), associated textual knowledge Ki,c , discrim-inative attributes Ai,c , and grounded visual masks Mi,c .The large multimodal model then performs reasoning con-ditioned on the accumulated evidence: 
+
+P (y|X, q ) = Flmm (X, q, {Ei}Ni=1 ), (9) 
+
+ˆy = arg max  
+
+> y
+
+P (y|X, q ), (10) where P (y|X, q ) represents the probability distribution over possible answers given image X and question q, and ˆy
+
+is the final predicted answer. If ˆy exhibits low confidence, the controller re-invokes earlier stages to refine hypothe-ses or localisation, completing the self-corrective reasoning loop. Through this design, KFRA transforms large multi-modal models from passive recognisers into active reason-ing agents capable of constructing, verifying, and revising evidence dynamically. 
+
+Discussion. KFRA unifies perception, retrieval, and rea-soning within a self-corrective framework, achieving fac-tual, interpretable, and task-agnostic fine-grained under-standing across open-world scenarios without any task-specific retraining. 
+
+4. Experiments 
+
+In this section, we conduct extensive experiments to eval-uate and analyze our proposed method. Section 4.1 de-scribes experimental settings, Section 4.2 compares KFRA                                                                                                                                                                  
+
+> Models Obj. Attr. Act. Cnt. Rsn. Know. Average
+> Phi-3.5-4B [1] 36.45 46.94 51.02 47.33 56.00 45.76 47.47 Gemma3-it-4B [41] 45.81 51.02 55.10 51.33 45.33 54.00 50.43 LLaVA-OneVision-7B [23] 31.03 36.73 48.98 40.67 34.67 44.27 39.39 LLaVA-Next-8B [24] 31.53 51.02 57.14 44.00 36.67 42.24 43.77 InternVL3-8B [56] 42.36 52.04 61.22 58.00 55.33 52.24 53.53 InternVL3.5-8B [45] 39.41 47.96 65.31 61.33 54.66 51.18 53.31 GLM-4.1V-9B [42] 62.56 63.27 57.14 64.67 59.33 58.71 60.95 GLM-4.5V-12B [42] 65.52 64.29 67.34 64.67 65.33 65.29 65.41 Qwen2.5-VL-7B [2] 33.50 42.86 63.27 46.67 34.00 41.53 48.64 Qwen2.5-VL-72B [2] 57.64 51.02 69.39 69.33 66.67 63.65 62.95 Qwen3-VL-8B [51] 51.72 63.27 75.51 53.33 56.67 56.71 59.54 Qwen3-VL-A22B [51] 64.53 61.22 73.47 66.67 67.33 66.24 66.58 GLM-4V-Plus 47.29 45.92 63.27 64.67 58.00 48.35 54.58 Qwen-VL-Plus 60.10 57.14 75.51 66.00 56.00 61.53 62.71 GPT-4o 66.50 65.31 67.35 61.33 68.46 61.19 65.03 Doubao-1.5-Vision-Pro 71.92 66.32 73.47 67.33 71.33 68.47 69.81 Gemini-2.5-Flash 68.96 69.39 71.43 69.33 68.67 72.12 69.98 VSA [55] 31.68 44.90 51.02 31.33 38.67 37.81 39.24 MMSearch [18] 27.09 39.80 38.78 26.00 48.00 41.65 36.81
+> Open-Source Commercial Agent-Based
+> KFRA (Qwen2.5-VL-7B) 68.47 64.29 75.51 68.00 64.67 65.76 67.78 KFRA (Qwen3-VL-8B) 69.54 72.45 83.67 65.33 70.67 69.41 71.85 KFRA (GLM-4.5V-12B) 74.88 74.49 77.55 71.33 75.33 75.29 74.81
+
+Table 2. Quantitative results (%) on FGExpertBench. KFRA achieves strong and consistent performance across all dimensions, showing superior fine-grained perception and reasoning ability. 
+
+Bold indicates the best performance in each column. 
+
+with existing methods on FGExpertBench and traditional fine-grained image classification datasets, and Section 4.3 provides further analysis of our method. 
+
+4.1. Experimental Setting 
+
+Implementation Details. KFRA is implemented as a tool-augmented reasoning framework coordinated by a Qwen3-A3B [51] controller. The open-vocabulary detection mod-ule employs Grounding-DINO [31], while the global-to-local focusing module is constructed upon VisionRea-soner [33]. For external retrieval, we adopt Google Lens for web-scale visual search and Wikipedia for textual knowl-edge reference. OseDiff [49] is integrated as a super-resolution enhancer to recover fine-grained details when critical cues are visually degraded. All experiments are con-ducted on a single NVIDIA H20 GPU under identical infer-ence settings across all comparisons. 
+
+Comparison Methods. We compare KFRA against a com-prehensive set of large multimodal models (LMMs) and re-cent agent-based frameworks. The evaluated LMMs cover both open-source and commercial systems to ensure fair and representative benchmarking. Open-source models in-clude Phi-3.5 [1], Gemma3-it [41], LLaVA-OneVision [23], LLaVA-Next [24], InternVL3 and InternVL3.5 [45, 56], GLM-4.1V and GLM-4.5V [42], Qwen2.5-VL [2], and Qwen3-VL [51]. Commercial models include GLM-4V-Plus, Qwen-VL-Plus, GPT-4o, Doubao-1.5-Vision-Pro, and Gemini-2.5-Flash. For agent-based baselines , we consider VSA [55] and MMSearch [18], which represent current paradigms for multimodal retrieval–reasoning agents. All models are evaluated using official checkpoints and default settings to ensure consistency across comparisons. 
+
+Evaluation Datasets and Metrics. We primarily evalu-ate KFRA on the proposed FGExpertBench , which mea-Question B:        
+
+> What feature sets this sled dog apart?
+> Results
+> B. Rectangular head
+> A. Long legs
+> D. Dropped ears
+> A. Long legs
+> D. Dropped ears
+> B. Rectangular head
+> Models
+> Qwen3 -VL -7B
+> GLM -4.5V
+> GPT -4o
+> Doubao -1.5 -Vision -Pro
+> Gemini -2.5 -Flash
+> KFRA (GLM -4.5V)
+> Question A:
+> Are these birds in the same species?
+> Results
+> A. Yes
+> A. Yes
+> C. Not sure
+> A. Yes
+> B. No
+> B. No
+> Models
+> Qwen3 -VL -7B
+> GLM -4.5V
+> GPT -4o
+> Doubao -1.5 -Vision -Pro
+> Gemini -2.5 -Flash
+> KFRA (GLM -4.5V)
+> Question D:
+> How many petals do the flowers have?
+> Results
+> B. Five petals
+> B. Five petals
+> B. Five petals
+> B. Five petals
+> B. Five petals
+> C. Six petals
+> Models
+> Qwen3 -VL -7B
+> GLM -4.5V
+> GPT -4o
+> Doubao -1.5 -Vision -Pro
+> Gemini -2.5 -Flash
+> KFRA (GLM -4.5V)
+> Question C:
+> When did this car sell most worldwide?
+> Results
+> B. 2018
+> A. 2017
+> B. 2018
+> B. 2018
+> C. 2019
+> C. 2019
+> Models
+> Qwen3 -VL -7B
+> GLM -4.5V
+> GPT -4o
+> Doubao -1.5 -Vision -Pro
+> Gemini -2.5 -Flash
+> KFRA (GLM -4.5V)
+> Question E:
+> Which country can’t produce this aircraft?
+> Results
+> A. Jordan
+> C. Uruguay
+> C. Uruguay
+> B. China
+> D. Lebanon
+> B. China
+> Models
+> Qwen3 -VL -7B
+> GLM -4.5V
+> GPT -4o
+> Doubao -1.5 -Vision -Pro
+> Gemini -2.5 -Flash
+> KFRA (GLM -4.5V)
+
+Figure 5. Qualitative results of all comparison methods on FGExpertBench . KFRA produces the most accurate answers across diverse fine-grained scenarios, highlighting the strong capability in visual reasoning and multimodal understanding. 
+
+sures reasoning depth and cross-task generalisation across six knowledge dimensions. To further assess the adaptabil-ity of KFRA to conventional recognition settings, we ad-ditionally test on six widely used fine-grained image clas-sification (FGIC) datasets, including CUB-200-2011 [43], Stanford Cars [21], Stanford Dogs [20], Oxford 102 Flow-ers [37], FGVC-Aircraft [35], and Oxford-IIIT Pets [38]. Following [15], all datasets are reformulated into a unified question–answer format, where each question corresponds to a visual query with one correct answer among multiple candidates. Accuracy of model responses is reported as the evaluation metric, and the final score is computed as the av-erage accuracy across all categories and dimensions. 
+
+4.2. Comparison with Existing Methods 
+
+Quantitative Results. Table 2 presents the overall results on FGExpertBench . KFRA achieves consistent state-of-the-art performance across all six reasoning dimensions, substantially surpassing both open-source and commer-cial multimodal models. When built upon GLM-4.5V, it reaches the highest average accuracy of 74.81%, out-performing Gemini-2.5-Flash by 4.83%. When integrated with Qwen2.5-VL, KFRA delivers a remarkable 19.14% improvement over its base model, demonstrating strong open-set generalisation and robustness across knowledge dimensions. Among agent-based frameworks, KFRA also shows clear superiority: VSA and MMSearch achieve only 39.24% and 36.81%, respectively, as their retrieval proce-dures lack fine-grained category alignment and fail to estab-lish evidence-grounded reasoning. Note that KFRA particu-larly excels in Reasoning and Knowledge categories, under-scoring its advantage in tasks that require explicit evidence construction and knowledge grounding. 
+
+Qualitative Results. Figure 5 provides qualitative compar-isons illustrating how KFRA performs reasoning through explicit evidence construction. Across diverse fine-grained scenarios, KFRA produces correct and interpretable an-swers where existing large multimodal models exhibit se-mantic confusion or local bias. In Question A , two visually                                                                                                                                             
+
+> Models Bird Car Dog Air. Flwr. Pet Avg.
+> Phi-3.5-4B [1] 40.66 44.31 41.52 30.57 48.02 61.87 44.49 Gemma3-it-4B [41] 50.05 91.07 66.66 66.82 81.25 86.35 73.70 LLaVA-OneVision-7B [23] 34.14 61.77 51.99 53.56 51.21 62.06 52.46 LLaVA-Next-8B [24] 31.58 37.56 29.27 18.36 40.15 46.09 33.84 InternVL3-8B [56] 51.28 70.80 58.47 57.40 65.47 80.49 63.99 InternVL3.5-8B [45] 52.50 71.38 52.27 58.78 58.74 78.82 62.13 GLM-4.1V-9B [42] 65.96 72.84 64.86 65.74 85.20 91.31 74.32 GLM-4.5V-12B [42] 83.53 94.79 85.94 77.23 90.68 95.34 87.92 Qwen2.5-VL-7B [2] 41.08 68.05 56.43 47.19 74.52 81.68 61.49 Qwen2.5-VL-72B [2] 74.09 81.84 69.24 61.24 87.14 86.89 76.74 Qwen3-VL-8B [51] 38.95 67.52 51.79 45.00 80.87 76.70 60.14 Qwen3-VL-A22B [51] 73.44 84.57 71.29 70.33 89.69 86.05 79.23 GPT-4o 81.36 93.21 83.30 85.06 93.17 91.77 87.98 Doubao-1.5-Vision-Pro 81.12 86.90 79.97 73.12 92.01 92.56 84.28 Gemini-2.5-Flash 84.41 92.89 84.42 83.92 93.72 95.23 89.10 Finedefics-8B [15] 57.61 84.67 72.86 63.82 89.88 92.18 76.84 DeepPerception-7B [34] 67.86 91.75 78.29 75.31 93.06 93.00 83.21
+> Open-Source Com. SOTA
+> KFRA (Qwen2.5-VL-7B) 83.28 92.41 79.24 80.56 83.23 91.88 85.10 KFRA (GLM-4.5V-12B) 86.52 95.85 87.66 81.04 93.83 96.51 90.24
+
+Table 3. Experimental results (%) on six conventional FGIC datasets. KFRA achieves the competitive performance across all datasets. Bold indicates the best performance in each column. 
+
+similar species—Snow Goose and Ross Goose—are cor-rectly distinguished by KFRA through localisation of di-agnostic cues around the beak and wing bar, while most other models collapse them into a single class. In Ques-tion B , KFRA identifies a Chinook breed by grounding tex-tual traits such as “black muzzle” and “arched neck”, which competing models misinterpret due to missing fine-scale at-tention. Questions C and D highlight structural reasoning: KFRA recognises the BMW i3 model year and correctly infers the petal structure of Gardenia jasminoides, avoid-ing the common bias toward more salient but irrelevant fea-tures. Finally, in Question E , the agent links a Robinson R44 helicopter to its correct origin, demonstrating factual reasoning via retrieved external knowledge. These exam-ples collectively show that KFRA’s closed reasoning loop: linking retrieval, grounding, and verification, which enables factual, spatially grounded, and interpretable fine-grained understanding that generalises beyond pattern recognition. 
+
+4.3. Further Analysis 
+
+Comparison on FGIC Datasets. To validate the gen-eralisation capability of KFRA, we evaluate its perfor-Original Image  FGKA  Original Image  FGKA                           
+
+> Dog. Stool. Sofa. Plant. Labrador Retriever .Wire -Haired Dachshund .
+> Pols Potten Stub End Table .Bluebell Pet Bed .
+> Aspidistra Elatior .
+> Elephant. Giraffe. Bird. Rhinoceros.
+> Wildebeest. Boar. Zebra.
+> African Bush Elephant .Masai Giraffe .Black
+> Kite .White Stork .Southern White Rhinoceros .
+> Blue Wildebeest .Warthog .Plains Zebra .
+
+Figure 6. Visualisation of the “Fine-Grained Anything” Effect. Starting from coarse detections guided by LMM-generated tags and Grounding-DINO, KFRA performs knowledge-driven reasoning, refining coarse predictions into precise fine-grained categories. 
+
+mance on six conventional fine-grained image classifica-tion (FGIC) benchmarks, as reported in Table 3. Despite being trained without any task-specific supervision, KFRA achieves highly competitive results across all datasets. When built upon GLM-4.5V, it attains the best average ac-curacy of 90.24%, surpassing Gemini-2.5-Flash (89.10%) and DeepPerception-7B (83.21%). Even with a lighter backbone such as Qwen2.5-VL-7B, KFRA still reaches 85.10%, marking a 23.61% improvement over the base model. This substantial gain demonstrates that the proposed closed reasoning loop not only enhances interpretability but also improves recognition robustness in traditional classifi-cation settings. 
+
+Fine-Grained Anything. To assess the broader appli-cability of KFRA, we extend it to open-world scenarios, demonstrating its potential for “fine-grained anything” rea-soning. Specifically, GLM-4.5V first analyses the image context to generate descriptive tags, which are then used as prompts for Grounding-DINO to guide spatial locali-sation. The detected regions are subsequently refined by KFRA for category-level reasoning, as shown in Figure 6. KFRA accurately localises and distinguishes fine-grained categories that models fail to recognise, revealing that its closed reasoning loop extends beyond question answering. By coupling perception with knowledge-driven inference, KFRA transforms generic open-vocabulary detectors into fine-grained experts capable of precise recognition in com-plex open-world settings. 
+
+Ablation Study. To evaluate the role of each component, we conduct a removal ablation on FGExpertBench using Qwen2.5-VL-7B as the backbone and the standalone model (48.64%) as baseline. Table 4 shows that accuracy gradu-ally increases as more tools are enabled. When only percep-tion modules (VS, OD, GF, SR) are used, the accuracy rises slightly to 49.56%, indicating limited improvement with-out factual grounding. Introducing the knowledge reference (KR) brings steady gains, reaching 50.21% and confirming the importance of external knowledge. With all modules activated, KFRA achieves 67.78%, a +19.14% overall im-provement. KR contributes the most, while VS and OD en-                                      
+
+> KR VS OD GF SR Acc. % Imp. %
+> 48.64 -
+> ✓✓✓✓49.56 +0.92
+> ✓✓✓✓50.21 +1.57
+> ✓✓✓✓52.83 +4.19
+> ✓✓✓✓57.15 +8.51
+> ✓✓✓✓63.42 +14.78
+> ✓✓✓✓✓67.78 +19.14
+
+Table 4. Ablation study of tools within KFRA on FGExpert-Bench . #Acc. denotes the average accuracy. #Imp. denotes the improvement above baseline. Bold indicates the best performance. 
+
+sure reliable hypotheses, and GF with SR enhance spatial alignment and fine-detail verification. These results demon-strate that retrieval and grounding act synergistically, form-ing the closed reasoning loop that transforms large multi-modal models into evidence-driven reasoning agents. 
+
+5. Limitations 
+
+Although KFRA achieves strong generalisation and inter-pretability, it still faces several limitations. The frame-work relies on external APIs for retrieval and knowledge access, which may cause latency or errors in retrieved infor-mation. Its multi-step design increases computational cost compared with single-pass models. In addition, FGExpert-Bench currently has limited domain coverage, and broader extensions would further validate generality. 
+
+6. Conclusion 
+
+We introduced the Knowledge-Augmented Fine-Grained Reasoning Agent (KFRA) , a framework that transforms recognition into reasoning through a closed loop of percep-tion, grounding, and inference. KFRA converts retrieved knowledge into verifiable spatial evidence, enabling factual and interpretable reasoning across open-set scenarios. We also proposed FGExpertBench to evaluate reasoning depth and generalisation. Experiments confirm that KFRA ad-vances fine-grained understanding beyond classification to-ward expert-level reasoning. Acknowledgements. This work was supported by the National Natural Science Foundation of China (Grant 62406171, 62225601, U23B2052, 62306031), in part by the Beijing Natural Science Foundation Project No. L242025, in part by the Guizhou Province Science and Technology Plan Project (No. QianKeHeZhongDa [2025]031), and in part by the Fundamental Research Funds for the Beijing University of Posts and Telecommunications under Grant 2025AI4S15. 
+
+References 
+
+[1] Marah Abdin, Jyoti Aneja, Harkirat Behl, S´ ebastien Bubeck, Ronen Eldan, Suriya Gunasekar, Michael Harrison, Russell J Hewett, Mojan Javaheripi, Piero Kauffmann, et al. Phi-4 technical report. arXiv preprint arXiv:2412.08905 , 2024. 6, 7[2] Shuai Bai, Keqin Chen, Xuejing Liu, Jialin Wang, Wenbin Ge, Sibo Song, Kai Dang, Peng Wang, Shijie Wang, Jun Tang, et al. Qwen2. 5-vl technical report. arXiv preprint arXiv:2502.13923 , 2025. 6, 7 [3] Qi Bi, Beichen Zhou, Wei Ji, and Gui-Song Xia. Universal fine-grained visual categorization by concept guided learn-ing. IEEE Transactions on Image Processing , 2025. 2 [4] Dongliang Chang, Kaiyue Pang, Yixiao Zheng, Zhanyu Ma, Yi-Zhe Song, and Jun Guo. Your “flaming” is my “bird”: Fine-grained, or not. In CVPR , 2021. 2 [5] Dongliang Chang, Kaiyue Pang, Ruoyi Du, Yujun Tong, Yi-Zhe Song, Zhanyu Ma, and Jun Guo. Making a bird ai expert work for you and me. IEEE Transactions on Pattern Analysis and Machine Intelligence , 2023. 2 [6] Dongliang Chang, Yujun Tong, Ruoyi Du, Timothy Hospedales, Yi-Zhe Song, and Zhanyu Ma. An erudite fine-grained visual classification model. In CVPR , 2023. 2 [7] Zheng Chang, Shuchen Weng, Yu Li, Si Li, and Boxin Shi. L-coder: Language-based colorization with color-object de-coupling transformer. In ECCV , 2022. 3 [8] Zheng Chang, Shuchen Weng, Peixuan Zhang, Yu Li, Si Li, Boxin Shi, et al. L-cad: Language-based colorization with any-level descriptions using diffusion priors. 2023. 3 [9] Junhan Chen, Dongliang Chang, Yujun Tong, Ruoyi Du, Yingqing Wang, Zhanyu Ma, and Yi-Zhe Song. Fcnet: Ex-tracting undistorted images for fine-grained image classifica-tion. Neurocomputing , 2025. 3 [10] Ruoyi Du, Dongliang Chang, Ayan Kumar Bhunia, Jiyang Xie, Zhanyu Ma, Yi-Zhe Song, and Jun Guo. Fine-grained visual classification via progressive multi-granularity train-ing of jigsaw patches. In ECCV , 2020. 3 [11] Ruoyi Du, Dongliang Chang, Kongming Liang, Timothy Hospedales, Yi-Zhe Song, and Zhanyu Ma. On-the-fly cate-gory discovery. In CVPR , 2023. 2 [12] Ruoyi Du, Wenqing Yu, Heqing Wang, Ting-En Lin, Dongliang Chang, and Zhanyu Ma. Multi-view active fine-grained visual recognition. In ICCV , 2023. 3 [13] Gregor Geigle, Radu Timofte, and Goran Glavaˇ s. African or european swallow? benchmarking large vision-language models for fine-grained object classification. In EMNLP ,2024. 5 [14] Jingxuan Han, Zhendong Mao, Yi Liu, Yexuan Che, Zheren Fu, and Quan Wang. Fine-grained knowledge enhancement for retrieval-augmented generation. In ACL , 2025. 2 [15] Hulingxiao He, Geng Li, Zijun Geng, Jinglin Xu, and Yuxin Peng. Analyzing and boosting the power of fine-grained vi-sual recognition for multi-modal large language models. In 
+
+ICLR , 2025. 2, 7 [16] Ailin Huang, Chengyuan Yao, Chunrui Han, Fanqi Wan, Hangyu Guo, Haoran Lv, Hongyu Zhou, Jia Wang, Jian Zhou, Jianjian Sun, et al. Step3-vl-10b technical report. 
+
+arXiv preprint arXiv:2601.09668 , 2026. 3 [17] Yueting Huang, Zhenzhe Hechen, Mingliang Zhou, Zheng-guo Li, and Sam Kwong. An attention-locating algorithm for eliminating background effects in fine-grained visual clas-sification. IEEE Transactions on Circuits and Systems for Video Technology , 2025. 2 [18] Dongzhi Jiang, Renrui Zhang, Ziyu Guo, Yanmin Wu, Peng-shuo Qiu, Pan Lu, Zehui Chen, Guanglu Song, Peng Gao, Yu Liu, et al. Mmsearch: Unveiling the potential of large models as multi-modal search engines. In ICLR , 2025. 4, 6 [19] Xuan Ju, Xian Liu, Xintao Wang, Yuxuan Bian, Ying Shan, and Qiang Xu. Brushnet: A plug-and-play image inpainting model with decomposed dual-branch diffusion. In ECCV ,2024. 3 [20] Aditya Khosla, Nityananda Jayadevaprakash, Bangpeng Yao, and Fei-Fei Li. Novel dataset for fine-grained image categorization: Stanford dogs. In CVPR Workshop , 2011. 5, 7[21] Jonathan Krause, Michael Stark, Jia Deng, and Li Fei-Fei. 3d object representations for fine-grained categorization. In 
+
+ICCV Workshop , 2013. 7 [22] Xin Lai, Junyi Li, Wei Li, Tao Liu, Tianjian Li, and Hengshuang Zhao. Mini-o3: Scaling up reasoning pat-terns and interaction turns for visual search. arXiv preprint arXiv:2509.07969 , 2025. 2 [23] Bo Li, Yuanhan Zhang, Dong Guo, Renrui Zhang, Feng Li, Hao Zhang, Kaichen Zhang, Peiyuan Zhang, Yanwei Li, Zi-wei Liu, et al. Llava-onevision: Easy visual task transfer. 
+
+arXiv preprint arXiv:2408.03326 , 2024. 6, 7 [24] Feng Li, Renrui Zhang, Hao Zhang, Yuanhan Zhang, Bo Li, Wei Li, Zejun Ma, and Chunyuan Li. Llava-next-interleave: Tackling multi-image, video, and 3d in large multimodal models. arXiv preprint arXiv:2407.07895 , 2024. 6, 7 [25] Geng Li, Jinglin Xu, Yunzhen Zhao, and Yuxin Peng. Dyfo: A training-free dynamic focus visual search for enhancing lmms in fine-grained visual understanding. In CVPR , 2025. 2[26] Hongyu Li, Jinyu Chen, Ziyu Wei, Shaofei Huang, Tian-rui Hui, Jialin Gao, Xiaoming Wei, and Si Liu. Llava-st: A multimodal large language model for fine-grained spatial-temporal understanding. In CVPR , 2025. 3 [27] Junnan Li, Dongxu Li, Caiming Xiong, and Steven Hoi. Blip: Bootstrapping language-image pre-training for unified vision-language understanding and generation. In ICML ,2022. 3 [28] Kongming Liang, Xinran Wang, Haiwen Zhang, Zhanyu Ma, and Jun Guo. Hierarchical visual attribute learning in the wild. In ACM MM , 2023. 3 [29] Kongming Liang, Zijin Yin, Min Min, Yan Liu, Zhanyu Ma, and Jun Guo. Learning dynamic prototypes for visual pattern debiasing. International Journal of Computer Vision , 2024. 3[30] Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong Jae Lee. Visual instruction tuning. In NeurIPS , 2023. 3 [31] Shilong Liu, Zhaoyang Zeng, Tianhe Ren, Feng Li, Hao Zhang, Jie Yang, Qing Jiang, Chunyuan Li, Jianwei Yang, Hang Su, et al. Grounding dino: Marrying dino with grounded pre-training for open-set object detection. In 
+
+ECCV , 2024. 3, 6 [32] Xiao Liu, Hanyu Lai, Hao Yu, Yifan Xu, Aohan Zeng, Zhengxiao Du, Peng Zhang, Yuxiao Dong, and Jie Tang. Webglm: towards an efficient web-enhanced question an-swering system with human preferences. In ACM SIGKDD ,2023. 4 [33] Yuqi Liu, Tianyuan Qu, Zhisheng Zhong, Bohao Peng, Shu Liu, Bei Yu, and Jiaya Jia. Visionreasoner: Unified visual perception and reasoning via reinforcement learning. arXiv preprint arXiv:2505.12081 , 2025. 6 [34] Xinyu Ma, Ziyang Ding, Zhicong Luo, Chi Chen, Zonghao Guo, Derek F Wong, Xiaoyi Feng, and Maosong Sun. Deep-perception: Advancing r1-like cognitive visual perception in mllms for knowledge-intensive visual grounding. arXiv preprint arXiv:2503.12797 , 2025. 5, 7 [35] Subhransu Maji, Esa Rahtu, Juho Kannala, Matthew Blaschko, and Andrea Vedaldi. Fine-grained visual classi-fication of aircraft. arXiv preprint arXiv:1306.5151 , 2013. 5, 7 [36] Reiichiro Nakano, Jacob Hilton, Suchir Balaji, Jeff Wu, Long Ouyang, Christina Kim, Christopher Hesse, Shantanu Jain, Vineet Kosaraju, William Saunders, et al. Webgpt: Browser-assisted question-answering with human feedback. 
+
+arXiv preprint arXiv:2112.09332 , 2022. 4 [37] Maria-Elena Nilsback and Andrew Zisserman. Automated flower classification over a large number of classes. In 
+
+ICVGIP , 2008. 7 [38] Omkar M Parkhi, Andrea Vedaldi, Andrew Zisserman, and CV Jawahar. Cats and dogs. In CVPR , 2012. 7 [39] Dongyu Ru, Lin Qiu, Xiangkun Hu, Tianhang Zhang, Peng Shi, Shuaichen Chang, Cheng Jiayang, Cunxiang Wang, Shichao Sun, Huanyu Li, et al. Ragchecker: A fine-grained framework for diagnosing retrieval-augmented generation. In NeurIPS , 2024. 2 [40] Yueqi Song, Frank F Xu, Shuyan Zhou, and Graham Neubig. Beyond browsing: Api-based web agents. In ACL , 2025. 2 [41] Gemma Team, Aishwarya Kamath, Johan Ferret, Shreya Pathak, Nino Vieillard, Ramona Merhej, Sarah Perrin, Ta-tiana Matejovicova, Alexandre Ram´ e, Morgane Rivi` ere, et al. Gemma 3 technical report. arXiv preprint arXiv:2503.19786 , 2025. 6, 7 [42] V Team, W Hong, W Yu, X Gu, G Wang, G Gan, H Tang, J Cheng, J Qi, J Ji, et al. Glm-4.1 v-thinking: Towards versa-tile multimodal reasoning with scalable reinforcement learn-ing. arXiv preprint arXiv:2507.01006 , 2025. 3, 6, 7 [43] Catherine Wah, Steve Branson, Peter Welinder, Pietro Per-ona, and Serge Belongie. The caltech-ucsd birds-200-2011 dataset. Caltech, Technical Report , 2011. 5, 7 [44] Jiahui Wang, Qin Xu, Bo Jiang, Bin Luo, and Jinhui Tang. Multi-granularity part sampling attention for fine-grained vi-sual classification. IEEE Transactions on Image Processing ,2024. 2 [45] Weiyun Wang, Zhangwei Gao, Lixin Gu, Hengjun Pu, Long Cui, Xingguang Wei, Zhaoyang Liu, Linglin Jing, Shenglong Ye, Jie Shao, et al. Internvl3. 5: Advancing open-source multimodal models in versatility, reasoning, and efficiency. 
+
+arXiv preprint arXiv:2508.18265 , 2025. 6, 7 [46] Xinran Wang, Songyu Xu, Xiangxuan Shan, Yuxuan Zhang, Muxi Diao, Xueyan Duan, Yanhua Huang, Kongming Liang, and Zhanyu Ma. Cinetechbench: A benchmark for cine-matographic technique understanding and generation. arXiv preprint arXiv:2505.15145 , 2025. 2 [47] Xiu-Shen Wei, Yi-Zhe Song, Oisin Mac Aodha, Jianxin Wu, Yuxin Peng, Jinhui Tang, Jian Yang, and Serge Belongie. Fine-grained image analysis with deep learning: A survey. 
+
+IEEE Transactions on Pattern Analysis and Machine Intelli-gence , 2021. 2 [48] Jinming Wu, Zihao Deng, Wei Li, Yiding Liu, Bo You, Bo Li, Zejun Ma, and Ziwei Liu. Mmsearch-r1: Incentivizing lmms to search. arXiv preprint arXiv:2506.20670 , 2025. 2, 4[49] Rongyuan Wu, Lingchen Sun, Zhiyuan Ma, and Lei Zhang. One-step effective diffusion network for real-world image super-resolution. In NeurIPS , 2024. 6 [50] Wei Xu, Cheng Wang, Dingkang Liang, Zongchuang Zhao, Xingyu Jiang, Peng Zhang, and Xiang Bai. Nautilus: A large multimodal model for underwater scene understanding. In 
+
+NeurIPS , 2025. 5 [51] An Yang, Anfeng Li, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Yu, Chang Gao, Chengen Huang, Chenxu Lv, et al. Qwen3 technical report. arXiv preprint arXiv:2505.09388 , 2025. 3, 6, 7 [52] Yuqi Yang, Dongliang Chang, Ruoyi Du, Yi-Zhe Song, and Zhanyu Ma. Adaptive multi-resolution feature fusion for fine-grained visual classification. IEEE Transactions on Cir-cuits and Systems for Video Technology , 2025. 2 [53] Zijin Yin, Kongming Liang, Zhanyu Ma, and Jun Guo. Du-plex contextual relation network for polyp segmentation. In 
+
+ISBI , 2022. 3 [54] Hong-Tao Yu, Xiu-Shen Wei, Yuxin Peng, and Serge Be-longie. Benchmarking large vision-language models on fine-grained image tasks: A comprehensive evaluation. arXiv preprint arXiv:2504.14988 , 2025. 5 [55] Zhixin Zhang, Yiyuan Zhang, Xiaohan Ding, and Xiangyu Yue. Vision search assistant: Empower vision-language models as multimodal search engines. arXiv preprint arXiv:2410.21220 , 2024. 4, 6 [56] Jinguo Zhu, Weiyun Wang, Zhe Chen, Zhaoyang Liu, Shen-glong Ye, Lixin Gu, Hao Tian, Yuchen Duan, Weijie Su, Jie Shao, et al. Internvl3: Exploring advanced training and test-time recipes for open-source multimodal models. arXiv preprint arXiv:2504.10479 , 2025. 6, 7

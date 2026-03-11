@@ -30,6 +30,12 @@ subscriptions:
       description: 多模态RAG相关的研究
       enabled: true
       keywords:
+        - keyword: Visual Document Retrieval-Augmented Generation
+          keyword_cn: 视觉文档检索增强生成
+          query: Visual Document Retrieval-Augmented Generation
+        - keyword: Visual Retrieval-Augmented Generation
+          keyword_cn: 视觉检索增强生成
+          query: Visual Retrieval-Augmented Generation
         - keyword: Knowledge-based Visual Question Answering
           keyword_cn: 基于知识库的视觉问答
           query: Knowledge-based Visual Question Answering
@@ -47,9 +53,14 @@ subscriptions:
           enabled: true
           source: manual
           note: ''
-      updated_at: '2026-03-10T12:11:08.285Z'
-    - tag: video
-      description: 围绕使用Agent解决Video Understanding任务场景的文章，包括视频数据集和Video Memory构建。
+        - query: I hope you retrieve articles related to the task of document RAG.
+          query_cn: 我希望你检索你检索文档检索视觉问答这个任务相关的文章。
+          enabled: true
+          source: generated
+          note: ''
+      updated_at: '2026-03-11T01:53:13.949Z'
+    - tag: multi-modal memory
+      description: 查找与多模态智能体记忆（图像、视频、音频）相关的研究文章
       enabled: true
       keywords:
         - keyword: Video Benchmark
@@ -57,61 +68,19 @@ subscriptions:
           query: V
         - keyword: Video Memory
           keyword_cn: 视频记忆
-          query: Long-term memory mechanisms for video processing
-        - keyword: Video Reasoning
-          keyword_cn: 视频推理
           query: V
         - keyword: Video Agent
           keyword_cn: 视频智能体
-          query: Autonomous agents for video understanding and analysis
-      intent_queries:
-        - query: >-
-            I hope to learn more about articles related to solving video understanding using methods involving Agent
-            systems + Memory.
-          query_cn: 我希望了解到更多的关于使用Agent系统+Memory相关的方法解决视频理解相关的文章。
-          enabled: true
-          source: manual
-          note: ''
-        - query: How to build long term video memory for AI agents?
-          query_cn: 如何为AI智能体构建长期视频记忆？
-          enabled: true
-          source: manual
-          note: ''
-        - query: State of the art datasets for long form video understanding.
-          query_cn: 长视频理解的最先进数据集。
-          enabled: true
-          source: manual
-          note: ''
-        - query: Using LLM agents for complex video reasoning tasks.
-          query_cn: 使用LLM智能体处理复杂的视频推理任务。
-          enabled: true
-          source: manual
-          note: ''
-        - query: Retrieval augmented video understanding with memory modules.
-          query_cn: 带有记忆模块的检索增强视频理解。
-          enabled: true
-          source: manual
-          note: ''
-      updated_at: '2026-03-10T12:16:19.244Z'
-    - tag: memory
-      description: 查找与多模态智能体记忆（图像、视频、音频）相关的研究文章
-      enabled: true
-      keywords:
+          query: V
         - keyword: Multi-modal Memory
           keyword_cn: 多模态记忆
           query: Multi-modal Memory
-        - keyword: multimodal agent memory
+        - keyword: Multimodal Agent Memory
           keyword_cn: 多模态智能体记忆
           query: multimodal memory architectures for autonomous agents
-        - keyword: visual memory
+        - keyword: Visual Memory
           keyword_cn: 视觉记忆
           query: visual long-term and short-term memory in agents
-        - keyword: episodic memory
-          keyword_cn: 情景记忆
-          query: episodic memory for multimodal perception
-        - keyword: semantic memory
-          keyword_cn: 语义记忆
-          query: semantic memory systems for multimodal data
       intent_queries:
         - query: architectures for multimodal agent memory systems
           query_cn: 多模态智能体记忆系统架构
@@ -133,36 +102,21 @@ subscriptions:
           enabled: true
           source: manual
           note: ''
-      updated_at: '2026-03-10T12:20:50.633Z'
-    - tag: self-evolving
-      description: Self-evolving Agent相关的研究
-      enabled: true
-      keywords:
-        - keyword: Self-evolving Agent
-          keyword_cn: 自我演化智能体
-          query: Self-evolving autonomous agents and systems
-        - keyword: Self-improving LLM
-          keyword_cn: 自我改进大模型
-          query: Large language models with self-improvement capabilities
-      intent_queries:
-        - query: Recent advances in self evolving autonomous agent architectures
-          query_cn: 自我演化自主智能体架构的最新进展
+        - query: How to build long term video memory for Alagents?
+          query_cn: 如何为A智能体构建长期视频记忆?
           enabled: true
-          source: manual
+          source: generated
           note: ''
-        - query: Methods for recursive self improvement in large language model agents
-          query_cn: 大语言模型智能体递归自我提升的方法
+        - query: Retrieval augmented video understanding withmemory modules.
+          query_cn: 带有记忆模块的检索增强视频理解。
           enabled: true
-          source: manual
+          source: generated
           note: ''
-        - query: How agents learn and evolve through environmental interaction
-          query_cn: 智能体如何通过环境交互进行学习与演化
+        - query: >-
+            I hope to learn more about articles related tosolving video understanding using methodsinvolving Agent
+            systems + Memory.
+          query_cn: 我希望了解到更多的关于使用Agent系统+Memory相关的方法解决视频理解相关的文章。
           enabled: true
-          source: manual
+          source: generated
           note: ''
-        - query: Self correction and feedback loops in autonomous agent development
-          query_cn: 自主智能体开发中的自我纠错与反馈循环
-          enabled: true
-          source: manual
-          note: ''
-      updated_at: '2026-03-10T12:23:06.830Z'
+      updated_at: '2026-03-11T01:58:12.118Z'
