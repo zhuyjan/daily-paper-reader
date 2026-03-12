@@ -1,0 +1,594 @@
+Title: Beyond Pixel Histories: World Models with Persistent 3D State
+
+URL Source: https://arxiv.org/pdf/2603.03482v1
+
+Published Time: Thu, 05 Mar 2026 01:12:45 GMT
+
+Number of Pages: 27
+
+Markdown Content:
+# Beyond Pixel Histories: World Models with Persistent 3D State 
+
+Samuel Garcin * 1 Thomas Walker * 1 Steven McDonagh 1 Tim Pearce 2 Hakan Bilen 1 Tianyu He 2
+
+Kaixin Wang 2 Jiang Bian 2
+
+francelico.github.io/persist.github.io 
+
+# Abstract 
+
+Interactive world models continually generate video by responding to a user’s actions, enabling open-ended generation capabilities. However, ex-isting models typically lack a 3D representation of the environment, meaning 3D consistency must be implicitly learned from data, and spatial mem-ory is restricted to limited temporal context win-dows. This results in an unrealistic user experi-ence and presents significant obstacles to down-stream tasks such as training agents. To address this, we present PERSIST, a new paradigm of world model which simulates the evolution of a latent 3D scene: environment , camera , and ren-derer . This allows us to synthesize new frames with persistent spatial memory and consistent ge-ometry. Both quantitative metrics and a qualita-tive user study show substantial improvements in spatial memory, 3D consistency, and long-horizon stability over existing methods, enabling coher-ent, evolving 3D worlds. We further demonstrate novel capabilities, including synthesising diverse 3D environments from a single image, as well as enabling fine-grained, geometry-aware control over generated experiences by supporting envi-ronment editing and specification directly in 3D space. 
+
+# 1. Introduction 
+
+Interactive world models aim to generate experiences that unfold over time in response to user actions, enabling a new class of photo-realistic, personalised, and immersive inter-active experiences for human users (Kanervisto et al., 2025; Ball et al., 2025; Huang et al., 2025b). At the same time, such models hold significant potential for safely training embodied agents within simulators learned directly from 
+
+> *
+
+Equal contribution 1University of Edinburgh 2Microsoft Re-search. Correspondence to: Samuel Garcin <s.garcin@ed.ac.uk >,Kaixin Wang <kaixin96.wang@gmail.com >.
+
+Preprint. March 5, 2026. 
+
+data (Hafner et al., 2025; Micheli et al., 2023; Alonso et al., 2024; Garcin et al., 2024). Unlike passive video generation, interactive generation requires models to respond meaning-fully to external interventions. In this setting, realism is not determined solely by per-frame visual quality, but by the degree to which the generated experience maintains persis-tent environments and stable dynamics throughout extended rollouts. Most existing approaches to interactive video generation rely on auto-regressive (AR) models that condition on the history of past observations and actions to generate the most recent frame, often using diffusion-based transformers with causal attention (Peebles & Xie, 2023). This formulation is attractive: it naturally supports real-time action conditioning, allows generation to proceed indefinitely, and integrates cleanly with recent advances in large-scale video modelling. As a result, AR video diffusion models form the backbone of many recent neural game engines and interactive world models (Che et al., 2024; He et al., 2025; Valevski et al., 2024b; Zhang et al., 2025; Yu et al., 2025). However, conditioning on high-dimensional visual observa-tions is computationally expensive, and the number of prior frames that AR models can ingest is tightly constrained by hardware. In practice, this limits AR generation to condition on what amounts to only a few seconds of past footage, even when observations are compressed to lower spatial and/or temporal resolutions using learned autoencoders. As a result, a growing body of work has explored how best to populate this limited contextual window, most commonly through heuristic strategies that retrieve individual key frames from a memory bank of past observations (Xiao et al., 2025a; Huang et al., 2025a). Yet, an inherent flaw of key-frame retrieval methods is that each pixel observation provides only partial, highly redun-dant, and viewpoint-dependent information about the world at a fixed point in time. As the memory bank grows, identify-ing the relevant past evidence becomes increasingly difficult. As a result, generating extended and coherent experiences within complex 3D environments remains an open challenge 1        
+
+> arXiv:2603.03482v1 [cs.CV] 3 Mar 2026 World Models with Persistent 3D State
+> Figure 1. Initialized with a single pixel frame, PERSIST evolves in an auto-regressive loop in response to user actions . We first denoise the 3D environment centred on the agent in the form of a latent world-frame . Next, camera parameters are predicted with a feed-forward transformer. We then project the world to the camera plane to form a depth-ordered stack of world latents . Finally, pixel latents are denoised, using pixel-aligned 3D information from the world latents stack as guidance.
+
+even for frontier models. 1
+
+In this work, we propose to depart from pixel-based histo-ries and substitute key frame retrieval with active key frame generation . We are inspired by traditional 3D simulators and game engines, which maintain coherence by directly rendering pixel frames from a persistent and dynamically evolving 3D state of the world. We introduce PERSIST, a framework that brings persistence to learned AR world models by tracking a dynamic 3D representation of the envi-ronment. We describe our framework in Figure 1. PERSIST decomposes world simulation into three coupled compo-nents: a world-frame model that predicts how a learned representation of a 3D scene evolves over time, a camera model that tracks the agent’s viewpoint within this scene, and a world-to-pixel generation module that produces obser-vations via differentiable projection and a learned rendering function. Rather than treating pixels as the primary carrier of memory, PERSIST models the structure and dynamics of the environ-ment in a latent 3D space. This persistent world represen-tation captures how the scene evolves over time, while the camera acts as a query mechanism that extracts the subset of 3D information relevant to guide the generation of the cur-rent frame. This formulation enables long-horizon rollouts with fixed-cost memory, enforces geometric consistency by construction, and remains fully learned and compatible with modern diffusion and flow-based training objectives. 
+
+> 1Closed-source frontier models report achieving up to one minute of visual memory, representing the current frontier of AR generation (Ball et al., 2025).
+
+We evaluate PERSIST in a complex 3D environment and find that explicitly modelling persistent 3D dynamics leads to substantially improved long-horizon generation quality compared to rolling-window and memory-retrieval base-lines. Our approach exhibits stronger temporal stability, improved spatial memory when revisiting previously ob-served regions, and markedly better 3D consistency overall. Beyond quantitative gains, persistent world representation enables new capabilities, including explicit 3D scene ini-tialisation, mid-episode scene edits, and the emergence of off-screen dynamic processes that continue to evolve even when not directly observed. 
+
+# 2. Related Works 
+
+World models. World models (Ha & Schmidhuber, 2018) aim to simulate environments by predicting future states con-ditioned on user actions. Recent progress in video genera-tion models enable high-fidelity interactive simulation (Ball et al., 2025; Alonso et al., 2024; Decart et al., 2024). How-ever, maintaining spatial and temporal consistency over extended rollouts remains challenging due to the finite num-ber of past frames existing models can incorporate as con-text. Prior works propose to alleviate this limitation via spatio-temporal compression of input tokens (Hafner et al., 2025), memory-efficient attention mechanisms (Po et al., 2025) or by populating the model context window with frames sampled from the full generation history (Song et al., 2025). Among this latter class of approaches, (Xiao et al., 2025a; Huang et al., 2025a) propose sampling strategies that retrieve key-frames according to their spatial relevance. 2World Models with Persistent 3D State    
+
+> Figure 2. PERSIST enables long-horizon spatial memory by modelling the dynamics of a 3D world-frame around the agent. Camera parameters then act as memory look-up key, fetching relevant features from the world frame via a geometric projection (here visualized as the coloured voxels).
+
+Nevertheless, such methods rely on retrieving relevant infor-mation from an ever-growing history of pixel observations, a task that becomes increasingly difficult and costly over extended rollouts. In contrast, PERSIST retrieves contex-tual information directly from a dynamically evolving 3D latent state, making its information retrieval mechanism independent of episode length. 
+
+3D environment representations. In parallel, a growing number of approaches incorporate explicit 3D represen-tations into their generative architectures to produce ex-plorable and spatially consistent environments (Huang et al., 2025b; Labs, 2025; Zhou et al., 2025). However, these environments remain static, restricting interaction to basic navigation within a frozen world. In contrast, PERSIST learns a 3D representation that evolves over time, enabling it to capture dynamic processes occurring within the envi-ronment, and richer agent–environment interactions. 
+
+Neural rendering. While neural radiance fields (NeRFs) have become a popular, compact, and resolution-free repre-sentation of 3D scenes (Mildenhall et al., 2021; M ¨uller et al., 2022; Li et al., 2023), they rely on costly ray marching with many neural network queries, making them prohibitively expensive for interactive use. PERSIST instead takes in-spiration from neural deferred shading, which rasterizes explicit geometry into screen-space features and decodes them with learned neural shaders, enabling more efficient rendering (Thies et al., 2019; Worchel et al., 2022; Walker et al., 2023; Chen et al., 2023; Deering et al., 1988). 
+
+# 3. Preliminaries 
+
+Rectified flow matching. Our approach is based on the paradigm of flow matching and diffusion models (Lipman et al., 2023), where the task is to restore a clean data sample x0 given a noised version xτ . The noise level 
+
+τ ∈ [0 , 1] determines the degree of corruption of the data, where τ = 0 denotes clean data and τ = 1 indicates pure noise. Rectified flow models (Lipman et al., 2023; Albergo & Vanden-Eijnden, 2023) employ a noising pro-cess xτ = (1 − τ )x0 + τ x 1 that linearly interpolates be-tween sample x0 and noise x1 ∼ N (0 , I). Provided with a noised sample and corresponding noise level, the model Vθ
+
+is trained to predict the velocity vector v = x0 −x1 pointing towards the clean data via the conditional flow matching objective (CFM) (Lipman et al., 2023): 
+
+L(θ) = Vθ (xτ , τ ) − (x0 − x1) 2
+
+τ ∼ p(τ ), (1) where τ is often sampled from a uniform or logit-normal distribution. During inference, random noise x1 is itera-tively denoised into a clean sample x0 over K sampling steps, with uniform or variable step size dk:
+
+xτ −dk
+
+= xτ + Vθ (xτ , τ )dk, τ ← τ − dk. (2) 
+
+Autoregressive video generation. While full-sequence video diffusion models treat videos as a single data sam-ple to be denoised jointly at inference time, AR models treat videos as a sequence of individual frames Xn 
+
+> 1
+
+=
+
+x1, x 2, . . . , x n to be diffused sequentially. 2 AR models em-ploy causal masking strategies during training to ensure no information travels from the future into the past. Diffusion forcing (Chen et al., 2024) improves the generation stability of AR video diffusion models at inference by introducing per-frame noise levels that are sampled independently dur-ing training. At inference, AR generation becomes a special case of the training setup, where the current frame is itera-tively denoised from random noise and past frames receive a small fixed noise level τctx .
+
+Interactive world simulation. Because generation pro-ceeds step-by-step, AR models can in principle be unrolled indefinitely and conditioned on external control signals pro-vided at each timestep. This enables a transition from pas-sive video generation to interactive world simulation. We employ a similar formalism as Valevski et al. (2024a) to characterize the problem of learning a world model , which           
+
+> 2Notation-wise, the noise level of an individual frame xτtis indicated by superscript τ, its position in the sequence by subscript
+> t. In the case of a truncated sequence Xtk, we overload the notation to have kand tindicate its beginning and end.
+
+3World Models with Persistent 3D State     
+
+> Figure 3. PERSIST can be initialized with a single RGB frame ( , row 1), or with a single RGB and world frame ( +, row 2). We visualize the world-frames and videos produced by an auto-regressive rollout of 600 timesteps. Even with a single RGB frame for initialization, PERSIST can generate cohesive and evolving worlds.
+
+we define here as a learned simulator of some interactive environment E:
+
+E = ⟨S, O, A, Ω, p ⟩, (3) where S is the space of latent states, O the space of observa-tions, A the set of actions that may be taken within the envi-ronment, Ω : S → O a partial projection function mapping states to observations, p(s′|a, s ) is a transition probability function such that s, s ′ ∈ S × S and a ∈ A. Given a distri-bution of initial states p0 and episode length N0, a policy π
+
+in charge of selecting actions in E, and a distance metric be-tween observation sequences D : On × On → R, learning an interactive world simulation of E consists of minimising the objective E[D(On, ˜On)] . On is a sequence of observa-tions of length n ∼ N0 collected in E from starting state 
+
+s0 ∼ p0 and by following π; and ˜On is obtained from an AR model Qθ initialised at o0 = Ω( s0) and subjected to the same action sequence. 
+
+# 4. A Persistent Environment Representation 
+
+Learning an auto-regressive model Qθ is often challeng-ing when E is a complex 3D environment featuring high dimensional pixel observations. First, memory constraints limit Qθ to condition on a finite context window of past 
+
+K frames, which degrades temporal consistency once the generated episode exceeds this horizon. Second, pixel ob-servations typically provide partial information about the environment’s hidden state, making learning accurate tran-sition dynamics challenging. One might therefore attempt to have Qθ condition on some approximation of the hidden state s; however s can be arbitrarily complex or entirely unmeasurable. Even if s was accessible, learning the ob-servation function Ω : S → O to recover observations can be a comparably challenging problem. For example, in the case of a video game, s would be the program’s dynamic memory contents, which may not be particularly helpful for easily recovering pixel observations. Instead, we define a proxy ˜s = ⟨w, c⟩, where w is a world-frame representing a fixed region of space centred on the agent, and c is a camera state encoding the agent’s view within w. Although not a perfect replacement for the true hidden state, ˜s is an effective modelling choice when E is a 3D environment, as it lets us: 1. Simplify information retrieval. Figure 2 demonstrate how the world-frame wt can function as a dynamic 
+
+spatial memory module throughout the episode, while the camera state ct acts as a spatial lookup-key to re-trieve the spatial information in wt that is necessary to reconstruct ot. ct encodes the information to project this information to screen-space, without requiring ex-plicit knowledge of the true observation function. 2. Improve dynamics predictions. Tracking w and 
+
+c over time facilitates modelling dynamics that are difficult to infer from pixel observations alone, such as interactions or collisions with out-of-view objects, or tracking how occluded regions of the environment change over time. 4World Models with Persistent 3D State 
+
+# 5. PERSIST 
+
+We present PERSIST (Persistent Environment Representa-tions for Simulating Interactive Space-Time), a world simu-lation framework for complex 3D environments. PERSIST decomposes the world simulation objective into the tasks of world frame prediction , camera prediction and world-to-pixel generation .
+
+Dataset construction and pre-processing. The different components of PERSIST are trained from a dataset of trajec-tories collected from E. A trajectory consists of a sequence of pixel observations O, actions A, world-frames W and camera views C. In this work, we assume that W and C are directly obtainable from E, the former as a 3D voxel grid within a cuboid centered on the agent, and the later as a vec-tor encoding the camera intrinsics and extrinsics. Actions are embedded as a 23-dimensional multi-hot encoding of key presses and discretised mouse movements. We train a 2D-VAE and a 3D-VAE to encode pixel- and world-frames into latent patches ¯o and ¯w of 10 ×10 pixels and 43 voxels respectively. 
+
+5.1. World-Frame and Camera Prediction World frame prediction. At each timestep, a new world-frame is generated by sampling 
+
+¯wt ∼ W θ ( ¯ wt| ¯W t−1 
+
+> t−K
+
+, A tt−K , C t−1
+
+> t−K−1
+
+, ¯Ot−1
+
+> t−K−1
+
+), (4) where K is the model’s temporal context window and la-tents ¯W t−1 
+
+> t−K
+
+and ¯Ot−1 
+
+> t−K−1
+
+are encoded using the VAEs. Wθ
+
+is parametrised as a rectified flow model with a causal Dif-fusion Transformer (DiT) backbone (Peebles & Xie, 2023) employing interleaved spatial, temporal and cross-attention modules (Decart et al., 2024). We modify the spatial mod-ule to handle three spatial dimensions, and replace RoPE spatial embeddings (Su et al., 2024) with absolute position embeddings of the XYZ coordinates of the centroid of each voxel token. We keep the temporal module as-is. Actions and cameras are jointly embedded using a multi-layer per-ceptron (MLP). The resulting embeddings are added to the denoising timestep embedding and injected into each mod-ule via Adaptive Layer Normalisation (AdaLN) (Peebles & Xie, 2023). We employ Pl ¨ucker embeddings (Xiao et al., 2025a; Sitzmann et al., 2021) to convey information on how individual pixel patches project to 3D space. These em-beddings are computed from Ct−1 
+
+> t−K−1
+
+and are concatenated channel-wise to the pixel patches. The resulting patches are then injected into the model via the cross-attention module. Finally, we employ the 3D-VAE to decode ¯wt to its native resolution. Crucially, Wθ supports conditioning on ¯W = ∅, making it able of generating an initial world frame w0 from initial condition ⟨o0, c0⟩ at inference time. Thus, while we rely on W to train Wθ , we do not have to rely on ground truth 3D conditioning during inference. We provide examples for each inference configuration in Figure 3. 
+
+Camera model. At any given timestep, cameras are rep-resented as the 10-dimensional vector c = ⟨pos , rot , fov ⟩,where pos ∈ R3 encodes the camera’s position in the world-frame, rot ∈ R6 its orientation as a 6D continuous rota-tion (Zhou et al., 2019), and fov ∈ R its field-of-view. The camera model predicts ct = Cθ (Ct−1 
+
+> t−1−K
+
+, W tt−K , A tt−K )
+
+using a 1D causal transformer backbone with RoPE tem-poral embeddings. Individual tokens are obtained by passing pos and rot through separate positional embed-ders, concatenating fov and applying a linear projection. 
+
+W is cropped to its inner-most 43 voxels and embedded alongside A via a joint MLP prior to AdaLN injection. Given that the camera only rotates along its pitch and yaw axis, we re-parametrise the model’s output layer to predict ¯c = ⟨pos , ∆pitch , ∆yaw , ∆fov ⟩, with residuals 
+
+∆pitch = pitch t − pitch t−1,∆yaw = yaw t − yaw t−1 and 
+
+∆fov = fov t − fov t−1.3 The camera model is trained via MSE losses applied to each component of ¯c.
+
+5.2. World-to-Pixel Generation 
+
+In order to condition the pixel-space generation on 3D in-formation we need to form world-to-pixel correspondence. 
+
+World projection. We project w to screen-space via the projection operator 
+
+R(c, w) = ( ˜ w2D , d), (5) where ˜w2D ∈ Rh×w×l×m is a per-pixel depth-ordered list of l voxel features with m channels, indexed according to their position in screen space ⟨hi, w j ⟩. d ∈ Rh×w×l is the linear depth of each voxel feature measured in camera space. We provide a visualisation of how R constructs ˜w2D and d
+
+in Figure 4. R employs the same h, w screen dimensions as the pixel latents, ensuring pixel-level alignment with ¯o.Finally, we combine ˜w2D and d into w2D ∈ Rh×w×z via channel-wise concatenation, where z = l × (m + 1) .      
+
+> Figure 4. World frame wfeatures are projected to screen-space to obtain the depth-ordered stack of features ˜w2Dand linear depth information d.
+
+Pixel frame prediction. Pixel frames are generated by     
+
+> 3ctis recovered from ⟨¯ct,ct−1⟩via an algebraic manipulation at inference time.
+
+5World Models with Persistent 3D State 
+
+sampling 
+
+¯ot ∼ P θ (¯ ot|W2Dtt−K , A tt−K , ¯Ot−1 
+
+> t−K
+
+), (6) where W2D tt−K is obtained from the projection 
+
+R(Ctt−K , W tt−K ). Here, Pθ acts as a learned de-ferred shader (Thies et al., 2019) which additionally predicts information not provided by 3D latents (e.g. texture, lighting, particle effects, screen-space overlays, . . . ). This choice allows Pθ to learn arbitrary rendering functions, whilst encouraging spatial consistency through its dependency on w2D . Pθ is parametrised as a rectified flow model with a causal DiT backbone employing interleaved spatial and temporal modules (Decart et al., 2024). Actions are embedded using a MLP and injected via AdaLN. w2D is projected to latent space via a channel-wise 1D-convolution and is incorporated to ¯o via channel-wise concatenation. Crucially, we assign more latent channels to w2D than to ¯o, in order to bias the model to use the 3D latent frame as its primary source of information. 
+
+5.3. Mitigating Exposure Bias 
+
+During training, the denoisers condition on latents encoded from the training data. However, they condition on autore-gressive predictions at inference time, leading to exposure bias (Ning et al., 2024). We train each diffuser with diffu-sion forcing (Chen et al., 2024) to make them robust to the exposure bias induced by their own predictions. In addition, at inference Wθ depends on latents predicted by Pθ , and vice-versa. To alleviate the resulting distributional shift, we apply a flat 10% random noise augmentation to ¯O when training Wθ , and to ¯W when training Pθ . This lets us train each component of PERSIST separately and combine them at inference time without any fine-tuning. 
+
+# 6. Experiments 
+
+We conduct our experiments within Luanti (Luanti con-tributors, 2024), an open-source voxel-based game engine inspired by Minecraft. 4 Voxel environments discretise 3D space into individual voxels, each voxel taking on any of thousands of possible configurations (e.g. water, stone, air, etc. ). These environments constitute a valuable re-search platform (Malag ´on et al., 2025; Fan et al., 2022; Guss et al., 2019; Baker et al., 2022), as they instantiate in-terpretable, complex, diverse, and persistent 3D worlds with rich player–environment interactions. Unlike prior work that learns world models from data collected within a single game map (Alonso et al., 2024; Kanervisto et al., 2025), we learn a broad distribution of procedurally generated worlds. Training world models within procedural environments sub-
+
+> 4We prefer Luanti over Minecraft due to its open-source de-sign and expressive Lua API, which facilitates data collection and experimentation.
+
+stantially increases the difficulty of achieving spatial and temporal consistency, as the model cannot overfit to a fixed environment layout. 
+
+Dataset. We use the Craftium platform (Malag ´on et al., 2025) to collect game data to train and evaluate our models. We collect ∼40M environment interactions consisting of player actions, camera states, pixel and 3D observations. Actions are represented as multi-hot vectors encoding indi-vidual key presses and discretised mouse movements. 3D observations are represented as a 48 3 voxel grid centred on the agent. In Luanti, individual voxels contain seman-tic information about a specific spatial location, encoded as integer labels. In total, we collect ∼100K trajectories, amounting to 460 hours of gameplay recorded at 24Hz. To interact with the game, we employ a similar strategy as (Yu et al., 2025) and design a simple policy that randomly sam-ples from a set of pre-defined action sequences. 
+
+Training and Inference. All models are trained using the AdamW (Loshchilov & Hutter, 2019) optimizer with a learn-ing rate of 1e − 4. We first train the VAEs and pre-encode the 3D and pixel latents to accelerate the training of the dynamic models. The pixel and 3D VAEs take 4 and 12 days to train using 8 A100 GPUs. We train two versions of the 3D denoiser, “3D-S” and “3D-XL”, which uses 8 ×
+
+more spatial tokens. 3D-Small takes 3 days to train on 8 H100 GPUs, while 3D-XL and the pixel denoiser each take 10 days. The camera model trains on a single A100 in 16 hours with batch size 256. All other models use batch size 64. Each model is trained separately and assembled in the full pipeline with no further finetuning. At inference, we use 20 denoising steps per-frame and slightly noise past context frames to make the denoisers more resilient to imperfections in their own generations. We provide more implementation details in Appendix A. 
+
+6.1. Interactive Generation 
+
+In this section, we assess our method’s ability to generate in-teractive experiences that are both spatially and temporally consistent. We craft action policies specifically designed to make the agent explore its environment while continually revisiting previously rendered locations at different times and from various viewpoints. We deploy these policies in Craftium to collect a dataset of 148 evaluation trajectories from game worlds that were held-out from the training set. Finally, we sample starting conditions ⟨o0, c0⟩ and action se-quences from the evaluation set to generate trajectories with PERSIST-S (featuring the 3D-S denoiser) and PERSIST-XL (featuring the 3D-XL denoiser). 
+
+Baselines. We compare our approach with Oasis (Decart et al., 2024) and WorldMem (Xiao et al., 2025b), two in-teractive video generation methods employing the same DiT backbone as Pθ , but only conditioning on observations 6World Models with Persistent 3D State  
+
+> Figure 5. Video frames generated over 600 timestep episodes by PERSIST (Ours), Oasis (Decart et al., 2024) and WorldMem (Xiao et al., 2025a).
+
+sampled from Ot−1. Oasis conditions on the most recent 
+
+Ot−1 
+
+> t−K
+
+observations, and can therefore also be viewed as an ablation of PERSIST in which the guidance provided by 
+
+W2D is disabled. WorldMem tracks camera states during generation, and guides generation by retrieving from the full history key-frames closely matching the current camera state. As these methods were trained using Minecraft data, we collect a separate evaluation set in Minedojo (Fan et al., 2022) to not induce domain shift, and we replicate their re-spective inference configurations. In the case of WorldMem, this includes initialising the memory bank used to sample key-frames with 600 ground truth cameras and pixel obser-vations. This contrasts with PERSIST, which is initialised from a single initial frame ⟨o0, c0⟩.
+
+Evaluation. We conduct an user study comprising over 800 rollout evaluations from 28 participants. Users rate each video on “Per-Frame Visual Fidelity”, “3D Spatial Consistency”, and “Temporal Environment Stability and Consistency” before assigning an overall score. We addition-ally report the Frechet Video Distance (FVD) (Unterthiner et al., 2018) between each method and its corresponding evaluation set. While the FVD captures distribution-level discrepancies, it has a bias to favour per-frame visual quality over temporal consistency (Ge et al., 2024). In contrast, hu-man ratings directly assess spatial and temporal coherence within individual episodes, making the two complementary. Results are summarised in Table 1, with full methodological details in Appendix B and extended results in Appendix C. Across all metrics, PERSIST configurations consistently outperform the baselines, highlighting the benefits of ex-plicitly maintaining a persistent 3D environment state. Im-provements in FVD and per-frame visual fidelity further indicate that guidance from w2D enhances visual quality. Qualitative rollouts (Figure 5) corroborate these findings, particularly over long horizons. 
+
+Spatial resolution of Wθ . While PERSIST-XL achieves a lower FVD than PERSIST-S, we find that the two configura-tions perform similarly in terms of average user ratings and during head-to-head comparisons (see Appendix C). This suggests that the effectiveness of the 3D representation is robust to reductions in the spatial resolution of Wθ .7World Models with Persistent 3D State   
+
+> Table 1. FVD and mean user ratings (score range: 1-5) for videos generated from different PERSIST configurations and baselines. Bold numbers indicate the best performing methods. We find that every PERSIST configuration significantly outperforms baselines for all measured metrics. PERSIST-XL +w0is discussed in Section 6.2.
+
+Method FVD ↓ Per Frame Visual Fidelity ↑ 3D Consistency ↑ Temporal Consistency ↑ Overall Score ↑
+
+Oasis 706 2.1 ± 0.1 1.9 ± 0.1 1.8 ± 0.1 1.9 ± 0.1 WorldMem 596 1.7 ± 0.09 1.7 ± 0.09 1.5 ± 0.08 1.5 ± 0.07 PERSIST-S 209 2.8 ± 0.1 2.7 ± 0.1 2.5 ± 0.1 2.6 ± 0.09 
+
+PERSIST-XL 181 2.8 ± 0.09 2.5 ± 0.09 2.5 ± 0.09 2.6 ± 0.08 
+
+PERSIST-XL +w0 116 3.2 ± 0.1 2.8 ± 0.1 2.8 ± 0.1 3.0 ± 0.1  
+
+> Figure 6. PERSIST’s explicit 3D representation allows us to edit the world-state during an episode, enabling intuitive fine grained control over generations. We demonstrate this above with both global edits to terrain and biome, as well as the placement of smaller assets such as trees.
+
+6.2. New Applications and Emerging Capabilities 
+
+In addition to its improvement to the quality and coher-ence of generated experiences, we find that PERSIST’s 3D representation confers a number of new capabilities. 
+
+3D generation. At initialisation, it is essential for w0 to capture the structure and semantics of the provided con-ditioning RGB observation. In Figure 13, we show that 
+
+Wθ successfully generates plausible starting world frames, while also outpainting unseen regions differently from one episode to the next. This ability lets PERSIST generate environments that are both diverse and coherent, supporting a wide variety of interactive experiences. 
+
+Explicit 3D initialisation. By default, PERSIST initialises generation from starting condition ⟨o0, c0⟩, with the ini-tial world-frame w0 being inferred by the world dynamics model Wθ . However PERSIST also supports w0 being pro-vided as a starting condition. This explicit 3D conditioning allows a greater degree of control over the generated expe-rience than providing an image, as the full surroundings of the agent can be specified. To assess how effectively PERSIST can leverage explicit 3D conditioning, we evaluate a variant denoted PERSIST-XL+ w0, where a ground-truth world-frame w0 is provided at initialisation. PERSIST-XL+ w0 improves over PERSIST-XL in terms of FVD and human ratings (Table 1), demon-strating that the model successfully incorporates the addi-tional information contained within w0.
+
+World edits mid-generation. Valevski et al. (2024a) and Kanervisto et al. (2025) proposed to perform manual ed-its to generated pixel frames before re-injecting them as context, as an alternative way of controlling the generated experience. Similarly, as we can extract wt at any point during generation, we obtain the capability of making pre-cise 3D-edits to the world mid-episode. To do so, we pause generation after timestep t and manually edit wt to obtain 
+
+˜wt. We then restart generation using { ˜wt, ct, ot, at} as the starting condition. We show several edit examples in Figure 6. 
+
+Persistent world dynamics. PERSIST learns to model en-vironmental processes that evolve on their own. In Figure 7 8World Models with Persistent 3D State    
+
+> Figure 7. PERSIST maintains a dynamic 3D state that evolves even when unobserved (bottom: a cave filling with water), allowing off-screen events to produce on-screen effects (top: water flowing onto the player at t= 150 ).
+
+we provide examples of environment changes occurring outside of the agent’s view, sometimes giving rise to unex-pected interactions, e.g. water flowing onto the agent from above. 
+
+# 7. Conclusion 
+
+In this work, we introduced PERSIST, a world modelling framework that tracks the evolution of a persistent latent 3D state. Our results demonstrate that actively generating guid-ance frames from this 3D state substantially improves spatial memory, temporal coherence, and overall generation quality compared to conditioning on pixel-based histories. We show that tracking this 3D world state allows the model to capture environment dynamics occurring beyond the agent’s view. Additionally, it lets users pre-specify, visualise, and modify the structure of generated environments, creating new ways of controlling generated experiences. Despite these advances, PERSIST currently relies on ground-truth 3D supervision during training, and faces chal-lenges common to AR generation, such as error accumula-tion and memory constraints. We report examples of gener-ation glitches caused by error accumulation over the course of a 2000 steps episode in Figure 14. We believe these limi-tations outline a clear roadmap for future research involving persistent 3D world states: in-the-wild training via syn-thetic 3D annotations obtained from 2D-to-3D foundation models (Wang et al., 2025; Team et al., 2025), end-to-end post-training on generated rollouts to mitigate autoregres-sive drift (Huang et al., 2025c), and access to unconstrained spatial memory via a 3D memory bank. We provide a de-tailed discussion of these directions in Appendix D. 
+
+# Impact Statement 
+
+This work advances the field of Machine Learning by im-proving the spatial and temporal consistency of generative world models. While our research is primarily conducted within the simulated environment of Luanti, the underlying methodologies have potential applications in video games, digital twin simulation, and embodied AI navigation, where reliable 3D scene representation is critical. We do not fore-see any immediate negative societal consequences that re-quire specific highlighting at this stage, as our model oper-ates within a synthetic domain. 
+
+# References 
+
+Albergo, M. S. and Vanden-Eijnden, E. Building normaliz-ing flows with stochastic interpolants. In The Eleventh International Conference on Learning Representations, ICLR 2023, Kigali, Rwanda, May 1-5, 2023 . OpenRe-view.net, 2023. URL https://openreview.net/ pdf?id=li7qeBbCR1t .Alonso, E., Jelley, A., Micheli, V., Kanervisto, A., Storkey, A. J., Pearce, T., and Fleuret, F. Diffusion for world modeling: Visual details matter in atari. In Globersons, A., Mackey, L., Belgrave, D., Fan, A., Paquet, U., Tomczak, J. M., and Zhang, C. (eds.), Advances in Neural Information Processing Systems 38: Annual Conference on Neural Information Processing Systems 2024, NeurIPS 2024, Vancouver, BC, Canada, Decem-ber 10 - 15, 2024 , 2024. URL http://papers. nips.cc/paper_files/paper/2024/hash/ 6bdde0373d53d4a501249547084bed43-Abstract-Conference.html .9World Models with Persistent 3D State 
+
+Baker, B., Akkaya, I., Zhokhov, P., Huizinga, J., Tang, J., Ecoffet, A., Houghton, B., Sampedro, R., and Clune, J. Video pretraining (VPT): learning to act by watching unlabeled online videos. In Koyejo, S., Mohamed, S., Agarwal, A., Belgrave, D., Cho, K., and Oh, A. (eds.), Advances in Neural Information Processing Systems 35: Annual Conference on Neu-ral Information Processing Systems 2022, NeurIPS 2022, New Orleans, LA, USA, November 28 - De-cember 9, 2022 , 2022. URL http://papers. nips.cc/paper_files/paper/2022/hash/ 9c7008aff45b5d8f0973b23e1a22ada0-Abstract-Conference.html .Ball, P. J., Bauer, J., Belletti, F., Brownfield, B., Ephrat, A., Fruchter, S., Gupta, A., Holsheimer, K., Holynski, A., Hron, J., Kaplanis, C., Limont, M., McGill, M., Oliveira, Y., Parker-Holder, J., Perbet, F., Scully, G., Shar, J., Spencer, S., Tov, O., Villegas, R., Wang, E., Yung, J., Baetu, C., Berbel, J., Bridson, D., Bruce, J., Buttimore, G., Chakera, S., Chandra, B., Collins, P., Cullum, A., Damoc, B., Dasagi, V., Gazeau, M., Gbadamosi, C., Han, W., Hirst, E., Kachra, A., Kerley, L., Kjems, K., Knoepfel, E., Koriakin, V., Lo, J., Lu, C., Mehring, Z., Moufarek, A., Nandwani, H., Oliveira, V., Pardo, F., Park, J., Pier-son, A., Poole, B., Ran, H., Salimans, T., Sanchez, M., Saprykin, I., Shen, A., Sidhwani, S., Smith, D., Stanton, J., Tomlinson, H., Vijaykumar, D., Wang, L., Wingfield, P., Wong, N., Xu, K., Yew, C., Young, N., Zubov, V., Eck, D., Erhan, D., Kavukcuoglu, K., Hassabis, D., Ghara-mani, Z., Hadsell, R., van den Oord, A., Mosseri, I., Bolton, A., Singh, S., and Rockt ¨aschel, T. Genie 3: A new frontier for world models. 2025. Bavoil, L. and Myers, K. Order independent transparency with dual depth peeling. NVIDIA OpenGL SDK , 1(12): 2–4, 2008. Carreira, J. and Zisserman, A. Quo vadis, action recog-nition? A new model and the kinetics dataset. In 
+
+2017 IEEE Conference on Computer Vision and Pat-tern Recognition, CVPR 2017, Honolulu, HI, USA, July 21-26, 2017 , pp. 4724–4733. IEEE Computer Society, 2017. doi: 10.1109/CVPR.2017.502. URL https: //doi.org/10.1109/CVPR.2017.502 .Chang, A., Dai, A., Funkhouser, T., Halber, M., Niessner, M., Savva, M., Song, S., Zeng, A., and Zhang, Y. Matter-port3d: Learning from rgb-d data in indoor environments. 
+
+International Conference on 3D Vision (3DV) , 2017. Che, H., He, X., Liu, Q., Jin, C., and Chen, H. Gamegen-x: Interactive open-world game video generation. In 
+
+The Thirteenth International Conference on Learning Representations , 2024. Chen, B., Monso, D. M., Du, Y., Simchowitz, M., Tedrake, R., and Sitzmann, V. Diffusion forcing: Next-token prediction meets full-sequence diffusion. In Globersons, A., Mackey, L., Belgrave, D., Fan, A., Paquet, U., Tomczak, J. M., and Zhang, C. (eds.), Advances in Neural Information Processing Systems 38: Annual Conference on Neural Information Processing Systems 2024, NeurIPS 2024, Vancouver, BC, Canada, Decem-ber 10 - 15, 2024 , 2024. URL http://papers. nips.cc/paper_files/paper/2024/hash/ 2aee1c4159e48407d68fe16ae8e6e49e-Abstract-Conference.html .Chen, Z., Funkhouser, T. A., Hedman, P., and Tagliasac-chi, A. Mobilenerf: Exploiting the polygon rasterization pipeline for efficient neural field rendering on mobile architectures. In IEEE/CVF Conference on Computer Vision and Pattern Recognition, CVPR 2023, Vancou-ver, BC, Canada, June 17-24, 2023 , pp. 16569–16578. IEEE, 2023. doi: 10.1109/CVPR52729.2023.01590. URL https://doi.org/10.1109/CVPR52729. 2023.01590 .Decart, Quevedo, J., McIntyre, Q., Campbell, S., Chen, X., and Wachen, R. Oasis: A universe in a transformer. 2024. URL https://oasis-model.github.io/ .Deering, M., Winner, S., Schediwy, B., Duffy, C., and Hunt, N. The triangle processor and normal vector shader: a vlsi system for high performance graphics. ACM Siggraph Computer Graphics , 22(4):21–30, 1988. Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., Dehghani, M., Minderer, M., Heigold, G., Gelly, S., Uszkoreit, J., and Houlsby, N. An image is worth 16x16 words: Transformers for image recognition at scale. In 9th International Con-ference on Learning Representations, ICLR 2021, Vir-tual Event, Austria, May 3-7, 2021 . OpenReview.net, 2021. URL https://openreview.net/forum? id=YicbFdNTTy .Fan, L., Wang, G., Jiang, Y., Mandlekar, A., Yang, Y., Zhu, H., Tang, A., Huang, D., Zhu, Y., and Anandkumar, A. Minedojo: Building open-ended embodied agents with internet-scale knowledge. In Koyejo, S., Mohamed, S., Agarwal, A., Belgrave, D., Cho, K., and Oh, A. (eds.), Advances in Neural Information Processing Systems 35: Annual Conference on Neural Information Processing Systems 2022, NeurIPS 2022, New Orleans, LA, USA, November 28 - December 9, 2022 , 2022. URL http://papers. nips.cc/paper_files/paper/2022/hash/ 74a67268c5cc5910f64938cac4526a90-Abstract-Datasets_and_Benchmarks.html .10 World Models with Persistent 3D State 
+
+Garcin, S., Doran, J., Guo, S., Lucas, C. G., and Albrecht, S. V. DRED: zero-shot transfer in reinforcement learning via data-regularised environment design. In Forty-first International Conference on Machine Learning, ICML 2024, Vienna, Austria, July 21-27, 2024 . OpenReview.net, 2024. URL https://openreview.net/forum? id=uku9r6RROl .Ge, S., Mahapatra, A., Parmar, G., Zhu, J., and Huang, J. On the content bias in fr ´echet video distance. In 
+
+IEEE/CVF Conference on Computer Vision and Pattern Recognition, CVPR 2024, Seattle, WA, USA, June 16-22, 2024 , pp. 7277–7288. IEEE, 2024. doi: 10.1109/ CVPR52733.2024.00695. URL https://doi.org/ 10.1109/CVPR52733.2024.00695 .Guss, W. H., Houghton, B., Topin, N., Wang, P., Codel, C., Veloso, M., and Salakhutdinov, R. Minerl: A large-scale dataset of minecraft demonstrations. In Kraus, S. (ed.), 
+
+Proceedings of the Twenty-Eighth International Joint Conference on Artificial Intelligence, IJCAI 2019, Macao, China, August 10-16, 2019 , pp. 2442–2448. ijcai.org, 2019. doi: 10.24963/ijcai.2019/339. URL https: //doi.org/10.24963/ijcai.2019/339 .Ha, D. and Schmidhuber, J. World models. 2018. doi: 10.5281/ZENODO.1207631. URL https://zenodo. org/record/1207631 .Hafner, D., Yan, W., and Lillicrap, T. Training agents in-side of scalable world models. arXiv preprint arXiv: 2509.24527 , 2025. He, X., Peng, C., Liu, Z., Wang, B., Zhang, Y., Cui, Q., Kang, F., Jiang, B., An, M., Ren, Y., et al. Matrix-game 2.0: An open-source, real-time, and streaming interactive world model. ArXiv preprint , abs/2508.13009, 2025. URL 
+
+https://arxiv.org/abs/2508.13009 .Huang, J., Hu, X., Han, B., Shi, S., Tian, Z., He, T., and Jiang, L. Memory forcing: Spatio-temporal memory for consistent scene generation on minecraft. arXiv preprint arXiv: 2510.03198 , 2025a. Huang, T., Zheng, W., Wang, T., Liu, Y., Wang, Z., Wu, J., Jiang, J., Li, H., Lau, R., Zuo, W., et al. Voyager: Long-range and world-consistent video diffusion for explorable 3d scene generation. ACM Transactions on Graphics (TOG) , 44(6):1–15, 2025b. Huang, X., Li, Z., He, G., Zhou, M., and Shechtman, E. Self forcing: Bridging the train-test gap in autoregressive video diffusion. ArXiv preprint , abs/2506.08009, 2025c. URL https://arxiv.org/abs/2506.08009 .Kanervisto, A., Bignell, D., Wen, L. Y., Grayson, M., Georgescu, R., Valcarcel Macua, S., Tan, S. Z., Rashid, T., Pearce, T., Cao, Y., et al. World and human action models towards gameplay ideation. Nature , 638(8051): 656–663, 2025. Labs, W. Marble: A multimodal world model. 
+
+https://www.worldlabs.ai/blog/marble-world-model , 2025. Blog Post. Accessed: 2026-01-29. Li, Z., M ¨uller, T., Evans, A., Taylor, R. H., Unberath, M., Liu, M., and Lin, C. Neuralangelo: High-fidelity neural surface reconstruction. In IEEE/CVF Conference on Com-puter Vision and Pattern Recognition, CVPR 2023, Van-couver, BC, Canada, June 17-24, 2023 , pp. 8456–8465. IEEE, 2023. doi: 10.1109/CVPR52729.2023.00817. URL https://doi.org/10.1109/CVPR52729. 2023.00817 .Lipman, Y., Chen, R. T. Q., Ben-Hamu, H., Nickel, M., and Le, M. Flow matching for generative modeling. In The Eleventh International Conference on Learning Repre-sentations, ICLR 2023, Kigali, Rwanda, May 1-5, 2023 .OpenReview.net, 2023. URL https://openreview. net/pdf?id=PqvMRDCJT9t .Loshchilov, I. and Hutter, F. Decoupled weight decay regu-larization. In 7th International Conference on Learning Representations, ICLR 2019, New Orleans, LA, USA, May 6-9, 2019 . OpenReview.net, 2019. URL https: //openreview.net/forum?id=Bkg6RiCqY7 .Luanti contributors. Luanti: An open source voxel game-creation platform. https://github.com/ luanti-org/luanti , 2024. Formerly Minetest. Malag ´on, M., Ceberio, J., and Lozano, J. A. Craftium: Bridging flexibility and efficiency for rich 3d single- and multi-agent environments. In International Conference on Machine Learning (ICML) , 2025. Micheli, V., Alonso, E., and Fleuret, F. Transformers are sample-efficient world models. In The Eleventh International Conference on Learning Representations, ICLR 2023, Kigali, Rwanda, May 1-5, 2023 . OpenRe-view.net, 2023. URL https://openreview.net/ pdf?id=vhFu1Acb0xb .Mildenhall, B., Srinivasan, P. P., Tancik, M., Barron, J. T., Ramamoorthi, R., and Ng, R. Nerf: Representing scenes as neural radiance fields for view synthesis. Communica-tions of the ACM , 65(1):99–106, 2021. M ¨uller, T., Evans, A., Schied, C., and Keller, A. Instant neural graphics primitives with a multiresolution hash encoding. ACM transactions on graphics (TOG) , 41(4): 1–15, 2022. 11 World Models with Persistent 3D State 
+
+Nagy, Z. and Klein, R. Depth-peeling for texture-based volume rendering. In 11th Pacific Conference onCom-puter Graphics and Applications, 2003. Proceedings. , pp. 429–433. IEEE, 2003. Ning, M., Li, M., Su, J., Salah, A. A., and Ertugrul, I. ¨O. Elucidating the exposure bias in diffusion models. In 
+
+The Twelfth International Conference on Learning Repre-sentations, ICLR 2024, Vienna, Austria, May 7-11, 2024 .OpenReview.net, 2024. URL https://openreview. net/forum?id=xEJMoj1SpX .Peebles, W. and Xie, S. Scalable diffusion models with transformers. In IEEE/CVF International Conference on Computer Vision, ICCV 2023, Paris, France, October 1-6, 2023 , pp. 4172–4182. IEEE, 2023. doi: 10.1109/ ICCV51070.2023.00387. URL https://doi.org/ 10.1109/ICCV51070.2023.00387 .Po, R., Nitzan, Y., Zhang, R., Chen, B., Dao, T., Shecht-man, E., Wetzstein, G., and Huang, X. Long-context state-space video world models. In Proceedings of the IEEE/CVF International Conference on Computer Vision ,pp. 8733–8744, 2025. Sitzmann, V., Rezchikov, S., Freeman, B., Tenenbaum, J., and Durand, F. Light field networks: Neural scene representations with single-evaluation rendering. In Ranzato, M., Beygelzimer, A., Dauphin, Y. N., Liang, P., and Vaughan, J. W. (eds.), Advances in Neural Information Processing Systems 34: Annual Conference on Neural Information Processing Systems 2021, NeurIPS 2021, December 6-14, 2021, virtual , pp. 19313– 19325, 2021. URL https://proceedings. neurips.cc/paper/2021/hash/ a11ce019e96a4c60832eadd755a17a58-Abstract.html .Song, K., Chen, B., Simchowitz, M., Du, Y., Tedrake, R., and Sitzmann, V. History-guided video diffusion. 
+
+ArXiv preprint , abs/2502.06764, 2025. URL https: //arxiv.org/abs/2502.06764 .Su, J., Ahmed, M., Lu, Y., Pan, S., Bo, W., and Liu, Y. Roformer: Enhanced transformer with rotary position embedding. Neurocomputing , 568:127063, 2024. Team, S. D., Chen, X., Chu, F.-J., Gleize, P., Liang, K. J., Sax, A., Tang, H., Wang, W., Guo, M., Hardin, T., Li, X., Lin, A., Liu, J., Ma, Z., Sagar, A., Song, B., Wang, X., Yang, J., Zhang, B., Doll ´ar, P., Gkioxari, G., Feiszli, M., and Malik, J. Sam 3d: 3dfy anything in images. 
+
+ArXiv preprint , abs/2511.16624, 2025. URL https: //arxiv.org/abs/2511.16624 .Thies, J., Zollh ¨ofer, M., and Nießner, M. Deferred neural rendering: Image synthesis using neural textures. ACM Transactions on Graphics (TOG) , 38(4):1–12, 2019. Unterthiner, T., Van Steenkiste, S., Kurach, K., Marinier, R., Michalski, M., and Gelly, S. Towards accurate gen-erative models of video: A new metric & challenges. 
+
+ArXiv preprint , abs/1812.01717, 2018. URL https: //arxiv.org/abs/1812.01717 .Valevski, D., Leviathan, Y., Arar, M., and Fruchter, S. Dif-fusion models are real-time game engines, 2024a. URL 
+
+https://arxiv.org/abs/2408.14837 .Valevski, D., Leviathan, Y., Arar, M., and Fruchter, S. Diffu-sion models are real-time game engines. In The Thirteenth International Conference on Learning Representations ,2024b. Walker, T., Mariotti, O., Vaxman, A., and Bilen, H. Explicit neural surfaces: Learning continuous geometry with de-formation fields. ArXiv preprint , abs/2306.02956, 2023. URL https://arxiv.org/abs/2306.02956 .Wang, J., Chen, M., Karaev, N., Vedaldi, A., Rupprecht, C., and Novotny, D. Vggt: Visual geometry grounded transformer. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2025. Worchel, M., Diaz, R., Hu, W., Schreer, O., Feldmann, I., and Eisert, P. Multi-view mesh reconstruction with neural deferred shading. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pp. 6187–6197, 2022. Xiang, J., Lv, Z., Xu, S., Deng, Y., Wang, R., Zhang, B., Chen, D., Tong, X., and Yang, J. Structured 3d latents for scalable and versatile 3d generation. Cvpr , 2025. Xiao, Z., Lan, Y., Zhou, Y., Ouyang, W., Yang, S., Zeng, Y., and Pan, X. Worldmem: Long-term consis-tent world simulation with memory. ArXiv preprint ,abs/2504.12369, 2025a. URL https://arxiv.org/ abs/2504.12369 .Xiao, Z., Lan, Y., Zhou, Y., Ouyang, W., Yang, S., Zeng, Y., and Pan, X. Worldmem: Long-term consistent world simulation with memory, 2025b. URL https: //arxiv.org/abs/2504.12369 .Yeshwanth, C., Liu, Y., Nießner, M., and Dai, A. Scan-net++: A high-fidelity dataset of 3d indoor scenes. In 
+
+IEEE/CVF International Conference on Computer Vision, ICCV 2023, Paris, France, October 1-6, 2023 , pp. 12– 22. IEEE, 2023. doi: 10.1109/ICCV51070.2023.00008. URL https://doi.org/10.1109/ICCV51070. 2023.00008 .Yu, J., Qin, Y., Wang, X., Wan, P., Zhang, D., and Liu, X. Gamefactory: Creating new games with generative interactive videos. ArXiv preprint , abs/2501.08325, 2025. URL https://arxiv.org/abs/2501.08325 .12 World Models with Persistent 3D State 
+
+Zhang, Y., Peng, C., Wang, B., Wang, P., Zhu, Q., Kang, F., Jiang, B., Gao, Z., Li, E., Liu, Y., et al. Matrix-game: Interactive world foundation model. ArXiv preprint ,abs/2506.18701, 2025. URL https://arxiv.org/ abs/2506.18701 .Zhou, S., Du, Y., Yang, Y., Han, L., Chen, P., Yeung, D.-Y., and Gan, C. Learning 3d persistent embodied world models. ArXiv preprint , abs/2505.05495, 2025. URL 
+
+https://arxiv.org/abs/2505.05495 .Zhou, T., Tucker, R., Flynn, J., Fyffe, G., and Snavely, N. Stereo magnification: Learning view synthesis using multiplane images. ArXiv preprint , abs/1805.09817, 2018. URL https://arxiv.org/abs/1805.09817 .Zhou, Y., Barnes, C., Lu, J., Yang, J., and Li, H. On the continuity of rotation representations in neural networks. In IEEE Conference on Computer Vi-sion and Pattern Recognition, CVPR 2019, Long Beach, CA, USA, June 16-20, 2019 , pp. 5745– 5753. Computer Vision Foundation / IEEE, 2019. doi: 10.1109/CVPR.2019.00589. URL http: //openaccess.thecvf.com/content_CVPR_ 2019/html/Zhou_On_the_Continuity_of_ Rotation_Representations_in_Neural_ Networks_CVPR_2019_paper.html .13 World Models with Persistent 3D State 
+
+# A. Additional Implementation Details 
+
+A.1. Additional Model Details 2D VAE. We employ a vision transformer architecture (Dosovitskiy et al., 2021), using the open-source implementation of (Decart et al., 2024). We train the VAE via an MSE reconstruction objective, alongside a KL divergence penalty coefficient of 1e − 6.
+
+3D VAE. We employ a 3D-ResNet architecture based on the implementation provided by (Xiang et al., 2025). We train the VAE via a cross-entropy loss to predict voxel class labels, alongside a KL divergence penalty coefficient of 1e − 6.
+
+Differentiable Rasterizer. For our projecting function R, we leverage GPU-native triangle rasterization, by assigning voxel features to faces of a static voxel-grid mesh. Then, depth-peeling (Bavoil & Myers, 2008; Nagy & Klein, 2003) is applied during rasterization to produce a per-pixel, depth-ordered stack of 3D features W t 
+
+> 2D
+
+∈ RH×W ×L×C , where L is the maximum number of layers. Since the mesh topology is fixed for a given resolution, we construct it once at initialisation, updating vertex attributes in-place to avoid redundant mesh construction. 
+
+A.2. PERSIST and PERSIST +w0 Inference Logic Algorithm 1 PERSIST inference logic. 
+
+Input: Models Wθ , Cθ , Pθ , 2D-VAE, 3D-VAE, Model context window sizes KW , KC , KP ,Renderer R,Initial conditions oinit , cinit ,Episode Length T ,Agent. 
+
+1: ainit ← NO-OP Pipeline is always initialised using a NO-OP action. 2: ¯o0 ← 2D-VAE.encode (oinit )
+
+3: ¯w0 ← W θ (ainit , c init , ¯o0)
+
+4: w0 ← 3D-VAE.decode ( ¯ w0)
+
+5: w2D0 ← R (w0, c init )
+
+6: ¯o0 ← P (w2D0 , a init ) Regenerating the starting observation from w0
+
+guarantees alignment between w0 and o0.7: o0 ← 2D-VAE.decode (¯ o0)
+
+8: Initialise rollout buffers {A, C, O, ¯O, W, ¯W , W 2D } with 
+
+ainit , c init , o 0, ¯o0, w 0, ¯w0, w 2D0
+
+9: for t in 1, . . . , T do 
+
+10: Append to A: at ← Agent (ot−1)
+
+11: Append to ¯W : ¯wt ← W θ ( ¯W t−1 
+
+> t−KW
+
+, A tt−KW , C t−1 
+
+> t−KW−1
+
+, ¯Ot−1 
+
+> t−KW−1
+
+)
+
+12: Append to W : wt ← 3D-VAE.decode ( ¯ wt)
+
+13: Append to C: ct ← C θ (Ct−1 
+
+> t−1−KC
+
+, W tt−KC , A tt−KC )
+
+14: Append to W2D : w2Dt ← R (wt, c t)
+
+15: Append to ¯O: ¯ot ← P θ (W2D tt−KP , A tt−KP , ¯Ot−1 
+
+> t−KP
+
+)
+
+16: Append to O: ot ← 2D-VAE.decode (¯ ot)
+
+14 World Models with Persistent 3D State 
+
+Algorithm 2 PERSIST +w0 inference logic. Changes to Algorithm 1 in blue. 
+
+Input: Models Wθ , Cθ , Pθ , 2D-VAE, 3D-VAE, Model context window sizes KW , KC , KP ,Renderer R,Initial conditions oinit , cinit , winit 
+
+Episode Length T ,Agent. 
+
+1: ainit ← NO-OP Pipeline is always initialised using a NO-OP action. 2: ¯o0 ← 2D-VAE.encode (oinit )
+
+3: ¯w0 ← 3D-VAE.encode (winit )
+
+4: w2D0 ← R (winit , c init )
+
+5: ¯o0 ← 2D-VAE.encode (oinit )
+
+6: Initialise rollout buffers {A, C, O, ¯O, W, ¯W , W 2D } with 
+
+ainit , c init , o init , ¯o0, w init , ¯w0, w 2D0
+
+We can use oinit directly as oinit and winit are expected to be perfectly aligned. 7: for t in 1, . . . , T do 
+
+8: Append to A: at ← Agent (ot−1)
+
+9: Append to ¯W : ¯wt ← W θ ( ¯W t−1 
+
+> t−KW
+
+, A tt−KW , C t−1 
+
+> t−KW−1
+
+, ¯Ot−1 
+
+> t−KW−1
+
+)
+
+10: Append to W : wt ← 3D-VAE.decode ( ¯ wt)
+
+11: Append to C: ct ← C θ (Ct−1 
+
+> t−1−KC
+
+, W tt−KC , A tt−KC )
+
+12: Append to W2D : w2Dt ← R (wt, c t)
+
+13: Append to ¯O: ¯ot ← P θ (W2D tt−KP , A tt−KP , ¯Ot−1 
+
+> t−KP
+
+)
+
+14: Append to O: ot ← 2D-VAE.decode (¯ ot)
+
+15 World Models with Persistent 3D State 
+
+A.3. Model and Inference Hyperparameters  
+
+> Table 2. 3D-VAE configuration.
+
+Parameter Value input shape [48, 48, 48, 2138] number of residual blocks 2middle channels [32, 128, 512] 
+
+¯w shape [12, 12, 12, 48] # parameters 138M  
+
+> Table 3. 2D-VAE configuration.
+
+Parameter Value input size [360, 640, 3] patch size 10 
+
+¯o shape [36, 64, 16] encoder dimension 1024 encoder depth 6encoder number of heads 6decoder dimension 1024 decoder depth 12 decoder number of heads 16 # parameters 227M  
+
+> Table 4. Camera model configuration.
+
+Parameter Value rotation embedding channels 256 translation embedding channels 256 hidden size 1024 transformer blocks 12 number of heads 12 MLP ratio 4context window size 8# parameters 234M 16 World Models with Persistent 3D State 
+
+Table 5. World denoiser hyperparameters (3D-S configuration). The XL configuration uses patch size=1 and has the same number of learned parameters. 
+
+Parameter Value input shape [12, 12, 12, 48] patch size 2hidden size 1024 cross condition hidden size 1024 depth 12 number of heads 16 MLP ratio 4pixel condition patch size 2context window size 8# parameters 686M 
+
+Table 6. Pixel denoiser configuration. 
+
+Parameter Value 
+
+¯o shape [36, 64, 16] 
+
+¯o embedder output channels 16 patch size 2hidden size 1024 depth 12 number of heads 16 MLP ratio 4
+
+˜w2D shape [36, 64, 192, 32] 
+
+w2D embedder patch size 6
+
+w2D embedder stride 4
+
+w2D embedder output channels 752 context window size 16 # parameters 460M 
+
+Table 7. Flow matching sampler configurations at inference time. 
+
+Parameter Value minimum noise σmin 1e − 5
+
+denoising steps 20 denoising step scheduling function τ k = ηk 
+
+> 1+( η−1) k
+
+η 3noise level applied to context (past) frames τctx 0.02 ( Wθ ) / 0.1 ( Pθ )
+
+Table 8. Number of spatial and temporal tokens for different models. 
+
+Model # Temporal Tokens # Spatial Tokens 
+
+Wθ -S 8 216 
+
+Wθ -XL 8 1728 
+
+Pθ 16 576 
+
+Cθ 8 n/a 17 World Models with Persistent 3D State 
+
+# B. Evaluation Methodology 
+
+B.1. Evaluation data 
+
+As discussed in the main body, we curated evaluation datasets across four modes to assess agent behaviour: Free Play , Move Forward , Move Backward , and Orbit . These modes are designed to produce trajectories that require a high level of temporal and spatial consistency to be correctly simulated by the world model. • Free Play: randomly samples action from a set of pre-defined sequences, facilitating exploration. • Move Forward/Backward: The agent moves forwards or backwards, periodically spinning on itself to observe its surroundings. • Orbit: The agent follows a circular trajectory, while constantly adjusting its heading to look towards the centre of the circle. We collect evaluation sets in MineDojo and Craftium following these policies. For inference with WorldMem, we prepend 600 ground truth frames to each evaluation sequence to warm-start the memory bank. 
+
+B.2. FVD computation 
+
+To compute the FVD, we collect a total of 148 rollouts of 192 frames for each method, splitting collection evenly across all four evaluation sets. Videos are spliced into 16-frame clips, for a total of 1776 clips. We then compute the FVD from the latent features obtained by passing rollout and ground truth clips through a pretrained Inflated 3D ConvNet (Carreira & Zisserman, 2017). 
+
+B.3. User Study Protocol 
+
+The user study was deployed via a custom web interface (see Figure 8). Participants were tasked of scoring videos according to the following metrics and instructions: • Visual Fidelity. Per-frame visual quality of the video. Deduct points for visual artifacts such as blurriness, color shifts, flickering, noise, or texture degradation. • 3D Spatial Consistency. Spatial consistency of the scene. Deduct points if objects deform, shift, or change appearance when viewed from different camera angles, or if the relative depth and spatial relationships between objects appear inconsistent as the player moves. • Temporal Environment Stability and Consistency. Consistency of the environment over time. Deduct points if the scene changes unexpectedly, such as objects disappearing, reappearing, or changing structure when revisiting previously seen areas, or if the environment degrades or becomes unnaturally simplified over time. • Overall Quality Score. Your subjective rating of the overall quality of the video, considering all factors above. Ratings had the range of 1-5. Videos were presented to the user as pairs. Each pair depicted matching behaviour (free play, move forward, move backward, orbit) but different methods (baselines, PERSIST configurations, Minedojo or Craftium ground truth). Each individual user was asked to rate up to 50 videos. User assessments were subsequently aggregated to compute average scores. We consider the first three evaluation trials for each participant to count as calibration, and we discard them from the study. 
+
+# C. Extended User Study Results 
+
+C.1. Score Differences During Head-to-Head Comparisons 
+
+Given that users rate two side-by-side videos during each trial, we can analyse how a PERSIST configuration fares in a direct head-to-head comparison against any other baseline, PERSIST configuration, or the ground truth data. We provide score comparison matrices below (one per metric) displaying the average score deltas during head-to-head comparisons. 18 World Models with Persistent 3D State   
+
+> Figure 8. User Study Interface. A screenshot of our web-based platform where participants evaluate video pairs based on temporal and spatial consistency.
+
+PERSIST configurations consistently outperform the baselines in every head-to-head comparison. During head-to-head comparisons between PERSIST-S and PERSIST-XL, PERSIST-S narrowly wins on 3D Spatial Consistency ( +0 .21 ), while PERSIST-XL achieves a slightly higher Overall Quality Score ( +0 .14 ). The differences in Visual Fidelity and Temporal Consistency are too narrow to call for either side. While PERSIST-XL achieves a better FVD, the results of the study indicate that humans do not observe a significant performance degradation when we decrease the number of spatial tokens allotted to Wθ . In contrast, PERSIST-XL +w0 wins most head-to-head comparisons against PERSIST-XL and PERSIST-S, which indicates that providing direct 3D conditioning generally improves performance. Finally, users consistently prefer ground-truth videos across all metrics, highlighting that even our strongest configurations remain below the quality of real trajectories. This persistent gap underscores both the difficulty of long-horizon world modelling with procedurally generated environments, and the opportunity for further advances in persistent 3D generative representations. 19 World Models with Persistent 3D State 
+
+Figure 9. Score differences during head-to-head comparisons, visual fidelity .
+
+20 World Models with Persistent 3D State 
+
+Figure 10. Score differences during head-to-head comparisons, 3D spatial consistency .
+
+21 World Models with Persistent 3D State 
+
+Figure 11. Score differences during head-to-head comparisons, temporal consistency .
+
+22 World Models with Persistent 3D State 
+
+Figure 12. Score differences during head-to-head comparisons, overall quality score .
+
+23 World Models with Persistent 3D State 
+
+C.2. Scores for Each Evaluation Set   
+
+> Table 9. Per set user study scores: circle around .
+
+Method Per Frame Visual Fidelity ↑ 3D Consistency ↑ Temporal Consistency ↑ Overall Score ↑
+
+Oasis 2 ± 0.2 1.6 ± 0.2 1.5 ± 0.2 1.6 ± 0.2 WorldMem 1.7 ± 0.2 1.5 ± 0.1 1.3 ± 0.1 1.4 ± 0.1 PERSIST-S 2.8 ± 0.2 2.6 ± 0.2 2.3 ± 0.2 2.5 ± 0.2 PERSIST-XL 3.0 ± 0.2 2.5 ± 0.1 2.2 ± 0.1 2.5 ± 0.1 PERSIST-XL +w0 3.4 ± 0.2 3.0 ± 0.2 2.7 ± 0.3 3.1 ± 0.2   
+
+> Table 10. Per set user study scores: free play .
+
+Method Per Frame Visual Fidelity ↑ 3D Consistency ↑ Temporal Consistency ↑ Overall Score ↑
+
+Oasis 2.3 ± 0.2 2.2 ± 0.2 2.0 ± 0.2 2.0 ± 0.2 WorldMem 1.5 ± 0.2 1.5 ± 0.2 1.2 ± 0.1 1.3 ± 0.1 PERSIST-S 3.0 ± 0.2 2.9 ± 0.2 2.8 ± 0.2 3.0 ± 0.2 PERSIST-XL 2.9 ± 0.2 2.8 ± 0.2 2.8 ± 0.2 2.8 ± 0.2 PERSIST-XL +w0 3.6 ± 0.2 3.1 ± 0.2 3.3 ± 0.2 3.4 ± 0.2   
+
+> Table 11. Per set user study scores: backwards and look around .
+
+Method Per Frame Visual Fidelity ↑ 3D Consistency ↑ Temporal Consistency ↑ Overall Score ↑
+
+Oasis 1.9 ± 0.2 2.0 ± 0.2 2.0 ± 0.2 1.9 ± 0.2 WorldMem 1.7 ± 0.2 1.8 ± 0.2 1.6 ± 0.2 1.6 ± 0.1 PERSIST-S 3.0 ± 0.2 2.7 ± 0.2 2.7 ± 0.2 2.6 ± 0.2 PERSIST-XL 2.7 ± 0.2 2.4 ± 0.2 2.4 ± 0.2 2.5 ± 0.1 PERSIST-XL +w0 3.0 ± 0.2 2.6 ± 0.2 2.6 ± 0.2 2.8 ± 0.2   
+
+> Table 12. Per set user study scores: forward and look around .
+
+Method Per Frame Visual Fidelity ↑ 3D Consistency ↑ Temporal Consistency ↑ Overall Score ↑
+
+Oasis 2.4 ± 0.2 2.0 ± 0.2 1.8 ± 0.2 1.9 ± 0.2 WorldMem 2.1 ± 0.2 2.2 ± 0.2 1.9 ± 0.2 1.9 ± 0.2 PERSIST-S 2.2 ± 0.2 2.3 ± 0.2 2.1 ± 0.2 2.3 ± 0.2 PERSIST-XL 2.6 ± 0.2 2.3 ± 0.2 2.3 ± 0.2 2.4 ± 0.1 
+
+PERSIST-XL +w0 2.7 ± 0.2 2.4 ± 0.2 2.3 ± 0.2 2.4 ± 0.2 
+
+24 World Models with Persistent 3D State 
+
+# D. Limitations and Future Work 
+
+Training without ground truth 3D supervision. Our results underscore the critical role of explicit 3D representations in maintaining environmental coherence over long horizons. Currently, however, PERSIST acquires this representation via supervised training, restricting its applicability to simulators or datasets providing 3D annotations (e.g. Zhou et al., 2018; Chang et al., 2017; Yeshwanth et al., 2023). A key direction for future work is to relax this dependency by learning 3D representations directly from pixels, or by leveraging recent advances in 2D-to-3D foundation models (Wang et al., 2025; Team et al., 2025) to generate synthetic 3D annotations as a pre-processing step. 
+
+Eliminating exposure bias. While PERSIST yields substantial improvements in generation quality, temporal stability, and environmental coherence over baselines, human evaluators tend to prefer ground-truth videos in head-to-head comparisons, reporting a gradual degradation in visual quality and environment coherence over time. We attribute this degradation primarily to exposure bias: during training, individual pipeline components ( Wθ , Cθ and Pθ ) are trained using ground truth data; at inference, they condition on their own past predictions and on predictions from other components, causing a train-inference distribution mismatch that grows over time. We report examples of generation glitches that occur over the course of a 2000 steps episode in Figure 14. Leveraging PERSIST’s fully differentiable pipeline, future work could explore incorporating an end-to-end post-training stage on generated rollouts, thereby aligning the training and inference distributions. As demonstrated in recent work (Huang et al., 2025c), this approach can be effective in making AR models robust to their own imperfect predictions. 
+
+Unconstrained spatial memory. PERSIST presently tracks a finite region of 3D space centred on the agent, causing information from distant locations to be discarded as the agent moves through the environment. To retain spatial information over arbitrarily large environments, future work could consider a conditioning strategy for Wθ based on loading spatial chunks from a 3D memory bank. Whereas pixel memory banks suffer from viewpoint redundancy, a 3D store is inherently deduplicated and spatially organized, offering unique advantages for efficient storage and retrieval of spatial information. 25 World Models with Persistent 3D State 
+
+Figure 13. PERSIST generates diverse but coherent initial world frames from a single RGB conditioning observation. Each row corresponds to a specific input RGB frame, while each column depicts the initial world frame sampled from Wθ during a specific generation episode. 
+
+26 World Models with Persistent 3D State 
+
+Step 0 (0 seconds) . Start of the episode. Gener-ation is stable. 
+
+Step 672 (28 seconds) . A tree trunk disappears from the 3D representation. As a result only the tree foliage is rendered to the left of the agent. 
+
+Step 888 (37 seconds) . Several wood blocs are wrongly predicted by Wθ and appear in the 3D representation. They get rendered in the agent’s view. 
+
+Step 1296 (54 seconds) . The texture of the ground is drifting to a yellowish colour. The 3D representation remains stable. 
+
+Step 1320 (55 seconds) . Pθ recovers the cor-rect texture thanks to the grounding provided by 
+
+w2D .
+
+Step 1656 (69 seconds) . A collision gets mis-predicted and the agent clips through a bloc. The ground texture begins to drift. 
+
+Step 1680 (70 seconds) . The model recovers from terrain clipping and texture drift after the agent executes a jump action. 
+
+Step 2000 (83 seconds) . The episode concludes on a stable frame. The environment remains globally coherent after 2000 steps, but glitches occur more frequently due to exposure bias.    
+
+> Figure 14. Generation glitches and subsequent recoveries over a 2000 step (83 seconds) episode generated with PERSIST. The 3D representation drifts locally, causing individual blocs to appear and disappear from the agent’s view. However we find that the 3D representation remains globally coherent and has a net stabilising effect on generation, allowing Pθto recover from visual artifacts. This lets PERSIST generate rollouts lasting thousands of steps, even if glitches become more frequent over time due to autoregressive drift.
+
+27

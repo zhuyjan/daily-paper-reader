@@ -1,0 +1,393 @@
+Title: DQE-CIR: Distinctive Query Embeddings through Learnable Attribute Weights and Target Relative Negative Sampling in Composed Image Retrieval
+
+URL Source: https://arxiv.org/pdf/2603.04037v1
+
+Published Time: Thu, 05 Mar 2026 02:01:47 GMT
+
+Number of Pages: 34
+
+Markdown Content:
+# Highlights 
+
+DQE-CIR: Distinctive Query Embeddings through Learnable At-tribute Weights and Target Relative Negative Sampling in Com-posed Image Retrieval 
+
+Geon Park, Ji-Hoon Park, Seong-Whan Lee 
+
+• We propose a composed image retrieval method that learns more dis-tinctive query representations for fine-grained image retrieval. 
+
+• We introduce a target relative negative sampling strategy that selects informative negatives while avoiding overly easy or false negatives. 
+
+• We design a pairwise learning objective that clearly separates images matching the intended modification from confusing candidates. 
+
+• We show that the proposed components consistently improve retrieval accuracy on multiple composed image retrieval benchmarks. 
+
+> arXiv:2603.04037v1 [cs.CV] 4 Mar 2026
+
+# DQE-CIR: Distinctive Query Embeddings through Learnable Attribute Weights and Target Relative Negative Sampling in Composed Image Retrieval 
+
+Geon Park, Ji-Hoon Park, Seong-Whan Lee 
+
+> Department of Artificial Intelligence, Korea University, Seoul, 02841, Republic of Korea
+
+Abstract 
+
+Composed image retrieval (CIR) addresses the task of retrieving a target image by jointly interpreting a reference image and a modification text that specifies the intended change. Most existing methods are still built upon contrastive learning frameworks that treat the ground truth image as the only positive instance and all remaining images as negatives. This strategy inevitably introduces relevance suppression, where semantically related yet valid images are incorrectly pushed away, and semantic confusion, where dif-ferent modification intents collapse into overlapping regions of the embedding space. As a result, the learned query representations often lack discrimina-tiveness, particularly at fine-grained attribute modifications. To overcome these limitations, we propose distinctive query embeddings through learn-able attribute weights and target relative negative sampling (DQE-CIR), a method designed to learn distinctive query embeddings by explicitly model-ing target relative relevance during training. DQE-CIR incorporates learn-able attribute weighting to emphasize distinctive visual features conditioned on the modification text, enabling more precise feature alignment between language and vision. Furthermore, we introduce target relative negative sam-pling, which constructs a target relative similarity distribution and selects in-formative negatives from a mid-zone region that excludes both easy negatives and ambiguous false negatives. This strategy enables more reliable retrieval for fine-grained attribute changes by improving query discriminativeness and reducing confusion caused by semantically similar but irrelevant candidates. We conduct extensive experiments on standard CIR benchmarks, including FashionIQ and CIRR, under both supervised and zero-shot retrieval settings. DQE-CIR consistently achieves superior performance across multiple evalu-ation metrics, demonstrating improvements in both coarse retrieval accuracy and fine-grained semantic alignment compared to existing methods. Detailed ablation studies and qualitative analyses further validate the contribution of each component and confirm that modeling target relative negative samples is crucial for robust and reliable CIR. 
+
+Keywords: composed image retrieval, vision–language model, query embedding, negative sampling, semantic alignment 
+
+1. Introduction 
+
+Composed Image Retrieval (CIR) aims to retrieve images that apply the modification specified by the user based on a reference image and a textual description. Unlike existing text-to-image or image-to-image retrieval meth-ods [1, 2, 3], CIR enables fine-grained and controllable retrieval by jointly modeling visual context and linguistic modification, making it particularly suitable for interactive retrieval where users iteratively refine their intent. Re-cent advances in CIR [4, 5] have significantly expanded its practical impact across real-world applications such as fashion search, product recommenda-tion, and content management systems, where precise attribute changes such as color, shape, quantity, or appearance must be accurately applied in the retrieved results [6, 7]. As a result, recent research has increasingly focused on developing distinctive query representations that faithfully capture sub-tle semantic shifts while remaining robust to visually similar but irrelevant candidates, exploring directions such as improved multimodal fusion and attribute-aware modeling [8, 9]. Although extensive research has improved the overall capability of CIR methods, most existing methods [10, 11, 12] still rely on contrastive learning, where the target image is treated as the only positive object, and all remaining images are classified as negatives. This introduces two limitations that arise in CIR. As illustrated in Fig. 1, the first limitation is relevance suppression. Im-ages that match modified attributes of the user (i.e., “green” and “short-sleeved”) are often treated as negatives simply because they are not labeled as the target. These relevant images share essential attributes with the target but are gradually penalized during training. Consequently, they receive lower similarity scores and can be ranked below irrelevant images that do not satisfy the conditions of the user. Since real-world users typically expect multiple relevant results rather than a single exact match, the suppression of such im-2Existing Methods DQE-CIR Irrelevance  
+
+> 1.
+> 4.
+> relevance 2.
+> 3.
+> Concat
+> Reference Image Modification Text
+
+“A green short-sleeved T-shirt” 
+
+> Image Encoder Text Encoder
+> Image Corpus 1. 4. 2. 3. Retrieval
+
+Figure 1: Example of attribute-aware relevance separation in CIR. Given a reference image and the modification text specifying green and short-sleeved, candidate images are grouped according to their attribute alignment. The red box shows irrelevant images that violate key attributes and commonly appear in top-ranked results of existing CIR models. In contrast, the blue box shows relevant images that satisfy both attributes—results that DQE-CIR retrieves consistently through attribute-aware query embeddings and distinctive ranking constraints. 
+
+3ages directly undermines retrieval quality and user satisfaction [13, 14]. The second limitation visible in Fig. 1 is semantic confusion. Contrastive learning does not explicitly model attribute discriminativeness, which embeddings for different queries tend to collapse into nearby regions of the representation space. As a result, the model struggles to separate queries with different attribute modifications, leading to reduced discriminativeness when subtle attributes such as color or sleeve length must be distinguished [15]. To address these limitations, we propose Distinctive Query Embeddings for Composed Image Retrieval through Learnable Attribute Weights and Target Relative Negative Sampling (DQE-CIR), a framework designed to produce more distinctive and attribute-aware query embeddings while miti-gating performance degradation caused by false negatives. The first compo-nent of DQE-CIR is Learnable Attribute Weights, which enable the model to adaptively regulate the contribution of key attributes such as color and shape within the composed query representation. By assigning learnable importance to attribute-specific features derived from textual modifications, the model emphasizes attributes that are critical for a given retrieval intent while suppressing less informative features. This adaptive weighting leads to a more distinctive embedding space, in which queries applying different attribute changes are better distinguished from one another, thereby facili-tating more reliable alignment with target images in CIR. The second component is Target Relative Negative Sampling (TRNS). Instead of treating all non-target images as negatives, TRNS evaluates each candidate relative to the target by computing a ∆-score and identifying a mid-zone region that contains images sufficiently similar to provide meaning-ful supervision but not so similar that they constitute false negatives. This target relative perspective prevents both relevance suppression and overly easy negative sampling, allowing the model to focus training on semantically informative samples. After defining this target relative negative set, Pairwise Learning is applied. Unlike standard contrastive learning, which compares a positive sample against many negatives simultaneously, pairwise learning fo-cuses on a single selected negative for each query. This strengthens the rank-ing margin between relevant and less relevant images, allowing the model to train clearer preference ordering and to form a distinctive embedding space. We conduct extensive experiments on standard CIR benchmarks, includ-ing FashionIQ and CIRR, under both supervised and zero-shot retrieval set-tings. Quantitative results evaluated using Recall@K and mean Average Precision (mAP) demonstrate that DQE-CIR consistently outperforms exist-4ing methods, achieving improvements in both overall retrieval accuracy and fine-grained retrieval performance. Qualitative evaluations further show that the proposed method retrieves images that better apply the intended mod-ifications, producing more accurate and semantically appropriate retrieval results compared to prior methods. In addition, ablation studies systemat-ically verify the contribution of each component, confirming that utilizing target relative negative samples and applying attribute emphasis pairwise learning are crucial for reliable CIR. The main contributions of this paper are summarized as follows: 
+
+• We introduce DQE-CIR, a framework that constructs distinctive and attribute-sensitive query embeddings through learnable attribute weights and auxiliary attribute queries. 
+
+• We present a Target Relative Negative Sampling, a negative selection strategy that identifies a mid-zone of target relative negatives using a ∆-score band. This mid-zone excludes false negatives and removes excessively easy negatives, enabling training to focus on semantically informative and properly challenging samples. 
+
+• We demonstrate the effectiveness of DQE-CIR through extensive ex-periments, showing that it outperforms existing methods in various benchmarks. The improvements are particularly pronounced in miti-gating relevance suppression and semantic confusion, two limitations of existing CIR methods. 
+
+2. Related Work 
+
+2.1. Vision-Language Models 
+
+Vision–Language Models seek to learn joint representations from paired visual and textual data, enabling a single model to reason across modalities and support a wide range of downstream tasks such as retrieval, captioning, and multimodal understanding [16, 17]. Foundational dual-encoder meth-ods [18, 19, 20], exemplified by CLIP [21], align global image and text em-beddings through large-scale contrastive pretraining, demonstrating strong generalization and zero-shot capabilities. Subsequent architectures, such as BLIP [22], introduce cross-modal fusion strategies that integrate linguistic context into visual feature processing, enhancing the model capacity for 5fine-grained semantic reasoning [23, 24]. A particularly influential advance-ment is BLIP-2 [25], which adopts a modular design with a frozen vision encoder and a frozen large language model connected by a lightweight Q-Former [26, 27, 28]. The Q-Former employs trainable query tokens that at-tend to the frozen visual backbone and extract task-relevant features, which are then projected into the language model space through cross-attention. This strategy not only yields expressive multimodal representations but also significantly reduces training cost by limiting the number of trainable pa-rameters [29, 30]. In DQE-CIR, we build upon BLIP-2 as the underlying vision–language backbone. Specifically, we utilize its pretrained image en-coder, text encoder, and Q-Former to construct the initial multimodal em-bedding space for composed queries and candidate images. Unlike methods that use BLIP-2 solely for feature extraction, DQE-CIR fine-tunes the Q-Former and projection layers to generate distinctive and composition-aware query embeddings that are sensitive to attribute variations expressed in tex-tual modifications. This adaptation enables the model to leverage strong pretrained priors from BLIP-2 while adapting its representations to the spe-cific demands of CIR. 
+
+2.2. Composed image retrieval 
+
+Composed image retrieval (CIR) addresses the task of retrieving a target image from a database given a multimodal query that combines a reference image with a modification text [31, 32]. Recent methods [33, 34, 35] build on large vision–language backbones and differ mainly in how they form and train the composed query representation. CLIP4Cir [10] fine-tunes CLIP and introduces a lightweight composition network that fuses the reference image feature and the relative caption into a single query embedding, which is then optimized with triplet-style contrastive losses for CIR benchmarks. Extending this method, BLIP4CIR [36] leverages BLIP-style representations and bi-directional training, where the model is trained not only to retrieve the target image given a composed query but also to retrieve the reference image given the target and the modification text, thereby improving the ro-bustness of the composition function and better exploiting the symmetry in CIR. Beyond small- to medium-scale curated datasets, CoVR [37] focuses on composed video retrieval by exploiting web-scale video captions, automati-cally constructing large-scale video–text–video training pairs, and adapting a BLIP-2-based model to capture compositional modifications in video re-trieval. More recently, SPRC [38] proposes to learn sentence-level prompts 6appended to the modification text, using pretrained vision–language mod-els such as BLIP-2 and a combination of image–text contrastive loss and prompt-alignment loss, so that standard text-based retrieval models can be reused for CIR without designing task-specific composition networks. Com-plementary to prompt-based methods, QuRe [39] introduces a hard negative sampling strategy that explicitly accounts for the relevance of non-target images, constructing query-relevant negatives to encourage the model to dis-tinguish between varying degrees of semantic similarity within the candidate set. Despite these advances, most prior CIR methods [40, 41, 42] still rely on contrastive learning that treats the ground-truth image as the only positive and all remaining images as negatives. This method often causes relevance suppression, where semantically relevant images are incorrectly pushed away as false negatives, and semantic confusion, where distinct modification intents collapse into overlapping regions in the embedding space [43, 44]. In contrast, DQE-CIR adopts a pairwise learning paradigm over composed query–image pairs, directly optimizing relative preference scores so that more relevant images are consistently ranked above less relevant ones, thereby mitigating Relevance Suppression and Semantic Confusion while producing a more dis-tinctive and composition-aware retrieval space. 
+
+3. Method 
+
+To enhance distinctive query embeddings and improve retrieval perfor-mance in CIR, we propose DQE-CIR, a framework that applies attribute-aware query construction, target relative negative sampling, and single-negative ranking optimization. DQE-CIR aims to generate query representations that more clearly capture the intended attribute modifications, thereby reduc-ing semantic ambiguity and improving fine-grained retrieval accuracy. The overall framework is illustrated in Fig. 2, which shows how the model in-tegrates learnable attribute weights, dynamic negative selection based on 
+
+∆-score bands, and a single-negative pairwise learning strategy to construct a more distinctive and composition-aware embedding space. Through these components, DQE-CIR effectively strengthens attribute sensitivity, mitigates semantic confusion, and enhances the ability of the model to apply the mod-ification text to the reference image in a structurally meaningful way. 7Reference Image Modification Text 
+
+> two dogs of the same kind on the lawn
+> Positive Image
+
+Target Relative Negative Sampling BLIP-2 Negative Image Learnable Attribute Weights 
+
+> Target Image
+> Mid Zone
+> Image Encoder Image Encoder Text LLM
+> Q-Former Q-Former
+> Color Query Color Weight
+> Total Query Positive Score Negative Score Image Encoder Q-Former
+> BLIP-2 KL-divergence Loss +Attribute-aware Margin Loss
+
+Pairwise Learning 
+
+> Base Query Shape Query Shape Weight
+
+-Score 
+
+> False Negative
+> Easy Negative
+> Random Selection
+
+Figure 2: Overview of the proposed DQE-CIR framework. DQE-CIR first encodes the ref-erence image, modification text, and candidate images using BLIP-2 to obtain base query representations. Learnable Attribute Weights then enhance the color- and shape-specific sub-queries, which are combined to form the final attribute-aware query embedding and optimized through KL-divergence and attribute-aware margin losses. In parallel, Tar-get Relative Negative Sampling (TRNS) selects a single negative from the ∆-score–based mid-zone, enabling distinctive pairwise ranking training. Together, these components strengthen fine-grained attribute sensitivity and improve retrieval discriminativeness. 
+
+83.1. Problem Definition 
+
+We consider a CIR dataset D composed of triplets. Each triplet is de-fined as (xref , x txt , y tar ), where xref denotes the reference image, xtxt specifies the modification text describing the intended change, and ytar is the target image that accurately applies the intended modification. The image corpus is denoted as {Ij }Nj=1 , where N is the total number of candidate images. For each query pair (xref , x txt ), the goal is to construct a query embedding q that accurately captures the intended transformation from xref to ytar . During re-trieval, the model computes similarity scores between the query embedding and the representation of every image Ij ∈ I, and ranks them accordingly. The correct target image ytar should receive the highest similarity score, and all other images should be ordered based on their semantic relevance. 
+
+3.2. Learnable Attribute Weights 
+
+To enhance the ability to apply fine-grained attribute modifications, learn-able attribute weights are integrated into the Q-former-based query encoding process. The Q-former receives xref and xtxt , and produces a set of U query tokens Q = {qu}Uu=1 , where each token qu corresponds to one of the U la-tent learnable queries used by the Q-former to extract cross-modal features. A pooled representation of these tokens yields the composed query embed-ding q. To explicitly emphasize attribute-sensitive features, attribute-specific sub-query features qcolor and qshape are extracted from Q-former attention out-puts conditioned on color-related and shape-related terms in the modification text. The attribute-enhanced query embedding q∗ is defined by the following equation: 
+
+q∗ = q + wcolor · qcolor + wshape · qshape , (1) where wcolor and wshape are learnable scalar weights that modulate the contri-bution of color- and shape-sensitive features to the final embedding. This for-mulation emphasizes distinctive attribute dimensions within the embedding space, enabling the composed query representation to align more faithfully with the intended modification while remaining distinguishable from visually similar distractors during retrieval. 
+
+3.3. Target Relative Negative Sampling 
+
+To identify informative negatives that contribute to a more distinctive query embedding, DQE-CIR constructs a target relative ∆-score distribution for each composed query. Given a reference image and modification text, the 9Image Corpus Embeddings Target Embedding  
+
+> Cosine Similarity Total Query Embedding
+> ∆-Score Mid-Zone
+
+Figure 3: Illustration of Target Relative Negative Sampling (TRNS). The total query embedding is compared with the target embedding and all image corpus embeddings using cosine similarity to derive relevance scores. Subsequently, the ∆-score is computed as the difference between the target similarity and each candidate similarity. Candidate images whose ∆-score falls within a predefined mid-zone are designated as informative negatives for training. 
+
+model first encodes them into a joint query embedding q that represents how the reference image should be applied with the specified attribute changes. In parallel, every image Ij in the image corpus I is encoded into an embedding 
+
+vj , and the corresponding target image ytar is encoded into vtar . The target embedding vtar is treated as the positive ground truth because it is expected to apply the intended modification most accurately. As shown in Fig. 3, the model computes cosine similarities between the query embedding and all image embeddings: 
+
+sj = cos( q∗, v j ), star = cos( q∗, v tar ), (2) where sj measures how closely a candidate image Ij applies the intended transformation, and star measures how well the target image applies the same transformation. Using these similarity scores, DQE-CIR defines the target relative ∆S-value for each candidate image as: 
+
+∆Sj = star − sj , (3) where ∆Sj quantifies the similarity gap between the target image and can-didate Ij , with smaller values indicating candidates that are closer to the target in the embedding space. This yields a one-dimensional ∆S distribu-tion centered around the target similarity. 10 To focus on moderately challenging negatives, DQE-CIR defines a ∆S-based mid-zone by discarding overly easy negatives with very large ∆S-values and overly confusing negatives whose ∆S-values are too close to zero. For-mally, the mid-zone is defined as: 
+
+M = {j | α ≤ ∆Sj ≤ β}, (4) where α and β denote the lower and upper bounds of the ∆S band, respec-tively, ensuring that only candidates with intermediate similarity gaps are preserved and later used for single-negative sampling. 
+
+3.4. Learning with Single-Negative Ranking Pairs 
+
+After constructing the mid-zone M from the ∆S distribution as described in Section. 3.3, DQE-CIR forms a single target negative ranking pair by ran-domly selecting one candidate image within M . The sampled negative serves as the contrastive counterpart to the correct target image, providing a com-pact ranking structure that enhances the ability to distinguish fine-grained and attribute-sensitive modifications. Beyond the main composed query, DQE-CIR further introduces color- and shape-specific sub-queries, each de-signed to highlight attribute-related features that are often underrepresented in existing contrastive learning. These sub-queries supply auxiliary pairwise constraints that operate jointly with the primary divergence objective. The KL divergence loss for the composed query is defined as: 
+
+LKL = KL (ptar ∥ ppred ), (5) where ptar denotes the target distribution over the image corpus associated with the reference–text composition, and ppred represents the predicted dis-tribution over candidate image representations. To enforce a ranking margin between the target and the mid-zone negative, the main pairwise ranking loss is defined as: 
+
+Lmain = max(0 , m − star + sneg ), (6) where m is a margin hyperparameter, star denotes the similarity between the composed query embedding and the target image, and sneg represents the similarity with the sampled negative. For each attribute-aware sub-query 
+
+q(a), where a ∈ { color , shape }, the auxiliary margin loss is defined as: 
+
+La = max(0 , m a − s(a)tar + s(a)neg ), (7) 11 Algorithm 1: DQE-CIR: Distinctive Query Embeddings through Learnable Attribute Weights and Target Relative Negative Sampling in Composed Image Retrieval 
+
+Input: Reference image xref , modification text xtxt , target image 
+
+ytar , image corpus I = {Ij }Nj=1 , mid-zone bounds (α, β ),temperature τ , margins m, m a, weight λrank 
+
+Output: Total loss Ltotal  
+
+> 1
+
+q ← fQ(xref , x txt ) 
+
+> 2
+
+qcolor , q shape ← fA(xtxt ) 
+
+> 3
+
+q∗ ← q + wcolor qcolor + wshape qshape  
+
+> 4
+
+vtar ← fI(ytar ) 
+
+> 5
+
+star ← cos( q∗, v tar ) 
+
+> 6
+
+foreach Ij ∈ I \ { ytar } do  
+
+> 7
+
+vj ← fI(Ij ) 
+
+> 8
+
+sj ← cos( q∗, v j ) 
+
+> 9
+
+∆Sj ← star − sj 
+
+> 10
+
+end  
+
+> 11
+
+M ← { j | α ≤ ∆Sj ≤ β} 
+
+> 12
+
+j− ∼ M ; // sample a single negative in the mid-zone  
+
+> 13
+
+vj− ← fI(Ij− ) 
+
+> 14
+
+sj− ← cos( q∗, v j− ) 
+
+> 15
+
+ppred ← softmax 
+
+[star ,{sj }]
+
+> τ
+
+ 
+
+> 16
+
+ptar ← [1 , 0, . . . , 0]  
+
+> 17
+
+LKL ← KL( ptar ∥ ppred ) 
+
+> 18
+
+Lmain ← max(0 , m − star + sj− ) 
+
+> 19
+
+foreach a ∈ { color , shape } do  
+
+> 20
+
+s(a)tar ← cos( qa, v tar ) 
+
+> 21
+
+s(a)neg ← cos( qa, v j− ) 
+
+> 22
+
+La ← max(0 , m a − s(a)tar + s(a)neg ) 
+
+> 23
+
+end  
+
+> 24
+
+Ltotal ← LKL + λrank Lmain + wcolor Lcolor + wshape Lshape  
+
+> 25
+
+return Ltotal 
+
+where s(a)tar and s(a)neg denote the similarities computed using the attribute-specific sub-query, and ma controls the margin strength for each attribute. 12 The final training objective that combines KL divergence, the main ranking constraint, and attribute-aware auxiliary losses is defined as: 
+
+Ltotal = LKL + λrank Lmain + wcolor Lcolor + wshape Lshape , (8) where λrank regulates the influence of the main ranking loss, and wcolor and 
+
+wshape are learnable scalar weights that adaptively modulate the influence of color- and shape-specific features in both query representation and attribute-aware supervision during training. The pseudocode is presented in Algo-rithm 1, which summarizes the overall learning procedure of DQE-CIR by integrating attribute-aware query construction, target relative negative sam-pling, and single-negative pairwise optimization into a unified training method. Given a reference image and a modification text, the method first constructs a composed query embedding that adaptively emphasizes distinctive attribute features through learnable attribute weights, enabling precise alignment be-tween textual modifications and visual content. Instead of treating all non-target images as negatives, DQE-CIR leverages target relative similarity dif-ferences to identify informative negatives and selects a single representative negative for training, which provides a clear ranking. This design avoids relevance suppression caused by existing contrastive learning and reduces semantic confusion among visually similar candidates. 
+
+4. Experiment 
+
+4.1. Experimental Setting Evaluation Datasets. We follow two standard benchmarks for CIR, Fash-ionIQ [45] and CIRR [46]. FashionIQ contains fashion product images paired with modification texts that apply fine-grained attribute changes such as color, material, and sleeve length. This dataset evaluates how effectively a retrieval system applies subtle attribute variations while maintaining the identity of the reference item. CIRR covers more diverse real-world scenes in which the modification text applies broader attribute and shape-oriented changes under larger visual variation. Its subset-based evaluation protocol further examines the ability to distinguish visually similar candidates. To-gether, FashionIQ and CIRR provide complementary perspectives for assess-ing whether a method constructs distinctive query embeddings and applies attribute-aware modifications across object-centric and scene-centric retrieval settings. 13 Implementation Details. We conduct all experiments on a single NVIDIA A6000 GPU with 48 GB memory using a unified training pipeline built upon a BLIP-2 backbone that applies reference images, target images, and composed queries to a shared embedding space. We train the model for 50 epochs on CIRR and 30 epochs on FashionIQ with a batch size of 128 and adopt mixed precision training for computational efficiency. We optimize all parameters using AdamW [47] with weight decay, and we apply a cosine learning rate schedule that gradually reduces the step size across epochs. The training ob-jective integrates a KL divergence term that encourages the composed query to apply the target image more strongly than any candidate, together with a margin-based ranking loss that maintains a similarity margin between the target and the hardest negative sample. We further incorporate color-focused and shape-focused auxiliary queries, whose contributions are controlled by learnable non-negative weights updated jointly with the primary parameters. During training, the target relative negative set is redefined following a fixed interval-based schedule. We first employ an initial warm-up, during which negative samples are not selectively refined and instead consist of the entire image corpus except for the target image, allowing the model to establish a stable similarity distribution. After the warm-up phase, the training process is divided into 5 equal-length intervals, and the target relative negative set is updated once at the beginning of each interval based on the current model predictions. The selected negatives are then kept fixed and reused through-out the remainder of the corresponding interval, without further refinement. During this training process, the target relative negative set is refreshed a to-tal of 5 times over the course of training. This interval-based update strategy balances training stability and computational efficiency, while ensuring that the selected target relative negatives remain informative as the embedding space evolves. 
+
+4.2. Evaluation Metrics 
+
+We evaluate retrieval performance using three metrics that jointly mea-sure how effectively a composed query applies the intended modification and retrieves the correct target image from a large candidate set. Recall@K quan-tifies the proportion of queries for which the target image is ranked within the top K retrieved results, providing a direct indicator of whether the similarity scores induced by the composed query embedding successfully prioritize the correct target over non-target candidates. Recall@K implies that the method applies the modification text to the reference image in a way that yields a 14 distinctive ordering of images in the corpus, especially around the highest ranks, where retrieval quality is most critical. On the CIRR dataset, the evaluation additionally includes Recall subset @K, which is computed in a restricted subset of images selected to be semantically and visually similar to the reference image, often sharing global content and local features. This metric focuses on the most challenging cases in which subtle attribute differences, such as color or shape, determine the correct answer, and it evaluates whether the method can apply fine-grained modifi-cations while maintaining clear separation from visually similar distractors. In addition, we report the Average metric, which is defined as the mean of Recall@K over several K values specified by each benchmark protocol, which summarizes retrieval stability across different ranking depths rather than at a single setting. Considering Recall@K, Recall subset @K, and Average together enables a comprehensive assessment that covers both overall retrieval accu-racy and attribute-aware robustness, and reveals how consistently the pro-posed method constructs distinctive, modification-aligned query embeddings under varying difficulty levels and corpus conditions. 
+
+4.3. Quantitative Evaluation 
+
+We quantitatively compare our method with a diverse set of existing CIR methods to assess how effectively each system applies the modified text to the reference image and constructs distinctive query embeddings for ranking. This comparison spans both object-centric and scene-centric benchmarks, en-abling a comprehensive evaluation of retrieval accuracy under varying levels of visual complexity. For each dataset, we report performance using mul-tiple Recall@K metrics, along with subset-based measures. This enables an evaluation of global retrieval effectiveness over the full image corpus as well as fine-grained target discriminativeness under controlled subset-level retrieval settings. By situating our DQE-CIR framework alongside existing CIR methods, we evaluate whether our attribute-aware weighting and TRNS-driven negative sampling strategy contribute meaningfully to constructing more distinctive and modification-aligned query embeddings. 
+
+FashionIQ. In Tab. 1, we present a quantitative comparison of retrieval per-formance on the FashionIQ validation dataset, where DQE-CIR consistently surpasses existing CIR methods across categories and metrics. Using Re-call@10 and Recall@50 as evaluation measures, DQE-CIR achieves the best results for each clothing type. For the Dress category, DQE-CIR attains 15 Table 1: Retrieval quantitative performance of diverse CIR models on the FashionIQ validation dataset. Results are reported for the Dress, Shirt, and Toptee categories using Recall@10 and Recall@50. Bold indicates the best performance for each metric.                                                                            
+
+> Method Dress Shirt Toptee Average
+> R@10 R@50 R@10 R@50 R@10 R@50 R@10 R@50 CoSMo [48] 23.60 49.18 18.11 43.18 24.63 54.31 22.11 48.89 MGUR [49] 23.15 48.74 18.99 43.47 25.55 52.83 22.56 48.35 CLIP4Cir [10] 38.32 63.90 44.31 65.41 47.27 70.98 43.30 66.76 Bi-BLIP4CIR [36] 39.12 62.92 39.21 62.81 44.37 67.06 40.90 64.26 CoVR [37] 44.55 69.03 48.43 67.42 52.60 74.31 48.53 70.25 SPRC [38] 45.71 70.00 51.37 72.77 55.48 77.46 50.86 73.41 QuRe [39] 46.80 69.81 53.53 72.87 57.47 77.77 52.60 73.48
+> DQE-CIR 48.47 71.09 55.94 74.62 59.38 79.12 54.60 75.94
+
+48.47 and 71.09, improving over the strongest prior baseline QuRe, which records 46.80 and 69.81. For the Shirt, DQE-CIR reaches 55.94 and 74.62, again outperforming QuRe with 53.53 and 72.87. A similar trend appears in the Toptee category, where DQE-CIR obtains 59.38 and 79.12, compared with 57.47 and 77.77 for QuRe. When averaged over all categories, DQE-CIR achieves 54.60 Recall@10 and 75.94 Recall@50, yielding a gain of about 2.0 to 2.5 points over the existing best method. These consistent gains un-der both the top-10 and the top-50 indicate that DQE-CIR produces more distinctive query embeddings that better apply the intended textual modifi-cations, leading to more accurate retrieval of the target images across diverse garment types. 
+
+CIRR. The results in Tab. 2 show the performance on the CIRR test dataset, where DQE-CIR consistently achieves the strongest retrieval performance across both global ranking accuracy and subset-level discriminativeness. Com-pared with prior methods, DQE-CIR attains the highest Recall@K scores at all evaluated ranks, reaching 54.05 at K=1 and 98.68 at K=50, indicating improvements in both strict top-rank retrieval and broader candidate cover-age. More importantly, DQE-CIR also delivers clear gains in Recall subset @K, achieving 80.14, 92.39, and 97.32 at K=1, 2, and 3, respectively. This demon-strates that DQE-CIR can reliably identify the correct target image within controlled candidate subsets that contain visually similar images, applying stronger fine-grained target discriminativeness under ambiguity-free retrieval 16 Table 2: Retrieval quantitative performance comparison across different CIR models on the CIRR test dataset. Results are reported using Recall@K to evaluate global ranking accuracy over the entire image corpus and Recall subset @K to assess fine-grained target identification within the predefined candidate subset that contains the ground-truth im-age. The average metric jointly applies both global retrieval performance and subset-level discriminativeness.                                                                           
+
+> Method Recall@K Recall subset @K Average
+> K=1 K=5 K=10 K=50 K=1 K=2 K=3 R@5 + Recall subset @1 CoSMo 6.48 23.11 34.63 67.33 20.29 40.22 60.80 43.55 MGUR 5.78 21.45 33.42 67.06 20.29 40.22 60.80 42.91 CLIP4Cir 44.12 77.23 86.51 97.95 73.11 89.11 95.42 75.17 Bi-BLIP4CIR 32.55 64.36 76.53 91.61 63.54 82.46 92.48 63.95 CoVR 39.76 70.15 80.89 95.01 72.46 87.86 94.77 71.30 SPRC 50.75 80.58 88.72 97.59 79.57 91.76 96.70 80.07 QuRe 52.22 82.53 90.31 98.17 78.51 91.28 96.48 80.52
+> DQE-CIR 54.05 84.17 91.58 98.68 80.14 92.39 97.32 82.16
+
+settings. These improvements translate into the best overall average score of 82.16, surpassing the strongest prior baseline QuRe. The consistent gains across both global and subset-based metrics indicate that DQE-CIR learns more distinctive query representations, enabling stable and reliable target ranking even in challenging retrieval on CIRR. 
+
+4.4. Qualitative Evaluation 
+
+We provide qualitative retrieval examples on both FashionIQ and CIRR to visually examine the behavior of CIR models under different evaluation settings. On FashionIQ, we compare DQE-CIR with other representative methods to highlight relative differences in retrieval quality and attribute alignment. On CIRR, we focus on illustrating the retrieval results of DQE-CIR under a variety of conditions, including subtle attribute changes and vi-sually similar candidates, where accurate target identification is particularly difficult. Through these results, we illustrate how DQE-CIR produces more coherent and consistent retrieval outcomes, offering insights into the quali-tative advantages that are not fully validated by numerical metrics alone. 
+
+FashionIQ. The results in Fig. 4 shows a qualitative comparison on the Fash-ionIQ dataset, illustrating the retrieval behavior under fine-grained attribute modification. Given a reference image of a pink short-sleeved shirt and a modification text (i.e., “A blue short-sleeved shirt with white lettering”), the 17 Ours QuRe SPRC CoVR-BLIP Bi-BLIP4CIR 
+
+> “A blue short-sleeved shirt with white lettering”
+
+Reference Image Modification Text 
+
+Retrieval Figure 4: Qualitative comparison of different CIR models on the FashionIQ validation dataset. Given a reference image and a modification text specifying “a blue short-sleeved shirt with white lettering”, we compare the top-ranked retrieval results produced by dif-ferent CIR methods. While baseline models often retrieve images that partially match the query attributes, DQE-CIR retrieves images that correctly satisfy all specified modifica-tions. 
+
+18 goal is to retrieve images that accurately apply all specified attributes si-multaneously. As shown in Fig. 4, existing CIR methods tend to focus on partial feature overlap, returning top-ranked results that merely contain blue color or some white regions, regardless of whether explicit white lettering is present. This behavior indicates limited distinctive capability in capturing attribute conjunctions, as these methods prioritize coarse semantic similarity rather than precise attribute alignment. In contrast, DQE-CIR consistently retrieves blue short-sleeved shirts with clearly visible white lettering across the top results, demonstrating a more faithful interpretation of the modi-fication text. This qualitative result highlights that the proposed method enforces stronger attribute-level reasoning in the retrieval, enabling target relative discriminativeness that filters out visually similar yet semantically incomplete candidates and yields retrievals that closely match the intended combination of color, sleeve length, and textual pattern. 
+
+CIRR. The results in Fig. 5 provide a qualitative evaluation of the CIRR dataset, demonstrating the performance of DQE-CIR across diverse retrieval conditions driven by reference images and modification texts. As illustrated in case (a), when the modification text specifies a color change, DQE-CIR successfully retrieves images that accurately apply the transformed object color while preserving the original object identity, indicating a precise color-level feature. In case (b), the evaluation focuses on retrieving images that contain a specified number of identical objects described in the text, where DQE-CIR correctly aligns numerical constraints with the visual content and returns results that match the intended object count. Case (c) focuses on appearance changes, such as querying different life stages of the same object (i.e., younger or grown status). The retrieval results show that DQE-CIR captures these subtle appearance transitions without confusing them with se-mantically similar objects. Finally, case (d) examines form variations, where the modification text describes structural or contextual changes, such as background alterations or objects filled with liquid, and DQE-CIR consis-tently retrieves images that apply these form-level transformations. Across all cases, the qualitative results show that DQE-CIR maintains superior re-trieval by jointly modeling target relative negative samples and fine-grained attribute alignment, allowing robust retrieval across variations in color, quan-tity, appearance, and form within a unified framework. 19 (a) Color 
+
+(b) Quantity 
+
+(c) Appearance 
+
+(d) Form 
+
+> “A red car of the
+> same kind driving
+> on the road”
+> “A blue drum with
+> a black chair”
+> “Three standing
+> penguins of the
+> same breed”
+> “Two birds of the
+> same breed on a
+> tree branch”
+> “The puppy form
+> of the same breed
+> of dog”
+> “The adult form
+> of the same breed”
+> “A dog of the
+> same breed
+> swimming in the
+> water”
+> “A beaker
+> containing green
+> liquid”
+
+Figure 5: Qualitative comparison of DQE-CIR on the CIRR test dataset across different compositional categories. Retrieval results are conditioned on four categories of modifica-tions: (a) Color, (b) Quantity, (c) Appearance, and (d) Form. Given a reference image and a modification text, the model retrieves images that apply the specified attribute changes while preserving the object. 
+
+20 Table 3: Zero-shot quantitative performance comparison of diverse CIR models on the CIRCO dataset, reported using mAP, which measures the average precision computed over the ranked retrieval results.                                     
+
+> Method mAP@5 mAP@10 mAP@25 mAP@50
+> CoSMo 0.31 0.40 0.47 0.53 MGUR 0.14 0.17 0.25 0.30 CLIP4Cir 10.58 11.18 12.32 12.96 Bi-BLIP4CIR 4.74 4.97 5.69 6.10 CoVR 18.35 19.25 21.02 21.88 SPRC 17.57 18.48 20.14 20.98 QuRe 23.22 24.23 26.26 27.24
+> DQE-CIR 24.27 25.68 27.47 28.13
+
+4.5. Ablation Studies 
+
+We conduct ablation studies to evaluate the contribution of each compo-nent in DQE-CIR from multiple complementary perspectives. These studies are designed to systematically examine how the proposed method influences retrieval performance, representation quality, and training. By decomposing the proposed framework into its key components and analyzing their effects under controlled settings, we aim to provide a comprehensive understanding of how DQE-CIR achieves distinctive and robust CIR. 
+
+Zero-shot Performance Comparison. We evaluate zero-shot retrieval perfor-mance on the CIRCO dataset [50] using mAP at multiple setting levels. As shown in Tab. 3, DQE-CIR achieves the highest performance across all evalu-ation points, indicating stable generalization in the absence of dataset-specific training. DQE-CIR attains mAP@5 of 24.27, mAP@10 of 25.68, mAP@25 of 27.47, and mAP@50 of 28.13. Compared with QuRe, which reports 23.22, 24.23, 26.26, and 27.24 at the same settings, DQE-CIR shows improvements of around 1.0 to 1.5 points throughout the ranked retrieval range. Other CIR methods, including CoVR and SPRC, achieve mAP@50 values of 21.88 and 20.98, while CLIP4Cir and Bi-BLIP4CIR exhibit lower scores across all settings. Overall, the results show that DQE-CIR produces more distinctive query embeddings in zero-shot retrieval by more effectively modeling tar-get relative negative samples and fine-grained feature alignment, leading to improved ranking quality across different retrieval depths on CIRCO. 
+
+Performance Comparison across mid-zone Ranges. We evaluate the effect of different mid-zone ranges defined by the ∆S interval [α, β ] on the CIRR 21 Table 4: Mid-zone range performance comparison on the CIRR test dataset. The mid-zone is defined by the ∆S interval [α, β ].                                           
+
+> Mid-zone ( α–β)Recall@K Recall subset @K K=1 K=5 K=10 K=50 K=1 K=2 K=3
+> 0.30 –0.70 (40%) 52.35 82.64 90.62 98.36 77.95 91.08 96.15
+> 0.25 –0.75 (50%) 53.22 83.42 91.12 98.52 79.02 91.84 96.78
+> 0.20 –0.80 (60%) 54.05 84.17 91.58 98.68 80.14 92.39 97.32
+> 0.15 –0.85 (70%) 53.34 83.50 91.08 98.55 79.18 91.92 96.86
+> 0.10 –0.90 (80%) 52.44 82.78 90.70 98.41 78.12 91.22 96.28
+
+test dataset to examine how the selection of target relative negatives influ-ences retrieval performance. As shown in Tab. 4, the mid-zone setting with 
+
+α = 0 .20 and β = 0 .80 , corresponding to a 60% range, yields the best overall performance across both Recall@K and Recall subset @K metrics. Under this configuration, DQE-CIR achieves Recall@1 of 54.05, Recall@5 of 84.17, Re-call@10 of 91.58, and Recall@50 of 98.68, while also obtaining Recall subset @1 of 80.14, Recall subset @2 of 92.39, and Recall subset @3 of 97.32. Narrower mid-zone ranges, such as 40% and 50%, result in lower Recall@1 values of 52.35 and 53.22, indicating that excessively restrictive intervals reduce the avail-ability of informative negatives. In contrast, wider ranges of 70% and 80% lead to decreased Recall@1 and Recall subset @1, suggesting that overly broad intervals introduce less informative or ambiguous negatives. Overall, these results demonstrate that a balanced mid-zone range allows DQE-CIR to more effectively exploit target relative negative samples, producing more distinc-tive query representations and improving retrieval accuracy on CIRR. 
+
+Cross-Attention Visualization for Semantic Alignment. We provide cross-attention visualizations to analyze how DQE-CIR achieves semantic align-ment between composed queries and retrieved images. As illustrated in Fig 6, the visualizations present cross-attention maps generated when the model jointly processes the reference image and the modification text, re-vealing which visual regions contribute most to the retrieval decision. In the FashionIQ, the attention maps consistently concentrate on attribute-specific regions corresponding to the pink color, short sleeves, and black cat patterns described in the modification text. Notably, the attention is localized around 22 “A pink short-sleeved shirt with three black cats” “A scuba diver feeding a swimming sea lion underwater” Reference Image Modification Text Retrieved Image “A pink short-sleeved shirt with three black cats” “A pink short-sleeved shirt with three black cats” “A scuba diver feeding a swimming sea lion underwater” “A scuba diver feeding a swimming sea lion underwater” Attention Map 
+
+> (a) FashionIQ (a) CIRR
+
+Figure 6: Cross-attention highlight visualization of DQE-CIR on the FashionIQ and CIRR datasets. The visualization highlights cross-attention maps corresponding to the composed queries, showing how the model attends to attribute-relevant regions in the retrieved images conditioned on the reference image and modification text. 
+
+the cat silhouettes and sleeve regions rather than diffused across the entire garment, indicating precise alignment between textual attributes and their visual counterparts. In the CIRR, the attention highlights similarly concen-trate on regions directly related to the target concept in the scuba diver and the sea lion. These results demonstrate that DQE-CIR emphasizes meaning-ful regions that directly apply the intended modification, rather than rely-ing on entire visual appearance features. Overall, the attention visualization confirms that DQE-CIR produces semantically aligned query representations by focusing on attribute-consistent visual features, enabling precise retrieval under diverse modification conditions. 
+
+Performance Comparison with Consistent Backbones. We report a controlled quantitative comparison on the FashionIQ validation dataset using the same vision-language backbone. As shown in Tab. 5, when the BLIP backbone is fixed, DQE-CIR consistently outperforms existing baselines Bi-BLIP4CIR and QuRe across all categories and both Recall@10 and Recall@50. Com-pared with the strongest prior baseline QuRe under the same BLIP setting, DQE-CIR improves Dress from 40.80 and 64.90 to 41.87 and 65.92, Shirt from 45.93 and 65.90 to 47.16 and 66.83, and Toptee from 52.07 and 72.87 to 53.58 and 74.24, resulting in a higher average from 46.27 and 67.89 to 23 Table 5: Retrieval performance comparison on the FashionIQ validation dataset with consistent vision–language model backbones.                                                                   
+
+> Method Backbone Dress Shirt Toptee Average
+> R@10 R@50 R@10 R@50 R@10 R@50 R@10 R@50 Bi-BLIP4CIR BLIP 39.12 62.92 39.21 62.81 44.37 67.06 40.90 64.26 QuRe BLIP 40.80 64.90 45.93 65.90 52.07 72.87 46.27 67.89
+> DQE-CIR BLIP 41.87 65.92 47.16 66.83 53.58 74.24 47.54 69.03
+> CoVR-2 BLIP-2 46.41 69.51 49.75 67.76 51.86 72.46 49.34 69.91 QuRe BLIP-2 46.80 69.81 53.53 72.87 57.47 77.77 52.60 73.48
+> DQE-CIR BLIP-2 47.83 70.68 54.89 73.94 59.02 79.11 53.91 74.55
+
+47.54 and 69.03. Since all methods share an identical backbone, these gains apply to the contribution of the proposed method and query construction strategy rather than architectural differences. Consistent improvement is also observed under the stronger BLIP-2 backbone, where DQE-CIR again achieves the best performance in every category, surpassing QuRe from 46.80 and 69.81 to 47.83 and 70.68 on Dress, from 53.53 and 72.87 to 54.89 and 73.94 on Shirt, and from 57.47 and 77.77 to 59.02 and 79.11 on Toptee, yielding an average improvement from 52.60 and 73.48 to 53.91 and 74.55. These consistent improvements under fixed backbones demonstrate that the proposed target relative negative sampling and pairwise learning enable the construction of more distinctive query embeddings and accurate retrieval of fine-grained attribute modifications, validating their effectiveness indepen-dently of the backbone. 
+
+TRNS Negative Set Size over Training. We analyze the evolution of the av-erage TRNS negative set size across training epochs on FashionIQ and CIRR to better understand the behavior of the proposed target relative negative sampling. As illustrated in Fig. 7, the average number of target relative neg-atives per query at the epochs where the negative set is redefined. For both datasets, the average set size is initially large at the first redefinition stage, indicating that many candidate images exhibit similar relevance scores to the target when the embedding space is still coarse. As training progresses, the average TRNS negative set size decreases consistently across successive redefinition epochs. This trend suggests that the learned embedding space becomes increasingly structured, allowing the method to more effectively sep-arate the target from non-target candidates based on target relative similarity 24 Figure 7: Average TRNS negative set size across training on FashionIQ and CIRR. The negative set is redefined based on the target relative similarity distribution. The decreasing trend indicates that the distribution becomes progressively sharper, allowing the method to focus on a more informative set of negatives as training proceeds. 
+
+25 differences. Notably, the reduction is more rapid on FashionIQ, applying its relatively constrained visual domain, while CIRR exhibits a more gradual decline due to its higher visual diversity and more complex retrieval condi-tions. Overall, this behavior confirms that DQE-CIR progressively sharpens target relative similarity distributions during training, enabling the method to focus on a smaller and more informative set of negatives, which supports more stable optimization and more distinctive query embeddings in CIR. 
+
+5. Conclusion 
+
+In this paper, we propose DQE-CIR, a method designed to construct more distinctive and attribute-aware query embeddings by jointly addressing rel-evance suppression and semantic confusion inherent in existing contrastive learning frameworks. DQE-CIR introduces learnable attribute weights that explicitly control the contribution of color- and shape-sensitive features within the composed query representation, enabling the model to faithfully apply fine-grained modification intents while maintaining clear separation from vi-sually similar distractors. In addition, we formulate target relative negative sampling, which defines a ∆S-based mid-zone to exclude false negatives and overly easy negatives, allowing training to focus on semantically informative samples that provide effective supervision. By combining this target relative sampling strategy with single-negative pairwise ranking, DQE-CIR enforces a clear preference structure between the target image and carefully selected negatives, leading to a more stable and distinctive embedding space. Exten-sive experiments on FashionIQ, CIRR, and CIRCO demonstrate that DQE-CIR consistently outperforms existing methods across both global retrieval and subset-level evaluation metrics, with particularly strong gains under fine-grained and ambiguous retrieval conditions. Qualitative results show that, compared to existing methods, DQE-CIR retrieves images that more faith-fully satisfy fine-grained modification intents, particularly in visually similar cases. In ablation studies, we further confirm that each component of DQE-CIR contributes meaningfully to the observed performance gains, validating the effectiveness of learnable attribute weighting, target relative negative sampling, and single-negative pairwise learning in constructing distinctive query embeddings. Overall, the proposed method provides an effective and unified solution for attribute-sensitive image retrieval, offering improved re-trieval accuracy across retrieval tasks. 26 6. Acknowledgment 
+
+This research was supported by the Institute of Information & Communi-cations Technology Planning & Evaluation (IITP) grant, funded by the Korea government (MSIT) (No. RS-2019-II190079 (Artificial Intelligence Gradu-ate School Program (Korea University)), No. IITP-2025-RS-2024-00436857 (Information Technology Research Center (ITRC), and No.IITP-2025-RS-2025-02304828 (the artificial intelligence star fellowship support program to nurture the best talents). 27 References 
+
+[1] R. Yang, S. Wang, Y. Gu, J. Wang, Y. Sun, H. Zhang, Y. Liao, L. Jiao, Continual learning for cross-modal image-text retrieval based on domain-selective attention, in: Pattern Recognition, Vol. 149, 2024, p. 110273. [2] H. Wen, X. Zhang, X. Song, Y. Wei, L. Nie, Target-guided composed image retrieval, in: Proceedings of the ACM international conference on multimedia, 2023, pp. 915–923. [3] Z. Zhao, L. Guo, T. Yue, E. Hu, S. Shao, Z. Yuan, H. Huang, J. Liu, Chatsearch: A dataset and a generative retrieval model for general con-versational image retrieval, in: Pattern Recognition, Vol. 167, 2025, p. 111696. [4] S. Li, C. He, X. Liu, J. T. Zhou, X. Peng, P. Hu, Learning with noisy triplet correspondence for composed image retrieval, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2025, pp. 19628–19637. [5] C. Huynh, J. Yang, A. Tawari, M. Shah, S. Tran, R. Hamid, T. Chilimbi, A. Shrivastava, CoLLM: A large language model for composed image retrieval, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2025, pp. 3994–4004. [6] L. Du, S. Deng, Y. Li, J. Li, Q. Tian, A survey on composed image retrieval, in: ACM transactions on multimedia computing, communica-tions, and applications, 2025. [7] X. Song, H. Lin, H. Wen, B. Hou, M. Xu, L. Nie, A comprehensive sur-vey on composed image retrieval, in: ACM transactions on information systems, Vol. 44, 2025, pp. 1–54. [8] Y. Wan, W. Wang, G. Zou, B. Zhang, Cross-modal feature align-ment and fusion for composed image retrieval, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2024, pp. 8384–8388. [9] G. Zhang, S. Li, S. Wei, S. Ge, N. Cai, Y. Zhao, Multimodal composi-tion example mining for composed query image retrieval, in: The IEEE transactions on image processing, Vol. 33, 2024, pp. 1149–1161. 28 [10] A. Baldrati, M. Bertini, T. Uricchio, A. Del Bimbo, Composed image retrieval using contrastive learning and task-oriented clip-based features, in: ACM transactions on multimedia computing, communications, and applications, Vol. 20, 2023, pp. 1–24. [11] X. Yang, D. Liu, H. Zhang, Y. Luo, C. Wang, J. Zhang, Decomposing semantic shifts for composed image retrieval, in: Proceedings of the AAAI conference on artificial intelligence, Vol. 38, 2024, pp. 6576–6584. [12] X. Ke, B. Chen, X. Yang, Y. Cai, H. Liu, W. Guo, Cross-modal indepen-dent matching network for image-text retrieval, in: Pattern Recognition, Vol. 159, 2025, p. 111096. [13] L. Du, S. Deng, Y. Li, J. Li, Q. Tian, A survey on composed image retrieval, in: ACM transactions on multimedia computing, communica-tions, and applications, Vol. 21, 2025. [14] L. Tian, J. Zhao, Z. Hu, Z. Yang, H. Li, L. Jin, Z. Wang, X. Li, CCIN: Compositional conflict identification and neutralization for composed image retrieval, in: Proceedings of the IEEE/CVF conference on com-puter vision and pattern recognition, 2025, pp. 3974–3983. [15] Z. Feng, R. Zhang, Z. Nie, Improving composed image retrieval via contrastive learning with scaling positives and negatives, in: Proceedings of the ACM international conference on multimedia, 2024, pp. 1632– 1641. [16] K. Zhou, J. Yang, C. C. Loy, Z. Liu, Conditional prompt learning for vision-language models, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2022, pp. 16816–16825. [17] D. Wang, J. Tian, X. Liang, Y. Tian, L. He, Global-aware fragment representation aggregation network for image–text retrieval, in: Pattern Recognition, Vol. 159, 2025, p. 111085. [18] W. Dai, J. Li, D. Li, A. Tiong, J. Zhao, W. Wang, B. Li, P. N. Fung, S. Hoi, InstructBLIP: Towards general-purpose vision-language models with instruction tuning, in: Advances in neural information processing systems, Vol. 36, 2023, pp. 49250–49267. 29 [19] J. Lin, H. Yin, W. Ping, P. Molchanov, M. Shoeybi, S. Han, VILA: On pre-training for visual language models, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2024, pp. 26689–26699. [20] Y.-H. Cao, K. Ji, Z. Huang, C. Zheng, J. Liu, J. Wang, J. Chen, M. Yang, Towards better vision-inspired vision-language models, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recogni-tion, 2024, pp. 13537–13547. [21] A. Radford, J. W. Kim, C. Hallacy, A. Ramesh, G. Goh, S. Agarwal, G. Sastry, A. Askell, P. Mishkin, J. Clark, G. Krueger, I. Sutskever, Learning transferable visual models from natural language supervision, in: The international conference on machine learning, Vol. 139, 2021, pp. 8748–8763. [22] J. Li, D. Li, C. Xiong, S. Hoi, Blip: Bootstrapping language-image pre-training for unified vision-language understanding and generation, in: The international conference on machine learning, 2022, pp. 12888– 12900. [23] D. Li, J. Li, H. Le, G. Wang, S. Savarese, S. C. H. Hoi, LAVIS: A One-stop Library for Language-Vision Intelligence, in: Proceedings of the annual meeting of the association for computational linguistics, 2023, pp. 31–41. [24] H. Jiang, J. Zhang, R. Huang, C. Ge, Z. Ni, S. Song, G. Huang, Cross-modal adapter for vision–language retrieval, in: Pattern Recognition, Vol. 159, 2025, p. 111144. [25] J. Li, D. Li, S. Savarese, S. Hoi, BLIP-2: Bootstrapping language-image pre-training with frozen image encoders and large language models, in: The international conference on machine learning, 2023, pp. 19730– 19742. [26] S. Kim, A. Lee, J. Park, A. Chung, J. Oh, J.-Y. Lee, Towards Effi-cient Visual-Language Alignment of the Q-Former for Visual Reasoning Tasks, in: The conference on empirical methods in natural language processing, 2024, pp. 15155–15165. 30 [27] S. Azad, V. Vineet, Y. S. Rawat, Hierarq: Task-aware hierarchical q-former for enhanced video understanding, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2025, pp. 8545–8556. [28] A.-L. Wang, B. Shan, W. Shi, K.-Y. Lin, X. Fei, G. Tang, L. Liao, J. Tang, C. Huang, W.-S. Zheng, ParGo: Bridging vision-language with partial and global views, in: Proceedings of the AAAI conference on artificial intelligence, Vol. 39, 2025, pp. 7491–7499. [29] Z. Li, C. Guo, X. Wang, H. Zhang, L. Hu, Multi-view visual semantic embedding for cross-modal image–text retrieval, in: Pattern Recogni-tion, Vol. 159, 2025, p. 111088. [30] S. Azad, Y. S. Rawat, Disenq: Disentangling q-former for activity-biometrics, in: Proceedings of the IEEE/CVF international conference on computer vision, 2025, pp. 13502–13512. [31] Z. Feng, R. Zhang, Z. Nie, Improving composed image retrieval via contrastive learning with scaling positives and negatives, in: Proceedings of the ACM international conference on multimedia, 2024, pp. 1632– 1641. [32] A. Baldrati, M. Bertini, T. Uricchio, A. Del Bimbo, Effective condi-tioned and composed image retrieval combining clip-based features, in: Proceedings of the IEEE/CVF conference on computer vision and pat-tern recognition, 2022, pp. 21466–21474. [33] Z. Sun, D. Jing, G. Yang, N. Fei, Z. Lu, Leveraging large vision-language model as user intent-aware encoder for composed image retrieval, in: Proceedings of the AAAI conference on artificial intelligence, Vol. 39, 2025, pp. 7149–7157. [34] H. Zhu, J.-H. Huang, Y. Shen, S. Rudinac, E. Kanoulas, Interactive image retrieval meets query rewriting with large language and vision language models, in: ACM transactions on multimedia computing, com-munications, and applications, Vol. 21, 2025, pp. 1–23. [35] S. Karthik, K. Roth, M. Mancini, Z. Akata, Vision-by-language for training-free compositional image retrieval, in: The international con-ference on learning representations, 2024. 31 [36] Z. Liu, W. Sun, Y. Hong, D. Teney, S. Gould, Bi-directional training for composed image retrieval via text prompt learning, in: Proceedings of the IEEE/CVF winter conference on applications of computer vision, 2024, pp. 5753–5762. [37] L. Ventura, A. Yang, C. Schmid, G. Varol, CoVR: Learning composed video retrieval from web video captions, in: Proceedings of the AAAI conference on artificial intelligence, Vol. 38, 2024, pp. 5270–5279. [38] Y. Bai, X. Xu, Y. Liu, S. Khan, F. Khan, W. Zuo, R. S. M. Goh, C.-M. Feng, Sentence-level prompts benefit composed image retrieval, in: The international conference on learning representations, 2024. [39] J. Kwak, R. M. I. Inhar, S.-Y. Yun, S.-J. Lee, QuRe: Query-relevant retrieval through hard negative sampling in composed image retrieval, in: The international conference on machine learning, 2025. [40] S. Li, X. Xu, X. Jiang, F. Shen, Z. Sun, A. Cichocki, Cross-modal at-tention preservation with self-contrastive learning for composed query-based image retrieval, in: ACM transactions on multimedia computing, communications, and applications, Vol. 20, 2024, pp. 1–22. [41] E. Xing, P. Kolouju, R. Pless, A. Stylianou, N. Jacobs, ConText-CIR: Learning from concepts in text for composed image retrieval, in: Pro-ceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2025, pp. 19638–19648. [42] P. Gao, Y. Lee, Z. Chen, X. Liu, H. Zhang, Y. Hu, G. Jing, NCL-CIR: Noise-aware contrastive learning for composed image retrieval, in: The IEEE international conference on acoustics, speech and signal process-ing, 2025, pp. 1–5. [43] Y. Suo, F. Ma, L. Zhu, Y. Yang, Knowledge-enhanced dual-stream zero-shot composed image retrieval, in: Proceedings of the IEEE/CVF con-ference on computer vision and pattern recognition, 2024, pp. 26951– 26962. [44] P. Kolouju, E. Xing, R. Pless, N. Jacobs, A. Stylianou, good4cir: Gener-ating detailed synthetic captions for composed image retrieval, in: Pro-ceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2025, pp. 3173–3182. 32 [45] H. Wu, Y. Gao, X. Guo, Z. Al-Halah, S. Rennie, K. Grauman, R. Feris, Fashion IQ: A new dataset towards retrieving images by natural lan-guage feedback, in: Proceedings of the IEEE/CVF conference on com-puter vision and pattern recognition, 2021, pp. 11307–11317. [46] Z. Liu, C. Rodriguez-Opazo, D. Teney, S. Gould, Image retrieval on real-life images with pre-trained vision-and-language models, in: Proceedings of the IEEE/CVF international conference on computer vision, 2021, pp. 2125–2134. [47] I. Loshchilov, F. Hutter, Decoupled weight decay regularization, in: The international conference on learning representations, 2019. [48] S. Lee, D. Kim, B. Han, CoSMo: Content-style modulation for image re-trieval with text feedback, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2021, pp. 802–812. [49] Y. Chen, Z. Zheng, W. Ji, L. Qu, T.-S. Chua, Composed image retrieval with text feedback via multi-grained uncertainty regularization, in: The international conference on learning representations, 2024. [50] A. Baldrati, L. Agnolucci, M. Bertini, A. Del Bimbo, Zero-shot com-posed image retrieval with textual inversion, in: Proceedings of the IEEE/CVF international conference on computer vision, 2023, pp. 15338–15347. 33
