@@ -1,0 +1,1231 @@
+Title: Follow the Saliency: Supervised Saliency for Retrieval-augmented Dense Video Captioning
+
+URL Source: https://arxiv.org/pdf/2603.11460v1
+
+Published Time: Fri, 13 Mar 2026 00:23:40 GMT
+
+Number of Pages: 16
+
+Markdown Content:
+# Follow the Saliency: Supervised Saliency for Retrieval-augmented Dense Video Captioning 
+
+Seung hee Choi MinJu Jeon Hyunwoo Oh Jihwan Lee Dong-Jin Kim Hanyang University 
+
+{ermitaju1, mnju5026, komjii, jjt2345, djdjkim }@hanyang.ac.kr 
+
+Abstract 
+
+Existing retrieval-augmented approaches for Dense Video Captioning (DVC) often fail to achieve accurate tempo-ral segmentation aligned with true event boundaries, as they rely on heuristic strategies that overlook ground truth event boundaries. The proposed framework, STaRC , over-comes this limitation by supervising frame-level saliency through a highlight detection module. Note that the high-light detection module is trained on binary labels derived directly from DVC ground truth annotations without the need for additional annotation. We also propose to utilize the saliency scores as a unified temporal signal that drives retrieval via saliency-guided segmentation and informs cap-tion generation through explicit Saliency Prompts injected into the decoder. By enforcing saliency-constrained seg-mentation, our method produces temporally coherent seg-ments that align closely with actual event transitions, lead-ing to more accurate retrieval and contextually grounded caption generation. We conduct comprehensive evalua-tions on the YouCook2 and ViTT benchmarks, where STaRC achieves state-of-the-art performance across most of the metrics. Our code is available at https://github. com/ermitaju1/STaRC 
+
+1. Introduction 
+
+Dense Video Captioning (DVC) aims to detect and describe multiple events across long, untrimmed videos [4, 14– 16, 31, 39]. This is fundamentally different from standard video captioning [3, 6, 21, 27, 37], which produces a sin-gle sentence for short, trimmed clips. Because DVC re-quires modeling a sequence of semantically rich events, re-cent studies have shown that visual-only approaches often struggle to capture the necessary event-level structure [30]. Consequently, retrieval-augmented methods [10, 12, 13] have gained attention. These approaches enhance the de-coder’s understanding by retrieving relevant captions from external datastores and have achieved strong performance ground -truth event duration 
+
+(b) Supervised Saliency -score based Explicit Segmentation (Ours)                     
+
+> Explicit Salient Cues
+> from ground truth!
+> 𝑾𝒆𝒍𝒍 −𝑨𝒍𝒊𝒈𝒏𝒆𝒅
+> 𝑫 𝒆𝒄𝒐𝒅𝒆𝒓
+> s
+> •-Heat the pan with some oil, then saute the onions
+> •-Preheat the pan with oil … , onions until fragrant
+> •-Warm the oil the pan …, onions over … heat ,.
+> 𝑹𝒆𝒕𝒓𝒊𝒆𝒗𝒆𝒅 𝒄𝒂𝒑𝒕𝒊𝒐𝒏𝒔
+> So the scene up to heating the pan,
+> adding oil, and sautéing the
+> onions is the important part!
+> 𝑪𝒂𝒑𝒕𝒊𝒐𝒏
+> 𝑫𝒂𝒕𝒂𝒔𝒕𝒐𝒓𝒆
+> Segment Cut!
+> Generate GT Well -Aligned Segments !
+
+(a) Semantic -based Implicit Segmentation         
+
+> Segment Cut!
+> 𝒕𝒉𝒓𝒆𝒔𝒉𝒐𝒍𝒅
+> 𝒇𝒓𝒂𝒎𝒆
+> 𝒅𝒊𝒇𝒇
+> 𝑾𝒓𝒐𝒏𝒈 𝑴𝒊𝒔𝒔𝒊𝒏𝒈
+> 𝑫 𝒆𝒄𝒐𝒅𝒆𝒓
+> s
+> -Preheat the pan with oil
+> -Heat the pan with some oil
+> -Warm the oil in the pan
+> 𝑹𝒆𝒕𝒓𝒊𝒆𝒗𝒆𝒅 𝒄𝒂𝒑𝒕𝒊𝒐𝒏𝒔
+> So heating the pan and adding the oil
+> is the important scene!
+> Misaligned with GT Segments
+> 𝑪𝒂𝒑𝒕𝒊𝒐𝒏
+> 𝑫𝒂𝒕𝒂𝒔𝒕𝒐𝒓𝒆
+> ground -truth event duration
+
+Figure 1. An example of caption retrieval and generation by existing methods (e.g., Sali4Vid [10]) and ours. The misaligned video segments in existing methods lead to less relevant retrieval results. Our supervised saliency scores are well-aligned with the ground truth, enabling more accurate retrieval. This alignment also provides the decoder with more precise and contextually ap-propriate information. 
+
+on YouCook2 [38] and ViTT [7]. Despite their success, retrieval operates on video segments formed by clustering frame-level features, making the quality of segmentation di-rectly affect the overall captioning performance. As shown in Figure 1 (a), implicit segmentation strate-gies in prior methods often produce misaligned segments that fail to capture true event boundaries. For instance, uni-form sampling in HiCM 2 [13] and similarity-based cluster-ing in Sali4Vid [10] frequently group unrelated frames to-gether, leading the model to retrieve less relevant captions. A typical failure case retrieves “ Preheat the pan with oil ” in-   
+
+> arXiv:2603.11460v1 [cs.CV] 12 Mar 2026 0.099 0.210
+> Recall@0.5
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 0.234 0.374
+> Mean IoU (over all GT)
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 333 702
+> Matched Segments
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> Correlation Between Segment Quality and Captioning Performance
+> Sali4Vid
+> Ours
+> CIDEr
+> METEOR
+> SODA_c
+> BLEU_4
+
+Figure 2. Correlation analysis between segment-quality metrics and captioning performance . The x-axis shows three indicators of temporal localization quality - Recall@0.5 , Mean IoU , and Matched Segments - which respectively measure the proportion of correctly detected events (IoU ≥ 0.5), the average overlap with ground truth segments, and the number of predictions aligned with the reference events. As these segment-quality metrics improve from Sali4Vid [10] to ours, downstream DVC performances (e.g., CIDEr, METEOR) also rise consistently, demonstrating a strong positive correlation between accurate event segmentation and caption generation performance. 
+
+stead of the correct event “ heat the pan with some oil, then saut´ e the onions .”. Such boundary errors propagate to re-trieval, causing the decoder to receive less relevant context. In contrast, Figure 1(b) illustrates how improved segment formation can yield boundaries that align more closely with true events. These higher quality segments provide retrieval modules with input that more accurately reflects the under-lying action, resulting in more relevant retrieved captions. This relationship is further validated by our correlation analysis in Figure 2, which shows that improvements in segment-quality indicators (e.g., Recall@0.5, Mean IoU, Matched Segments) are strongly associated with higher DVC evaluation metric such as CIDEr and METEOR. When segments more closely align with true event bound-aries, they supply the decoder with more meaningful re-trieval information, thereby consistently enhancing caption-ing performance. These findings emphasize the need for a framework that improves segment alignment with ground truth to better guide the decoder. To address these limitations, we propose Saliency 
+
+Training for Retrieval and Captioning ( STaRC ), a super-vised saliency learning framework for retrieval-augmented DVC. Our key idea is to learn frame-level saliency scores that reflect frame importance from ground truth event annotations using a highlight detection module following prior work [25, 34]. The labels for this module are derived directly from annotations, requiring no additional supervi-sion. Unlike prior approaches that implicitly use saliency during generation, we treat it as an explicit and shared su-pervisory signal for both retrieval and captioning. We intro-duce a Unified Saliency-Based Design that leverages the learned saliency scores in two complementary ways. First, we introduce Saliency-Guided Segmentation and Retrieval (SGSR) to form event-aligned segments. SGSR 
+
+uses Optimal Transport [35] to cluster frames based on predicted saliency scores. Previous method [10] clusters frames using only semantic similarity without ground truth guidance. In contrast, SGSR uses saliency scores learned from annotated event boundaries. This produces segments that align with true event boundaries to better separate dis-tinct events. These segments enable the model to retrieve more relevant captions for the decoder. Second, we introduce Saliency Prompt (SaliP) , which explicitly incorporates saliency into the decoder. Previ-ous method [10] implicitly applies saliency by multiply-ing video features with temporal masks. In contrast, SaliP 
+
+directly injects frame-level saliency scores as grounding prompts [28] into the decoder. This explicit guidance enables the decoder to focus on semantically important frames. Through this unified design, STaRC achieves co-herent alignment between retrieval and caption generation. The main contributions of our framework are as follows: • We propose STaRC , a supervised saliency learning framework for retrieval-augmented DVC. Our model ex-plicitly learns frame-level saliency scores using a high-light detection module trained with binary labels con-verted from ground truth event annotations, without any extra annotation cost. • We introduce a unified saliency-based design that lever-ages supervised saliency for both retrieval and captioning. Within this design, SGSR forms event-aligned segments that improve caption retrieval, and SaliP injects saliency into the decoder as temporal grounding. • With this unified approach, STaRC achieves state-of-the-art performance on YouCook2 and ViTT, demonstrating the benefit of supervised saliency learning for DVC. 𝑺𝑾𝑺𝑨 
+
+> Temporal Encoder
+> Spatial Encoder
+
+𝒔 𝟏 𝒔 𝟐 ⋯ 𝒔 𝑭                                          
+
+> 𝑹𝒆𝒇𝒊𝒏𝒆𝒅 𝑽𝒊𝒔𝒖𝒂𝒍 𝑭𝒆𝒂𝒕𝒖𝒓𝒆 𝑺𝒂𝒍𝒊𝒆𝒏𝒄𝒚 𝑷𝒓𝒐𝒎𝒑𝒕 (𝑺𝒂𝒍𝒊𝑷 )𝑹𝒆𝒕𝒓𝒊𝒆𝒗𝒆𝒅 𝑪𝒂𝒑𝒕𝒊𝒐𝒏 𝑻𝒆𝒙𝒕 𝑭𝒆𝒂𝒕𝒖𝒓𝒆
+> Attn
+> Pool
+> 𝑿 ′𝑿′ 𝒈
+> Highlight Detection
+> module
+> 𝑭
+> 𝑺𝒂𝒍𝒊𝒆𝒏𝒄𝒚 𝒔𝒄𝒐𝒓𝒆 𝑷 𝒔
+> 𝑷 𝒔
+> 𝑴𝒂𝒑𝒑𝒊𝒏𝒈 𝒍𝒂𝒚𝒆𝒓
+> 𝑷 𝒔 𝒙 "=𝒙 "𝑾 𝟏
+> $𝒙 𝒈
+> "𝑾 𝟐
+> $$
+> √𝑫
+> 𝑶𝑻 −𝒃𝒂𝒔𝒆𝒅 𝑪𝒍𝒖𝒔𝒕𝒆𝒓𝒊𝒏𝒈
+> 𝒂𝒏𝒄𝒉𝒐𝒓𝒔
+> 𝒂 𝟏
+> 𝒂 𝟐
+> 𝒂 𝟑
+> 𝒂 𝟒
+> 𝒔𝒆𝒈𝒎𝒆𝒏𝒕𝒔
+> 𝑭
+> 𝑪𝒂𝒑𝒕𝒊𝒐𝒏
+> 𝑫𝒂𝒕𝒂𝒔𝒕𝒐𝒓𝒆
+> 𝒕 𝟏
+> 𝒔
+> 𝒅
+> 𝟏 𝟎 𝟎
+> Binary Highlight Label
+> 𝒕 𝟏
+> 𝒆
+> 𝒅
+> ⋯𝟏
+> 𝒕 𝒏
+> 𝒔
+> 𝒅
+> 𝒕 𝒏
+> 𝒆
+> 𝒅 𝑭 ⋯
+> Timestamp 𝒕 𝒊
+> 𝒔 ,𝒕 𝒊
+> 𝒆
+> duration d
+> Encoder Token
+> Embedder
+> Text Encoder
+> [32s~34s] Now I love mayonnaise
+> on my BLTs.
+> [34s~36s] If you don’t like it, keep it
+> Speech Transcription Input Video [BOS] [𝑇 )
+> *][𝑇 )
+> +]Pour bowl. ⋯
+> [27s~82s] Add sauce sesame seeds and
+> soy sauce to a bowl and stir.
+> [91s~152s] Add the beef to the marinade
+> and mix.
+> ⋯[𝑇 )
+> *][𝑇 )
+> +]Add stir [EOS]
+
+𝑶𝒖𝒕𝒑𝒖𝒕 𝑪𝒂𝒑𝒕𝒊𝒐𝒏 
+
+> Language -Model Head
+> Text Decoder
+> Decoder Token Embedder
+
+Unified Saliency Based Design 
+
+Supervised Saliency Training  
+
+> 𝒙 𝟏
+> 𝒔 𝒙 𝑭
+> 𝒔 ⋯𝒙 𝟐
+> 𝒔
+
+𝑺𝑮𝑺𝑹 𝑺𝒂𝒍𝒊𝑷 
+
+𝒓 𝟏 𝒓 𝟐 ⋯ 𝒓 𝒌 𝒚 𝟏 𝒚 𝟐 ⋯ 𝒚 𝑵 𝒕 
+
+⋯
+
+𝒙′ 𝟏 𝒙′ 𝟐 ⋯ 𝒙′ 𝑭 Figure 3. Overview of our STaRC framework for DVC. A SWSA module refines video features, and a highlight detection module is supervised using binary highlight labels derived from existing DVC annotations to predict frame-level saliency scores. The SGSR module then performs OT-based clustering guided by these saliency scores to form coherent retrieval segments. In addition, the SaliP integrates saliency into the decoders attention for saliency-aware caption generation. STaRC unifies retrieval and caption generation using saliency signals learned in a supervised manner, ensuring consistent alignment between visual context and semantic description. 
+
+2. Related Works 
+
+2.1. Dense Video Captioning 
+
+Dense Video Captioning (DVC) aims to detect multiple events in long videos and generate natural language de-scriptions for each [14]. Early two-stage approaches [8, 9] treated event localization and sentence generation indepen-dently, which often caused temporal inconsistencies due to limited cross-stage interaction. End-to-end architectures have been proposed to mitigate these issues. PDVC [30] formulates DVC as set-level prediction using a DETR-style transformer [2], while Vid2Seq [36] adopts a sequence-to-sequence framework that jointly models localization and captioning. Streaming V2S [40] enables online infer-ence, and DIBS [32] leverages large-scale pseudo-labeled datasets for pretraining. More recent end-to-end methods address structural limitations without relying on large-scale pretraining. E 2DVC [33] groups frames into pseudo-events using agglomerative clustering to prevent the model from overlooking short or infrequent events. CACMI [11] also forms pseudo-events through clustering, but uses retrieved captions as queries to align visual and textual features. Both methods show that explicitly modeling event structure im-proves performance, though their pseudo-events are formed without ground truth guidance, so segment boundaries may not match annotated events. Among pretrained approaches, retrieval-based frame-works [10, 12, 13] improve visual grounding by retriev-ing similar captioned segments from external datastores. However, these models remain sensitive to temporal mis-alignment because they rely on heuristic or fixed segmen-tation. HiCM 2[13] constructs fixed-length segments via uniform sampling, and Sali4Vid[10] uses frame similarity changes to derive boundaries. Both approaches provide coarse temporal cues but lack precise event-level modeling. Recently, Sali4Vid demonstrates that temporally important frames benefit both retrieval and caption generation. How-ever, its saliency is derived heuristically from timestamps rather than learned directly. The potential of supervised saliency learning that unifies retrieval and caption genera-tion remains underexplored in DVC. 
+
+3. Method 
+
+This work presents Saliency Training for Retrieval and 
+
+Captioning ( STaRC ), a framework for supervised saliency learning in Dense Video Captioning (DVC). Highlights an-notated event boundaries serve as the important temporal regions from which frame-level saliency scores are inferred. Therefore, frame features are refined using Sliding-Window Self-Attention ( SWSA ), which aggregates local temporal context. The refined features are then passed to the highlight detection module to predict saliency scores. These scores are integrated through a Unified Saliency-Based Design comprising two components: Saliency-Guided Segmentation and Retrieval ( SGSR ) for ground truth event aligned segment retrieval, and Saliency Prompts (SaliP ) to guide the decoder toward salient temporal regions during decoding. The full architecture is shown in Figure 3. 3.1. Preliminaries 
+
+Task Formulation. Given an input video consisting of F
+
+frames, spatial embeddings Xs = {xsn}Fn=1 ∈ RF ×D are extracted using a frozen CLIP ViT-L/14 [19]. A temporal transformer encoder contextualizes these embeddings into 
+
+X = {xn}Fn=1 ∈ RF ×D. The model also receives a tran-scribed text sequence Y = {ym}Nt 
+
+> m=1
+
+∈ RNt×D as input. The output is a set of L events Z = {zq }Lq=1 , where each event zq consists of its temporal boundaries (tstart  
+
+> q
+
+, t end  
+
+> q
+
+) and its corresponding natural language caption. 
+
+Retrieval-augmentation for DVC. For retrieval, spatial embeddings Xs are used due to their robustness to appear-ance variations. The video is divided into Nseg segments, and each segment is represented by an aggregated embed-ding. For all segment, the model retrieves the top-p most relevant captions from an external datastore using cosine similarity. The retrieved captions are encoded with a CLIP text encoder, and their averaged embedding forms a re-trieval vector rs for that segment. Collectively, these re-trieval vectors form R = {rs}N seg  
+
+> s=1
+
+, which are provided as auxiliary input to the decoder during caption generation. 
+
+3.2. Saliency Prediction via Highlight Detection 
+
+We define highlights as the event boundaries annotated in the DVC dataset. Frame-level saliency scores are estimated to measure the semantic importance of each frame within these highlighted intervals. To enable saliency prediction, frame features are first refined using a SWSA mechanism. The refined features are then passed to a highlight detection module, which outputs saliency scores. 
+
+Feature Refinement. The Sliding-Window Self-Attention (SWSA ) module enhances the temporally encoded frame features before saliency prediction. It applies local self-attention across multiple sliding windows 
+
+{w1, w 2, w 3} of varying sizes, allowing each frame to incorporate contextual information from neighboring regions at different scales. Unlike standard self-attention, the queries, keys, and values are directly derived from the input features without any linear projections, making the module free of learnable parameters. As the windows slide over the sequence, overlapping outputs are averaged based on their overlap counts. The aggregated features are then normalized and added to the original input X via a residual connection, yielding the refined representation X′. The detailed formulation and architecture of SWSA are provided in the Appendix. 
+
+Supervised Saliency Learning. We use the refined local features X′ to obtain frame-level saliency scores in a su-pervised manner. We adopt a highlight detection module to predict these scores. To capture both fine-grained temporal features and overall video context, the highlight detection module takes both local and global video features as in-put [25, 34], which predicts the frame-level saliency distri-bution. A global video feature X′ 
+
+> g
+
+∈ R1×D is obtained via attention pooling over X′, summarizing the overall context of the video. We project X′ and X′ 
+
+> g
+
+into a shared embed-ding space through learnable matrices W1 and W2. The saliency score for each frame is computed as: 
+
+Ps(x′
+
+> n
+
+) = (x′
+
+> n
+
+W⊤ 
+
+> 1
+
+)( x′
+
+> ng
+
+W⊤ 
+
+> 2
+
+)⊤
+
+√D . (1) The resulting Ps ∈ RF ×1 represents the frame-level saliency scores, which quantify the relative importance of each frame with respect to the global video context. 
+
+Training Objective. Since DVC datasets do not contain suitable labels for training a highlight detection module, we convert their annotated event boundaries into binary frame-level highlight labels following the YouTube High-lights protocol [22]. Unlike YouTube Highlights, which defines highlights at the clip-level with binary labels, we extend this idea to the frame-level and train the model to predict saliency scores. Frames within annotated event boundaries are considered highlights and labeled 1, whereas the others are labeled 0,producing H ∈ { 0, 1}F . Because these highlight labels are directly derived from existing DVC annotations, no addi-tional annotation cost is required. Based on these binary labels, we train the highlight detection module using a list-wise softmax objective. Given predicted saliency scores Ps,binary highlight labels H, and a validity mask M ∈ RF , we define the masked softmax probability for each frame l as: 
+
+pl = exp( Psl /τ ) Ml
+
+PFn=1 exp( Psn /τ ) Mn
+
+, (2) and the video-level saliency loss as: 
+
+Lsaliency = − 1
+
+PFl=1 HlMlFX
+
+> l=1
+
+HlMl log pl. (3) As shown in Equation (2), the normalized softmax distri-bution enables all frames to compete for probability mass within a video. Building upon Equation (3), the objective encourages annotated highlights to receive higher probabil-ities while implicitly down-weighting unannotated frames. Note that the ground truth highlight labels H and M can be obtained from annotations without any extra labeling cost. 
+
+3.3. Unified Saliency-Based Design 
+
+Building on the saliency scores Ps obtained from Sec-tion 3.2, we introduce a Unified Saliency-Based Design that exploits Ps as a shared temporal signal. STaRC ensures consistent temporal grounding by using the same saliency scores across both retrieval and caption generation: SGSR 
+
+forms segments based on saliency, while SaliP guides the decoder to attend to the same salient regions. 
+
+Saliency-Guided Segmentation and Retrieval. SGSR 
+
+generates video segments that closely align with ground truth event transitions via saliency-guided clustering. These top-ranked segments are then used to retrieve semantically relevant captions from a datastore, providing the decoder with comprehensive contextual information. To effectively cluster frames while incorporating saliency information, we adopt an Optimal Transport (OT)-based clustering approach inspired by ASOT [35]. We de-fine K learnable anchors A = {aj }Kj=1 ∈ RK×D as seman-tic prototypes, where each frame is assigned to the anchor with the highest cosine similarity. We normalize saliency scores Ps with a sigmoid function to obtain the saliency prior ps ∈ [0 , 1] F .We integrate saliency in two ways. First, unlike ASOT, which relaxes the anchor side marginal, we apply unbal-anced OT on the frame side by using ps as a soft constraint on the frame marginal distribution. Since not all frames contain events in DVC, this allows salient frames to receive higher transport mass while keeping anchor marginals bal-anced. Let T ∈ RF ×K denote the transport plan. We solve: 
+
+min  
+
+> T∈T
+
+FFGW (C, T) + γ DKL 
+
+ T ⊤1K ps
+
+, (4) where T := {T | T⊤1F = 1 
+
+> K
+
+1K } enforces balanced anchor marginals and relaxed frame marginals. The KL term in Equation (4), controlled by γ, encourages the frame marginal T1 K to follow the saliency distribution ps. C =
+
+{Ck, C v , C a} represents the costs used in ASOT. Specifi-cally, Cv encodes an intra-segment temporal cost and Ca
+
+captures an inter-segment semantic cost. Second, we incorporate ps as a bias term in the KOT cost matrix Ck ∈ RF ×K [23] to prioritize salient frames during the assignment process: 
+
+Cknj := (1 − xsn⊤aj
+
+∥xsn∥2∥aj ∥2
+
+) − μp sn , (5) where μ controls the strength of the saliency bias, xsn de-notes spatial embeddings. This dual use of saliency scores is realized through the optimized transport plan T⋆ ∈ RF ×K , which allocates higher transport mass to important frames and suppresses background frames. This encourages the formation of seg-ments centered on salient regions, resulting in semantically coherent clusters. Using T⋆, each anchor aj is associated with the frames that receive the highest transport mass from that anchor. Adjacent frames assigned to the same anchor form a temporal segment sj = [ f sj , f ej ). However, balanced anchors may still produce segments containing non-salient frames. To exclude such uninformative segments, we assign each sj a score that captures both its semantic alignment and temporal stability: 
+
+SOT (sj ) = 1
+
+Ljf ej −1
+
+X 
+
+> i=fsj
+
+T ⋆i, a j , Slen (sj ) = log(1 + Lj ), (6) where Lj = f ej −f sj denotes the segment length. The align-ment score SOT (sj ) measures the average transport mass assigned to anchor aj , rewarding segments whose frames exhibit strong correspondence with their anchor. The length regularizer Slen (sj ) encourages segments with sufficient du-ration to maintain temporal consistency. The final score is computed as S(sj ) = SOT (sj ) × S len (sj ), which prioritizes segments that are both semantically aligned with their an-chor and temporally stable. We rank all segments by S(sj ) and keep the top-k as retrieval units, resulting in Nseg = k representative seg-ments. Each selected segment is represented by aggre-gating its frame embeddings, where we apply a saliency-weighted average to emphasize informative frames. This saliency-weighted pooling ensures that more salient frames have greater influence on retrieval. Using these k represen-tative features, we perform retrieval following the procedure described in Section 3.1 to obtain R ∈ Rk×D .
+
+Saliency Prompt. SaliP converts frame-level saliency scores into prompts that guide the decoder toward salient moments. Saliency score Ps is projected through a learn-able mapping layer, implemented as a linear layer, to yield saliency prompts S. Let X′ denote the refined video frame embeddings, R the retrieval embeddings, and Y the tran-scribed text tokens. These components are concatenated into a unified sequence: 
+
+Tin = [ X′; S; R; Y ] ∈ R(F +F +k+Nt)×D . (7) Through SaliP , saliency information is directly incorpo-rated into decoding. This prompt explicitly guides temporal grounding, helping the decoder focus on salient frames dur-ing caption generation. 
+
+3.4. Training and Inference 
+
+Training. During training, the decoder takes Tin as input, where the corresponding video frame features are the orig-inal features X. We use these raw frame-level features to enable precise alignment with text transcriptions. Following prior work [10, 13, 36], the decoder is built upon the T5 ar-chitecture [20]. The T5 decoder is trained with a token-level Cross-Entropy (CE) loss between the predicted caption z
+
+and ground truth captions ˆz. As described in Section 3.2, Method PT YouCook2 (val) ViTT (test) CIDEr METEOR SODA c BLEU4 CIDEr METEOR SODA c BLEU4 
+
+PDVC ICCV21 ✗ 29.69 5.56 4.92 1.40 - - - -CM 2 CVPR24 ✗ 31.66 6.08 5.34 1.63 - - - -E2DVC CVPR25 ✗ 34.26 6.11 5.39 1.68 - - - -CACMI AAAI26 ✗ 34.83 6.21 5.57 1.70 - - - -Streaming V2S CVPR24 ✓ 32.90 7.10 6.00 - 25.20 5.80 10.00 -DIBS CVPR24 ✓ 44.44 7.51 6.39 - - - - -Vid2Seq † CVPR23 ✓ 66.29 12.41 9.87 5.64 48.84 9.51 14.99 0.71 HiCM 2 AAAI25 ✓ 71.84 12.80 10.73 6.11 51.29 9.66 15.07 0.86 Sali4Vid EMNLP25 ✓ 75.80 13.54 10.28 6.35 53.87 10.05 15.08 0.91 
+
+Ours ✓ 80.53 13.86 10.73 6.75 56.04 10.49 15.01 0.89 
+
+Table 1. Comparison with state-of-the-art methods on the YouCook2 validation set and the ViTT test set. PT indicates whether the model is pretrained. Bold and underlined values represent the best and second best results, respectively. “–” denotes unavailable results, and †
+
+marks results reproduced from official implementations. Our method achieves state-of-the-art performance across most evaluation metrics.                                                                                 
+
+> Method PT YouCook2 (val) ViTT (test) F1 Recall Precision F1 Recall Precision
+> PDVC ✗26.81 22.89 32.37 ---CM 2✗28.43 24.76 33.38 ---E2DVC CVPR25 ✗28.87 25.01 34.13 ---CACMI AAAI26 ✗29.34 25.54 34.63 ---Streaming V2S ✓24.10 --35.40 --DIBS ✓31.43 26.24 39.81 ---Vid2Seq †✓31.08 30.38 31.81 46.21 45.89 46.53 HiCM 2✓32.51 32.51 32.51 45.98 45.00 47.00 Sali4Vid ✓33.61 31.11 36.57 46.58 44.31 49.10
+> Ours ✓34.34 31.53 37.70 44.34 40.02 49.72
+
+Table 2. Localization results on the YouCook2 validation set and the ViTT test set. Bold and underlined values indicate the best and second-best performances, respectively. “–” denotes unavailable results. 
+
+we also apply a saliency loss scaled by λ to supervise the HD module. The final training objectives are defined as: 
+
+LCE = CE (z, ˆz), Ltotal = LCE + λLsaliency . (8) 
+
+Inference. At inference, the decoder similarly takes Tin 
+
+as input, but the corresponding video frame features are the refined features X′ from Section 3.2. This design uses raw features at training time for fine-grained text alignment, while refined features at inference time provide richer tem-poral context, leading to more accurate event boundaries and coherent captions. Note that our method is formu-lated from the inference perspective, and the overall STaRC 
+
+pipeline follows this inference procedure. 
+
+4. Experiments 
+
+4.1. Experimental Setup 
+
+Datasets and Evaluation Metrics. We conduct experi-ments on two Dense Video Captioning (DVC) benchmarks, YouCook2 [38] and ViTT [7]. The YouCook2 dataset contains 2,000 untrimmed cooking videos, each averag-ing 320 seconds in length and annotated with 7.7 tempo-rally localized sentences. The ViTT dataset consists of 8,000 untrimmed instructional videos, averaging 250 sec-onds per video, and annotated with 7.1 temporally localized short tags. We evaluate our model on two sub-tasks within DVC, focusing on caption generation and event localiza-tion. Following the official evaluation protocol [29], we measure caption quality using CIDEr [26], METEOR [1], and BLEU 4 [17], which compare generated captions with ground truth across IoU thresholds of 0.3, 0.5, 0.7, and 0.9. To further assess storytelling ability, we employ the SODA c metric [5]. For event localization, we compute the average precision (AP), average recall (AR), and F1 score, averaged across the same IoU thresholds. 
+
+Implementation Details. Following prior studies [10, 13], our framework is built upon Vid2Seq [36], pre-trained on 1.8M videotext pairs. Video frames are uniformly sam-pled at 1 FPS and truncated or zero-padded to a fixed se-quence length of T = 100 . We adopt the two-stage train-ing protocol from Sali4Vid [10]. First, the model is pre-trained following the original Vid2Seq configuration with a learning rate of 3e-4. Then, we fine-tune the model for 10 additional epochs using our proposed method. During fine-tuning, the learning rate starts at 1e-5, is linearly warmed up over the first 10% of training steps, and is subsequently de-cayed to zero with a cosine schedule. All experiments are conducted on a single NVIDIA A6000 GPU with a batch size of 4. For the saliency-aware loss, we set λ = 6 .0 for YouCook2 and λ = 2 .0 for ViTT. The Sliding Window Self-Attention (SWSA) module operates with window sizes of 8, 32, and 64. In the Saliency-Guided Segmentation and Re-trieval (SGSR) stage, we use 8 anchors to define 8 candi-date segments and select the top-5 segments with the high-Method SGSR 3.3 SaliP 3.3 CIDEr METEOR 
+
+Baseline 66.29 12.41 
+
+(1) ✓ 76.94 13.60 
+
+(2) ✓ 78.74 13.75 
+
+STaRC ✓ ✓ 80.53 13.86 
+
+Table 3. Ablation study on the key components of STaRC . We evaluate the contributions of our main proposed modules, SGSR ,and SaliP on YouCook2 validation set. The baseline corresponds to the performance of Vid2Seq. 
+
+Window sizes YouCook2 (val) CIDEr METEOR SODA c BLEU4 
+
+w/o SWSA 3.2 75.82 13.23 10.33 6.49 6, 36, 66 78.46 13.66 10.57 6.66 8, 32, 64 80.53 13.86 10.73 6.75 10, 40, 70 70.52 13.26 9.72 5.92 8 78.03 13.69 10.62 6.65 8, 32 79.35 13.80 10.79 6.73 8, 16, 32, 64 79.06 13.75 10.62 6.78 
+
+Table 4. Ablation study on window sizes and the effect of remov-ing SWSA module on the YouCook2 validation set. 
+
+est scores. The hyperparameters μ and ρ are set to 0.1 and 0.3, respectively. Other segmentation components follow the default configuration of ASOT [35]. Ablation studies and additional analyses of the segmentation mechanism are provided in the Appendix. 
+
+4.2. Results and Analysis 
+
+Comparison with State-of-the-Art. Table 1 and Table 2 compare Saliency Training for Retrieval and Captioning (STaRC) with recent DVC methods. STaRC attains a CIDEr score of 80.53 on YouCook2 and 56.04 on ViTT, outperforming prior methods such as Sali4Vid [10] and HiCM 2 [13]. For localization, STaRC achieves the best F1 score of 34.34 on YouCook2 and the highest precision of 49.72 on ViTT. Unlike previous retrieval-augmented mod-els that rely on heuristic segmentation or timestamp-derived saliency, STaRC benefits from supervised saliency signals that produce event-aligned segments. These segments also supply the decoder with more reliable temporal cues during generation, leading to more faithful event descriptions. 
+
+Component Ablation Study. We validate the contribu-tion of each proposed key module SGSR and SaliP . As shown in Table 3, combining both components yields the best performance, achieving a +14.24 CIDEr gain over the baseline Vid2Seq model. When applied individually, SaliP 
+
+alone brings a +12.45 CIDEr improvement, while SGSR                         
+
+> Method / Variant YouCook2 (val) CIDEr METEOR SODA c BLEU4
+> Clustering Type
+> k-means 75.63 13.34 10.46 6.29 Adaptive clustering [10] 78.19 13.69 10.55 6.57 SGSR (Ours) 80.53 13.86 10.73 6.75
+> Pooling Strategy (within SGSR)
+> Uniform Avg 78.95 13.65 10.52 6.68 Saliency-weighted Avg (Ours) 80.53 13.86 10.73 6.75
+
+Table 5. Ablation on segmentation and pooling strategies. The top part compares clustering methods, where our SGSR outperforms k-means and adaptive clustering [10]. The bottom part compares pooling strategies within SGSR , showing the benefit of saliency-weighted averaging over uniform averaging. 
+
+Num of Retrieval ( p)YouCook2 (val) CIDEr METEOR SODA c BLEU4 
+
+3 79.65 13.79 10.61 6.79 
+
+5 79.12 13.73 10.70 6.67 10 80.53 13.86 10.73 6.75 15 78.00 13.81 10.56 6.57 
+
+Table 6. Ablation study on the number of top-ranked (top-p) cap-tions retrieved based on similarity. 
+
+alone yields +10.65. Notably, both modules provide mean-ingful gains on their own, and their combination further boosts performance, showing that they are complementary. This confirms the effectiveness of our Unified Saliency-Based Design , where segmentation and caption generation both benefit from the same learned saliency signal. 
+
+Feature Refinement Ablation Study. We analyze the effect of our feature refinement module, Sliding-Window Self-Attention ( SWSA ). As presented in Table 4, removing it from the full model results in a slight drop in CIDEr, in-dicating that this module provides a complementary gain when combined with the two key modules. We also explore different window size configurations. To ensure consistent temporal coverage, we employ three windows, each defined as a multiple of the smallest one. Among the tested con-figurations, the combination of window sizes 8, 32, and 64 with three windows achieves the best performance. 
+
+Saliency-Guided Segmentation and Retrieval Ablation Study. To verify the contribution of our SGSR , we com-pare it with alternative segmentation and pooling strategies in Table 5. Our method achieves +4.9 and +2.34 CIDEr gains over standard k-means and the adaptive clustering scheme from Sali4Vid [10], respectively. We also find that constructing segment representations with saliency-weighted averaging, instead of uniform averaging, further improves performance. The learned saliency scores empha-3 5 8 10 
+
+> Top-k
+> 78
+> 79
+> 80
+> CIDEr Score
+
+(a)       
+
+> Number of Anchors ( K)
+> K= 3
+> K= 5
+> K= 8
+> K= 10
+> Max: 80.53
+> Base Noise Zero
+> SaliP(Ours)
+> 70
+> 75
+> 80
+> 85
+> 90
+> 76.94
+> 73.47
+> 76.84
+> 80.53
+
+(b)   
+
+> CIDEr
+> Base Noise Zero
+> SaliP(Ours)
+> 13
+> 14
+> 15
+> 13.60
+> 13.10
+> 13.51
+> 13.86
+
+(c)    
+
+> METEOR
+> Base Noise Zero
+> SaliP(Ours)
+> 32
+> 34
+> 36
+> 38
+> 34.37
+> 32.84
+> 33.87 34.34
+
+(d)   
+
+> F1
+> Impact of Anchor Count ( K) and Top-kSelection Effect of Saliency Prompt across Different Metrics
+
+Figure 4. (a) Effect of anchor count and top-k segment selection. CIDEr scores across different numbers of anchors ( K) and top-k
+
+segment selections, where only the k highest-scoring segments are used for retrieval. Each line represents a different anchor configuration, and K corresponds to the number of segments produced by SGSR . (b-d) Impact of saliency-prompt corruption. These plots show the effect of replacing SaliP with Zero and Gaussian noise prompts. Both corrupted prompts still outperform the baseline ( STaRC without 
+
+SaliP ), but Gaussian noise causes a larger drop, emphasizing the importance of accurate saliency cues. 
+
+size informative frames when forming segments, resulting in more relevant retrieval. We further analyze how vary-ing the number of anchors ( K) and retrieved segments ( k)affects overall performance, as shown in Figure 4 (a). Ad-ditional analysis and hyperparameter details are provided in the Appendix. In Table 6, we compare different numbers of retrieved captions per segment ( p ∈ { 3, 5, 10 , 15 }). Re-trieving 3 or 5 captions results in noticeably lower perfor-mance across all metrics. In contrast, retrieving 15 captions does not lead to further improvement and instead causes a decline in performance. We observe that retrieving 10 cap-tions provides the highest scores across most metrics, con-sistent with prior work [10, 13]. 
+
+Saliency Prompt Ablation Study. To investigate the con-tribution of SaliP , we conduct an ablation study in Figure 4 (b-d) by replacing the saliency prompt with two variants: a prompt with added Gaussian noise and a Zero prompt of the same shape. The baseline corresponds to STaRC without the 
+
+SaliP module. Both variants outperform the baseline, indi-cating that additional tokens help the decoder capture tem-poral and contextual information. However, prompt quality is crucial. The Gaussian noise prompt causes the largest performance drop. It corrupts saliency scores with random noise, actively misleading the decoder to focus on incor-rect frames. The Zero prompt performs better by assigning uniform importance to all frames. This avoids misleading cues but also removes temporal guidance. Without saliency information, the decoder cannot distinguish important mo-ments from background, reducing caption quality. This sen-sitivity to prompt quality demonstrates that the model relies on accurate saliency cues from SaliP for effective DVC. 
+
+4.3. Qualitative Results 
+
+As shown in Figure 5, which illustrates an example from the YouCook2 validation set, our proposed STaRC accurately Video ID: VH0SmCfAov4           
+
+> 16s 20s 50s
+> 14s 21s 26s 28s 51s
+> combine
+> diced tomato
+> and cucumber
+> and sliced
+> onions
+> add 1
+> chopped
+> toasted
+> pita
+> bread
+> combine pomegranate
+> molasses lemon juice
+> salt and pepper and olive
+> oil
+> Combine a
+> diced
+> cucumber
+> tomatoes
+> and an onion.
+> Add a piece of
+> pita bread to the
+> salad and stir to
+> combine.
+> Add pomegranate molasses
+> lemon juice salt and pepper
+> and drizzle in the dressing.
+> 23s 28s 51s 69s
+> toss
+> everythin
+> g well to
+> combine
+> drizzle the dressing
+> on the salad and toss
+> to combine
+> 60s
+> Drizzle the
+> dressing over
+> the salad.
+> Ground -
+> Truth
+> Our s
+
+Figure 5. A qualitative result from YouCook2 validation set. 
+
+The arrows indicate the duration of each localized event, and the text below each arrow represents its corresponding caption. 
+
+predicts event durations and generates captions that align well with the ground truth descriptions. The predicted seg-ments also exhibit clear temporal boundaries with coherent correspondence between visual content and textual seman-tics. Notably, STaRC is able to capture subtle transitions be-tween consecutive events, producing more precise segment splits. 
+
+5. Conclusion 
+
+We propose STaRC , a unified saliency-guided framework for retrieval-augmented Dense Video Captioning. By learn-ing frame-level saliency directly from event annotations, 
+
+STaRC provides a temporal signal that guides both retrieval and captioning. SGSR produces event-aligned segments via Optimal Transport, and SaliP injects saliency into the de-coder as temporal prompts. Experiments on YouCook2 and ViTT demonstrate that STaRC achieves strong performance, validating supervised saliency as an effective signal. Acknowledgement This was partly supported by the In-stitute of Information & Communications Technology Plan-ning & Evaluation (IITP) grant funded by the Korean gov-ernment (MSIT) (No.RS-2020-II201373, Artificial Intelli-gence Graduate School Program(Hanyang University)) and the Institute of Information & Communications Technol-ogy Planning & Evaluation (IITP) grant funded by the Ko-rean government (MSIT) RS-2025-25422680, Metacogni-tive AGI Framework and its Applications). 
+
+References 
+
+[1] Satanjeev Banerjee and Alon Lavie. Meteor: An automatic metric for mt evaluation with improved correlation with hu-man judgments. In Proceedings of the acl workshop on in-trinsic and extrinsic evaluation measures for machine trans-lation and/or summarization , pages 65–72, 2005. 6 [2] Nicolas Carion, Francisco Massa, Gabriel Synnaeve, Nicolas Usunier, Alexander Kirillov, and Sergey Zagoruyko. End-to-end object detection with transformers. In European confer-ence on computer vision , pages 213–229. Springer, 2020. 3 [3] Shizhe Chen, Jia Chen, Qin Jin, and Alexander Hauptmann. Video captioning with guidance of multimodal latent topics. In Proceedings of the 25th ACM international conference on Multimedia , pages 1838–1846, 2017. 1 [4] Xuguang Duan, Wenbing Huang, Chuang Gan, Jingdong Wang, Wenwu Zhu, and Junzhou Huang. Weakly supervised dense event captioning in videos. Advances in Neural Infor-mation Processing Systems , 31, 2018. 1 [5] Soichiro Fujita, Tsutomu Hirao, Hidetaka Kamigaito, Man-abu Okumura, and Masaaki Nagata. Soda: Story oriented dense video captioning evaluation framework. In Computer Vision–ECCV 2020: 16th European Conference, Glasgow, UK, August 23–28, 2020, Proceedings, Part VI 16 , pages 517–531. Springer, 2020. 6 [6] Lianli Gao, Zhao Guo, Hanwang Zhang, Xing Xu, and Heng Tao Shen. Video captioning with attention-based lstm and semantic consistency. IEEE Transactions on Multime-dia , 19(9):2045–2055, 2017. 1 [7] Gabriel Huang, Bo Pang, Zhenhai Zhu, Clara Rivera, and Radu Soricut. Multimodal pretraining for dense video cap-tioning. arXiv preprint arXiv:2011.11760 , 2020. 1, 6 [8] Vladimir Iashin and Esa Rahtu. A better use of audio-visual cues: Dense video captioning with bi-modal transformer. 
+
+arXiv preprint arXiv:2005.08271 , 2020. 3 [9] Vladimir Iashin and Esa Rahtu. Multi-modal dense video captioning. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition workshops , pages 958–959, 2020. 3 [10] MinJu Jeon, Si-Woo Kim, Ye-Chan Kim, HyunGee Kim, and Dong-Jin Kim. Sali4vid: Saliency-aware video reweight-ing and adaptive caption retrieval for dense video captioning. 
+
+arXiv preprint arXiv:2509.04602 , 2025. 1, 2, 3, 5, 6, 7, 8 [11] Mingda Jia, Weiliang Meng, Zenghuang Fu, Yiheng Li, Qi Zeng, Yifan Zhang, Ju Xin, Rongtao Xu, Jiguang Zhang, and Xiaopeng Zhang. Explicit temporal-semantic modeling for dense video captioning via context-aware cross-modal inter-action. arXiv preprint arXiv:2511.10134 , 2025. 3 [12] Minkuk Kim, Hyeon Bae Kim, Jinyoung Moon, Jinwoo Choi, and Seong Tae Kim. Do you remember? dense video captioning with cross-modal memory retrieval. In Proceed-ings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 13894–13904, 2024. 1, 3 [13] Minkuk Kim, Hyeon Bae Kim, Jinyoung Moon, Jinwoo Choi, and Seong Tae Kim. Hicm 2: Hierarchical compact memory modeling for dense video captioning. In Proceed-ings of the AAAI Conference on Artificial Intelligence , pages 4293–4301, 2025. 1, 3, 5, 6, 7, 8 [14] Ranjay Krishna, Kenji Hata, Frederic Ren, Li Fei-Fei, and Juan Carlos Niebles. Dense-captioning events in videos. In 
+
+Proceedings of the IEEE international conference on com-puter vision , pages 706–715, 2017. 1, 3 [15] Yehao Li, Ting Yao, Yingwei Pan, Hongyang Chao, and Tao Mei. Jointly localizing and describing events for dense video captioning. In Proceedings of the IEEE conference on computer vision and pattern recognition , pages 7492–7500, 2018. [16] Hassan Mkhallati, Anthony Cioppa, Silvio Giancola, Bernard Ghanem, and Marc Van Droogenbroeck. Soccernet-caption: Dense video captioning for soccer broadcasts com-mentaries. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 5074– 5085, 2023. 1 [17] Kishore Papineni, Salim Roukos, Todd Ward, and Wei-Jing Zhu. Bleu: a method for automatic evaluation of machine translation. In Proceedings of the 40th annual meeting of the Association for Computational Linguistics , pages 311–318, 2002. 6 [18] Gabriel Peyr, Marco Cuturi, and Justin Solomon. Gromov-Wasserstein Averaging of Kernel and Distance Matrices. 2016. 2 [19] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual models from natural language supervi-sion. In International conference on machine learning , pages 8748–8763. PmLR, 2021. 4 [20] Colin Raffel, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan Narang, Michael Matena, Yanqi Zhou, Wei Li, and Peter J Liu. Exploring the limits of transfer learning with a unified text-to-text transformer. Journal of machine learning research , 21(140):1–67, 2020. 5 [21] Paul Hongsuck Seo, Arsha Nagrani, Anurag Arnab, and Cordelia Schmid. End-to-end generative pretraining for mul-timodal video captioning. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition ,pages 17959–17968, 2022. 1 [22] Min Sun, Ali Farhadi, and Steve Seitz. Ranking domain-specific highlights by analyzing edited videos. In European conference on computer vision , pages 787–802. Springer, 2014. 4 [23] Matthew Thorpe. Introduction to optimal transport. Notes of Course at University of Cambridge , 3, 2018. 5 [24] Matthew Thorpe. Introduction to optimal transport, 2018. 1 [25] Sung Jin Um, Dongjin Kim, Sangmin Lee, and Jung Uk Kim. Watch video, catch keyword: Context-aware keyword atten-tion for moment retrieval and highlight detection. In Pro-ceedings of the AAAI Conference on Artificial Intelligence ,pages 7473–7481, 2025. 2, 4 [26] Ramakrishna Vedantam, C Lawrence Zitnick, and Devi Parikh. Cider: Consensus-based image description evalua-tion. In Proceedings of the IEEE conference on computer vision and pattern recognition , pages 4566–4575, 2015. 6 [27] Bairui Wang, Lin Ma, Wei Zhang, and Wei Liu. Recon-struction network for video captioning. In Proceedings of the IEEE conference on computer vision and pattern recog-nition , pages 7622–7631, 2018. 1 [28] Jie Wang, Nana Yu, Zihao Zhang, and Yahong Han. Vi-sual consensus prompting for co-salient object detection. In 
+
+Proceedings of the Computer Vision and Pattern Recognition Conference , pages 9591–9600, 2025. 2 [29] Teng Wang, Huicheng Zheng, and Mingjing Yu. Dense-captioning events in videos: Sysu submission to activitynet challenge 2020. arXiv preprint arXiv:2006.11693 , 2020. 6 [30] Teng Wang, Ruimao Zhang, Zhichao Lu, Feng Zheng, Ran Cheng, and Ping Luo. End-to-end dense video captioning with parallel decoding. In Proceedings of the IEEE/CVF international conference on computer vision , pages 6847– 6857, 2021. 1, 3 [31] Yiwei Wei, Shaozu Yuan, Meng Chen, Xin Shen, Long-biao Wang, Lei Shen, and Zhiling Yan. Mpp-net: multi-perspective perception network for dense video captioning. 
+
+Neurocomputing , 552:126523, 2023. 1 [32] Hao Wu, Huabin Liu, Yu Qiao, and Xiao Sun. Dibs: Enhanc-ing dense video captioning with unlabeled videos via pseudo boundary enrichment and online refinement. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 18699–18708, 2024. 3 [33] Kangyi Wu, Pengna Li, Jingwen Fu, Yizhe Li, Yang Wu, Yuhan Liu, Jinjun Wang, and Sanping Zhou. Event-equalized dense video captioning. In Proceedings of the Computer Vision and Pattern Recognition Conference , pages 8417–8427, 2025. 3 [34] Yicheng Xiao, Zhuoyan Luo, Yong Liu, Yue Ma, Heng-wei Bian, Yatai Ji, Yujiu Yang, and Xiu Li. Bridging the gap: A unified video comprehension framework for mo-ment retrieval and highlight detection. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 18709–18719, 2024. 2, 4 [35] Ming Xu and Stephen Gould. Temporally consistent unbal-anced optimal transport for unsupervised action segmenta-tion. In Proceedings of the IEEE/CVF Conference on Com-puter Vision and Pattern Recognition , pages 14618–14627, 2024. 2, 5, 7, 1 [36] Antoine Yang, Arsha Nagrani, Paul Hongsuck Seo, An-toine Miech, Jordi Pont-Tuset, Ivan Laptev, Josef Sivic, and Cordelia Schmid. Vid2seq: Large-scale pretraining of a vi-sual language model for dense video captioning. In Proceed-ings of the IEEE/CVF conference on computer vision and pattern recognition , pages 10714–10726, 2023. 3, 5, 6 [37] Yue Zhao, Ishan Misra, Philipp Kr¨ ahenb¨ uhl, and Rohit Girdhar. Learning video representations from large lan-guage models. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 6586– 6597, 2023. 1 [38] Luowei Zhou, Chenliang Xu, and Jason Corso. Towards automatic learning of procedures from web instructional videos. In Proceedings of the AAAI conference on artificial intelligence , 2018. 1, 6 [39] Luowei Zhou, Yingbo Zhou, Jason J Corso, Richard Socher, and Caiming Xiong. End-to-end dense video captioning with masked transformer. In Proceedings of the IEEE conference on computer vision and pattern recognition , pages 8739– 8748, 2018. 1 [40] Xingyi Zhou, Anurag Arnab, Shyamal Buch, Shen Yan, Austin Myers, Xuehan Xiong, Arsha Nagrani, and Cordelia Schmid. Streaming dense video captioning. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pat-tern Recognition , pages 18243–18252, 2024. 3 Follow the Saliency: Supervised Saliency for Retrieval-augmented Dense Video Captioning 
+
+# Supplementary Material 
+
+In this Appendix, we present additional experiments, de-tailed formulations, and qualitative results to further sup-port our findings on the proposed STaRC . Specifically, §A provides additional analyses and experiments on Supervised Saliency Training , §B presents extended formulations and studies for Saliency-Guided Segmentation and Retrieval (SGSR) , and §C additional qualitative results and visualiza-tions, particularly focusing on experiments regarding Slid-ing Window Self-Attention (SWSA) module. 
+
+A. Supervised Saliency Training 
+
+§A.1 analysis the impact of hyperparameters ( λ, τ ) in the saliency loss and §A.2 offers visualizations of predicted saliency scores. 
+
+A.1. Saliency Loss Hyperparameters 
+
+The hyperparameters λ and τ significantly impact saliency learning performance, as shown in Figure A.1. These hyperparameters appear in our saliency loss formulation (Equation (2) and Equation (3)), where τ controls the softmax temperature and λ weights the saliency loss. YouCook2 [38] achieves best performance at λ = 6.0,while ViTT [7] performs best at λ = 2 .0. For the tem-perature parameter τ , 0.5 provides optimal performance. 
+
+A.2. Qualitative Analysis of Saliency Scores 
+
+We visualize the predicted saliency scores from the trained highlight detection module in Figure A.2. Saliency scores are high within ground truth event boundaries and low in non-event regions. Quantitative analysis confirms that event regions show significantly higher mean scores than non-event regions, demonstrating effective separation of impor-tant frames from background. 
+
+B. Saliency-Guided Segmentation and Re-trieval 
+
+§B.1 provides detailed equations for the saliency-aware OT-based segmentation method in SGSR , including Kan-torovich OT matching, Gromov-Wasserstein OT, fused OT objective, and the balanced-unbalanced constraint that uniquely differentiates SGSR from prior OT-based formula-tions such as ASOT [35], along with hyperparameter exper-iments. §B.2 presents the saliency weighted pooling equa-tion and qualitative segmentation results with retrieved cap-tions. 0.5 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0                
+
+> Value
+> 79
+> 80
+> 81
+> CIDEr Score
+> 80.53
+> (a)
+> YouCook2 CIDEr
+> Max: 80.53 @ =6.0
+> 0.5 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0
+> Value
+> 55.4
+> 55.6
+> 55.8
+> 56.0
+> 56.2
+> CIDEr Score  56.04
+> (b)
+> ViTT CIDEr
+> Max: 56.04 @ =2.0
+> 0.1 0.3 0.5 0.7 1.0
+> Value
+> 76
+> 77
+> 78
+> 79
+> 80
+> 81
+> CIDEr Score
+> 80.53
+> (c)
+> CIDEr Score
+> Max: 80.53 @ =0.5
+
+Figure A.1. (a-b) CIDEr performance for different saliency-loss weights λ. Results on YouCook2 and ViTT showing how different values of λ influence the strength of supervised saliency learning and overall caption quality. (c) CIDEr performance in YouCook2 validation set for different temperature values τ .
+
+This figure visualizes model sensitivity to different τ values used in the loss formulation. 
+
+Preliminary. Given frame spatial features Xs ∈ RF ×D
+
+and learnable anchors A = {aj }Kj=1 ∈ RK×D , we solve for a soft assignment matrix T ∈ FN ×K , where Tij denotes the probability that frame i belongs to prototype j.
+
+B.1. OT-based segmentation method 
+
+Saliency-aware Kantorovich OT matching. We formu-late the OT problem using the Kantorovich objective [24]. Let the anchor and frame marginals be defined as p = 1 
+
+> F
+
+1F
+
+and q = 1 
+
+> K
+
+1K :
+
+minimize 
+
+> T∈T p,q
+
+FKOT (Ck, T) := ⟨Ck, T⟩. (9) The visual affinity between frames and anchors is mea-sured using cosine similarity. To incorporate saliency infor-0 20 40 60 80 100 
+
+> Frame Index
+> 0.50
+> 0.55
+> 0.60
+> 0.65
+> 0.70
+> 0.75
+> 0.80
+> 0.85
+> Saliency Probability
+
+GT=1 (event) mean: 0.8156 
+
+GT=0 (not event) mean: 0.6570      
+
+> video id=SOMsxGGSTUk
+> 020 40 60 80 100
+> Frame Index
+> 0.5
+> 0.6
+> 0.7
+> 0.8
+> 0.9
+> Saliency Probability
+
+GT=1 (event) mean: 0.8182 
+
+GT=0 (not event) mean: 0.7045      
+
+> video id=UkqQAynrM2g
+> 020 40 60 80 100
+> Frame Index
+> 0.50
+> 0.55
+> 0.60
+> 0.65
+> 0.70
+> 0.75
+> 0.80
+> 0.85
+> Saliency Probability
+
+GT=1 (event) mean: 0.8247 
+
+GT=0 (not event) mean: 0.6837  
+
+> video id=LKrI9pGpM78
+> Saliency Score GT Event boundaries
+
+Figure A.2. Visualization of predicted frame-level saliency scores. Black lines show predicted saliency scores overlaid with ground truth event boundaries (green regions). Saliency scores are higher within event regions than in non-event regions. This separation confirms that the model successfully learns to align saliency prediction with true event boundaries. 
+
+mation, we introduce a bias term weighted by μ using the saliency prior ps. This yields the following cost matrix: 
+
+Cknj := (1 − xsn⊤aj
+
+∥xsn∥2∥aj ∥2
+
+) − μp sn . (10) 
+
+Temporal consistency via Gromov-Wasserstein OT. To enforce smooth temporal structure, we adopt the Gromov-Wasserstein (GW) OT [18]. Let Cv capture temporal prox-imity between frames and Ca captures the structural rela-tionship between prototypes. We define [F ] := {1, ..., F }.The GW objective is then formulated as: 
+
+FGW (Cv , Ca, T) := X
+
+n,F ∈[F ]
+
+j,K ∈A
+
+L(CvnF , C ajK )Tnj TF K .
+
+(11) 
+
+Fused GW Optimal Transport Objective. The final 
+
+SGSR objective combines visual matching and structural consistency as Fused GW OT objective: 
+
+FFGW (C, T) := αFGW (Cv , Ca, T)+(1 −α)FKOT (Ck, T).
+
+(12) 
+
+Unbalanced OT. Unlike ASOT, we reverse the bal-anced/unbalanced configuration to better suit the DVC task. Specifically, we apply unbalanced OT for frame-level matching using saliency scores as the marginal constraint p,while the anchor marginal remains balanced, as formulated in Equation (13): 
+
+min 
+
+T∈T q
+
+FFGW (C, T) + γ DKL 
+
+ T ⊤1K ps
+
+. (13) This configuration enables the transport mass to follow the saliency distribution, allowing the model to adaptively B / B     
+
+> B / UnB
+> UnB / B
+> UnB / UnB
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> 1.2
+> Score  78.00
+> 77.00
+> 80.53
+> 78.50
+> CIDEr
+> B / B
+> B / UnB
+> UnB / B
+> UnB / UnB
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> 1.2
+> Score
+> 13.71
+> 13.50
+> 13.86
+> 13.75
+> METEOR
+> B / B
+> B / UnB
+> UnB / B
+> UnB / UnB
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> 1.2
+> Score
+> 10.51
+> 10.20
+> 10.73 10.67
+> SODA
+> B / B
+> B / UnB
+> UnB / B
+> UnB / UnB
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> 1.2
+> Score
+> 6.67
+> 6.50
+> 6.75 6.73
+> BLEU_4
+> B = Balanced |UnB = Unbalanced
+
+Figure A.3. Performance comparison of SGSR under different OT configurations. We evaluate Balanced (B) and Unbalanced (UnB) OT for both frame-side and anchor-side matching. The con-figuration with UnB for frames and B for anchors achieves the best performance across all metrics. 
+
+allocate attention to salient regions. As shown in Fig-ure A.3, this reversed configuration achieves the best per-formance for our task. Therefore, our SGSR setting of ap-plying unbalanced OT with saliency score constraints for frames and balanced OT for anchors proves to be optimal for DVC. 
+
+Hyperparameter Analysis. Except for the saliency-related terms μ and γ, we keep all other OT parameters identical to ASOT. We set the unbalanced regularization co-efficient ρ to 0 during both training and inference. This im-proves CIDEr from 79 .61 to 80 .53 . We analyze different μ
+
+and γ combinations in Figure A.4. The best performance is achieved at μ = 0 .1 and γ = 0 .3. This shows that moderate 0.01 0.05 0.1 0.2 0.3 0.4 
+
+Value 
+
+0.01 
+
+0.05 
+
+0.1 
+
+0.2 
+
+0.3 
+
+0.4 
+
+> Value
+
+78.68 78.48 79.42 79.50 78.37 79.52 
+
+79.90 78.67 79.35 79.09 79.15 79.30 
+
+78.85 79.85 78.97 79.48 78.88 79.82 
+
+79.64 79.73 79.87 79.17 79.01 80.06 
+
+79.65 78.83 80.53 79.26 79.18 79.20 
+
+79.81 79.17 79.56 78.54 78.95 78.17 
+
+CIDEr Score Heatmap 
+
+78.5 
+
+79.0 
+
+79.5 
+
+80.0 
+
+80.5 
+
+> CIDEr Score
+
+Figure A.4. CIDEr performance heatmap across different combinations of saliency weight μ and temporal-consistency weight γ. Each cell shows the CIDEr score obtained under a spe-cific μ and γ configuration in the SGSR objective. 
+
+Datstore Type YouCook2 (val) CIDEr METEOR SODA c BLEU4 
+
+CC3M 76.65 13.63 10.53 6.63 COCO 77.31 13.57 10.66 6.67 Hierarchical [13] 77.28 13.59 10.42 6.59 In-domain 80.53 13.86 10.73 6.75 
+
+Table A.1. Ablation study on different datstores used for retrieval. 
+
+saliency weighting and temporal consistency work best for our task. 
+
+B.2. Retrieval process 
+
+Representative Segment Features for Retrieval. After obtaining the optimized transport plan T ∗, we generate seg-ments. We rank all segments using the scoring and select the top-k segments for retrieval. For each selected segment, we construct a representative feature by aggregating its frame embeddings using a saliency-weighted average to empha-size informative frames. Let sj = [ f sj , f ej ) denote the frame indices assigned to segment j. The representative feature is computed as: 
+
+¯xsj =
+
+P
+
+n∈sj ps,n xsn
+
+P
+
+n∈sj ps,n 
+
+, (14) These k representative features are then used for re-trieval following the mechanism described in Section 3.1. As shown in Table 5, the saliency-weighted pooling leads to more accurate segment representations for retrieval. This results in consistent improvements in overall DVC perfor-add some barbecue sauce                                     
+
+> and place the meat
+> in the loaf pan
+> pour some barbecue sauce on the meat
+> loaf and bake the meatloaf
+> spread barbecue sauce
+> on the meatloaf
+> (a) GT event duration (Segments)
+> (c) Adaptive Caption Retrieval
+> (d) Saliency -score based Caption Retrieval (Ours)
+> (b) Uniform Sampling based Caption Retrieval
+> ❌misaligned
+> ❌misaligned ❌misaligned ❌misaligned
+> well aligned ✅well aligned ✅well aligned ✅
+> “Add oil to a pan …”
+> “Combine ingredients in a bowl to create
+> the marinade.”
+> “Spread tomato sauce …and on top of the cooked
+> chicken.”
+> “Add wine to a pot …create a flavorful dish.”
+> “add barbecue sauce honey onion powder …to another bowl”
+> “cut the barbecue pork into thin slices”
+> “shape the meatloaf”,
+> “cook in an oven”
+> “preheat the oven
+> to 450 degrees”
+> “Add barbecue sauce onto
+> the top of the meatloaf”
+> “Pour the sauce on top of the
+> meat loaf”
+> “Place the …making a beef
+> meatloaf”
+> “Pour some pasta sauce …
+> meatballs and place the lid on”
+> “Pour the mixed sauce on a baking pan …”.
+> “Pour the sauce on top of the meatballs”
+> ❌misaligned
+
+Figure A.5. Qualitative comparison of retrieved captions un-der different segmentation strategies. (a) Ground truth segments and captions. (b) Segments from uniform sampling (HiCM2 [13]) and their retrieved captions. (c) Segments from adaptive sampling (Sali4Vid [10]) and their retrieved captions. (d) Our SGSR pro-duces segments that align more closely with true event boundaries and retrieves more relevant captions. GT: add flour eggs and water to a bowl and mix    
+
+> Anchor_1 (event_1) Anchor_2 (event_2)
+> GT: add bacon bits garlic milk salt
+> and pepper then mash
+> Top -8 semantic segments via anchors
+
+Figure A.6. Visualization of the Semantic Prototypes. 
+
+mance compared to the uniform averaging strategy used in previous work [10, 12, 13]. In addition, we evaluate retrieval performance under dif-ferent datastores to assess the robustness of our method. As reported in Table A.1, SGSR consistently maintains state-of-the-art performance. 
+
+Segment and Retrieved Captions Qualitative Results. 
+
+We qualitatively compare segments and retrieved captions in Figure A.5. While prior methods [10, 13] often produce misaligned or drifting segment boundaries, our saliency-guided transport yields segments that align more closely with ground truth event durations. The retrieved captions are also semantically more relevant to the video content, validating the effectiveness of SGSR . In SGSR , we define K
+
+learnable anchor embeddings as semantic prototypes, where 𝑳𝒂𝒚𝒆𝒓 𝑵𝒐𝒓𝒎  
+
+> 𝑶𝒗𝒆𝒓𝒍𝒂𝒑𝒑𝒆𝒅 𝒇𝒆𝒂𝒕𝒖𝒓𝒆
+> 𝒂𝒗𝒆𝒓𝒂𝒈𝒊𝒏𝒈
+
+𝑺𝑾𝑺𝑨           
+
+> ⋯
+> ⋯
+> 𝑨𝒕𝒕𝒆𝒏𝒕𝒊𝒐𝒏
+> 𝑴𝒆𝒄𝒉𝒂𝒏𝒊𝒔𝒎
+> 𝑾𝒊𝒏𝒅𝒐𝒘
+> 𝒆𝒎𝒑𝒕𝒚 𝒕𝒆𝒏𝒔𝒐𝒓
+> 𝑸 ⨂𝑲
+> 𝑽
+> softmax
+> 𝑨𝒕𝒕𝒆𝒏𝒕𝒊𝒐𝒏
+> 𝑴𝒆𝒄𝒉𝒂𝒏𝒊𝒔𝒎
+> =𝑸 ,𝑲 ,𝑽
+> 𝑾𝒊𝒏𝒅𝒐𝒘
+> ⋯𝒙′ 𝟏 𝒙′ 𝟐 𝒙′ 𝑭
+> ⋯𝒙 𝟏 𝒙 𝟐 𝒙 𝑭
+> ⋯
+> 𝒘 𝟏 𝒘 𝟐 𝒘 𝟑
+
+Figure A.7. Architecture of the SWSA module. SWSA refines X
+
+through local self-attention without linear projections over sliding windows, where overlapping regions are averaged and residually added to produce refined features X′.
+
+each anchor serves as a general temporal placeholder rep-resenting an individual event. During optimal transport, frames are assigned to the anchor with the highest feature similarity, forming temporally coherent segments. We visu-alize the learned anchor assignments in Figure A.6, show-ing that the anchors consistently capture meaningful event boundaries. 
+
+C. Additional Analysis and Experiments 
+
+Feature Refinement. The architecture of SWSA is on the Figure A.7. Given the input features X ∈ RF ×D and a set of window sizes {w1, w 2, w 3}, we compute local self-attention within each window. For a window of size w, the segment starting at position i is denoted as Xi:i+w ∈ Rw×D . The attention output for this segment is computed as: 
+
+Ai:i+w = softmax Xi:i+wX⊤
+
+> i:i+w
+
+√D
+
+!
+
+Xi:i+w. (15) Since windows overlap, each frame n may appear in multiple windows. We average all attention outputs that cover frame n, weighted by the number of overlapping win-dows Cn:
+
+ˆXn = 1
+
+Cn
+
+X 
+
+> (w,i ): n∈[i,i +w)
+
+A(w,i ) 
+
+> n
+
+, (16) where Cn is the number of windows covering frame n, and 
+
+A(w,i ) 
+
+> n
+
+is the attention output at position n from the window of size w starting at i. The final refined representation is obtained via a residual connection: 
+
+X′ = X + LayerNorm ( ˆX). (17) 
+
+Method PT CIDEr SODA c F1 
+
+TimeChat CVPR24 ✓ 11.0 3.4 19.5 VTG-LLM AAAI25 ✓ 13.4 3.6 20.6 TRACE ICLR25 ✓ 35.5 6.7 31.8 TimeExpert ICCV25 ✓ 39.0 7.2 33.5 
+
+Ours ✓ 80.53 10.73 34.34 
+
+Table A.2. Comparison with VLM methods on the YouCook2 val-idation set 
+
+Feature Difference between Training and Inference. In 
+
+STaRC , we use refined features from SWSA differently dur-ing training and inference. During training, the refined fea-tures X′ are used only as input to the highlight detection module, while the decoder receives original features X.During inference, the refined features X′ are used both as input to the highlight detection module and as decoder in-put. To analyze the refinement impact, we measure frame-to-frame transition sharpness in Figure A.8, by comput-ing L2 distances between consecutive frame embeddings. Refined features X′ produce sharper transitions at event boundaries compared to X, while non-event regions show smaller transitions. 
+
+Comparison with Vision-Language Models. We also compare with recent Vision-Language Models (VLMs) on the DVC task. As shown in Table A.2, even powerful VLMs struggle to produce accurate event boundaries and captions simultaneously. This suggests that general-purpose VLMs are not yet sufficient for DVC, and task-specific architec-tures remain essential. 
+
+D. Failure case and limitations 
+
+STaRC occasionally produces redundant captions despite precise localization (a challenge shared by existing DVC methods). OT-based retrieval is effective overall but can introduce noise in some segments (Figure A.9), which we leave for future work. 0 20 40 60 80 100 
+
+> Frame
+> 1rMT2uMF78E - Origin
+
+Event mean = 0.880 
+
+Non-event mean = 0.945      
+
+> 020 40 60 80 100
+> Frame
+> 1rMT2uMF78E - Refined
+
+Event mean = 1.760 
+
+Non-event mean = 0.942      
+
+> 020 40 60 80 100
+> Frame
+> PTpRTJKAEoI - Origin
+
+Event mean = 1.648 
+
+Non-event mean = 2.296      
+
+> 020 40 60 80 100
+> Frame
+> PTpRTJKAEoI - Refined
+
+Event mean = 2.540 
+
+Non-event mean = 1.393      
+
+> 020 40 60 80 100
+> Frame
+> 9GX8f5EwwE4 - Origin
+
+Event mean = 0.887 
+
+Non-event mean = 1.325      
+
+> 020 40 60 80 100
+> Frame
+> 9GX8f5EwwE4 - Refined
+
+Event mean = 1.435 
+
+Non-event mean = 0.962 Figure A.8. Frame transition sharpness comparison between original and refined features . For each video in the YouCook2 validation set, red spans indicate ground truth event regions. Refined features exhibit larger transition magnitudes within event intervals, indicating stronger semantic contrast and clearer event boundaries than original features. GT 
+
+prediction 
+
+> c
+
+OT segments 
+
+dice the apples 
+
+add lemon juice to the apples and mix 
+
+chop the celery add raisins cranberries and 
+
+nuts to the apples 
+
+add mayonnaise 
+
+and mix 
+
+everything together 
+
+chill the dish 
+
+Mix flour salt and pepper 
+
+together. 
+
+Add salt and 
+
+pepper to a 
+
+bowl and mix. 
+
+Add the mixture 
+
+to the 
+
+bowl and mix .
+
+Add the 
+
+mixture … mix .
+
+Add … mix. Add … mix. 
+
+video_id : JWcAs8biQFU 
+
+Figure A.9. Failure case of STaRC .23s 61s 62s 96s 101s 153s      
+
+> 12s 60s 62s 97s 101s 155s
+
+mix bread crumbs 
+
+cornflakes and 
+
+parmesan cheese 
+
+dip the calamari in 
+
+the flour beaten egg 
+
+and bread crumbs 
+
+heat butter in a pan and cook the 
+
+calamari 
+
+Mix bread crumbs corn 
+
+flakes and parmesan 
+
+cheese. 
+
+Mix the calamari in 
+
+flour egg and crumb 
+
+mix. 
+
+Cook the calamari in a pan with 
+
+butter and oil. 
+
+> Video ID: VLS3ZJt9GMg
+
+Ours 
+
+Ground -Truth Video ID: GXnzgRC3sd4    
+
+> 31s 64s
+> 22s 32s 44s
+
+cut the 
+
+fish to 
+
+straighten 
+
+it 
+
+mix in water to 
+
+form a batter 
+
+add 
+
+sesame 
+
+oil to the 
+
+batter 
+
+Mix flour 
+
+baking 
+
+powder and 
+
+salt. 
+
+Mix ice water with 
+
+the flour. 
+
+> 51s
+
+drop the 
+
+shrimp into 
+
+the oil 
+
+Stir in 
+
+sesame 
+
+oil.      
+
+> 9s 21s 22s 32s 59s 52s 60s 68s
+
+mix flour 
+
+baking 
+
+powder 
+
+and salt 
+
+dip the 
+
+shrimp in 
+
+the batter    
+
+> 52s 59s 80s 90s
+
+Dip the 
+
+shrimp in 
+
+the batter. 
+
+Fry the 
+
+shrimp in 
+
+oil. 
+
+Ours 
+
+Ground -Truth Figure A.10. Additional qualitative results for STaRC on the YouCook2 validation set.

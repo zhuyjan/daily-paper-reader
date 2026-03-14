@@ -1,0 +1,326 @@
+Title: Deep Expert Injection for Anchoring Retinal VLMs with Domain-Specific Knowledge
+
+URL Source: https://arxiv.org/pdf/2603.07131v2
+
+Published Time: Wed, 11 Mar 2026 00:34:39 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# Deep Expert Injection for Anchoring Retinal VLMs with Domain-Specific Knowledge 
+
+Shuai Lu 1,5, Meng Wang 2, Jia Guo 3, Jiawei Du 1, Bo Liu 4, Shengzhu Yang 1,Weihang Zhang 1, Huazhu Fu 5⋆, and Huiqi Li 1⋆ 
+
+> 1
+
+Beijing Institute of Technology, Beijing, China  
+
+> 2
+
+National University of Singapore, Singapore  
+
+> 3
+
+Tsinghua University, Beijing, China  
+
+> 4
+
+The Hong Kong Polytechnic University, Hong Kong  
+
+> 5
+
+Institute of High Performance Computing, Agency for Science, Technology and Research, Singapore  
+
+> ⋆
+
+Corresponding authors 
+
+Abstract. Large Vision Language Models (LVLMs) show immense po-tential for automated ophthalmic diagnosis. However, their clinical de-ployment is severely hindered by lacking domain-specific knowledge. In this work, we identify two structural deficiencies hindering reliable med-ical reasoning: 1) the Perception Gap, where general-purpose visual en-coders fail to resolve fine-grained pathological cues (e.g., microaneurysms); and 2) the Reasoning Gap, where sparse visual evidence is progressively overridden by massive language priors in deeper transformer layers, lead-ing to ungrounded hallucinations. To bridge these gaps, we propose EyE-xIn , a data-efficient framework designed to anchor retinal VLMs with ex-pert knowledge via a Deep Expert Injection mechanism. Our architecture employs an Expert-Aware Dual-Stream encoding strategy that decou-ples visual representation into a general stream for anatomical context and a specialized expert stream for pathological semantics. To ensure high-fidelity integration, we design a Semantic-Adaptive Gated Fusion module, which dynamically amplifies subtle lesion signals while filtering irrelevant background noise. Furthermore, we introduce Adaptive Deep Expert Injection to embed persistent "Vision Anchors" by integrating fused visual features as residual biases directly into intermediate LLM layers. This mechanism creates a visual shortcut that forces the rea-soning stack to remain strictly grounded in visual evidence. Extensive experiments across four benchmarks demonstrate that our model con-sistently outperforms massive proprietary systems. EyExIn significantly enhances domain-specific knowledge embedding and achieves state-of-the-art precision in ophthalmic visual question answering, advancing the development of trustworthy ophthalmic AI. 
+
+Keywords: Retinal Disease Diagnosis · Vision-Language Models · VQA 
+
+1 Introduction 
+
+The emergence of Large Vision Language Models (LVLMs) has established a new paradigm in cross-modal interaction, offering transformative potential for  
+
+> arXiv:2603.07131v2 [cs.CV] 10 Mar 2026 2Authors Suppressed Due to Excessive Length
+
+automated healthcare [3,8,16,18]. By effectively processing complex multimodal data and executing advanced cognitive reasoning, these systems are emerging as highly promising tools for clinical automation [6, 10–14]. Due to their inherent reliance on the precise interpretation of intricate visual evidence, ophthalmol-ogy stands to benefit profoundly from this technological leap, particularly in tasks such as fundus report generation and visual question answering (VQA). However, despite their impressive fluency, current general-domain LVLMs are severely hampered by a critical flaw: lack of domain-specific knowledge embed-ding [15]. In clinical settings, this deficiency manifests in two critical ways: fab-ricating plausible but non-existent lesions (false positives), and more perilously, failing to identify subtle pathological cues, thereby misdiagnosing diseased pa-tients as healthy. Such missed diagnoses can cause patients to lose crucial win-dows for early intervention, posing unacceptable safety risks and fundamentally undermining trust in AI-assisted diagnosis. Existing alignment strategies typically rely on "brute-force" data scaling, such as massive instruction tuning [7, 16, 21] or extensive RLHF [17, 20]. This is highly impractical in ophthalmology, where expert-annotated fundus images are privacy-sensitive and prohibitively expensive to acquire. Confined to low-data regimes, standard parameter-efficient fine-tuning fails to optimally utilize limited visual evidence, exacerbating two structural deficiencies. First, the Per-ception Gap : General visual encoders pre-trained on natural images struggle to resolve fine-grained pathological features (e.g., tiny microaneurysms), passing ambiguous tokens to the LLM. Second, the Reasoning Gap : Sparse medical gradients fail to thoroughly rewire deep reasoning layers. Faced with visual-semantic uncertainty, the LLM falls back on massive pre-trained language priors (Prior Domination), bypassing weak visual evidence to fabricate clinical text. To bridge these structural gaps under limited medical supervision, we pro-pose EyExIn , a data-efficient framework designed to deeply embed ophthalmic knowledge into LVLMs. Our main contributions are summarized as follows: 
+
+– To tackle the Perception Gap , we introduce an Expert-Aware Dual-Stream architecture with a Semantic-Adaptive Gated Fusion module. It dy-namically decouples global anatomical context from fine-grained expert pathol-ogy, filtering background noise to maximize the visual Signal-to-Noise Ratio of subtle lesions. 
+
+– To overcome the Reasoning Gap , we propose an Adaptive Deep Expert Injection mechanism. By embedding visual features as persistent residual biases directly into intermediate LLM layers, our framework establishes "Vi-sion Anchors" that strictly ground pathological predictions in actual image evidence. 
+
+– Extensive experiments across four benchmarks (TM4K, JSIEC, Retina, and ODIR) demonstrate that our EyExIn 6 with 7B-parameter achieves state-of-the-art diagnostic precision.  
+
+> 6Source code will be released upon publication.
+
+Title Suppressed Due to Excessive Length 3Text 
+
+> General
+> Vision
+> Encoder
+
+Text  
+
+> General
+> Vision
+> Encoder
+> Expert
+> Vision
+> Encoder Gated
+> Fusion
+> (GF)
+
+Adaptive Deep Expert Injection (Vision Anchor) 
+
+Incorrect 
+
+visual features 
+
+LLM 
+
+Visual 
+
+signal decay 
+
+preserved vision signal 
+
+Standard large VLM 
+
+Our EyExIn VLM 
+
+> No abnormalities in
+> the optic disc or macula.
+> Glaucoma.
+> - Pale optic disc.
+> - Enlarged cup-to-disc ratio.
+> - Narrow neuroretinal rim.
+> - Retinal nerve fiber layer defect. Describe abnormalities
+> in fundus images
+> Describe abnormalities
+> in fundus images
+> Ground truth
+> Model output
+> Model output
+
+Image 
+
+Image 
+
+> Glaucoma.
+> - Enlarged cup-to-disc ratio.
+> - Pale optic disc.
+> - Retinal nerve fiber layer defect.
+
+Expert knowledge  
+
+> Ground truth
+> 1. High Cup/Disc ratio
+> 2.Retinal nerve fiber layer Defect
+
+Fig. 1. Architectural comparison between a standard VLM and the proposed EyExIn framework. (Top) Standard VLMs suffer from visual signal decay across deep LLM layers, leading to ungrounded reasoning. (Bottom) EyExIn introduces an expert-aware dual-stream encoder and Semantic-Adaptive Gated Fusion (GF). Crucially, Deep Expert Injection establishes persistent “Vision Anchors” in intermediate layers, ensuring evidence-grounded clinical outputs. 
+
+2 Methodology 
+
+The overall architecture of EyExIn is illustrated in Fig. 1. Compared to stan-dard early-fusion VLMs (Top in Fig. 1) characterized by coarse perception and visual signal decay across deep LLM layers, our framework introduces a decou-pled, deep-injected paradigm (Bottom in Fig. 1). The data flow is explicitly structured to target two structural deficiencies. First, to address the Perception Gap , the input fundus image is processed by an Expert-Aware Dual-Stream en-coder, followed by a Semantic-Adaptive Gated Fusion (GF) module designed to isolate fine-grained lesions from the anatomical background. Second, to address the Reasoning Gap , EyExIn bypasses traditional prompt-level visual integra-tion. Instead, an Adaptive Deep Expert Injection mechanism embeds the fused features directly into intermediate LLM layers as persistent "Vision Anchors". 
+
+2.1 Expert-Aware Dual-Stream Encoding 
+
+Standard LVLMs [4, 16, 19] relying on single natural-image encoders struggle to resolve fine-grained pathologies in medical domains. To bridge this Perception Gap , we decouple visual extraction into two complementary streams. 
+
+General Stream (Anatomical Context): We retain the frozen foundation encoder (e.g., Qwen2.5-VL [4]) to extract global features Fgen ∈ RN ×Dllm (N4 Authors Suppressed Due to Excessive Length 
+
+tokens). Leveraging its broad pre-training, it preserves macroscopic anatomical structures and holistic colorimetric variations (e.g., optic disc pallor) that are often compromised in heavily specialized models. 
+
+Expert Stream (Pathological Semantics): A contrastively pre-trained fundus foundation encoder [9] extracts fine-grained features Fexp ∈ RN ×Dexp ,providing high sensitivity to subtle lesions like microaneurysms. To align the feature spaces, a linear projection ϕ maps the expert features to the general dimension, yielding F ′ 
+
+> exp
+
+= ϕ(Fexp ) ∈ RN ×Dllm .
+
+2.2 Semantic-Adaptive Gated Fusion 
+
+Trivial integration strategies (e.g., direct addition or concatenation) are sub-optimal as they dilute fragile lesion signals, inject expert-driven noise into healthy regions, or impose severe computational redundancy. Furthermore, relying solely on the expert encoder discards the general stream’s critical sensitivity to holistic colorimetric attributes. To isolate subtle lesions while preserving global anatomy, we propose a Semantic-Adaptive Gated Fusion, which employs a lightweight se-mantic router to compute a token-wise weight map α ∈ RN ×1:
+
+α = σ(MLP ([ Fgen ∥ F ′
+
+> exp
+
+])) , (1) where σ(·) denotes the Sigmoid activation function and ∥ represents channel concatenation. The fused representation is obtained via convex interpolation: 
+
+Ff used = (1 − α) ⊙ Fgen + α ⊙ F ′
+
+> exp
+
+. (2) By dynamically enforcing α → 1 in pathological regions and α → 0 in broader structural contexts, this spatial adaptivity purifies the visual features and max-imizes the Signal-to-Noise Ratio. 
+
+2.3 Adaptive Deep Expert Injection 
+
+In standard early fusion, fragile visual signals decay across deep reasoning layers, causing the model to fabricate diagnoses based on language priors. While recent cross-layer fusions (e.g., Qwen3-VL [3]) mitigate this via uniform residual addi-tions, clinical applications can be further optimized by a more targeted paradigm that distinguishes critical lesions from normal anatomical backgrounds. To es-tablish a strict and focused visual grounding, we directly inject the expert-fused features Ff used ∈ RN ×Dllm back into the corresponding visual token positions within the intermediate LLM layers. Crucially, this integration must safely supplement visual knowledge without erasing the LLM’s pre-trained hidden states. For the visual tokens at the l-th Transformer layer, denoted as Hvis l−1 ∈ RN ×Dllm , we propose an Adaptive Deep Expert Injection . Rather than blind addition, we first compute a token-wise spatial routing map gl = σ(MLP l([ Hvis l−1 ∥ Ff used ])) ∈ RN ×1. By concatenating Title Suppressed Due to Excessive Length 5
+
+the current hidden states with the pristine visual evidence, this router explic-itly detects representation decay, adaptively evaluating the necessity of visual refreshing. The expert features are then integrated as a persistent residual bias: 
+
+H′vis l = Hvis l−1 + tanh( γl) · (gl ⊙ Ff used ) (3) where γl is a zero-initialized, layer-specific scaling parameter. This dual-gated design explicitly decouples the feature integration process. At the token level, gl
+
+functions as a discrepancy-aware router that selectively bypasses normal anatom-ical backgrounds, thereby precisely refreshing pathological representations when language priors risk overriding visual evidence. At the layer level, tanh( γl) acts as a global capacity controller; its zero-initialization effectively isolates the pre-trained LLM from uncalibrated visual projections during early training, ensuring robust convergence and averting catastrophic forgetting. 
+
+3 Experiments and Results 
+
+Experimental Datasets. To ensure a fair comparison, all fine-tuned models are trained on a real-world clinical dataset of 150K fundus images and their cor-responding diagnostic reports. We evaluate its diagnostic generalization across four diverse datasets covering various retinal diseases and imaging devices. This includes a large-scale private clinical dataset ( TM4K : 4,022 images spanning 21 categories) and three public datasets: JSIEC [5] (315 images with 39 classes), 
+
+Retina [1] (90 images with 3 classes), and ODIR [2] (1,851 images with 7 classes). 
+
+Implementation Details. We employ Qwen2.5-VL (7B) [4] as our baseline. We freeze its general vision encoder while introducing a pre-trained fundus foun-dation model [9] as the trainable expert stream. To achieve parameter-efficient optimization under limited data, the LLM backbone is fine-tuned using Low-Rank Adaptation (LoRA) with a rank of 16 and a scaling factor ( α) of 32. Train-ing is conducted on A100 GPUs via DeepSpeed ZeRO-2, utilizing the AdamW optimizer with a weight decay of 0.05, a peak learning rate of 2 × 10 −5, and a co-sine learning rate decay schedule incorporating a 3% warmup. The global batch size is set to 48, and the maximum sequence length is constrained to 2048 to-kens. Furthermore, employing BFloat16 mixed-precision format guarantees both memory efficiency and computational stability during the training process. We compare our 7B-model against proprietary LVLMs ( Qwen3-VL-Max ,
+
+ChatGPT-5.2 , and Gemini3-Pro ) and open-source models ( LLaVA , and 
+
+Qwen2.5-VL ) fine-tuned (FT) on our data. Diagnostic performance is eval-uated via Macro-Averaged Recall, Precision, and F1-score, rigorously ensuring rare pathologies contribute equally. Additionally, to assess the linguistic and clin-ical fidelity of generated text, we utilize BLEU-1, ROUGE-L, and METEOR for structural similarity, alongside BERT-F1 for deep semantic equivalence. 6 Authors Suppressed Due to Excessive Length 
+
+Table 1. Comparison of Macro Average metrics on multi-class Closed and Open-ended VQA tasks. Best results are highlighted in bold . Models are categorized as 
+
+Proprietary (Prop.) general-domain LVLMs and Fine-Tuned (FT) open-source models.                                                                                                                                                             
+
+> Dataset Method Closed VQA (%) Open-ended VQA (%)
+> F1 Recall Prec F1 Recall Prec
+> TM4K
+> Qwen3-VL-Max (Prop.) 7.82 9.16 14.58 11.39 11.97 32.58 ChatGPT-5.2 (Prop.) 15.93 21.55 23.83 26.72 27.44 44.20 Gemini3-Pro (Prop.) 37.99 48.11 40.53 47.71 54.17 53.25 LLaVA [16] (FT) 39.83 46.13 44.80 39.71 43.01 44.61 Qwen2.5-VL [4] (FT) 55.72 69.12 51.22 47.84 56.02 54.44
+> Our EyExIn (FT) 78.07 82.42 77.33 72.91 78.99 71.87 JSIEC
+> Qwen3-VL-Max (Prop.) 6.96 9.55 7.59 19.48 24.34 24.98 ChatGPT-5.2 (Prop.) 21.18 26.00 26.09 31.39 35.80 38.86 Gemini3-Pro (Prop.) 43.29 49.27 48.25 30.78 26.34 48.16 LLaVA [16](FT) 26.59 33.62 30.52 11.82 12.15 17.65 Qwen2.5-VL [4](FT) 44.98 47.52 53.29 14.00 14.85 21.99
+> Our EyExIn (FT) 80.66 82.33 85.20 63.10 76.32 60.84 Retina
+> Qwen3-VL-Max (Prop.) 42.00 41.36 49.71 53.00 48.77 73.74 ChatGPT-5.2 (Prop.) 56.63 61.73 62.15 60.28 51.23 87.66 Gemini3-Pro (Prop.) 65.73 71.60 64.63 61.42 45.68 95.83 LLaVA [16](FT) 47.60 55.42 43.11 45.89 54.30 41.55 Qwen2.5-VL [4] (FT) 54.59 63.58 48.15 52.63 61.73 46.90
+> Our EyExIn (FT) 71.27 67.90 89.68 67.80 62.30 96.15 ODIR
+> Qwen3-VL-Max (Prop.) 29.65 27.07 43.65 31.65 30.73 53.58 ChatGPT-5.2 (Prop.) 29.06 31.08 33.19 36.42 36.73 42.54 Gemini3-Pro (Prop.) 29.48 40.39 34.56 32.13 24.54 75.70
+> LLaVA [16](FT) 37.82 39.55 38.41 34.90 36.15 40.80 Qwen2.5-VL [4](FT) 42.84 44.87 44.69 39.09 42.02 46.28
+> Our EyExIn (FT) 60.09 59.81 64.69 56.70 55.20 60.40
+
+Main Results: Visual Question Answering. Table 1 and Table 2 present the comprehensive evaluation. As observed, general proprietary LVLMs struggle to provide accurate diagnostic assessments, exhibiting remarkably low F1-scores in Closed VQA (e.g., 7.82% for Qwen3-VL-Max and 15.93% for ChatGPT-5.2 on TM4K) due to their inability to resolve fine-grained ophthalmic features. While standard domain-specific fine-tuning (LLaVA, Qwen2.5-VL) partially mitigates this perception gap, EyExIn demonstrates consistently superior capabilities. Focusing on Closed VQA, our framework achieves state-of-the-art F1-scores of 78.07% on TM4K and 80.66% on JSIEC. This success is directly attributed to our Semantic-Adaptive Gated Fusion, which effectively isolates pathological cues to drive high diagnostic sensitivity (e.g., 82.42% Recall on TM4K). Furthermore, by employing Adaptive Deep Expert Injection to anchor reasoning strictly to vi-sual evidence, EyExIn effectively suppresses ungrounded language priors. This advantage seamlessly extends to the highly challenging Open-ended VQA task, where the model maintains remarkable precision (e.g., 96.15% on Retina) com-pared to the severe false-positive drops of baseline models. This strict clinical fidelity is further corroborated by Table 2, where EyExIn leads across all struc-tural and semantic text generation metrics, objectively validating our targeted architectural design in low-data regimes. Title Suppressed Due to Excessive Length 7
+
+Table 2. Comparison of text similarity metrics on the TM4K dataset .
+
+Method BLEU-1 ROUGE-L METEOR BERT-F1 
+
+Qwen3-VL-Max 0.3623 0.2082 0.3258 0.9352 ChatGPT-5.2 0.2942 0.2098 0.2726 0.9320 Gemini3-Pro 0.2564 0.2130 0.3056 0.9286 LLaVA [16](FT) 0.3854 0.2688 0.3692 0.9387 Qwen2.5-VL [4](FT) 0.4123 0.3046 0.4076 0.9420 
+
+Our EyExIn (FT) 0.4579 0.3552 0.4316 0.9466 Finding: The optic disc margins are distinct with normal color; the cup-to-disc (C/D) ratio is 0.4. 
+
+The retinal vascular course is generally normal. There are retinal pigment epithelium changes in 
+
+the macular region, along with a disciform retinal detachment .
+
+Diagnosis : Central serous chorioretinopathy .
+
+Findings: The optic disc margins are distinct with a normal C/D ratio. T h e m a cu la is 
+
+completely normal with an intact structure. Retinal arteriovenous coursing is natural. No 
+
+hemorrhages, exudates, microaneurysms, or drusen are observed across the entire retina, though 
+
+mild localized optical reflection artifacts are present. 
+
+Diagnosis : Normal Fundus. 
+
+Findings : The optic disc margins are clear with normal color and a C/D ratio of 0.4. Retinal 
+
+vasculature appears generally normal. Notably, the macula exhibits discifor m detachment 
+
+accompanied by r etinal pigment epithelium (RPE) changes .
+
+Diagnosis : Centr al Ser ous Chor ior etinopathy (CSCR) .
+
+Chief Complaint :
+
+Decreased visual 
+
+acuity for 10 days. 
+
+Gemini3-Pro 
+
+Clinical 
+
+Diagnosis 
+
+Our EyExIn 
+
+You are an expert ophthalmologist. Please analyze the fundus image and provide your findings and final diagnosis. Query 
+
+Open VQA 
+
+Closed VQA 
+
+Please detect abnormalities in this fundus image from: 
+
+> Pathologic Myopia, Glaucoma, Central Serous Chorioretinopathy, Diabetic Retinopathy, Macular Hole, Severe Hypertensive Retinopathy,
+> Retinal Detachment, Asteroid Hyalosis, Acute Non-glaucomatous Optic Neuropathy, Laser Spots, Choroidal Coloboma, Retinitis
+> Pigmentosa, Optic Atrophy, Preretinal Hemorrhage, Retinal Artery Occlusion, Normal Fundus, Myelinated Nerve Fiber, Cataract, Age-
+> related Macular Degeneration, Epiretinal Membrane, Retinal Vein Occlusion.
+
+Chief Complaint :
+
+Blurred vision in the 
+
+right eye for 2-3 days. 
+
+Finding : Extensive flame-shaped hemor r hages and cotton wool spots are visible on the retina. 
+
+The optic disc margins are indistinct, and the retinal veins ar e tor tuous and dilated .
+
+Diagnosis : Retinal Vein Occlusion .
+
+Clinical 
+
+Diagnosis 
+
+Retinal Vein Occlusion (RVO) Our EyExIn 
+
+What findings support this diagnosis? 
+
+Query 
+
+The optic disc margins are indistinct and hyperemic. The arteries are attenuated, and 
+
+arteriovenous (AV) nicking is present. The veins ar e tor tuous and dilated . Extensive 
+
+hemor r hages and cotton wool spots are observed in all quadrants of the posterior pole, 
+
+involving the macula. 
+
+Our EyExIn 
+
+Query 
+
+What is the recommended management? 
+
+Query 
+
+Prioritize the FFA exam to determine the necessity of immediate laser treatment. Our EyExIn 
+
+Fig. 2. Qualitative VQA comparison on two real-world clinical cases. Red text indi-cates severe missed diagnoses and hallucinated artifacts by Gemini, while green text highlights accurate, expert-aligned lesion identification and clinical metrics by EyExIn. 
+
+Real-World Clinical Validation: Fig. 2 demonstrates EyExIn ’s reliabil-ity across Central Serous Chorioretinopathy (CSCR) and Retinal Vein Occlusion (RVO) cases. In Open VQA, Gemini3-Pro miss subtle detachments and halluci-nate a Normal Fundus diagnosis. Conversely, driven by persistent visual anchors, 
+
+EyExIn accurately extracts quantitative metrics (e.g., C/D ratio 0.4) for CSCR. Furthermore, in Closed VQA, it correctly identifies RVO by strictly grounding 8 Authors Suppressed Due to Excessive Length 
+
+Table 3. Ablation study on the TM4K dataset (Closed VQA). We compare different strategies for integrating the expert stream: sequence addition (Add) vs. our semantic-adaptive gated fusion (Gated), and unconditional addition (Direct) vs. our adaptive routing (Adapt) for deep injection.                                        
+
+> Model Expert Fusion Injection F1 Recall Prec Variant Stream Strategy Strategy
+> Baseline (Qwen2.5-VL) ---55.72 69.12 51.22 Variant 1 ✓Add -64.23 81.30 55.10 Variant 2 ✓Gated -71.45 78.50 67.65 Variant 3 ✓Gated Direct 74.12 82.15 69.80
+> EyExIn ✓Gated Adapt 78.07 82.42 77.33
+
+its reasoning in multi-regional lesions (tortuous veins, extensive hemorrhages), demonstrating its capacity for trustworthy, evidence-based clinical evaluation. 
+
+Ablation Study. To validate the proposed components, we conduct an ablation study on the closed validation set of TM4K as summarized in Table 3. 
+
+Expert Stream & Gated Fusion: Integrating the expert stream via simple element-wise addition (Variant 1) significantly boosts Recall (from 69.12% to 81.30%), confirming its ability to capture fine-grained pathological cues missed by the general encoder. However, this naive integration injects uncalibrated noise into healthy regions, bottlenecking Precision at 55.10%. Upgrading to Semantic-Adaptive Gated Fusion (Variant 2) dynamically filters this noise, yielding a substantial Precision leap (+12.55%) by maximizing the visual signal-to-noise ratio before LLM processing. 
+
+Adaptive Deep Expert Injection: To prevent visual signal decay in deeper reasoning layers, Variant 3 unconditionally adds visual features (Direct). While this forces visual grounding and further boosts Recall (82.15%), it indiscrim-inately alters grammatical tokens, disrupting the LLM’s pre-trained syntactic fluency and capping Precision at 69.80%. Our EyExIn resolves this structural conflict via adaptive routing (Adapt). By intelligently bypassing visual signals for grammatical tokens while strictly anchoring pathological predictions, it drives a massive gain in Precision (77.33%) and achieves the optimal F1-score (78.07%). 
+
+4 Conclusion 
+
+In this paper, we presented EyExIn , a novel framework designed to embed domain-specific knowledge into retinal Large Vision Language Models (LVLMs). By decoupling visual perception into specialized anatomical and pathological streams, our architecture effectively resolves the Perception Gap that limits gen-eral purpose encoders. Our framework utilizes a dual-stream architecture with Semantic-Adaptive Gated Fusion to accurately isolate subtle lesions while pre-serving global anatomical context. Furthermore, Deep Expert Injection embeds persistent visual anchors into the LLM’s deep layers, effectively preventing vi-sual signal decay. Extensive experiments across four diverse fundus benchmarks Title Suppressed Due to Excessive Length 9
+
+demonstrate that our 7B parameter model achieves state-of-the-art diagnostic precision in both Closed and Open-ended VQA tasks, consistently outperform-ing massive proprietary systems such as GPT-5.2 and Gemini3-Pro. By strictly grounding clinical reasoning in high fidelity image evidence, EyExIn advances the development of trustworthy and evidence based AI for ophthalmology. 
+
+References 
+
+1. Retina_dataset (2016), https://github.com/yiweichen04/retina_dataset 2. International competition on ocular disease intelligent recognition. (2021), https://www.kaggle.com/datasets/andrewmvd/ocular-disease-recognition-odir5k/data 3. Bai, S., Cai, Y., Chen, R., Chen, K., Chen, X., Cheng, Z., Deng, L., Ding, W., Gao, C., Ge, C., et al.: Qwen3-vl technical report. arXiv preprint arXiv:2511.21631 (2025) 4. Bai, S., Chen, K., Liu, X., Wang, J., Ge, W., Song, S., et al.: Qwen2.5-vl technical report. arXiv preprint arXiv:2502.13923 (2025) 5. Cen, L.P., Ji, J., Lin, J.W., Ju, S.T., Lin, H.J., Li, T.P., Wang, Y., Yang, J.F., Liu, Y.F., Tan, S., et al.: Automatic detection of 39 fundus diseases and conditions in retinal photographs using deep neural networks. Nature communications 12 (1), 4828 (2021) 6. Chen, J., Gui, C., Ouyang, R., Gao, A., Chen, S., Chen, G.H., Wang, X., Cai, Z., Ji, K., Wan, X., et al.: Towards injecting medical visual knowledge into multimodal llms at scale. In: Proceedings of the 2024 conference on empirical methods in natural language processing. pp. 7346–7370 (2024) 7. Dai, W., Li, J., Li, D., Tiong, A., Zhao, J., Wang, W., Li, B., Fung, P.N., Hoi, S.: Instructblip: Towards general-purpose vision-language models with instruction tuning. Advances in neural information processing systems 36 , 49250–49267 (2023) 8. Guo, D., Yang, D., Zhang, H., Song, J., Wang, P., Zhu, Q., Xu, R., Zhang, R., Ma, S., Bi, X., et al.: Deepseek-r1: Incentivizing reasoning capability in llms via reinforcement learning. arXiv preprint arXiv:2501.12948 (2025) 9. Guo, J., Du, J., Yang, S., Lu, S., Cheng, W., Zhang, K., Sun, Y., Yang, C., Zhang, W., Chen, F., et al.: Native intelligence emerges from large-scale clinical practice: A retinal foundation model with deployment efficiency. arXiv preprint arXiv:2512.14499 (2025) 10. Li, C., Wong, C., Zhang, S., Usuyama, N., Liu, H., Yang, J., Naumann, T., Poon, H., Gao, J.: LLaVA-Med: Training a large language-and-vision assistant for biomedicine in one day. In: Advances in Neural Information Processing Systems. vol. 36, pp. 28541–28564 (2023) 11. Li, J., Guan, Z., Wang, J., Cheung, C.Y., Zheng, Y., Lim, L.L., Lim, C.C., Ruamvi-boonsuk, P., Raman, R., Corsino, L., et al.: Integrated image-based deep learning and language models for primary diabetes care. Nature medicine 30 (10), 2886–2896 (2024) 12. Li, S., Lin, T., Lin, L., Zhang, W., Liu, J., Yang, X., Li, J., He, Y., Song, X., Xiao, J., et al.: Eyecaregpt: Boosting comprehensive ophthalmology understanding with tailored dataset, benchmark and model. In: Proceedings of the 33rd ACM International Conference on Multimedia. pp. 3893–3902 (2025) 10 Authors Suppressed Due to Excessive Length 13. Lin, T., Zhang, W., Li, S., Yuan, Y., Yu, B., Li, H., He, W., Jiang, H., Li, M., Song, X., et al.: Healthgpt: A medical large vision-language model for unifying compre-hension and generation via heterogeneous knowledge adaptation. arXiv preprint arXiv:2502.09838 (2025) 14. Liu, B., Zou, K., Zhan, L.M., Lu, Z., Dong, X., Chen, Y., Xie, C., Cao, J., Wu, X.M., Fu, H.: Gemex: A large-scale, groundable, and explainable medical vqa benchmark for chest x-ray diagnosis. In: Proceedings of the IEEE/CVF International Confer-ence on Computer Vision. pp. 21310–21320 (2025) 15. Liu, H., Xue, W., Chen, Y., Chen, D., Zhao, X., Wang, K., Hou, L., Li, R., Peng, W.: A survey on hallucination in large vision-language models. arXiv preprint arXiv:2402.00253 (2024) 16. Liu, H., Li, C., Wu, Q., Lee, Y.J.: Visual instruction tuning. Advances in neural information processing systems 36 , 34892–34916 (2023) 17. Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C., Mishkin, P., Zhang, C., Agarwal, S., Slama, K., Ray, A., et al.: Training language models to follow instructions with human feedback. Advances in neural information processing sys-tems 35 , 27730–27744 (2022) 18. Wang, P., Bai, S., Tan, S., Wang, S., Fan, Z., Bai, J., Chen, K., Liu, X., Wang, J., Ge, W., et al.: Qwen2-vl: Enhancing vision-language model’s perception of the world at any resolution. arXiv preprint arXiv:2409.12191 (2024) 19. Yu, H., Yi, S., Niu, K., Zhuo, M., Umit, B.L.: Unifying medical imaging tasks via vision-language models. arXiv preprint arXiv:2503.15892 1 (2025) 20. Yu, T., Yao, Y., Zhang, H., He, T., Han, Y., Cui, G., Hu, J., Liu, Z., Zheng, H.T., Sun, M., et al.: Rlhf-v: Towards trustworthy mllms via behavior alignment from fine-grained correctional human feedback. In: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. pp. 13807–13816 (2024) 21. Zambrano Chaves, J.M., Huang, S.C., Xu, Y., Xu, H., Usuyama, N., Zhang, S., Wang, F., Xie, Y., Khademi, M., Yang, Z., et al.: A clinically accessible small multimodal radiology model and evaluation metric for chest x-ray findings. Nature Communications 16 (1), 3108 (2025)

@@ -1,0 +1,1003 @@
+Title: UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark
+
+URL Source: https://arxiv.org/pdf/2603.10722v1
+
+Published Time: Thu, 12 Mar 2026 01:10:30 GMT
+
+Number of Pages: 16
+
+Markdown Content:
+# UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark 
+
+## Yu Zhang a,b , Zhicheng Zhao c,d ,∗, Ze Luo a,b ,∗, Chenglong Li c,d and Jin Tang c,d 
+
+> a
+
+Computer Network Information Center, Chinese Academy of Sciences, Beijing 100190, China 
+
+> b
+
+University of Chinese Academy of Sciences, Beijing 100190, China 
+
+> c
+
+Anhui Provincial Key Laboratory of Multimodal Cognitive Computation, Anhui University, Hefei 230601, China 
+
+> d
+
+Information Materials and Intelligent Sensing Laboratory of Anhui Province, Anhui University, Hefei 230601, China 
+
+A R T I C L E I N F O 
+
+Keywords :Visual Question Answering UAV Traffic Scene Understanding Optical-Thermal Cross-Spectral Fusion Cognitive Reasoning 
+
+A B S T R A C T 
+
+Traffic scene understanding from unmanned aerial vehicle (UAV) platforms is crucial for intelligent trans-portation systems due to its flexible deployment and wide-area monitoring capabilities. However, ex-isting methods face significant challenges in real-world surveillance, as their heavy reliance on optical imagery leads to severe performance degradation under adverse illumination conditions like nighttime and fog. Furthermore, current Visual Question Answering (VQA) models are restricted to elementary perception tasks, lacking the domain-specific regulatory knowledge required to assess complex traffic behaviors. To address these limitations, we propose a novel Cross-spectral Traffic Cognition Network (CTCNet) for robust UAV traffic scene understanding. Specifically, we design a Prototype-Guided Knowl-edge Embedding (PGKE) module that leverages high-level semantic prototypes from an external Traffic Regulation Memory (TRM) to anchor domain-specific knowledge into visual representations, enabling the model to comprehend complex behaviors and distinguish fine-grained traffic violations. Moreover, we develop a Quality-Aware Spectral Compensation (QASC) module that exploits the complementary characteristics of optical and thermal modalities to perform bidirectional context exchange, effectively compensating for degraded features to ensure robust representation in complex environments. In ad-dition, we construct Traffic-VQA, the first large-scale optical-thermal infrared benchmark for cogni-tive UAV traffic understanding, comprising 8,180 aligned image pairs and 1.3 million question-answer pairs across 31 diverse types. Extensive experiments demonstrate that CTCNet significantly outper-forms state-of-the-art methods in both cognition and perception scenarios. The dataset is available at 
+
+> https://github.com/YuZhang-2004/UAV-traffic-scene-understanding
+
+.
+
+## 1. Introduction 
+
+With the continuous advancement of remote sensing ob-servation technology, Unmanned Aerial Vehicles (UAVs) have become essential components of Intelligent Transportation Systems (ITS). Compared to fixed ground-level surveillance cameras, UAVs offer flexible deployment and wide-area moni-toring capabilities, enabling comprehensive observation of dy-namic traffic flows. Consequently, UAV-based Visual Ques-tion Answering (UAV-VQA) [1] has emerged as a transforma-tive technology. Unlike conventional visual approaches con-strained to fundamental object detection and counting, UAV-VQA enables operators to interact with traffic scenes through natural language queries ( e.g. , " Is the white vehicle at the inter-section violating traffic rules? "), thereby providing actionable insights for dynamic traffic control and safety regulation. However, deploying UAV-VQA in real-world traffic surveillance presents significant scientific challenges. Be-yond controlled ideal laboratory settings, practical UAV im-agery is captured under unconstrained open-world conditions. These scenes are characterized by extreme viewpoint varia-tions, dense distributions of tiny objects ( e.g. , miniaturized ve-hicles in wide-angle views), and severe vulnerability to envi-ronmental degradation such as nighttime darkness, glare, or dense fog [2, 3, 4]. Furthermore, interpreting complex traf-fic behaviors requires domain-specific regulatory knowledge, exposing a critical cognitive deficiency in current visual sys-tems. As illustrated in Fig. 1, these factors lead to substan- 
+
+> zhaozhicheng@ahu.edu.cn
+
+(Z. Zhao); luoze@cnic.cn (Z. Luo) 
+
+tial visual feature corruption and semantic ambiguity, severely bottlenecking the perception capabilities of traditional visual models and limiting the practical deployment of UAV-VQA systems. While existing VQA methods and Multimodal Large Lan-guage Models (MLLMs) designed for aerial platforms have driven significant progress in generalized spatial comprehen-sion, they exhibit notable limitations. Representative methods such as GeoChat [5] and EarthGPT [6, 7] leverage pre-trained large models as unified interfaces to handle diverse interpreta-tion tasks. However, a major vulnerability of these approaches is their predominant reliance on high-quality, single-modality optical (OPT) imagery. Since extracted feature representations are highly sensitive to input quality, optical signals are eas-ily disrupted by environmental noise [8]. Consequently, these models often suffer severe perception failures when applied to challenging, all-weather traffic scenarios where the optical sig-nal is significantly degraded. To mitigate the limitations of optical sensors, thermal in-frared (TIR) imagery provides a complementary modality that captures heat signatures independent of ambient illumination, enabling effective performance in darkness and fog [2, 4, 9, 10]. Fusing optical and TIR data represents a highly promising strategy for robust, all-weather perception. Mainstream multi-modal fusion strategies have evolved from simple static con-catenation to sophisticated dynamic attention and correlation-driven mechanisms. Despite their success in low-level per-ception tasks such as object detection, these advanced cross-spectral fusion techniques have rarely been integrated into the high-level cognitive context of UAV-VQA, leaving a signifi-
+
+Yu Zhang et al.: Page 1 of 16 
+
+> arXiv:2603.10722v1 [cs.CV] 11 Mar 2026
+
+UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark Real -World (Our Traffic -VQA) 
+
+Existing Datasets  Scenario 1 : Domain Knowledge Gap (Cognitive Missing) 
+
+Scenario 2 : Multi Modal Fusion Gap (Static Fusion)   
+
+> (a) (b)
+> Cognitive Reasoning :
+> Is there any traffic violation
+> occurring here?
+> UAV View
+> Aligned OPT -TIR
+> Optical Only
+> Satellite View Simple Counting :
+> How many cars in the image ?
+
+Huge Gap 
+
+> (c)
+
+CTCNe t
+
+(Expected )    
+
+> Illegal U-turn across
+> double yellow lines .
+
+General MLLM                
+
+> Awhite car is turning left .Lacks Traffic
+> Rules Shallow
+> Interpretation
+> Traditional Fusion
+> CTCNet
+> No cars are parked .
+> Noise Interference
+> Static Fusion
+> One car is parked in
+> the lower right .
+
+…
+
+Prototype -Guided Knowledge 
+
+Embedding (PGKE) 
+
+Knowledge Gap 
+
+Quality -Aware Spectral 
+
+Compensation (QASC) 
+
+Fusion Gap 
+
+Traffic -VQA Dataset 
+
+Data Gap 
+
+Figure 1: Current challenges in UAV-based traffic VQA. (a) Data Gap. Existing datasets (top) rely on single-modal optical imagery for elementary perception, whereas practical surveillance (bottom) demands aligned OPT-TIR data for complex cognitive understanding. (b) Methodological Bottlenecks. General MLLMs struggle with the Domain Knowledge Gap , failing to interpret specific traffic rules (e.g. , missing the "illegal" attribute of a U-turn), and the Multi-Modal Fusion Gap , where static fusion allows degraded optical noise to corrupt robust thermal features under adverse conditions. (c) Our Solution. The proposed CTCNet systematically bridges these gaps through the Traffic-VQA dataset, the PGKE module, and the QASC module. 
+
+cant gap in robust multimodal feature representation for traffic behavior understanding. Regarding cognitive capabilities, state-of-the-art MLLMs have made remarkable strides in generalized visual reasoning and complex deductive tasks [11, 12, 13, 14]. However, when deployed in the highly dynamic and regulation-intensive traffic scenarios typical of UAV traffic surveillance, these models en-counter a fundamental cognitive bottleneck. Current MLLMs predominantly rely on broad statistical priors and surface-level visual-semantic alignment, critically lacking the capacity to ground complex, evolving visual states into domain-specific regulatory frameworks. For instance, as illustrated in Fig. 1, when a vehicle crosses double yellow lines, a general-purpose MLLM may provide only a shallow spatial description ( e.g. ,"A white car is turning left"), fundamentally missing the "il-legal" attribute of the U-turn. This failure occurs because the model cannot map the dynamic trajectory to the abstract traffic rule. Without explicit regulatory memory to anchor such spe-cialized rules, these models struggle to maintain logical con-sistency in unconstrained traffic environments, often resorting to spurious visual correlations that result in semantic halluci-nations and a critical perception-cognition disconnect. To address these combined challenges of multi-spectral data fusion and domain-specific cognitive depth, we propose a novel Cross-spectral Traffic Cognition Network (CTCNet). We decouple the problem into two complementary objectives: enhancing low-level perceptual robustness and injecting high-level cognitive context. Specifically, we design a Prototype-Guided Knowledge Embedding (PGKE) module that leverages an external Traffic Regulation Memory (TRM) constructed from expert knowledge. By retrieving and aligning high-level semantic prototypes with current visual features, the PGKE module injects domain-specific cognitive capabilities into the network. Simultaneously, we develop a Quality-Aware Spec-tral Compensation (QASC) module that orchestrates a bidirec-tional context exchange between optical and thermal modali-ties via a dynamic attention mechanism, allowing the network to selectively transfer discriminative features from the reliable modality to compensate for the degraded one, ensuring ro-bust representation in complex environments. Beyond these methodological contributions, the research field also lacks a large-scale benchmark dataset with aligned multi-spectral im-agery and cognitive annotations, which is crucial for train-ing and evaluating robust traffic understanding models. To fill this gap, we construct Traffic-VQA, a large-scale OPT-TIR benchmark for UAV traffic understanding. It contains 8,180 meticulously aligned image pairs with over 1.3 million question-answer pairs, covering diverse environmental condi-tions (sunny, night, fog) and a comprehensive taxonomy of 31 question types, spanning from basic perception to complex vi-olation understanding. Extensive experiments conducted on the proposed dataset demonstrate the superiority and effective-ness of CTCNet compared to existing state-of-the-art methods. The main contributions of this work are summarized as fol-lows: 
+
+Yu Zhang et al.: Page 2 of 16 UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark 
+
+• We introduce Traffic-VQA, the first large-scale OPT-TIR benchmark dedicated to cognitive traffic understanding. This dataset contains a substantial number of complex traffic scenarios and cognition-oriented QA pairs, pro-viding a critical foundation for advancing all-weather UAV perception and cognition tasks. 
+
+• Recognizing the vulnerability of single optical sig-nals and the lack of domain-specific cognitive depth in current UAV traffic scene understanding, we propose the CTCNet framework to effectively harness comple-mentary optical-thermal features and integrate domain-specific regulatory knowledge. 
+
+• To bridge the domain knowledge gap, we design a PGKE module, which retrieves and embeds domain-specific regulatory semantics via a constructed traffic regula-tion memory bank. Furthermore, to enhance low-level perceptual robustness under adverse conditions, we fur-ther introduce a QASC module to guide the network in performing dynamic bidirectional context exchange be-tween optical and thermal modalities. 
+
+• Extensive experiments on the Traffic-VQA dataset val-idate the effectiveness of the proposed CTCNet. Com-pared with existing leading open-source MLLMs ( e.g. ,Qwen2.5-VL [12], GeoChat [5]) and closed-source com-mercial models ( e.g. , GPT-4o [14]), our method suc-cessfully anchors domain-specific regulatory knowl-edge, achieving substantial improvements in compre-hension accuracy for complex traffic behaviors across all-weather scenarios. 
+
+## 2. Related Work 
+
+The proposed CTCNet framework builds upon and ad-vances three interrelated research areas: visual question an-swering, multimodal integration, and the cognitive capabilities of large language models. In what follows, we review repre-sentative works in each area and discuss their limitations in the context of UAV traffic understanding. 
+
+2.1. Visual Question Answering 
+
+VQA for aerial imagery has evolved significantly, pro-gressing from modular specialist architectures to integrated an-alytical systems. Early methods predominantly utilized dual-stream architectures, employing Convolutional Neural Net-works (CNNs) for visual feature extraction and Recurrent Neu-ral Networks (RNNs) for question encoding [15, 16]. These foundational models, alongside early large-scale benchmarks such as RSVQA-LR and RSVQA-HR [15], typically aggre-gated features via basic element-wise operations. However, such approaches often struggled to capture complex geospa-tial interactions [17]. The scope of these initial methods was broadened by datasets like RSVQAxBEN [18], which intro-duced logical connectors into queries to incrementally increase the complexity of structural linguistics. To address the misalignment between spatial visual layouts and linguistic tokens, subsequent research introduced refined attention mechanisms. For instance, MAIN [16] leveraged mutual attention for bidirectional guidance, whereas SHR-Net [17] and MQVQA [19] incorporated spatial hierarchical reasoning and multistep attention to model high-order intra-group object relations [17, 19]. As the field progressed to-ward practical deployments, researchers developed domain-specific frameworks. FloodNet [20] provided evaluations ex-clusively designed for post-disaster damage assessment, while CDVQA [21] introduced multitemporal analytical reasoning to address semantic change detection. Furthermore, RSIVQA [16] and TextRS [22] integrated multiple external sources to curate human-annotated answers that more closely mirror nat-uralistic human queries. Despite these successes in fundamental perception tasks, early VQA methods were constrained by rigid answer spaces and limited scalability across varied interpretation tasks. They primarily focused on basic perceptual queries such as object presence and spatial counting, lacking the cognitive capacity to address complex, open-ended interpretation tasks in diverse operational environments. 
+
+2.2. Multimodal VQA 
+
+Multimodal VQA aims to leverage the complementary physics of heterogeneous sensors—such as optical and thermal or synthetic aperture radar (SAR) configurations—to increase informational density and analytical precision across diverse environmental contexts [6, 23]. Within this area, researchers have systematically addressed representational discrepancies originating from distinct imaging modalities and environmen-tal degradation. To mitigate basic modality disparities, Li et al. [24] introduced a multiscale feature fusion and enhance-ment network designed to amplify foreground semantic ob-jects, thereby improving the parsing of urban road networks under suboptimal illumination. To address the intrinsic modal-ity gap, Zhou et al. [25] developed M-SpecGene, a generalized foundation model that uses a cross-modality structural sparsity metric to quantify information density and extract modality-invariant representations. Concurrently, Zhao et al. [26] pro-posed CDDFuse, a correlation-driven architecture that decom-poses features into modality-shared and modality-specific sub-components to improve cross-modal consistency. Moving beyond static integration approaches, Zhang et al. [27] formulated M2FNet, which dynamically aggregates multi-spectral features via union-modal and cross-modal at-tention mechanisms to ensure robust object detection regard-less of illumination variance. Furthermore, Xu et al. [28] pro-posed a unified unsupervised framework, U2Fusion, which au-tonomously estimates the informational saliency of source im-agery to guide adaptive feature preservation. Generative and prompt-guided strategies have also shown promise in bridg-ing representational gaps. Advanced architectures such as AT-GAN [29] and denoising diffusion models [30] have been adapted to synthesize high-fidelity fused imagery while pre-serving intricate structural details. Specifically targeting un-constrained aerial environments, Yang et al. [31] introduced GDNet for the disentanglement of optical guidance features, while PromptFusion [32] harmonized multi-modality images guided by explicit semantic prompts through bi-level optimiza-tion. Despite these promising results across various applica- 
+
+> Yu Zhang et al.: Page 3 of 16 UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark
+
+tions, the potential of advanced integration techniques within explicit cognitive contexts remains largely unexplored. Most existing multimodal methods rely on rigid integration strate-gies that lack the dynamic, non-destructive context exchange required to handle the extreme variance characteristic of all-weather traffic scenarios. 
+
+2.3. Multimodal Large Language Models 
+
+Recent developments in MLLMs for aerial scenarios have transitioned toward open-set generalization by adopting pre-trained Large Language Models (LLMs) as unified cognitive interfaces. Early efforts, such as EarthGPT [6] and EarthGPT-X [7], integrated various multi-sensor interpretation tasks through cross-modal comprehension and visual prompting. To incorporate spatial-temporal and geo-context clues, Sky-Sense [33] introduced a factorized multi-modal spatiotempo-ral encoder pre-trained on a large scale. Similarly, Ring-MoGPT [34] unified vision, language, and localization tasks using a location- and instruction-aware querying transformer. While these foundational architectures established versatile baselines for multi-sensor data, their holistic scene interpre-tation often lacked the fine-grained spatial awareness required for small, densely distributed objects. To address unique spatial complexities, subsequent re-search focused on region-level reasoning and high-resolution processing. GeoChat [5] advanced local perception by ac-cepting region inputs for region-specific dialogues and vi-sual grounding. Extending this to dynamic scenarios, Earth-Dial [23] enabled multi-sensory interactive dialogues, while AirSpatialBot [35] specifically targeted fine-grained vehicle attribute recognition and retrieval using a 3D visual ground-ing approach. Furthermore, handling ultra-high-resolution im-agery poses significant token explosion challenges. To address this, GeoLLaVA-8K [36] utilized background token pruning, and LRS-VQA [37] proposed a coarse-to-fine text-guided to-ken pruning strategy. Despite improving spatial grounding, these methods predominantly rely on static feature extraction pathways that struggle with complex deductive logic. To further enhance interpretive depth, inference-centric approaches utilizing reinforcement learning have recently gained traction. Frameworks such as Geo-R1 [38] and Vision-R1 [39] utilize verifiable rewards and group relative policy optimization to incentivize genuine geospatial reasoning. To overcome human annotation biases, GeoZero [40] attempts to elicit reasoning from scratch without predefined templates, while RS-EoT [41] employs an iterative evidence-seeking ap-proach to mitigate pseudo-reasoning and the glance effect. However, comprehensive evaluations indicate that these mod-els still struggle with dense, complex imagery and remain sus-ceptible to semantic hallucinations during highly specialized interpretation tasks. Despite these notable advancements, existing MLLMs ex-hibit a critical perception-cognition gap when deployed in spe-cialized domains like UAV traffic surveillance. While profi-cient at detecting general entities, they consistently fail to de-code complex traffic violations that require implicit regulatory knowledge. Furthermore, the absence of robust mechanisms to align multi-spectral observations with expert situational mem-ory underscores the need for a novel architecture that explicitly integrates specialized domain rules into the visual interpreta-tion process. 
+
+## 3. Methodology 
+
+In this section, we present the proposed CTCNet frame-work, a cognitive prototype-anchored architecture designed to augment MLLMs for robust traffic reasoning from UAV im-agery. As illustrated in Fig. 2, our approach addresses two fun-damental challenges in RSVQA: the domain knowledge gap inherent in interpreting specialized traffic behaviors, and the robust fusion of heterogeneous sensor modalities (OPT and TIR). Specifically, we first describe the overall Gated Parallel Residual Architecture (Section 3.1). We then detail the con-struction of the offline TRM (Section 3.2), which serves as an external knowledge repository. Subsequently, we elabo-rate on the two core trainable modules: the PGKE module (Section 3.3) for explicit domain knowledge injection, and the QASC module (Section 3.4) for dynamic, context-aware multi-spectral integration. 
+
+3.1. Overall Architecture 
+
+The overall architecture of CTCNet is illustrated in Fig. 2. The framework consists of a frozen MLLM backbone cou-pled with two parallel, task-specific enhancement branches: the PGKE module and the QASC module. Given a well-aligned pair of optical and TIR images, de-noted as 𝐼 𝑜𝑝𝑡 ∈ ℝ𝐻 ×𝑊 ×3 and 𝐼 𝑡ℎ ∈ ℝ𝐻 ×𝑊 ×3 , alongside a natural language query 𝑄 , CTCNet aims to generate a com-prehensive textual answer 𝐴 . To harness the generalized in-ferential capabilities of large-scale pre-training while adapting to the specificities of UAV traffic environments, we employ a frozen MLLM backbone (e.g., Qwen-VL) augmented with a non-invasive residual enhancement mechanism. Let Φenc (⋅) denote the frozen visual encoder. Multi-scale visual features are first extracted from both modalities, then flattened and projected into a unified semantic embedding space, yielding the optical feature sequence 𝐅 𝑜𝑝𝑡 ∈ ℝ𝐿 ×𝐷 and the thermal feature sequence 𝐅 𝑡ℎ ∈ ℝ𝐿 ×𝐷 , where 𝐿 is the se-quence length of visual tokens and 𝐷 is the latent feature di-mensionality. Concurrently, the query 𝑄 is tokenized and em-bedded into a textual feature vector 𝐪 ∈ ℝ𝐷 .To prevent catastrophic forgetting of pre-trained knowl-edge, the backbone parameters are kept frozen while task-specific contextual information is injected via the parallel trainable branches. The refined visual representation 𝐅 res  
+
+> 𝑚
+
+for modality 𝑚 ∈ { 𝑜𝑝𝑡, 𝑡ℎ } is formulated as: 
+
+𝐅 res  
+
+> 𝑚
+
+= 𝐅 𝑚 + 𝛼 ⋅ Δ𝐅 PGKE  
+
+> 𝑚
+
++ 𝛽 ⋅ Δ𝐅 QASC  
+
+> 𝑚
+
+, (1) where Δ𝐅 PGKE  
+
+> 𝑚
+
+and Δ𝐅 QASC  
+
+> 𝑚
+
+denote the residual feature tensors generated by the PGKE and QASC modules, respectively. The scalars 𝛼 and 𝛽 are learnable gating parameters initialized at zero, enabling the network to autonomously regulate the injec-tion intensity of cognitive prototypes and cross-modal context. The fused representations from both modalities are concate-nated and fed into the frozen LLM decoder for autoregressive answer generation.  
+
+> Yu Zhang et al.: Page 4 of 16
+
+UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark MLLM Encoder  
+
+> MLLM Decoder
+> Top -K
+> Retrieval
+> (a) TRM (b) PGKE
+> (c) QASC
+
+# +
+
+> 푭풐풑풕
+> 푭풕풉
+
+# + 푭풎  
+
+> 풓풆풔
+> ∆푭풎
+> 푷푲푮푬
+> ∆푭풎
+> 푸푨푺푪
+> 휶휷
+> 푷ퟏ
+> 푭풐풑풕
+> Gated Parallel Enhancement Architecture Fusion & Answering Inputs & Feature Extraction
+> Optical UAV Image
+> Thermal UAV Image
+> Is the illegal
+> parking in the top
+> area?
+> Question
+> No illegal
+> parking in the
+> top area.
+> Answer
+> Embedding Inputs
+> 푷ퟐ
+> 푷ퟑ
+> ……
+
+… ……
+
+> … …
+> …
+
+풒
+
+> …
+
+… …
+
+> 풒
+
+# ×
+
+> 푷
+
+…  
+
+> Normalize Linear LayerNorm
+> 푭풐풑풕 /푭풕풉
+> …
+> 푭풐풑풕
+> 푭풕풉
+> MatMul
+> Scale
+> Softmax
+> MatMul
+> Add & Norm
+> FeedForward
+> 푭풕풉
+> 푭풐풑풕
+
+…
+
+…
+
+# +
+
+> Weighted Sum
+> 푭풊풎품
+
+# + Add C Concat 
+
+> 푭풊풎품
+
+C
+
+> …
+
+Figure 2: Overall framework of CTCNet for multi-spectral UAV traffic VQA. The architecture adopts a Gated Parallel Residual paradigm in which the frozen, pre-trained MLLM visual features are adaptively augmented by domain-specific residual knowledge generated by the PGKE and QASC modules. The learnable gating parameters 𝛼 and 𝛽 regulate the intensity of cognitive and multimodal context injection. 
+
+3.2. Traffic Regulation Memory Construction 
+
+Existing MLLMs frequently generate imprecise descrip-tions when interpreting complex traffic violations, primarily due to the absence of domain-specific episodic memory. To bridge this gap, we establish an offline TRM, denoted as  ∈
+
+ℝ𝑁 ×𝐷 𝑝 , which stores 𝑁 high-level semantic prototypes de-rived from the training distribution. As illustrated in Fig. 3, the construction of the TRM is carried out through three phases: semantic distillation, multi-modal visual grounding, and situ-ation feature aggregation. 
+
+3.2.1. Semantic Phrase Generation 
+
+For each training triplet (𝐼 𝑜𝑝𝑡 , 𝐼 𝑡ℎ , 𝑄, 𝐴 ), a text-only LLM is used to distill the core visual scenario into a concise, specific semantic phrase, designated as 𝑃 𝑠𝑒𝑚 . Unlike unconstrained captions that tend to contain redundant information, the gener-ation prompt explicitly instructs the model to identify critical traffic entities and their concurrent behaviors (e.g., " a white SUV executing an illegal U-turn across double yellow lines "). This targeted distillation decouples the foundational visual-semantic elements from the grammatical structure of the raw QA pair, yielding a clean textual anchor for the subsequent lo-calization phase. 
+
+3.2.2. Multi-Modal Visual Grounding 
+
+To spatially isolate the specified traffic event from the complex background, an open-set visual grounding framework (e.g., Qwen-VL or Grounding-DINO) is applied. Using the distilled 𝑃 𝑠𝑒𝑚 as the referential cue, the model predicts bound-ing boxes for both the optical ( 𝐵 𝑜𝑝𝑡 ) and thermal ( 𝐵 𝑡ℎ ) visual planes. As shown in Fig. 3, this process effectively translates ab-stract textual descriptors into precise, localized spatial co-ordinates. The visualizations confirm the robustness of our grounding strategy across diverse scenarios, successfully iden-tifying static infrastructure such as "linear walkways" and "parking areas," as well as dynamic anomalies like "illegal parking" or "vehicle turning." Notably, the grounding prompts retain high efficacy even when the dominant visual features are defined primarily by thermal signatures. To further improve spatial robustness against single-modality occlusions (e.g., a vehicle clearly visible in TIR imagery but obscured in the op-tical view by shadows or foliage), we compute the union of the modality-specific bounding boxes to define a unified event Region of Interest (RoI), denoted as 𝐵 𝑢𝑛𝑖𝑜𝑛 :
+
+𝐵 𝑢𝑛𝑖𝑜𝑛 = 𝐵 𝑜𝑝𝑡 ∪ 𝐵 𝑡ℎ . (2) 
+
+3.2.3. Situation Feature Aggregation 
+
+We propose an Epicenter Query mechanism to extract a representative prototype vector from within the localized 
+
+𝐵 𝑢𝑛𝑖𝑜𝑛 region. Let 𝐅 𝑐𝑜𝑛𝑐𝑎𝑡 = [ 𝐅 𝑜𝑝𝑡 ; 𝐅 𝑡ℎ ] ∈ ℝ𝐿 ×2 𝐷 denote the concatenated multi-modal feature map. The epicenter query 
+
+𝐪 𝑒𝑝𝑖 is derived by mean-pooling over the features within the spatial center neighborhood of 𝐵 𝑢𝑛𝑖𝑜𝑛 . The cognitive prototype 
+
+𝐬 ∈ ℝ2𝐷 is then computed via a weighted aggregation: 
+
+𝐬 =
+
+> 𝐿
+
+∑
+
+> 𝑖 =1
+
+exp( 𝐅 (𝑖 ) 
+
+> 𝑐𝑜𝑛𝑐𝑎𝑡
+
+⋅ 𝐪 ⊤𝑒𝑝𝑖 ∕𝜏 )
+
+∑𝐿 𝑗 =1 exp( 𝐅 (𝑗 ) 
+
+> 𝑐𝑜𝑛𝑐𝑎𝑡
+
+⋅ 𝐪 ⊤𝑒𝑝𝑖 ∕𝜏 ) 𝐅 (𝑖 )
+
+> 𝑐𝑜𝑛𝑐𝑎𝑡
+
+, (3) where 𝜏 is a temperature scaling factor. This aggregation yields a refined prototype 𝐬 that encapsulates the core visual-semantic essence of the localized traffic situation. The collection of these vectors forms the TRM , which serves as an external knowledge base for subsequent complex cognitive tasks. 
+
+3.3. Prototype-Guided Knowledge Embedding 
+
+The PGKE module bridges the gap between the current visual input and the external domain knowledge stored in the 
+
+Yu Zhang et al.: Page 5 of 16 UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark Q. How many linear walkways are there ? A. 1                             
+
+> Grounding Prompt: one linear walkway present
+> Q. Is exactly one case of illegal parking there ? A. yes
+> Grounding Prompt: an orange car illegally parked
+> Q. How many vehicles are observed turning ? A. 1
+> Grounding Prompt: one vehicle turning
+> Q. What type of vehicle is predominantly seen in the
+> lower left ? A. cars
+> Grounding Prompt: cars predominately seen in the
+> lower left
+> Q. Is the number of illegal parking instances one ?
+> A. yes
+> Grounding Prompt: one instance of illegal parking
+> Q. Can a gridline be seen on the right side ?
+> A. yes
+> Grounding Prompt: a gridline visible on the right side
+> Q. Is there a car turning around in the image ? A.yes
+> Grounding Prompt: one vehicle turning around
+> Q. What type of road facility is located in the upper
+> right ? A.motor vehicle parking area
+> Grounding Prompt: a motor vehicle parking area
+> located in the upper right
+
+Figure 3: Multi-modal visual grounding in the TRM construction pipeline. Grounding prompts generated from semantic phrase distillation are used to localize traffic entities and behaviors (e.g., linear walkways, vehicle turning). Red boxes indicate the extracted regions of interest, demonstrating accurate text-to-region alignment in both optical and thermal imagery. 
+
+TRM. It operates via a retrieve-and-align strategy designed to generate the cognitive residual feature Δ𝐅 PGKE 
+
+𝑚 .
+
+Prototype Retrieval. The current textual question embed-ding 𝐪 is first linearly projected into the prototype space using a transformation matrix 𝐖 𝑞 . The system computes the cosine similarity between this projected question vector and all pro-totypes in , retrieving the top-𝐾 most semantically relevant prototypes to form a support set 𝑟𝑒𝑡 ∈ ℝ𝐾 ×𝐷 :
+
+𝑟𝑒𝑡 = TopK 
+
+( (𝐪𝐖 𝑞 )⊤
+
+‖𝐪𝐖 𝑞 ‖‖ ‖)
+
+. (4) These retrieved prototypes serve as reference anchors, supply-ing critical feature signatures for recognizing abstract traffic anomalies (e.g., recalling the visual pattern associated with a "rear-end collision"). 
+
+Cognitive Prototype Alignment. The detailed mecha-nism of the PGKE module, including the retrieve-and-align phase via multi-head cross-attention, is illustrated in Fig. 4. We employ a Multi-Head Cross-Attention framework to inject the retrieved regulatory knowledge into the visual feature hi-erarchy. For modality 𝑚 , the visual features 𝐅 𝑚 serve as the Query ( 𝐐 𝑝𝑔𝑘𝑒 ), while the retrieved prototypes 𝑟𝑒𝑡 serve as both the Key ( 𝐊 𝑝𝑔𝑘𝑒 ) and Value ( 𝐕 𝑝𝑔𝑘𝑒 ): 
+
+𝐐 𝑝𝑔𝑘𝑒 = LN( 𝐅 𝑚 )𝐖 𝑝𝑔𝑘𝑒 𝑄 , (5) 
+
+𝐊 𝑝𝑔𝑘𝑒 , 𝐕 𝑝𝑔𝑘𝑒 = LN( 𝑟𝑒𝑡 )𝐖 𝑝𝑔𝑘𝑒 𝐾 , LN( 𝑟𝑒𝑡 )𝐖 𝑝𝑔𝑘𝑒 𝑉 . (6) The cognitive residual is then computed as: 
+
+Δ𝐅 PGKE 
+
+𝑚 = sof tmax 
+
+( 𝐐 𝑝𝑔𝑘𝑒 𝐊 ⊤𝑝𝑔𝑘𝑒 
+
+√𝑑 𝑘 
+
+)
+
+𝐕 𝑝𝑔𝑘𝑒 𝐖 𝑝𝑔𝑘𝑒 𝑂 . (7) 퓜
+
+푸풖풆풔풕풊풐풏 
+
+푭풒
+
+> Similarity & Top -K
+> Retrieval
+
+퓟풓풆풕풓풊풆풗풆풅 
+
+푭풐풑풕 
+
+푭풕풊풓 
+
+> LN
+> Multi -Head Cross
+> Attention
+
+퓟풓풆풕풓풊풆풗풆풅  
+
+> Linear  Linear  푲,푽
+> 푸
+
+CPA Module 
+
+푭풐풑풕 
+
+> 푪푷푨
+
+푭풕풊풓 
+
+> 푪푷푨
+
+풔ퟏ 풔ퟐ 풔ퟑ 풔ퟒ
+
+> …
+
+(b) Cognitive Prototype Alignment 
+
+(a) Prototype Retrieval 
+
+…
+
+…
+
+…
+
+# +
+
+> Linear
+
+…
+
+푭풕풊풓 
+
+…
+
+> Qwen3 -VL
+> Text Encoder
+
+Is the illegal parking in the top area? 
+
+퓜
+
+풔ퟏ 풔ퟐ 풔ퟑ 풔ퟒ
+
+… … … …
+
+Figure 4: Internal architecture of the PGKE module. The module performs question-guided similarity retrieval to identify the top-𝐾 
+
+most relevant prototypes from the TRM. These prototypes serve as keys and values in a Multi-Head Cross-Attention mechanism, injecting situational domain knowledge into the visual feature streams as an optimized residual increment Δ𝐅 PGKE .
+
+Through this mechanism, the visual features are aligned with high-level domain knowledge, substantially enhancing the net-work’s discriminative ability in fine-grained cognitive evalua-
+
+Yu Zhang et al.: Page 6 of 16 UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark 
+
+tions. 
+
+3.4. Quality-Aware Spectral Compensation 
+
+To overcome the limitations of basic feature concatenation, we design the QASC module (depicted in Fig. 2 (c)), which fa-cilitates bidirectional, dynamically balanced context exchange between optical and thermal features. In contrast to simple concatenation or element-wise ad-dition, QASC leverages a symmetric bidirectional atten-tion mechanism to exchange complementary context between modalities. For the fusion direction from thermal to optical (compensating 𝐅 𝑜𝑝𝑡 using information from 𝐅 𝑡ℎ ), the query is derived from the optical features, while the key and value pair are derived from the thermal features: 
+
+Δ𝐅 QASC  
+
+> 𝑜𝑝𝑡
+
+= MHCA( 𝐐 = 𝐅 𝑜𝑝𝑡 , 𝐊 = 𝐅 𝑡ℎ , 𝐕 = 𝐅 𝑡ℎ ). (8) Conversely, the thermal features are simultaneously enriched by the optical context: 
+
+Δ𝐅 QASC  
+
+> 𝑡ℎ
+
+= MHCA( 𝐐 = 𝐅 𝑡ℎ , 𝐊 = 𝐅 𝑜𝑝𝑡 , 𝐕 = 𝐅 𝑜𝑝𝑡 ). (9) Standard Layer Normalization (LN) and Feed-Forward Net-works (FFNs) are applied following the standard Transformer blocks. This symmetric architecture ensures that under ad-verse conditions (e.g., deep darkness or dense fog), the modal-ity with superior signal quality (predominantly thermal) effec-tively guides the refinement of the degraded modality (optical), thereby maximizing the resilience and fidelity of the final joint representation. 
+
+3.5. Loss Function 
+
+Following standard MLLM training protocols, CTCNet is optimized via an auto-regressive language modeling ob-jective. Given the sequence of ground-truth answer tokens 
+
+𝐲 = { 𝑦 1, 𝑦 2, ..., 𝑦 𝑇 }, the training objective is to minimize the negative log-likelihood: 
+
+ = − 
+
+> 𝑇
+
+∑
+
+> 𝑡 =1
+
+log 𝑃 (𝑦 𝑡 |𝑦 <𝑡 , 𝐅 res 
+
+> 𝑜𝑝𝑡
+
+, 𝐅 res  
+
+> 𝑡ℎ
+
+, 𝐪 ; Θ) , (10) where Θ encompasses all trainable parameters within the PGKE and QASC modules, including the gating scalars. The parameters of the pre-trained visual encoder and LLM back-bone remain frozen throughout optimization. 
+
+## 4. Traffic-VQA Dataset 
+
+To bridge the gap between elementary perception and com-plex cognitive interpretation in traffic surveillance, we con-struct Traffic-VQA, the first large-scale OPT-TIR benchmark dedicated to cognitive traffic understanding. Unlike existing datasets that predominantly focus on rudimentary object detec-tion or counting in well-lit environments, Traffic-VQA is de-signed to challenge models with intricate cognitive tasks under diverse and adverse environmental conditions. 
+
+4.1. Review of Existing Datasets 
+
+While RSVQA has evolved considerably, existing bench-marks exhibit clear limitations when applied to the cognitive interpretation of complex traffic environments. We categorize the existing dataset landscape into three distinct groups: 
+
+Foundational Perception Benchmarks. Early datasets estab-lished the groundwork for fundamental remote sensing percep-tion. The seminal RSVQA [15] and RSVQAxBEN [18] pre-dominantly employed template-based questions programmat-ically generated from OpenStreetMap (OSM) data overlaying low-resolution Sentinel-2 or aerial imagery. Although large in scale, the generated queries are structurally rigid (e.g., "Is there a building?") and lack semantic diversity. RSIVQA [16] and the Open-Ended dataset [22] introduced human-annotated questions to increase natural language variety, yet they remain fundamentally constrained to static object recognition within optimal optical imagery. 
+
+Task-Specific and Disaster Response Benchmarks. A sec-ond group focuses on specific high-stakes operational scenar-ios. FloodNet [20] and SAM-VQA [42] exclusively address post-disaster damage assessment, requiring models to evalu-ate flood impacts or structural building damage. Similarly, CDVQA [21] introduces VQA specific to change detection on multitemporal images. While these datasets, alongside meth-ods like TGFNet [3], advance domain-specific understanding, their exclusive reliance on RGB sensors renders them unsuit-able for continuous traffic monitoring, where nighttime and ad-verse weather capabilities are essential. 
+
+Cognition-Oriented and Large-Scale Benchmarks. Recent efforts have aimed to align datasets with the capabilities of MLLMs. CRSVQA [19] introduces complex, multi-tiered questions to benchmark advanced question-driven systems. RSGPT [43] establishes a benchmark for simultaneous im-age captioning and VQA. EarthVQA [44] emphasizes complex relational analysis for urban planning applications, whereas LRS-VQA [37] targets gigapixel-level ultra-large imagery in-terpretation. EarthGPT [6] integrates a diverse set of tasks but still relies fundamentally on optical data. Critically, none of these benchmarks provide well-aligned multimodal (optical and TIR) data for robust all-weather perception, nor do they target the fine-grained cognitive tasks (e.g., traffic violation de-tection, vehicle behavior analysis) that are central to intelligent transportation systems. In contrast, Traffic-VQA addresses these limitations by in-troducing the aligned TIR modality alongside a hierarchical cognitive structure tailored for dynamic, real-time traffic cog-nition. Table 1 presents a comprehensive comparison between Traffic-VQA and existing datasets. 
+
+4.2. Data Construction Pipeline 
+
+Constructing a large-scale, cognitively rich, and robustly multimodal benchmark requires rigorous protocols to ensure both the visual fidelity of sensor data and the semantic in-tegrity of linguistic annotations. To this end, we designed a systematic Human-in-the-Loop LLM-Empowered Construc-tion Pipeline that minimizes manual annotation effort while expanding the structural diversity and cognitive complexity of the resulting queries. The construction workflow proceeds through three stages: Stage 1: Hardware-Synchronized Data Acquisition, Stage 2: Structured Attribute Annotation by Ex-perts, and Stage 3: LLM-Empowered QA Generation.  
+
+> Yu Zhang et al.: Page 7 of 16
+
+UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark (a) Aligned Optical -Thermal Infrared Image Pairs (c) Cognitive QA pairs for Realistic Traffic               
+
+> Q.Is there apossible vehicle blockage in the image
+> and where is it ?
+
+(traffic flow)                         
+
+> A.Center /Central /
+> Middle /Middle of the
+> image
+> Q.Is there avehicle in the image that is changing
+> lanes and where is it ?
+
+(vehicle traffic behavior)             
+
+> Q.Is it possible to have astopped bus in the image ?
+
+(deduce)              
+
+> Q.How many vehicles are parked illegally in the
+> middle of the image ?
+
+(vehicle traffic violation)              
+
+> Q.At the left of the image how many cars are
+> legally parked ?
+
+(vehicle traffic behavior)                     
+
+> Q.Are there any vehicles occupying the non -
+> motor lane to the left of the image and how many
+> in total ?
+
+(vehicle traffic violation)                       
+
+> A. 5 / Total five / Five
+> were sighted
+> A.3/Three in the middle
+> /Three illegal parking
+> A. Yes, 4 / Three on top,
+> one on bottom, total 4
+> A.Yes /Correct /Right
+> /Obviously, yes
+> A.Lower right /Bottom
+> right
+
+(b) Two -stage Annotation 
+
+for Realistic Complex 
+
+Traffic Scenarios 
+
++ Prompt 
+
+Gemini Agent MLLM for free - 
+
+> form QA
+
+car behavior : change lane 
+
+location : center 
+
+number : 1
+
+quality : thermal 
+
+Figure 5: Illustrative examples from the Traffic-VQA dataset. (a) Synchronized and co-registered optical and TIR UAV image pairs across diverse urban traffic settings. (b) Examples of challenging cognitive question-answer pairs that require deep situational understanding, such as identifying traffic violations and inferring latent behavioral risks. 
+
+Table 1 
+
+Comparison of Traffic-VQA with leading VQA datasets utilizing overhead imagery. (OPT: Optical, SAR: Synthetic Aperture Radar, TIR: Thermal Infrared) 
+
+Dataset Num Img Num QA Num Qst Type Main QA Generation Incl. Cognitive Modal Key Tasks 
+
+RSVQA-LR [15] 772 77k 5 Template ✗ OPT Counting, Presence RSVQA-HR [15] 10,659 1,066k 5 Template ✗ OPT Counting, Presence VQA-TextRS [22] 2,144 6.2k 4 Manual ✗ OPT Object Recognition RSIVQA [16] 37,264 111k 9 Template ✗ OPT Object Recognition CRSVQA [19] 4,639 4.6k 3 Manual ✗ OPT Multistep Analysis FloodNet-VQA [20] 2,188 7.4k 4 Manual ✗ OPT Disaster Assessment SAM-VQA [42] 2,348 10.5k 7 Template ✗ OPT Damage Analysis CDVQA [21] 4,662 >122k 5 Template ✓ OPT Change Detection RSIEval [43] 100 0.9k 4 Manual ✓ OPT Captioning & VQA EarthVQA [44] 6,000 209k 3 Manual + Template ✓ OPT Relational Analysis OSVQA [3] 6,008 pairs 1,037k 16 Manual + Template ✓ OPT & SAR Multimodal Perception 
+
+Traffic-VQA (Ours) 8,180 pairs 1,301k 31 Manual + LLM ✓ OPT & TIR Traffic Cognition 
+
+Stage 1: Hardware-Synchronized Data Acquisition. To en-sure spatial and temporal consistency, we deployed the DJI M300 RTK drone platform equipped with the Zenmuse H20T integrated payload. This payload houses a calibrated wide-angle optical sensor alongside a radiometric thermal camera, enabling hardware-synchronized capture of optical and TIR imagery. This integrated hardware approach eliminates the temporal desynchronization and spatial misalignment artifacts common in conventional multi-sensor arrays. Data collection was carried out across diverse urban environments, includ-ing high-density arterial roads, complex signalized intersec-tions, and highway on/off ramps. To ensure all-weather per-ceptual robustness, flights were conducted under a wide range of illumination conditions (daylight, dusk/dawn, and night-time) as well as adverse weather (dense fog). Post-acquisition, a manual screening protocol was enforced. Image pairs ex-hibiting motion blur, excessive occlusion, or corrupted sensor data were discarded, yielding a curated dataset of 8,180 high-quality, well-aligned image pairs. 
+
+Stage 2: Structured Attribute Annotation by Experts. Re-lying solely on direct manual annotation for large-scale QA datasets frequently results in simplistic and repetitive linguis-tic constructs. To address this, we adopted an attribute-centric annotation paradigm. We first defined a comprehensive Traf-
+
+Yu Zhang et al.: Page 8 of 16 UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark Normal light Thermal images Thermal images  Low light 
+
+Figure 6: Sample aligned image pairs from the proposed Traffic-VQA dataset. The dataset spans diverse illumination conditions (e.g., daylight, low-light, and nighttime) alongside adverse weather scenarios (e.g., fog), providing well-aligned OPT and TIR images to support research in all-weather traffic understanding. 0.00         
+
+> 2.00
+> 4.00
+> 6.00
+> 8.00
+> 10.00
+> 12.00
+> Normal
+> Light 4,470
+> Low Light
+> 3,710
+> Sunny
+> 3,145
+> Overcast
+> 65
+> Cloud Cover
+> 1,260
+> General
+> Sence 375
+> Traffic
+> Scene 7,805
+> Light
+> Condition
+> Weathe
+> Condition
+> Scene Type
+> (a) (b)
+> traffic road
+> 142,631
+> modality
+> 119,929
+> deduce 110,202
+> location 100,819
+> match
+> 83,198
+> vehicle
+> 82,583
+> compare
+> 80,862
+> vehicle violation
+> 42,674
+> vehicle behavior
+> 39,432
+> road facility
+> 36,848
+> theme 36,288
+> road condition
+> 35,266
+> pedestrian 32,475
+
+Figure 7: Statistical distribution of the Traffic-VQA dataset. Left: Breakdown of the 8,180 image pairs by illumination conditions, weather, and scene type. Right: Distribution of the 31 question types, highlighting the significant proportion of high-level cognitive tasks (20.7%) and specialized multimodal queries. 
+
+fic Cognition Ontology covering granular object categoriza-tions (e.g., sedan, heavy truck, pedestrian), dynamic behav-ioral classifications (e.g., executing a turn, exceeding speed limits, queuing), and environmental state attributes (e.g., visi-bility metrics, road surface conditions). Certified domain ex-perts were then tasked with annotating the imagery according to this ontology. Rather than drafting free-form questions, the experts focused on extracting structured, ground-truth meta-data: 
+
+• Object-Level. Precise bounding box annotations paired with attribute tags for individual traffic participants. 
+
+• Scene-Level. Global tags classifying weather condi-tions, ambient lighting, road type, and traffic density. 
+
+• Event-Level. Identification of specific vehicular viola-tions or behavioral anomalies (e.g., "vehicle illegally po-sitioned on pedestrian sidewalk"). This structured metadata repository serves as the factual foun-dation for the subsequent generative phase. 
+
+Stage 3: LLM-Empowered QA Generation and Verifica-tion. Leveraging the capabilities of LLMs, we automatically synthesized the structured expert annotations into complex, natural language QA pairs. This generation phase operates through two parallel processes: 1. Programmatic Generation for Precision. For objec-tive queries requiring exact numerical counting or bi-nary existence verification (e.g., "How many standard passenger cars are currently visible?"), we applied rule-based templates populated directly from the verified an-
+
+Yu Zhang et al.: Page 9 of 16 UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark 
+
+Table 2 
+
+Categorization of the 31 question types in the Traffic-VQA dataset, divided into cognitive, perceptual, and multimodal domains.       
+
+> Question Type Object Type Specific Question Type
+> Cognitive Traffic Participant Abnormal Traffic Condition, Vehicle Violations, Small Vehi-cle Violation, Pedestrian Violation, Vehicle Behavior, Small Vehicle Behavior, Deduce, Pedestrian Behavior, Traffic Par-ticipant Interaction, Road Condition Perceptual Traffic Participant Traffic Road, Vehicle, Pedestrian, Road Facility Total Object Compare, Presence, Location, Number, Shape, Most, Dis-tribution, Residential, Agricultural, Industrial, Fog, Dark, Urban, Theme, UAV Modal Total Object Match, Modality
+
+Table 3 
+
+Statistical overview of the Traffic-VQA dataset. 
+
+Statistics Numbers 
+
+Total QAs 1,301,466 Total OPT-TIR pairs 8,180 Avg QA on img pair 159.1 Max question length 28 Avg question length 8.5 Question vocab size 24,357 Total question types 31 Max answer length 16 Avg answer length 1.2 Answer vocab size 4,418 Total unique answers 7,644 0 
+
+> 3
+> 6
+> 9
+> 12 deduce location
+> compare
+> modality
+> small vehicle violation
+> residential
+> traffic participant interaction
+> most
+> pedestrian behavior
+> abnormal traffic situation
+> road condition
+> pedestrian
+> vehicle violation
+> match
+> pedestrian violation vehicle behavior
+> road facility
+> industrial
+> agricultural
+> vehicle
+> traffic road
+> theme
+> shape
+> distribution
+> number
+> night
+> mist
+> urban
+
+Figure 8: Distribution of average question length (in words) across varying question types within the Traffic-VQA dataset. 
+
+notation database, ensuring accuracy. 2. LLM-Based Cognitive Context Expansion. For ad-vanced cognitive tasks (e.g., "Is the current traffic con-figuration indicative of a dangerous anomaly?"), the structured attributes were fed into GPT-4 using spe-cialized, constrained prompts. These prompts guided the LLM to formulate multi-hop comprehension ques-tions, logically connecting cause-and-effect relation-ships and demanding comparative analysis of visual fea-tures across both optical and TIR modalities. Finally, a Human-in-the-Loop Verification mechanism was ap-plied. An independent team of verification experts sampled the generated QA pairs, correcting minor logical inconsisten-cies and filtering out ambiguous or poorly structured samples. This pipeline ultimately produced over 1.3 million high-quality QA pairs with diverse linguistic structures, far exceeding the scale and cognitive depth achievable through purely manual annotation. 
+
+4.3. Dataset Analysis 
+
+The Traffic-VQA dataset is characterized by its large scale, diversity, and cognitive depth. We present a detailed statistical analysis of the distribution of question types, environmental conditions, and linguistic complexity. 
+
+Statistical Distribution of Question Types. The finalized dataset comprises 1,300,620 verified QA pairs derived from 8,180 image pairs. The queries are distributed across distinct functional categories. The most frequent types include Traf-fic Road (142,631 queries) and Modality (119,929 queries), reflecting the dataset’s focus on structural road understanding and cross-modal perception. Crucially, the dataset emphasizes higher-order cognition: Deduce alone includes 110,202 sam-ples, and Location comprehension contributes 100,819 sam-ples. Two other high-impact categories are Compare Vehicle (approximately 80k) and Vehicle Violation (42,674), both di-rectly relevant to automated traffic surveillance. This distri-bution pushes evaluation beyond basic object presence toward situation understanding and rule-aware interpretation. 
+
+Environmental Diversity. To evaluate algorithmic robust-ness, Traffic-VQA incorporates a wide range of challenging environmental conditions. The dataset includes 4,470 im-age pairs captured under normal light, contrasted with 3,710 pairs acquired under low light, alongside dedicated subsets for Sunny (3,145) and Cloud Cover (1,260) scenarios. This structured variety prevents models from overfitting to idealized conditions, instead requiring the learning of invariant feature representations across radical illumination shifts (e.g., transi-tioning from optical-dominant features during daylight to TIR-dominant features at night). 
+
+Linguistic Complexity and Length. We quantified linguistic complexity by computing the average question length across different question types. The distribution shows a natural vari-ance, with average lengths ranging from 6 to 12 words. As expected, cognition-heavy queries tend to be longer; for exam-ple, questions related to Mist exhibit the highest average length (11.10 words), followed by Compare tasks (10.45 words) and Deduce queries (7.36 words). Simpler perception tasks, such as Urban classification, average approximately 6.76 words. This correlation between task difficulty and question length confirms that Traffic-VQA challenges MLLMs to process com-plex, natural language queries that closely reflect the nuanced interactions of real-world operators. 
+
+4.4. Dataset Challenges 
+
+The Traffic-VQA dataset introduces several key challenges to contemporary VQA architectures and MLLM methodolo-gies, highlighting important directions for future research. 1) Cross-Modality Semantic Alignment. Effectively fusing information from optical and TIR modalities remains a sig-nificant challenge. TIR images lack color information but provide strong spatial contrast for heat-emitting objects, 
+
+Yu Zhang et al.: Page 10 of 16 UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark A. 1                                                                                                                                       
+
+> A. 5
+> A. Yes
+> A. Yes
+> A. Lower right
+> Q.Can any low -rise non -residential buildings be identified ?(presence)
+> Q.Is the athletic track described as having an irregular shape ?(shape)
+> Q.How many streets are annotated ?(traffic road)
+> Q.Is vehicle queuing observed in the image ?(vehicle behavior)
+> Q.Is an intersection present in the central area ?(traffic road)
+> Q.What distribution pattern do the wide roads follow ?(distribution)
+> Q.Are there more than 5road dividers ?(road facility)
+> Q.Does the image primarily show anon -residential area ?(theme)
+> Q.How many cars are moving in the image ?(vehicle behavior)
+> Q.What is the total number of cars in the image ?(vehicle)
+> Q.Is there avehicle on the road here ?(vehicle violation)
+> Q.Is this aresidential area ?(theme)
+> Q.Which location in the image might be used for growing crops ?(presence)
+> A. Yes
+> A. Y es
+> A. 1
+> A. Yes
+
+(a) Optical Images (b) Thermal Images Questions Answers                                                                                                                                                  
+
+> A. Yes
+> A. C lustered
+> distribution
+> A. Yes
+> A. Yes
+> Q.Can any mist be observed in the image ?(mist)
+> Q.What type of roads are visible in the top section ?(traffic road)
+> Q.What is the estimated number of cars in the lower right area ?(match)
+> Q.Where is the large vehicle situated ?(vehicle)
+> A. Yes
+> A. Main city road
+> A. Between 6-10
+> A. Lower left
+> Q.What type of environment is depicted in the image ?(urban)
+> Q.Is the primary setting aresidential area ?(theme)
+> Q.How many vehicles are making aU-turn ?(vehicle behavior)
+> Q.Are vehicles turning in the scene ?(vehicle behavior)
+> Q.What is the relative quality between modalities for the turning vehicle ?
+> (modality)
+> A. U rban
+> A. Y es
+> A. 1
+> A. Yes
+> A. A lmost same
+> Q.How many distinct woodland areas are annotated ?(number)
+> Q.Where is the intersection located ?(traffic road)
+> Q.Is abus lane present ?(traffic road)
+> Q.Where is the large vehicle located ?(vehicle)
+> Q.How many vehicles are performing aturn ?(vehicle behavior)
+> A. Between 6 and
+> 10 areas
+> A. Upper left
+> A. Yes
+> A. Lower left
+> A. 2 vehicles
+
+Figure 9: Representative question-answer samples from Traffic-VQA. The dataset covers diverse query types beyond object recognition, requiring reasoning over spatial relations, vehicle behaviors, traffic-rule compliance, and scene context (e.g., queuing, environment type). 
+
+while optical images offer rich textural detail but fail un-der low-light conditions. Models must learn to dynami-cally weight the relevance of each modality depending on the context (e.g., prioritizing TIR data at night) and align inherently inconsistent semantic features across these dis-parate sensors. 2) Fine-Grained Object Cognition. UAV imagery typically captures a large field of view, making the constituent ob-jects very small relative to the overall image dimensions. Performing deep cognitive analysis on the behavior of a single small vehicle (e.g., determining "Is the third car in the far-left lane actively executing a turn?") requires precise attention mechanisms and fine-grained spatial localization capabilities, which are difficult to achieve with standard vi-sion encoders pre-trained on ground-level imagery. 3) Robustness to Environmental Degradation. The dataset includes a substantial proportion of foggy and low-light scenarios where standard visual features are severely de-graded. Traditional VQA models typically suffer signif-icant performance drops when confronted with such ex-treme domain shifts. Traffic-VQA therefore serves as a benchmark for developing robust representation learning methods that maintain high cognitive performance regard-less of adverse weather or lighting conditions. In summary, Traffic-VQA provides a comprehensive plat-form for advancing multimodal cognitive intelligence in the domain of intelligent transportation systems. 
+
+## 5. Experiments 
+
+In this section, we present an empirical evaluation of the proposed CTCNet framework on the Traffic-VQA benchmark. We first describe the experimental configuration and imple-mentation details (Section 5.1). We then provide a quantita-tive comparison against state-of-the-art (SOTA) MLLMs (Sec-tion 5.2), focusing on performance gains attributable to our cognitive and perceptual modules. Finally, ablation studies 
+
+Yu Zhang et al.: Page 11 of 16 UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark 
+
+(Section 5.3) verify the individual contributions of the PGKE and QASC modules, complemented by a fine-grained analysis across question types. 
+
+5.1. Implementation Details 
+
+Model Configuration. We employ Qwen3-VL-8B-Instruct as the frozen backbone, selected for its strong visual-linguistic alignment capabilities. The input resolution for both optical and TIR images is set to 640 × 512 pixels. To preserve the generalization capabilities of the pre-trained MLLM and en-sure parameter efficiency, the core vision encoder and LLM backbone remain entirely frozen. Only the parameters of the Gated Parallel Residual Architecture—comprising the PGKE and QASC modules—are updated during training. 
+
+Training Protocols. All models are implemented in PyTorch and trained on NVIDIA RTX 4090 GPUs. We use the AdamW optimizer with a cosine learning rate scheduler (initial learn-ing rate 1 × 10 −4 ) and a batch size of 16. To evaluate the effi-cacy and adaptability of our architecture, we adopt two train-ing protocols: (i) Few-Shot Learning. To demonstrate the effectiveness of prototype-guided knowledge injection under data-scarce conditions, the model is fine-tuned on a randomly sampled subset of 10,000 examples. (ii) Full Fine-Tuning. To establish the upper performance bound of the architecture, the model is trained on the complete Traffic-VQA training set. 
+
+Evaluation Metrics. Following standard VQA evaluation protocols, we report both Accuracy (Acc) and CIDEr (C) met-rics. The evaluation structure distinguishes between Cognitive 
+
+and Perceptual tasks, and multi-modal versus single-modal in-puts, to highlight the cognitive depth and environmental ro-bustness introduced by the proposed method. 
+
+5.2. Quantitative Comparison 
+
+We benchmark the proposed CTCNet against two cat-egories of baselines: (1) Zero-shot Open-source MLLMs (e.g., MiniCPM-V, GeoChat, Qwen3-VL Base); (2) Closed-source Commercial MLLMs (e.g., GPT-4o, Gemini-2.5-flash). The quantitative results, evaluated across single and multiple modalities, are summarized in Table 4. 
+
+5.2.1. Performance on Cognitive and Perceptual Tasks 
+
+As shown in Table 4, CTCNet achieves state-of-the-art per-formance across the board, with a consistent and substantial advantage. It is particularly strong in complex cognitive sce-narios, effectively bridging the domain knowledge gap inher-ent in general-purpose models. 
+
+Superiority in Cognitive Understanding. The most criti-cal evaluation domain is Traffic Cognitive Questions, which require an implicit understanding of traffic regulations com-bined with advanced contextual interpretation. While the Qwen3-VL-8B (Finetuned) baseline achieves a commendable cognitive accuracy of 80.55%—validating the utility of su-pervised domain adaptation—our fully integrated Qwen3-VL-8B + CTCNet architecture improves this to 84.81%, a mar-gin of +4.26%. This improvement indicates that standard fine-tuning is insufficient to capture the multi-layered logic gov-erning complex traffic violations. The advantage of CTCNet stems from the PGKE module, which retrieves expert proto-types from the external TRM, grounding the cognitive inter-pretation process in explicit, formalized domain knowledge rather than fragile statistical correlations. Furthermore, CTCNet demonstrates strong performance in fine-grained violation detection, achieving notable accura-cies in Vehicle Violation (80.26%) and Pedestrian Violation (77.78%). Notably, our method significantly outperforms lead-ing commercial models such as GPT-4o (Cognitive: 75.28%) and Gemini-2.5-flash (Cognitive: 74.92%), demonstrating that a domain-specialized, knowledge-anchored module can sub-stantially surpass large-scale general-purpose models in highly regulated vertical domains. 
+
+Robustness in Perceptual Tasks. For Traffic Perceptual Questions (e.g., object localization, presence detection), the fully fine-tuned CTCNet attains 80.26% accuracy, surpass-ing the corresponding fine-tuned baseline (75.30%) by nearly 5%. This improvement verifies that the QASC module effec-tively enhances feature distinctiveness, particularly for small and densely packed UAV targets. Even when constrained to the few-shot regime, our method (MUL OA: 61.94%) substan-tially outperforms all evaluated zero-shot open-source base-lines (peak OA around 47.62%), validating that our lightweight residual injection strategy preserves general perception abili-ties while improving sensitivity to domain-specific semantic objects. 
+
+5.2.2. Evaluation of Multi-Spectral Robustness 
+
+To assess the effectiveness of the QASC module under varying environmental conditions, we analyze performance across different input modalities (OPT, TIR, and MUL) as shown in Table 4. A recurring limitation in zero-shot baselines is that multi-modal (MUL) performance often stagnates or degrades rel-ative to single optical (OPT) performance. For instance, Qwen3-VL-8B (Base) shows only a marginal shift from an OPT Overall Accuracy of 47.56% to a MUL OA of 47.62%, and GeoChat experiences a similarly negligible gain (OPT: 44.00% vs. MUL: 44.22%). This pattern suggests that naive feature concatenation introduces detrimental noise, rendering complementary thermal data largely ineffective without ex-plicit semantic alignment. In contrast, CTCNet consistently achieves its best perfor-mance in the MUL setting. Under the few-shot protocol, CTC-Net improves the OPT baseline (47.56%) to a MUL OA of 61.94% (+14.38%). This result confirms that the QASC mod-ule successfully facilitates constructive interaction between modalities. By routing bidirectional attention toward the most informative regions of the TIR channel, the model effectively compensates for optical degradations (e.g., deep shadows, glare, or extreme low light) without incurring performance penalties from cross-modal feature conflict, ensuring reliable performance across all-weather UAV surveillance conditions. 
+
+5.3. Ablation Studies 
+
+To better understand the contributions of each architec-tural component, we conduct ablation studies targeting the core modules and fusion strategies, all under the few-shot setting to highlight baseline structural differences.  
+
+> Yu Zhang et al.: Page 12 of 16
+
+UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark 
+
+Table 4 
+
+Quantitative comparison on the Traffic-VQA test set. All numbers are Acc (%). Bold 
+
+indicates the best result and underline indicates the second-best result within the same modality for each metric. 
+
+Model Venue OA Traffic Cognition Traffic Perception Veh. Violation Veh. Behavior Veh. Ped. Violation Ped. Behavior Ped. 
+
+OPT modality 
+
+MiniCPM-V [45] arXiV 2024 45.27 39.7 45.43 37.12 39.57 47.57 40.13 44.82 41.22 MiniGPT-v2 [46] arXiv 2023 36.04 35.3 35.95 33.74 37.38 37.96 29.54 39.05 40.14 DeepSeek-VL [13] arXiV 2024 42.64 38.62 41.51 37.01 37.79 44.38 41.23 42.92 34.86 GeoPix [47] GRSM 2025 43.59 38.13 40.48 37.16 39.49 45.1 38.07 43.94 41.86 GeoChat [5] CVPR 2024 44 41.24 44.39 41.98 41.38 45.32 42.97 42.56 46.05 Falcon [48] arXiV 2025 34.22 38.27 40.41 37.57 32.45 37.83 43.29 46.42 37.84 Qwen2.5-VL-7B [12] Ali 2025 43.69 40.04 60.61 39.5 39.02 47.19 48.97 44.53 43.4 Qwen3-VL-8B (Base) [49] Ali 2025 47.56 35.11 46.79 34.76 32.67 56.01 31.45 40.02 42.95 GPT-4o [14] OpenAI 2024 64.81 71.92 72.33 74.15 71.22 73.27 64.3 73.8 62.46 Gemini-2.5-Flash [11] Google 2025 59.51 66.7 69.77 65 66.8 73.34 63.35 70.22 62.17 Gemini-2.5-Pro [11] Google 2025 56.17 65.98 63.18 64.95 64.16 67.44 56.24 62.85 58.27 CTCNet (Few-Shot) - 47.56 46.79 35.11 34.76 32.67 56.01 42.95 40.02 31.45 
+
+TIR modality 
+
+MiniCPM-V [45] arXiV 2024 43.62 40.83 43.92 39.1 39.27 46.24 39.65 47.01 41.78 MiniGPT-v2 [46] arXiv 2023 34.47 31.5 33.45 28.65 33.05 33.34 28.44 35.91 34.45 DeepSeek-VL [13] arXiV 2024 39.2 34.63 38.39 33.27 34.46 39.09 36.34 39.71 33.93 GeoPix [47] GRSM 2025 42.73 39.7 42.03 37.45 41.36 46.29 43.13 45.99 44.13 GeoChat [5] CVPR 2024 43.08 40.42 45.72 39.85 41 47.77 45.81 42.85 42.35 Falcon [48] arXiV 2025 33.59 40.03 39.73 40.51 34.71 38.34 50.24 49.42 36.97 Qwen2.5-VL-7B [12] Ali 2025 40.57 38.98 40.49 38.41 37.89 44.12 46.76 43.43 41.9 Qwen3-VL-8B (Base) [49] Ali 2025 44.09 28.68 41.23 30.13 26.87 49.15 35.47 33.48 29.23 GPT-4o [14] OpenAI 2024 63.66 69.97 70.67 71.13 66.74 71.98 65.72 76.06 59.23 Gemini-2.5-Flash [11] Google 2025 57.01 61.53 61.58 57.55 59.04 69.24 64.3 71.39 51.13 Gemini-2.5-Pro [11] Google 2025 51.5 57.51 55.14 53.18 55.17 64.76 47.87 61.39 46.98 CTCNet (Few-Shot) - 44.09 41.23 28.68 30.13 26.87 49.15 35.47 33.48 29.23 
+
+MUL modality 
+
+MiniCPM-V [45] arXiV 2024 45.37 39.28 60.06 36.46 38.61 47.93 42.02 46.13 41.74 MiniGPT-v2 [46] arXiv 2023 36.68 35.91 37.69 34.2 38.11 39.23 31.75 39.2 42.54 DeepSeek-VL [13] arXiV 2024 42.5 38.14 57.19 36.41 36.81 44.74 40.13 43.28 35.78 GeoPix [47] GRSM 2025 43.62 38.11 51.42 37.21 39.9 45.12 37.91 43.21 41.17 GeoChat [5] CVPR 2024 44.22 41.66 51.19 41.8 41.65 45.27 43.92 43.87 47.19 Falcon [48] arXiV 2025 34.8 38.39 36.83 37.05 33.02 38.62 42.97 46.06 37.89 Qwen2.5-VL-7B [12] Ali 2025 43.73 39.75 43.2 39.81 39.21 47.59 49.61 43.87 42.73 Qwen3-VL-8B (Base) [49] Ali 2025 47.62 35.64 47.47 36.13 32.54 54.84 45.3 43.56 36.45 GPT-4o [14] OpenAI 2024 67.72 75.28 73.96 77.67 73.13 74.06 69.51 78.03 69.13 Gemini-2.5-Flash [11] Google 2025 67.47 74.92 73.65 75.91 71.37 75.39 75.99 79.2 69.76 Gemini-2.5-Pro [11] Google 2025 61.41 70.05 64.93 69.38 66.03 68.64 68.72 72.99 62.15 CTCNet (Few-Shot) - 61.94 55.74 61.28 57.66 52.41 62.48 55.13 58.48 56.99 Qwen3-VL-8B (Finetuned) Ali 2025 79.598 80.546 75.296 76.747 75.65 79.766 76.496 71.245 69.661 Qwen3-VL-8B + CTCNet - 83.156 84.812 80.259 80.259 68.189 83.762 77.778 80.579 74.882 
+
+5.3.1. Effectiveness of Proposed Modules 
+
+We investigate the individual and combined contributions of the PGKE and QASC modules by incrementally integrating them into the baseline architecture (Qwen3-VL with standard concatenation). The results are reported in Table 5. 
+
+Effectiveness of PGKE (Exp2). Adding the PGKE module alone yields a substantial gain in Overall Accuracy (OA), ris-ing from the baseline’s 47.62% to 60.67%. This improvement highlights the vital role of explicitly injecting domain-specific knowledge. Without the external TRM, the baseline model struggles to map elementary visual features to abstract traf-fic rules. The PGKE module effectively bridges this semantic gap by grounding visual representations in expert regulatory prototypes. 
+
+Effectiveness of QASC (Exp3). Integrating only the QASC module also produces a significant performance improvement, achieving an OA of 61.27%. This gain highlights the neces-sity of dynamic, bidirectional context exchange between the optical and thermal modalities. By selectively compensating for degraded features, the QASC module establishes a robust perceptual foundation, which is essential for reliably identify-ing small and densely distributed traffic objects under adverse conditions. 
+
+Synergy of PGKE and QASC (Exp4). The fully integrated 
+
+Yu Zhang et al.: Page 13 of 16 UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark 
+
+Table 5 
+
+Ablation study isolating the PGKE and QASC modules under the few-shot setting. Exp1 represents the unmodified baseline using simple feature concatenation. OA : Overall Accuracy, AA :Average Accuracy.                     
+
+> ID PGKE (Cognition) QASC (Perception) OA (%) AA (%)
+> Exp1 ✗✗47.62 46.93 Exp2 ✓✗60.67 59.41 Exp3 ✗✓61.27 59.86 Exp4 ✓✓61.94 59.97
+
+Table 6 
+
+Comparison of different modality integration methods. The pro-posed QASC module consistently outperforms all static fusion operations.                    
+
+> Integration Method Overall Accuracy (OA) Δvs. Baseline
+> Optical Only (Baseline) 47.56 -Thermal Only 44.09 -Element-wise Add 47.62 +0.06 Concatenation 49.12 +1.56
+> CTCNet (QASC) 61.94 +14.38 0
+> 10
+> 20
+> 30
+> 40
+> 50
+> 60
+> 70
+> 80
+> 90
+> 100
+> 123
+> 4
+> 5
+> 6
+> 7
+> 8
+> 9
+> 10
+> 11
+> 12
+> 13
+> 14
+> 15
+> 16 17
+> 18
+> 19
+> 20
+> 21
+> 22
+> 23
+> 24
+> 25
+> 26
+> 27
+> 28
+> 29
+> 30 31
+> MUL OPT TIR 1-abnormal traffic situation
+> 2-agricultural
+> 3-compare
+> 4-deduce
+> 5-distribution
+> 6-industrial
+> 7-location
+> 8-match
+> 9-mist
+> 10 -modality
+> 11 -most
+> 12 -night
+> 13 -non -motorised vehicle behavior
+> 14 -non -motorised vehicle violation
+> 15 -number
+> 16 -pedestrian
+> 17 -pedestrian behavior
+> 18 -pedestrian violation
+> 19 -presence
+> 20 -residential
+> 21 -road condition
+> 22 -road facility
+> 23 -shape
+> 24 -theme
+> 25 -traffic participant interaction
+> 26 -traffic road
+> 27 -uav
+> 28 -urban
+> 29 -vehicle
+> 30 -vehicle behavior
+> 31 -vehicle violation
+
+Figure 10: Performance comparison (quantified via CIDEr score) across the 31 question types in Traffic-VQA. The radar chart highlights the operational stability of the proposed multi-modal (MUL) approach, particularly in challenging environmental cat-egories such as "Night" and "Mist," where single-modality ap-proaches consistently underperform. 
+
+framework achieves the best overall performance (OA 61.94%, AA 59.97%). The gain over single-module variants suggests that perceptual robustness and knowledge-guided reasoning are complementary. Specifically, QASC improves the stabil-ity of input features under changing environmental conditions, which in turn allows PGKE to retrieve more accurate and con-textually relevant prototypes to support complex reasoning. 
+
+5.3.2. Analysis of Fusion Mechanisms 
+
+We further compare the proposed QASC module against standard fusion operations, as shown in Table 6. Simple element-wise addition and concatenation yield OA values of 47.62% and 49.12%, respectively, offering only marginal improvements over the single-modality baseline. These results confirm that rigid, static fusion strategies fail to adaptively weight the importance of optical versus TIR fea-tures, a shortcoming that is exacerbated when one modality is heavily degraded by environmental noise. In contrast, our QASC mechanism achieves an OA of 61.94%, demonstrating that dynamic, attention-based bidirectional context exchange is essential for robust all-weather traffic analysis. 
+
+5.3.3. Fine-Grained Analysis by Question Type 
+
+To evaluate the model’s performance under specific en-vironmental and task-oriented conditions, we conduct a fine-grained analysis structured across different question types, as visualized in the radar chart (Fig. 10). The breakdown reveals two key observations regarding en-vironmental robustness: 
+
+Night Scenarios. For queries tagged with "Night", the optical-only (OPT) baseline suffers a significant performance drop (CIDEr: 12.93), while the standalone TIR modality remains robust (CIDEr: 80.55). Our fused model (MUL) effectively leverages the TIR stream to maintain strong performance (CIDEr: 78.84), demonstrating that the QASC module cor-rectly identifies and prioritizes the reliable TIR channel when the optical stream is rendered ineffective by darkness. 
+
+Fog or Mist Scenarios. Under "Mist" conditions, the fused model (MUL) achieves a CIDEr score of 79.69, outperforming both single-modality inputs (OPT: 60.13, TIR: 71.75). This result indicates that even when both sensors are partially de-graded by fog, the cross-spectral fusion strategy allows the model to aggregate complementary cues, yielding a result su-perior to either individual modality. CTCNet shows consistently strong performance across a diverse set of tasks, spanning both high-level cognitive analysis (e.g., "Abnormal Traffic Situation") and low-level perception queries (e.g., "Location"). These results suggest that the model generalizes well across task types and is a practical candidate for real-world UAV traffic surveillance scenarios. 
+
+## 6. Conclusion 
+
+In this paper, we construct a large-scale, unified bench-mark dataset, Traffic-VQA, designed to advance all-weather UAV traffic cognitive understanding. Comprising 8,180 well-aligned OPT-TIR image pairs and over 1.3 million question-answer pairs, the dataset covers diverse environmental condi-tions and 31 distinct cognitive tasks. To address the limita-tions of existing methods regarding domain knowledge defi-ciency and cross-modality interference, we propose CTCNet. The CTCNet incorporates a PGKE module working in con-junction with an external TRM to inject domain-specific situa-tional knowledge into visual features. Furthermore, the QASC module adaptively integrates complementary spectral informa-tion through dynamic, attention-driven context exchange. Ex-tensive experiments on Traffic-VQA demonstrate the effective-ness of CTCNet, which significantly outperforms contempo-rary state-of-the-art MLLMs, particularly in high-level cogni-tive scenarios. We further highlight several directions for future research. The first concerns the transition from static spatial obser-vation to continuous dynamic analysis. While Traffic-VQA provides a solid foundation for multi-spectral image compre-
+
+Yu Zhang et al.: Page 14 of 16 UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark 
+
+hension, practical traffic surveillance inherently requires the analysis of continuous behavioral trajectories. Extending the benchmark toward video-based spatio-temporal VQA would enhance comprehensive event interpretation capabilities. The second direction focuses on the development of more powerful cognitive mechanisms. Compared to generalized visual per-ception tasks, specialized traffic behavior understanding relies heavily on regulatory constraints, highlighting the importance of integrating explicit prior knowledge into large-scale foun-dation models rather than relying solely on data-driven statis-tical correlations. In future work, we plan to extend this frame-work to video-based UAV-VQA and investigate the integration of additional complementary sensor modalities, with the goal of advancing robust, all-weather intelligent transportation sys-tems. 
+
+## Acknowledgement 
+
+This work was supported in part by the National Natural Science Foundation of China (No. 62306005, 62006002, and 62076003), in part by the Joint Funds of the National Nat-ural Science Foundation of China (No. U20B2068), in part by the Natural Science Foundation of Anhui Province (No. 2208085J18 and 2208085QF192), and in part by the Natu-ral Science Foundation of Anhui Higher Education Institution (No. 2022AH040014). 
+
+## References 
+
+[1] Stanislaw Antol, Aishwarya Agrawal, Jiasen Lu, Margaret Mitchell, Dhruv Batra, C. Lawrence Zitnick, and Devi Parikh. Vqa: Visual ques-tion answering. In Proceedings of the IEEE International Conference on Computer Vision (ICCV) , pages 2425–2433, 2015. [2] Zhicheng Zhao, Juanjuan Gu, Chenglong Li, Chun Wang, Zhongling Huang, and Jin Tang. Guidance disentanglement network for optics-guided thermal uav image super-resolution. arXiv preprint arXiv:2410.20466 , 2024. [3] Zhicheng Zhao, Changfu Zhou, Yu Zhang, Chenglong Li, Xiaoliang Ma, and Jin Tang. Text-guided coarse-to-fine fusion network for robust re-mote sensing visual question answering. ISPRS Journal of Photogram-metry and Remote Sensing , 230:1–17, 2025. [4] Zhicheng Zhao, Juanjuan Gu, Chenglong Li, Chun Wang, Zhongling Huang, and Jin Tang. Guidance disentanglement network for optics-guided thermal uav image super-resolution. ISPRS Journal of Pho-togrammetry and Remote Sensing , 228:64–82, 2025. [5] Kartik Kuckreja, Muhammad Sohail Danish, Muzammal Naseer, Abhi-jit Das, Salman Khan, and Fahad Shahbaz Khan. Geochat: Grounded large vision-language model for remote sensing. arXiv preprint arXiv:2311.15826 , 2023. [6] Wei Zhang, Miaoxin Cai, Tong Zhang, Yin Zhuang, and Xuerui Mao. Earthgpt: A universal multi-modal large language model for multi-sensor image comprehension in remote sensing domain. IEEE Trans-actions on Geoscience and Remote Sensing , 2024. [7] Wei Zhang, Miaoxin Cai, Yaqian Ning, Tong Zhang, Yin Zhuang, Shi-jian Lu, He Chen, Jun Li, and Xuerui Mao. Earthgpt-x: A spatial mllm for multilevel multisource remote sensing imagery understanding with visual prompting. IEEE Transactions on Geoscience and Remote Sens-ing , 63:1–21, 2025. [8] Michael Schmitt and Xiao Xiang Zhu. Data fusion and remote sensing: An ever-growing relationship. IEEE Geoscience and Remote Sensing Magazine , 4:6–23, 2016. [9] Lei Liu, Mengya Zhang, Cheng Li, Chenglong Li, and Jin Tang. Cross-modal object tracking via modality-aware fusion network and a large-scale dataset. IEEE Transactions on Neural Networks and Learning Sys-tems , 36(4):6981–6994, 2024. [10] Zhicheng Zhao, Wei Zhang, Yun Xiao, Chenglong Li, and Jin Tang. Reflectance-guided progressive feature alignment network for all-day uav object detection. IEEE Transactions on Geoscience and Remote Sensing , 2025. [11] Google DeepMind. Gemini 2.5, 2025. [12] Shuai Bai, Keqin Chen, Xuejing Liu, Jialin Wang, Wenbin Ge, Sibo Song, Kai Dang, Peng Wang, Shijie Wang, Jun Tang, et al. Qwen2. 5-vl technical report. arXiv preprint arXiv:2502.13923 , 2025. [13] Haoyu Lu, Wen Liu, Bo Zhang, Bingxuan Wang, Kai Dong, Bo Liu, Jingxiang Sun, Tongzheng Ren, Zhuoshu Li, Hao Yang, et al. Deepseek-vl: towards real-world vision-language understanding. arXiv preprint arXiv:2403.05525 , 2024. [14] OpenAI. Hello GPT-4o, 2024. [15] Sylvain Lobry, Diego Marcos, Jesse Murray, and Devis Tuia. Rsvqa: Visual question answering for remote sensing data. IEEE Transactions on Geoscience and Remote Sensing , 58:8555–8566, 2020. [16] Xiangtao Zheng, Binqiang Wang, Xingqian Du, and Xiaoqiang Lu. Mu-tual attention inception network for remote sensing visual question an-swering. IEEE Transactions on Geoscience and Remote Sensing , 60:1– 14, 2022. [17] Zixiao Zhang, Licheng Jiao, Lingling Li, Xu Liu, Puhua Chen, Fang Liu, Yuxuan Li, and Zhicheng Guo. A spatial hierarchical reasoning network for remote sensing visual question answering. IEEE Transactions on Geoscience and Remote Sensing , 61:1–15, 2023. [18] Sylvain Lobry, Begüm Demir, and Devis Tuia. Rsvqa meets bigearthnet: A new, large-scale, visual question answering dataset for remote sensing. In 2021 IEEE International Geoscience and Remote Sensing Symposium IGARSS , pages 1218–1221, 2021. [19] Meimei Zhang, Fang Chen, and Bin Li. Multistep question-driven vi-sual question answering for remote sensing. IEEE Transactions on Geo-science and Remote Sensing , 61:1–12, 2023. [20] Maryam Rahnemoonfar, Tashnim Chowdhury, Argho Sarkar, Debvrat Varshney, Masoud Yari, and Robin Roberson Murphy. Floodnet: Ahigh resolution aerial imagery dataset for post flood scene understand-ing. IEEE Access , 9:89644–89654, 2021. [21] Zhenghang Yuan, Lichao Mou, Zhitong Xiong, and Xiao Xiang Zhu. Change detection meets visual question answering. IEEE Transactions on Geoscience and Remote Sensing , 60:1–13, 2022. [22] Sara O. Alsaleh, Yakoub Bazi, Mohamad M. Al Rahhal, and Mansour Al Zuair. Open-ended visual question answering model for remote sens-ing images. In IGARSS 2022 - 2022 IEEE International Geoscience and Remote Sensing Symposium , pages 2848–2851, 2022. [23] Sagar Soni, Akshay Dudhane, Hiyam Debary, Mustansar Fiaz, Muham-mad Akhtar Munir, Muhammad Sohail Danish, Paolo Fraccaro, Camp-bell D Watson, Levente J Klein, Fahad Shahbaz Khan, et al. Earthdial: Turning multi-sensory earth observations to interactive dialogues. In 
+
+Proceedings of the Computer Vision and Pattern Recognition Confer-ence , pages 14303–14313, 2025. [24] Wujie Zhou, Xinyang Lin, Jingsheng Lei, Lu Yu, and Jenq-Neng Hwang. Mffenet: Multiscale feature fusion and enhancement network for rgb– thermal urban road scene parsing. IEEE Transactions on Multimedia ,24:2526–2538, 2021. [25] Kailai Zhou, Fuqiang Yang, Shixian Wang, Bihan Wen, Chongde Zi, Linsen Chen, Qiu Shen, and Xun Cao. M-specgene: Generalized foundation model for rgbt multispectral vision. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 7861– 7872, 2025. [26] Zixiang Zhao, Haowen Bai, Jiangshe Zhang, Yulun Zhang, Shuang Xu, Zudi Lin, Radu Timofte, and Luc Van Gool. Cddfuse: Correlation-driven dual-branch feature decomposition for multi-modality image fu-sion. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 5906–5916, 2023. [27] Vishal Chudasama, Purbayan Kar, Ashish Gudmalwar, Nirmesh Shah, Pankaj Wasnik, and Naoyuki Onoe. M2fnet: Multi-modal fusion network for emotion recognition in conversation. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition ,pages 4652–4661, 2022. [28] Han Xu, Jiayi Ma, Junjun Jiang, Xiaojie Guo, and Haibin Ling. U2fusion: A unified unsupervised image fusion network. IEEE trans-actions on pattern analysis and machine intelligence , 44(1):502–518, 2020. 
+
+Yu Zhang et al.: Page 15 of 16 UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark 
+
+[29] Yujing Rao, Dan Wu, Mina Han, Ting Wang, Yang Yang, Tao Lei, Chengjiang Zhou, Haicheng Bai, and Lin Xing. At-gan: A generative adversarial network with attention and transition for infrared and visible image fusion. Information Fusion , 92:336–349, 2023. [30] Zixiang Zhao, Haowen Bai, Yuanzhi Zhu, Jiangshe Zhang, Shuang Xu, Yulun Zhang, Kai Zhang, Deyu Meng, Radu Timofte, and Luc Van Gool. Ddfm: denoising diffusion model for multi-modality image fusion. In 
+
+Proceedings of the IEEE/CVF international conference on computer vi-sion , pages 8082–8093, 2023. [31] Zhicheng Zhao, Juanjuan Gu, Chenglong Li, Chun Wang, Zhongling Huang, and Jin Tang. Guidance disentanglement network for optics-guided thermal uav image super-resolution. arXiv preprint arXiv:2410.20466 , 2024. [32] Jinyuan Liu, Xingyuan Li, Zirui Wang, Zhiying Jiang, Wei Zhong, Wei Fan, and Bin Xu. Promptfusion: Harmonized semantic prompt learning for infrared and visible image fusion. IEEE/CAA Journal of Automatica Sinica , 2024. [33] Xin Guo, Jiangwei Lao, Bo Dang, Yingying Zhang, Lei Yu, Lixiang Ru, Liheng Zhong, Ziyuan Huang, Kang Wu, Dingxiang Hu, et al. Skysense: A multi-modal remote sensing foundation model towards universal inter-pretation for earth observation imagery. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 27672– 27683, 2024. [34] Peijin Wang, Huiyang Hu, Boyuan Tong, Ziqi Zhang, Fanglong Yao, Yingchao Feng, Zining Zhu, Hao Chang, Wenhui Diao, Qixiang Ye, and Xian Sun. Ringmogpt: A unified remote sensing foundation model for vision, language, and grounded tasks. IEEE Transactions on Geoscience and Remote Sensing , 63:1–20, 2025. [35] Yue Zhou, Ran Ding, Xue Yang, Xue Jiang, and Xingzhao Liu. Airspa-tialbot: A spatially-aware aerial agent for fine-grained vehicle attribute recognization and retrieval. IEEE Transactions on Geoscience and Re-mote Sensing , pages 1–1, 2025. [36] Fengxiang Wang, Mingshuo Chen, Yueying Li, Di Wang, Haotian Wang, Zonghao Guo, Zefan Wang, Boqi Shan, Long Lan, Yulin Wang, Hongzhen Wang, Wenjing Yang, Bo Du, and Jing Zhang. Geollava-8k: Scaling remote-sensing multimodal large language models to 8k resolu-tion. arXiv preprint arXiv:2505.21375 , 2025. [37] Junwei Luo, Yingying Zhang, Xue Yang, Kang Wu, Qi Zhu, Lei Liang, Jingdong Chen, and Yansheng Li. When large vision-language model meets large remote sensing imagery: Coarse-to-fine text-guided token pruning. arXiv preprint arXiv:2503.07588 , 2025. [38] Zilun Zhang, Zian Guan, Tiancheng Zhao, Haozhan Shen, Tianyu Li, Yuxiang Cai, Zhonggen Su, Zhaojun Liu, Jianwei Yin, and Xiang Li. Geo-r1: Improving few-shot geospatial referring expression understand-ing with reinforcement fine-tuning. arXiv preprint arXiv:2509.21976 ,2025. [39] Wenxuan Huang, Bohan Jia, Zijie Zhai, Shaosheng Cao, Zheyu Ye, Fei Zhao, Zhe Xu, Yao Hu, and Shaohui Lin. Vision-r1: Incentivizing rea-soning capability in multimodal large language models. arXiv preprint arXiv:2503.06749 , 2025. [40] Di Wang, Shunyu Liu, Wentao Jiang, Fengxiang Wang, Yi Liu, Xiaolei Qin, Zhiming Luo, Chaoyang Zhou, Haonan Guo, Jing Zhang, et al. Geozero: Incentivizing reasoning from scratch on geospatial scenes. 
+
+arXiv preprint arXiv:2511.22645 , 2025. [41] Run Shao, Ziyu Li, Zhaoyang Zhang, Linrui Xu, Xinran He, Hongyuan Yuan, Bolei He, Yongxing Dai, Yiming Yan, Yijun Chen, et al. Asking like socrates: Socrates helps vlms understand remote sensing images. 
+
+arXiv preprint arXiv:2511.22396 , 2025. [42] Argho Sarkar, Tashnim Chowdhury, Robin Roberson Murphy, Aryya Gangopadhyay, and Maryam Rahnemoonfar. Sam-vqa: Supervised attention-based visual question answering model for post-disaster dam-age assessment on remote sensing imagery. IEEE Transactions on Geo-science and Remote Sensing , 61:1–16, 2023. [43] Yuan Hu, Jianlong Yuan, Congcong Wen, Xiaonan Lu, and Xiang Li. Rsgpt: A remote sensing vision language model and benchmark. arXiv preprint arXiv:2307.15266 , 2023. [44] Junjue Wang, Zhuo Zheng, Zihang Chen, Ailong Ma, and Yanfei Zhong. Earthvqa: Towards queryable earth via relational reasoning-based re-mote sensing visual question answering. In Proceedings of the AAAI Conference on Artificial Intelligence , volume 38, pages 5481–5489, 2024. [45] Yuan Yao, Tianyu Yu, Ao Zhang, Chongyi Wang, Junbo Cui, Hongji Zhu, Tianchi Cai, Haoyu Li, Weilin Zhao, Zhihui He, et al. Minicpm-v: A gpt-4v level mllm on your phone. arXiv preprint arXiv:2408.01800 ,2024. [46] Jun Chen, Deyao Zhu, Xiaoqian Shen, Xiang Li, Zechun Liu, Pengchuan Zhang, Raghuraman Krishnamoorthi, Vikas Chandra, Yunyang Xiong, and Mohamed Elhoseiny. Minigpt-v2: large language model as a uni-fied interface for vision-language multi-task learning. arXiv preprint arXiv:2310.09478 , 2023. [47] Ruizhe Ou, Yuan Hu, Fan Zhang, Jiaxin Chen, and Yu Liu. Geopix: Multi-modal large language model for pixel-level image understanding in remote sensing. arXiv preprint arXiv:2501.06828 , 2025. [48] Kelu Yao, Nuo Xu, Rong Yang, Yingying Xu, Zhuoyan Gao, Titinunt Kitrungrotsakul, Yi Ren, Pu Zhang, Jin Wang, Ning Wei, et al. Falcon: A remote sensing vision-language foundation model. arXiv preprint arXiv:2503.11070 , 2025. [49] Shuai Bai, Yuxuan Cai, Ruizhe Chen, Keqin Chen, Xionghui Chen, Ze-sen Cheng, Lianghao Deng, Wei Ding, Chang Gao, Chunjiang Ge, Wen-bin Ge, Zhifang Guo, Qidong Huang, Jie Huang, Fei Huang, Binyuan Hui, Shutong Jiang, Zhaohai Li, Mingsheng Li, Mei Li, Kaixin Li, Zicheng Lin, Junyang Lin, Xuejing Liu, Jiawei Liu, Chenglong Liu, Yang Liu, Dayiheng Liu, Shixuan Liu, Dunjie Lu, Ruilin Luo, Chenxu Lv, Rui Men, Lingchen Meng, Xuancheng Ren, Xingzhang Ren, Sibo Song, Yuchong Sun, Jun Tang, Jianhong Tu, Jianqiang Wan, Peng Wang, Pengfei Wang, Qiuyue Wang, Yuxuan Wang, Tianbao Xie, Yiheng Xu, Haiyang Xu, Jin Xu, Zhibo Yang, Mingkun Yang, Jianxin Yang, An Yang, Bowen Yu, Fei Zhang, Hang Zhang, Xi Zhang, Bo Zheng, Humen Zhong, Jingren Zhou, Fan Zhou, Jing Zhou, Yuanzhi Zhu, and Ke Zhu. Qwen3-vl technical report. arXiv preprint arXiv:2511.21631 ,2025. 
+
+Yu Zhang et al.: Page 16 of 16

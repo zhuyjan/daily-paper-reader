@@ -1,0 +1,312 @@
+Title: Chart-RL: Generalized Chart Comprehension via Reinforcement Learning with Verifiable Rewards
+
+URL Source: https://arxiv.org/pdf/2603.06958v1
+
+Published Time: Tue, 10 Mar 2026 00:21:07 GMT
+
+Number of Pages: 12
+
+Markdown Content:
+# Chart-RL: Generalized Chart Comprehension via Reinforcement Learning with Verifiable Rewards 
+
+## Xin Zhang, Xingyu Li, Rongguang Wang, Ruizhong Miao, Zheng Wang , Dan Roth , Chenyang Li 
+
+## Oracle AI 
+
+> {xin.j.zhang, xingyu.li, rongguang.wang, ruizhong.miao, z.zheng.wang, dan.roth, chenyang.li}@oracle.com
+
+## Abstract 
+
+Accurate chart comprehension represents a critical challenge in advancing multimodal learning systems, as extensive information is compressed into structured visual represen-tations. However, existing vision-language models (VLMs) frequently struggle to gener-alize on unseen charts because it requires ab-stract, symbolic, and quantitative reasoning over structured visual representations. In this work, we introduce Chart-RL, an effective re-inforcement learning (RL) method that em-ploys mathematically verifiable rewards to en-hance chart question answering in VLMs. Our experiments demonstrate that Chart-RL con-sistently outperforms supervised fine-tuning (SFT) across different chart understanding benchmarks, achieving relative improvements of 16.7% on MutlChartQA, and 11.5% on ChartInsights. We conduct robustness analy-sis, where Chart-RL achieves enhanced perfor-mance in 18 of 25 perturbed chart categories, demonstrating strong consistency and reason-ing capability across visual variations. Fur-thermore, we demonstrate that task difficulty and inherent complexity are more critical than data quantity in RL training. For instance, Chart-RL trained on merely 10 complex chart-query examples significantly outperforms mod-els trained on over 6,000 simple examples. Ad-ditionally, training on challenging reasoning tasks not only improves in-domain generaliza-tion relative to simpler tasks, but also facilitate strong transfer to out-of-domain visual mathe-matical problems. 
+
+## 1 Introduction 
+
+Reinforcement learning with verifiable rewards (RLVR) has demonstrated remarkable success in enhancing the reasoning capabilities of LLMs (Guo et al., 2025; Jaech et al., 2024; Team et al., 2023). However, one critical area that remains relatively underexplored is chart understanding in VLMs, whose challenges such as symbolic reasoning and precise data extraction distinguish it fundamentally from traditional vision-language tasks. Unlike nat-ural images, charts exhibit extreme diversity in types (bar charts, pie charts, scatter plots, etc.) and structural organizations, with performance heavily dependent on the training data distribution (Huang et al., 2024). Current VLMs often struggle to bridge the gap between extracting descriptive infor-mation and deriving correct answers that require multi-step reasoning (Kamath et al., 2023). 
+
+Figure 1: Comparison of Chart-RL vs SFT to reason on complex chart question answering. 
+
+Recent studies to improve chart question an-swering have explored various strategies, such as converting charts into tabular formats suitable for prompting LLMs (Liu et al., 2022), instruction tun-ing on multiple chart-related objectives (Schleid et al., 2025), and generating synthetic chart data to augment VLM’s capability in real-world chart 1
+
+> arXiv:2603.06958v1 [cs.LG] 7 Mar 2026
+
+comprehension (Huang et al., 2025a). Nonetheless, the majority of chart comprehension methods rely on either larger curated datasets that cover broader chart and question types, or SFT using domain-specific datasets. While large-scale datasets such as ChartQA (Masry et al., 2022), PlotQA (Methani et al., 2020), and FigureQA (Kahou et al., 2017) have significantly expanded coverage of chart types and reasoning scenarios, they often focus on spe-cific chart formats with template-based questions that may not fully capture real-world complexity. Although domain-specific SFT can enhance model performance on targeted task categories, it fre-quently leads to catastrophic forgetting and perfor-mance degradation on untrained tasks due to data distribution shifts (Luo et al., 2023; Kalajdzievski, 2024). This phenomenon fundamentally limits the capability of current approaches to generalize across diverse chart types and reasoning scenarios in real-world applications (Schulze Buschoff et al., 2025; Huang et al., 2023). To address these limitations, we propose Chart-RL , an efficient reinforcement fine-tuning frame-work that employs R1-style reinforcement learn-ing to enhance chart understanding capabilities in VLMs. A key insight motivating our approach is that chart-based questions frequently correspond to mathematically verifiable ground truths, making them well-suited for rule-based reward functions in RL training. More importantly, many charts en-capsulate sufficiently complex visual and semantic information that necessitate iterative reasoning pro-cesses. We find that such reasoning complexity is of central importance because it enables mod-els to develop advanced reasoning capabilities that can’t be acquired through simple chart interpre-tation tasks (Parashar et al., 2025). Leveraging group relative policy optimization (GRPO) with chart-aligned accuracy and format rewards (Shao et al., 2024; Shen et al., 2025), we train VLMs to develop robust reasoning capabilities that gener-alize across different chart types and complexity levels. Our approach circumvents the limitation of conventional SFT methods, where task-specific adaptation results in narrow specialization rather than transferable reasoning skills (Luo et al., 2023). As illustrated in Figure 1, we demonstrate that Chart-RL improves performance across different chart understanding tasks, ranging from simple data extraction to complex multi-step reasoning, while achieving remarkable data efficiency. By training on complex chart problems, Chart-RL de-velops proficiency in low-level component tasks without requiring explicit instruction tuning. The key contributions of this paper include: • First Adoption of RLVR for Chart Compre-hension in VLMs: We introduce Chart-RL, a reinforcement fine-tuning strategy that uses reinforcement learning with verifiable rewards to enhance chart comprehension capabilities in VLMs, achieving significant improvements over SFT approaches. • Efficient Generalization with Superior Training Data Efficiency: We demonstrate, for the first time, that RL training on com-plex chart reasoning tasks enables robust generalization, achieving consistent improve-ments across diverse benchmarks without task-specific optimization. • Comprehensive Experimental Validation of Robustness and Generalization: Our ex-tensive empirical evaluation reveals a criti-cal insight: task complexity , rather than the quantity of training data, is pivotal in develop-ing generalizable chart understanding capabil-ities. 
+
+## 2 Related Works 
+
+2.1 Chart-Based Question Answering 
+
+Chart understanding has evolved from multi-stage pipelines (Masry et al., 2022) to end-to-end mod-els. This transformation was pioneered by OCR-free architectures like Donut (Kim et al., 2022), which paved the way for powerful VLMs. Recent progress has been predominantly achieved through SFT approaches, with models such as Pix2Struct (Lee et al., 2023) and UniChart (Masry et al., 2023) being adapted for direct chart-to-answer generation. Concurrently, advanced models including LLaVA (Liu et al., 2023), PaliGemma (Beyer et al., 2024), and ChartLlama (Han et al., 2023) have been fine-tuned to address more sophisticated and diverse reasoning challenges. Despite its success in task-specific adaptation, SFT faces critical limitations in the domain of chart understanding. The need for large, meticulously annotated datasets makes the process costly and prone to overfitting, where models learn to exploit data artifacts rather than acquiring robust reasoning principles. Furthermore, SFT-based models often exhibit poor generalization ability: performance gains on one type of task do not reliably trans-2Figure 2: Schematic diagram of Chart-RL framework with GRPO optimization for chart comprehension. 
+
+fer to related tasks or different data distributions (Schulze Buschoff et al., 2025). 
+
+2.2 Reinforcement Fine-Tuning in VLMs 
+
+The success of R1-style reinforcement learning in enhancing LLM reasoning capabilities (Jaech et al., 2024; Guo et al., 2025) has inspired exten-sive research into its application toVLMs. For example, R1-OneVision (Yang et al., 2025) and Vision-R1 (Huang et al., 2025b) construct mul-timodal reasoning datasets by converting visual information into textual format before RL train-ing, while other studies focus on specific applica-tions such as object counting (Chen et al., 2025) or employ staged training strategies with progressive difficulty rewards (Peng et al., 2025; Deng et al., 2025). Notably, several studies have observed the “visual aha moment” in VLMs (Zhou et al., 2025; Meng et al., 2025), demonstrating emergent reason-ing capabilities. The VLM-R1 framework (Shen et al., 2025) provides a comprehensive investiga-tion into applying RL to general visual understand-ing tasks, including Referring Expression Com-prehension (REC) and Open-Vocabulary Object Detection (OVD). Despite these advances, the reasoning capabili-ties cultivated by existing R1-style VLMs are pri-marily tailored for understanding of natural images. Since charts present highly condensed information in diverse structural formats, the unique challenges of chart understanding have yet to be systemati-cally addressed. These tasks require interpreting relationships, performing calculations, and synthe-sizing information from graphical elements like bars, lines, and legends. Building on the principles established in the VLM-R1 (Shen et al., 2025), we propose an R1-type reinforcement fine-tuning ap-proach specifically for chart understanding, aiming to instill the robust generalization and reasoning capabilities. 
+
+## 3 Methods 
+
+3.1 Chart-RL Framework 
+
+We present Chart-RL, an extension of the open-source VLM-R1 platform (Shen et al., 2025) that adapts R1-style reinforcement fine-tuning for chart understanding tasks. As shown in Figure 2, we implement a verifiable reward function that pro-duces a score based on alignment between model outputs and annotated ground truths. In addition, a binary format reward function is employed to en-force task-specific output structures. This modular reward design enables Chart-RL to adapt to differ-ent chart-related training tasks with mathematically verifiable annotations. 
+
+3.2 Accuracy and Format Rewards 
+
+In Chart-RL, we employ the GRPO algorithm, which evaluates a group of candidate responses to guide policy updates, eliminating the need for a separate critic (Shao et al., 2024). The GRPO algo-rithm begins by sampling N candidate responses 
+
+{o1, o 2, ..., o N } from the current policy πθ for a given query q. Each response oi is scored using a reward function R(q, o i), and the resulting rewards 
+
+ri are normalized to compute the advantage Ai for 3each response as: 
+
+Ai = ri − mean {r1, r 2, ..., r N }
+
+std {r1, r 2, ..., r N } , (1) where Ai measures the relative advantage of re-sponse i compared to other responses in the sam-pled group. The policy πθ is then updated to in-crease the likelihood of generating responses with higher advantages using the following objective: 
+
+JGRP O (θ) = E[{oi}∼ πθold (q)] 
+
+1
+
+N
+
+> N
+
+X
+
+> i=1
+
+{min[ s1 · Ai, s 2 · Ai] − βDKL [πθ|| πref ]}
+
+s1 = πθ(oi|q)
+
+πθold (oi|q)
+
+s2 =clip 
+
+ πθ(oi|q)
+
+πθold (oi|q) , 1 − ϵ, 1 + ϵ
+
+
+
+(2) 
+
+Accuracy Reward. To ensure verifiable training signals, we sample query-chart pairs that produce mathematically deterministic results for RL train-ing. Our accuracy reward design is based on the rel-ative error between the model’s predicted result vp
+
+and the ground-truth solution vg, evaluated against a predefined precision threshold τ . The accuracy reward score S(vp, v g) is computed as: 
+
+S(vp, v g) = 
+
+(
+
+1, correct output 
+
+0, incorrect or malformed output (3) 
+
+Format Reward. We employ a binary format reward to enforce adherence to the prescribed out-put structure. This reward function assigns a value of 1.0 if the model’s response strictly follows the required template format, and 0 otherwise. Specifi-cally, the model must structure its output with two distinct components: (1) a reasoning process en-closed within <thinking>...</thinking> tags, and (2) a final answer in JSON format enclosed within <answer>“‘json...“‘</answer> tags. To implement this structured output format, we utilize carefully designed prompts during Chart-RL training as shown below. The system prompt es-tablishes the conversational framework and defines the expected output structure, while the generation prompt reinforces these formatting requirements for each specific query.                                            
+
+> System Prompt
+> Aconversation between User and Assistant. The user asks aquestion, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <thinking> </thinking> and <answer> </answer> tags, respectively, i.e., <thinking> reasoning process here </thinking><answer> answer here </answer>
+
+## 4 Experiments 
+
+4.1 Training & Evaluation Setup Baseline VLM. We use Qwen2.5-VL-3B-Instruct as our baseline. Recent studies show that small language models (SLMs) are sufficiently powerful and, when adapted with efficient post-training, provide a cost-effective and therefore more promising foundation for practical agentic systems (Belcak et al., 2025). In addition, SLMs align better with our practical development needs. 
+
+Training Datasets. We conduct RL training on two types of chart-based tasks: • Easy Task: – This task requires only single-step rea-soning and involves straightforward chart question-answering, such as direct numeric extraction from a single chart element. 
+
+– We use 6,200 subsampled charts from PlotQA (Methani et al., 2020), focusing on straightforward numerical queries. • Hard Task: – This task involves multi-step reasoning by performing a sequence of simple sub-tasks across one or multiple charts, ulti-mately producing responses through the aggregation of intermediate results. 
+
+– From the CharXiv validation set (Wang et al., 2024), we subsample 448 charts with mathematically verifiable ground truth, tailored for multi-hop reasoning in Chart-RL training. Unlike the easy tasks that focus on straightfor-ward numerical extraction, the hard tasks require multi-hop reasoning across chart elements, making the 448-chart training subset sufficiently complex for RL training. Unless otherwise noted, all re-ported Chart-RL results use query-chart pairs from 4Method Training Task MultiChartQA 
+
+> Overall
+
+ChartInsights 
+
+> Reasoning
+
+Accuracy Rel. ∆ p-value Accuracy Rel. ∆ p-value Baseline – 35.2 – – 36.4 – –SFT Hard 32.9 -6.6% 0.12 34.7 -4.7% < 10 −2
+
+CoT-SFT 39.1 +11.1% < 10 −2 40.3 +10.7% < 10 −6
+
+Chart-RL(ours) 41.1 +16.7% < 10 −4 40.6 +11.5% < 10 −6
+
+> Table 1: Evaluation results on two benchmarks comparing our Chart-RL approach against baseline, SFT, and CoT-SFT. The rightmost column for each dataset shows the proportional test results for the relative change.
+
+this 448-chart hard task training set. We provide examples of easy and hard tasks in Appendix A.2. 
+
+Training Hyper-parameters. We employ the VLM-R1 (Shen et al., 2025) pipeline using our customized accuracy and formatting rewards. All RL experiments are conducted on 8 NVIDIA H100 GPUs. At each update, we generate 8 samples per input prompt. We set per-device batch size to 1 and accumulate gradients over 4 steps. We apply parameter-efficient fine-tuning (PEFT) via LoRA (Hu et al., 2022), setting the adapter with rank 
+
+r = 64 , scaling factor alpha = 128 , and dropout rate of 0.05. To enable joint vision-language adaptation, we keep all vision modules unfrozen throughout RL fine-tuning. 
+
+Evaluation Benchmarks. We evaluate Chart-RL on three state-of-the-art chart comprehension benchmarks, including MultiChartQA (Zhu et al., 2024), ChartInsights (Wu et al., 2024), and Ro-bustCQA (Mukhopadhyay et al., 2024). In addition to our analysis of aggregate scores across all bench-marks, we perform categorical analysis to facilitate task-specific comparisons. • RobustCQA : Measures the robustness of VLMs under systematically perturbed chart variations. • MultiChartQA : Assesses the model’s ability to perform multi-hop reasoning and to inte-grate information across multiple charts. • ChartInsights : Evaluates fine-grained analyt-ical performance across seven chart types and ten task categories. 
+
+CoT Trajectory Generation. We use GPT-4o as a teacher model to process query-chart pairs from the hard task and generate validated reasoning traces. The resulting CoT trajectories then serve as supervised fine-tuning data. To compare CoT-SFT 
+
+Category Dataset # Charts # Queries 
+
+Training CharXiv 448 448 PlotQA 6,200 6,200 Evaluation RobustCQA 400 400 MultiChartQA 1,370 2,000 ChartInsights 2,000 22,000 
+
+> Table 2: Statistics of training and evaluation datasets.
+
+against RL training, the complete prompt template is provided in the Appendix A.1. 
+
+4.2 Fine-Tuning Strategy Comparison 
+
+We evaluate three fine-tuning approaches, ranging from standard SFT, chain-of-thought SFT (CoT-SFT), to our Chart-RL, against the baseline VLM. Table 1 summarizes the results across two chart understanding benchmarks. Chart-RL significantly outperforms both SFT and CoT-SFT approaches. All reported results are statistically significant at 
+
+α = 0.05 , except for SFT on MultiChartQA (p=0.12), with statistical significance confirmed across all methods on the larger ChartInsights dataset. Specifically, SFT leads to performance regres-sion on both datasets, demonstrating that task-agnostic instruction tuning fails to capture the com-plexities of chart question answering. CoT-SFT shows substantial improvements over both baseline and standard SFT, achieving +11.1% and +10.7% relative gains on MultiChartQA and ChartInsights, respectively. Notably, although Chart-RL’s train-ing is not optimized for these specific benchmarks, it demonstrates consistent generalization capabili-ties, achieving relative improvements of 16.7% on MultiChartQA and 11.5% on ChartInsights. We attribute Chart-RL’s generalization and rea-soning capabilities to the exploration inherent in RL 5training (Peng et al., 2025). These results demon-strate that our Chart-RL framework provides a ro-bust approach for advancing chart understanding tasks. 
+
+4.3 Robustness Analysis 
+
+We evaluate Chart-RL’s robustness across 25 per-turbed chart categories using complex charts and questions from the RobustCQA dataset, which sys-tematically assesses VLMs’ consistency across dif-ferent visual representations of identical underly-ing data. As shown in Table 3, Chart-RL demon-strates improved performance in 18 of 25 cate-gories (72%), compared to the SFT. In contrast, SFT only achieves better results in only 2 cate-gories (8%). The remaining 5 categories exhibits identical performance (20%). The most significant improvements occur in cat-egories involving chart layout modifications and visual styling, such as hatching patterns, legend positioning, and tick orientation. These improve-ments suggest that reinforcement learning with chart-specific reward signals likely enhances gen-eralization capabilities, making the model robust to layout and structural variations. Interestingly, Chart-RL shows minor degradation in only two scenarios: log scale transformations and scaling perturbations. This observation suggests that math-ematical transformations may require additional reasoning patterns during training. 
+
+4.4 Data Efficiency in RL Training 
+
+Inspired by recent work on RL training efficiency (Wang et al., 2025), we examine the training dy-namics using minimal training examples. Specif-ically, we aim to investigate how few verifiable-reward samples are required to achieve efficient visual reasoning in chart. Figure 3 compares Chart-RL’s training dynamics with limited training data, where the number of charts is restricted to 10, 100, or 448 randomly subsampled instances of equiva-lent task complexity. Notably, with only 10 sam-ples, the accuracy reward converges rapidly and plateaus earlier than the 488-sample run. In addi-tion, the format reward follows a similar conver-gence pattern across all sample sizes, likely reflect-ing the robust structural adherence capability of the Qwen2.5-VL instruct model. We extensively evaluate the resulting model checkpoints across three chart-related benchmarks. As shown in Table 4, Chart-RL produces substan-tial improvements on MultiChartQA and ChartIn-
+
+Category Fine-Tuning Strategy 
+
+SFT Chart-RL (ours) annotations 0.41 0.41 benchmark 0.47 0.52 
+
+color_random 0.37 0.37 color_scheme 0.34 0.34 data_pivot 0.35 0.36 
+
+font 0.39 0.41 
+
+grid 0.38 0.41 
+
+hatching 0.28 0.34 
+
+horizontal_grouped 0.35 0.38 
+
+horizontal_stacked 0.34 0.37 
+
+legend_position 0.34 0.40 
+
+line_representation 0.32 0.35 
+
+log_scale 0.33 0.30 normal 0.37 0.41 
+
+only_data_color_scheme 0.35 0.35 replacing_legend_with_labels 0.35 0.36 
+
+scaling 0.34 0.32 scatter_representation 0.31 0.31 stacked 0.30 0.32 
+
+stacked_area 0.32 0.33 
+
+stair_plot_normal 0.23 0.29 
+
+stair_plot_with_marker 0.32 0.35 
+
+stem_plot 0.30 0.31 
+
+tick_orientation 0.37 0.43 
+
+tick_position 0.36 0.37 
+
+> Table 3: Robustness comparison between Chart-RL and SFT across 25 perturbed chart categories.
+
+sights despite using far fewer training samples. In summary, Chart-RL demonstrates strong gen-eralization across diverse benchmarks while requir-ing only minimal training examples. Unlike tra-ditional SFT, this data-efficient training paradigm enables effective adaptation to both novel chart tasks and predefined output formats. 
+
+4.5 Out-of-Domain Generalization 
+
+We investigate whether Chart-RL’s reasoning ca-pabilities generalize to out-of-domain visual math-ematical tasks. As shown in Table 5, Chart-RL achieves a significant 55.6% relative improvement on MathVerse (Zhang et al., 2024), despite not being explicitly trained on mathematical reason-ing data. These results demonstrate that Chart-RL effectively transfers to visually grounded mathe-matical problem solving. Our findings align with recent studies highlight-6Method Training Task Training Samples MultiChartQA 
+
+> Overall
+
+ChartInsights 
+
+> Reasoning
+
+Accuracy Rel. ∆ p-value Accuracy Rel. ∆ p-value Baseline – – 35.2 – – 36.4 – –Chart-RL (ours) Hard 10 39.1 +11.1% < 10 −2 39.1 +7.4% < 10 −4
+
+100 39.2 +11.4% < 10 −2 39.7 +9.1% < 10 −6
+
+448 41.1 +16.7% < 10 −4 40.6 +11.5% < 10 −6
+
+> Table 4: Evaluation results for Chart-RL across different training sample sizes, showing performance on three chart understanding benchmarks under varying RL training data scales. The rightmost column for each dataset shows the proportional test results for the relative change.
+> Figure 3: RL Training reward trajectories for Chart-RL across different training sample sizes, showing accuracy rewards (left) and format rewards (right) throughout the training process.
+
+ing domain-specific reinforcement learning can in-centivize transferable analytical skills (Xie et al., 2025). We believe that complex chart-based rea-soning represents an important yet underexplored training data source that could benefit the develop-ment of generalized VLMs (Liang et al., 2024). 
+
+Methods MathVerse 
+
+> Vision
+
+Acc. Rel. ∆ p-value Baseline 1.8 – –Chart-RL (ours) 2.8 +55.6% < 10 −2
+
+> Table 5: Evaluation results on MathVerse Vision.
+
+## 5 Ablation Study 
+
+5.1 Generalization in Low-Level Tasks 
+
+To evaluate Chart-RL’s generalization capabilities within the chart understanding domain, we com-pare Chart-RL against the SFT-only variant and the base Qwen2.5-VL-3B-Instruct model. Fig-ures 4 presents detailed per-category performance comparisons on ChartInsights and MultiChartQA benchmarks. Chart-RL consistently outperforms both the baseline and the SFT-enhanced variant across var-ious low-level tasks. Our method demonstrates robust improvements, likely resulting from the re-inforced exploration on challenging chart-query pairs during RL training. Specifically, Chart-RL achieves substantial gains in reasoning tasks (Di-rect Questions, Parallel Questions, and Compara-tive Reasoning) on MultiChartQA, and data opera-tions (Order, Filter, and Cluster) on ChartInsights. By training on highly complex chart samples, we enable effective transfer to simpler, low-level chart-related tasks without requiring additional task-specific training. This suggests that our method facilitates fundamental chart understanding capabil-ities that generalize beyond the predefined training tasks. 
+
+5.2 Task Complexity Matters: Easy vs. Hard Training Tasks 
+
+To investigate how the complexity of training tasks affects RL performance, we compare mod-7Figure 4: Performance breakdown by sub-category on MultiChartQA and ChartInsights benchmarks. 
+
+els trained on tasks of varying difficulty. Fig-ure 5 shows drastically different learning dynam-ics. Specifically, easy tasks achieve high accuracy rapidly but offer limited learning potential, plateau-ing around 0.9 with minimal subsequent improve-ment. In contrast, hard tasks begin with lower accu-racy of 0.2 but demonstrate sustained improvement throughout RL training. This continuous learning trajectory suggests that hard tasks provide helpful feedback signals, enabling the model to develop more sophisticated chart reasoning capabilities. Table 6 summarizes the impact of task complex-ity on downstream performance. While easy tasks attain higher training accuracy, it ultimately leads to degradation on both evaluation benchmarks. By contrast, hard tasks, though achieving relatively lower training accuracy, result in substantial im-
+
+> Figure 5: Accuracy reward trajectories in RL training for Easy and Hard tasks.
+
+provements across all benchmarks. These results highlight a critical insight: training on challeng-ing tasks that maintain a consistent learning signal throughout optimization leads to better generaliza-tion. The continuous improvement on hard tasks suggests that the model develops robust chart com-prehension capabilities, while the early saturation on easy tasks likely leads to overfitting on limited patterns. Our results indicate that the complexity and diversity of training tasks are essential in RL for developing generalizable chart comprehension capabilities. 
+
+Task MultiChartQA ChartInsights 
+
+Baseline 35.2 36.4 Easy 34.8 (-1.2%) 36.0 (-1.1%) Hard 41.1 (+16.8%) 40.6 (+11.5%) 
+
+> Table 6: Evaluation results of Easy vs. Hard training tasks on different benchmarks.
+
+## 6 Conclusion 
+
+We present Chart-RL, an effective RL-based method that significantly advances task-agnostic chart comprehension capabilities in VLMs. Through systematic experiments across diverse benchmarks, we demonstrate that Chart-RL achieves substantial improvements using only a few hundreds of training samples. Our analysis reveals that training on complex tasks that provide continuous learning signals produces better gener-alization compared to optimizing for high training accuracy on simpler tasks. Moreover, Chart-RL ex-hibits cross-domain transfer capability, improving multimodal mathematical reasoning performance without explicit training in this domain. 8Limitations 
+
+Our work has a few limitations that should be ac-knowledged. First, Chart-RL relies on mathemat-ically verifiable ground truths for reward compu-tation, which restricts its applicability to chart un-derstanding tasks that lack deterministic answers or require subjective interpretation. Second, the evaluation remains relatively narrow and may not capture the full diversity of real-world chart com-prehension scenarios. The Chart-RL training re-quires careful curation of complex chart reasoning tasks, which may not be readily available for all do-mains or chart types. Third, our work mainly focus on the initial application of RLVR for chart ques-tion answering. We believe that a multi-stage post-training strategy, alternating SFT and RL, might lead to enhanced accuracy and generalization. 
+
+## References 
+
+Peter Belcak, Greg Heinrich, Shizhe Diao, Yonggan Fu, Xin Dong, Saurav Muralidharan, Yingyan Celine Lin, and Pavlo Molchanov. 2025. Small language models are the future of agentic ai. arXiv preprint arXiv:2506.02153 .Lucas Beyer, Andreas Steiner, André Susano Pinto, Alexander Kolesnikov, Xiao Wang, Daniel Salz, Maxim Neumann, Ibrahim Alabdulmohsin, Michael Tschannen, Emanuele Bugliarello, and 1 others. 2024. Paligemma: A versatile 3b vlm for transfer. arXiv preprint arXiv:2407.07726 .Liang Chen, Lei Li, Haozhe Zhao, Yifan Song, and Vinci. 2025. R1-v: Reinforcing super generalization ability in vision-language models with less than $3. 
+
+GitHub . Accessed: 2025-02-02. Huilin Deng, Ding Zou, Rui Ma, Hongchen Luo, Yang Cao, and Yu Kang. 2025. Boosting the generaliza-tion and reasoning of vision language models with curriculum reinforcement learning. arXiv preprint arXiv:2503.07065 .Daya Guo, Dejian Yang, Haowei Zhang, Junxiao Song, Ruoyu Zhang, Runxin Xu, Qihao Zhu, Shi-rong Ma, Peiyi Wang, Xiao Bi, and 1 others. 2025. Deepseek-r1: Incentivizing reasoning capability in ilms via reinforcement learning. arXiv preprint arXiv:2501.12948 .Y. Han, C. Zhang, X. Chen, X. Yang, Z. Wang, G. Yu, B. Fu, and H. Zhang. 2023. ChartLlama: a multi-modal llm for chart understanding and generation. 
+
+arXiv preprint arXiv:2311.16483 .Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, Weizhu Chen, and 1 others. 2022. Lora: Low-rank adaptation of large language models. ICLR , 1(2):3. Kung-Hsiang Huang, Hou Pong Chan, Yi R Fung, Haoyi Qiu, Mingyang Zhou, Shafiq Joty, Shih-Fu Chang, and Heng Ji. 2024. From pixels to insights: A survey on automatic chart understanding in the era of large foundation models. IEEE Transactions on Knowledge and Data Engineering .Kung-Hsiang Huang, Mingyang Zhou, Hou Pong Chan, Yi R Fung, Zhenhailong Wang, Lingyu Zhang, Shih-Fu Chang, and Heng Ji. 2023. Do lvlms understand charts? analyzing and correcting factual errors in chart captioning. arXiv preprint arXiv:2312.10160 .Muye Huang, Han Lai, Xinyu Zhang, Wenjun Wu, Jie Ma, Lingling Zhang, and Jun Liu. 2025a. Evochart: A benchmark and a self-training approach towards real-world chart understanding. In Proceedings of the AAAI Conference on Artificial Intelligence , vol-ume 39, pages 3680–3688. Wenxuan Huang, Bohan Jia, Zijie Zhai, Shaosheng Cao, Zheyu Ye, Fei Zhao, Yao Hu, and Shaohui Lin. 2025b. Vision-r1: Incentivizing reasoning capability in multimodal large language models. arXiv preprint arXiv:2503.06749 .Aaron Jaech, Adam Kalai, Adam Lerer, Adam Richard-son, Ahmed El-Kishky, Aiden Low, Alec Helyar, Aleksander Madry, Alex Beutel, Alex Carney, and 1 others. 2024. Openai o1 system card. arXiv preprint arXiv:2412.16720 .Samira Ebrahimi Kahou, Vincent Michalski, Adam Atkinson, Ákos Kádár, Adam Trischler, and Yoshua Bengio. 2017. Figureqa: An annotated fig-ure dataset for visual reasoning. arXiv preprint arXiv:1710.07300 .Damjan Kalajdzievski. 2024. Scaling laws for forget-ting when fine-tuning large language models. arXiv preprint arXiv:2401.05605 .Amita Kamath, Jack Hessel, and Kai-Wei Chang. 2023. What’s" up" with vision-language models? investi-gating their struggle with spatial reasoning. arXiv preprint arXiv:2310.19785 .G. Kim, T. Hong, M. Yim, J. Nam, J. Park, J. Yim, W. Hwang, S. Yun, D. Han, and S. Park. 2022. Ocr-free document understanding transformer. In Euro-pean Conference on Computer Vision (ECCV) .K. Lee, M. Joshi, I. Turc, H. Hu, F. Liu, J. Eisen-schlos, U. Khandelwal, P. Shaw, M.W. Chang, and K. Toutanova. 2023. Pix2struct: screenshot parsing as pretraining for visual language understanding. In 
+
+Proceedings of the 40th International Conference on Machine Learning , ICML’23. JMLR.org. Zijing Liang, Yanjie Xu, Yifan Hong, Penghui Shang, Qi Wang, Qiang Fu, and Ke Liu. 2024. A survey of multimodel large language models. In Proceedings of the 3rd International Conference on Computer, Artificial Intelligence and Control Engineering , pages 405–409. 
+
+9Fangyu Liu, Julian Martin Eisenschlos, Francesco Pic-cinno, Syrine Krichene, Chenxi Pang, Kenton Lee, Mandar Joshi, Wenhu Chen, Nigel Collier, and Yasemin Altun. 2022. Deplot: One-shot visual lan-guage reasoning by plot-to-table translation. arXiv preprint arXiv:2212.10505 .H. Liu, C. Li, Q. Wu, and Y.J. Lee. 2023. Visual instruc-tion tuning. In NeurIPS .Yun Luo, Zhen Yang, Fandong Meng, Yafu Li, Jie Zhou, and Yue Zhang. 2023. An empirical study of catastrophic forgetting in large language mod-els during continual fine-tuning. arXiv preprint arXiv:2308.08747 .A. Masry, P. Kavehzadeh, X.L. Do, E. Hoque, and S. Joty. 2023. UniChart: a universal vision-language pretrained model for chart comprehension and rea-soning. In Proceedings of the 2023 Conference on Empirical Methods in Natural Language Process-ing , pages 14662–14684, Singapore. Association for Computational Linguistics. Ahmed Masry, Do Long, Jia Qing Tan, Shafiq Joty, and Enamul Hoque. 2022. ChartQA: A benchmark for question answering about charts with visual and logical reasoning. In Findings of the Association for Computational Linguistics: ACL 2022 , pages 2263– 2279, Dublin, Ireland. Association for Computational Linguistics. Fanqing Meng, Lingxiao Du, Zongkai Liu, Zhixiang Zhou, Quanfeng Lu, Daocheng Fu, Botian Shi, Wen-hai Wang, Junjun He, Kaipeng Zhang, and 1 others. 2025. Mm-eureka: Exploring visual aha moment with rule-based large-scale reinforcement learning. 
+
+arXiv preprint arXiv:2503.07365 .Nitesh Methani, Pritha Ganguly, Mitesh M Khapra, and Pratyush Kumar. 2020. Plotqa: Reasoning over sci-entific plots. In Proceedings of the IEEE/CVF Win-ter Conference on Applications of Computer Vision ,pages 1527–1536. Srija Mukhopadhyay, Adnan Qidwai, Aparna Garimella, Pritika Ramu, Vivek Gupta, and Dan Roth. 2024. Un-raveling the truth: Do vlms really understand charts? a deep dive into consistency and robustness. In Find-ings of the Association for Computational Linguistics: EMNLP 2024 , pages 16696–16717. Shubham Parashar, Shurui Gui, Xiner Li, Hongyi Ling, Sushil Vemuri, Blake Olson, Eric Li, Yu Zhang, James Caverlee, Dileep Kalathil, and 1 others. 2025. Curriculum reinforcement learning from easy to hard tasks improves llm reasoning. arXiv preprint arXiv:2506.06632 .Yingzhe Peng, Gongrui Zhang, Miaosen Zhang, Zhiyuan You, Jie Liu, Qipeng Zhu, Kai Yang, Xingzhong Xu, Xin Geng, and Xu Yang. 2025. Lmm-r1: Empowering 3b lmms with strong reasoning abil-ities through two-stage rule-based rl. arXiv preprint arXiv:2503.07536 .Florian Schleid, Jan Strich, and Chris Biemann. 2025. Visual question answering on scientific charts using fine-tuned vision-language models. In Proceedings of the Fifth Workshop on Scholarly Document Pro-cessing (SDP 2025) , pages 211–220. Luca M. Schulze Buschoff, Konstantinos Voudouris, Elif Akata, Matthias Bethge, Joshua B. Tenenbaum, and Eric Schulz. 2025. Testing the limits of fine-tuning for improving visual cognition in vision lan-guage models. In International Conference on Ma-chine Learning . Published as a poster. Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei Zhang, Mingchuan Zhang, YK Li, Y Wu, and 1 others. 2024. Deepseek-math: Pushing the limits of mathematical reason-ing in open language models. arXiv preprint arXiv:2402.03300 .Haozhan Shen, Peng Liu, Jingcheng Li, Chunxin Fang, Yibo Ma, Jiajia Liao, Qiaoli Shen, Zilun Zhang, Kangjia Zhao, Qianqian Zhang, and 1 oth-ers. 2025. Vlm-r1: A stable and generalizable r1-style large vision-language model. arXiv preprint arXiv:2504.07615 .Gemini Team, Rohan Anil, Sebastian Borgeaud, Jean-Baptiste Alayrac, Jiahui Yu, Radu Soricut, Johan Schalkwyk, Andrew M Dai, Anja Hauth, Katie Mil-lican, and 1 others. 2023. Gemini: a family of highly capable multimodal models. arXiv preprint arXiv:2312.11805 .Yiping Wang, Qing Yang, Zhiyuan Zeng, Liliang Ren, Liyuan Liu, Baolin Peng, Hao Cheng, Xuehai He, Kuan Wang, Jianfeng Gao, and 1 others. 2025. Re-inforcement learning for reasoning in large language models with one training example. arXiv preprint arXiv:2504.20571 .Zirui Wang, Mengzhou Xia, Luxi He, Howard Chen, Yitao Liu, Richard Zhu, Kaiqu Liang, Xindi Wu, Haotian Liu, Sadhika Malladi, and 1 others. 2024. Charxiv: Charting gaps in realistic chart understand-ing in multimodal llms. Advances in Neural Informa-tion Processing Systems , 37:113569–113697. Yifan Wu, Lutao Yan, Leixian Shen, Yunhai Wang, Nan Tang, and Yuyu Luo. 2024. Chartinsights: Evaluating multimodal large language models for low-level chart question answering. arXiv preprint arXiv:2405.07001 .Tian Xie, Zitian Gao, Qingnan Ren, Haoming Luo, Yuqian Hong, Bryan Dai, Joey Zhou, Kai Qiu, Zhi-rong Wu, and Chong Luo. 2025. Logic-rl: Un-leashing llm reasoning with rule-based reinforcement learning. arXiv preprint arXiv:2502.14768 .Yi Yang, Xiaoxuan He, Hongkun Pan, Xiyan Jiang, Yan Deng, Xingtao Yang, Haoyu Lu, Dacheng Yin, Fengyun Rao, Minfeng Zhu, and 1 others. 2025. R1-onevision: Advancing generalized multimodal rea-soning through cross-modal formalization. arXiv preprint arXiv:2503.10615 .
+
+10 Renrui Zhang, Dongzhi Jiang, Yichi Zhang, Haokun Lin, Ziyu Guo, Pengshuo Qiu, Aojun Zhou, Pan Lu, Kai-Wei Chang, Yu Qiao, and 1 others. 2024. Math-verse: Does your multi-modal llm truly see the dia-grams in visual math problems? In European Confer-ence on Computer Vision , pages 169–186. Springer. Hengguang Zhou, Xirui Li, Ruochen Wang, Minhao Cheng, Tianyi Zhou, and Cho-Jui Hsieh. 2025. R1-zero’s" aha moment" in visual reasoning on a 2b non-sft model. arXiv preprint arXiv:2503.05132 .Zifeng Zhu, Mengzhao Jia, Zhihan Zhang, Lang Li, and Meng Jiang. 2024. Multichartqa: Benchmark-ing vision-language models on multi-chart problems. 
+
+arXiv preprint arXiv:2410.14179 .
+
+11 A Appendix 
+
+A.1 CoT Prompt Template 
+
+We use the GPT-4o model via Azure OpenAI (API version 2024-12-01-preview) to generate explicit chain-of-thought (CoT) reasoning. Below is the prompt template: 
+
+Prompt for Generating CoT Trajectories with GPT-4o 
+
+I will give you an image, an original question, and its correct answer. Your task is to rewrite the question so that solving it requires step-by-step CoT reasoning, including any necessary numerical or mathematical expressions. Feel free to include natural thought markers (e.g., ‘let me think,’ ‘oh, I see’). 
+
+• The rewritten question must request aspecific, easily verifiable answer (for example, ‘2’ or ‘A’)—no open-ended prompts. 
+
+• Do not include the word ‘Answer:’ in the question to avoid leakage. 
+
+Input: Original Question: {original_question} Original Answer: {original_answer} 
+
+Output: Question: [Rewritten question] Answer: [Detailed reasoning steps, with calculations as needed] <think>Step-by-step reasoning process</think> <answer>Final, verifiable answer</answer> 
+
+A.2 Examples of Easy and Hard Tasks 
+
+Easy tasks typically involve direct information ex-traction where the answer can be found through simple visual inspection, such as reading a single value from a clearly labeled data point. In contrast, hard tasks require multi-step reasoning, including comparing multiple data points, identifying rela-tionships between variables, and performing inter-mediate calculations or rankings. The query for the easy task in Figure 6 is: “What is the sodium content of sample 34?” The corre-sponding ground truth annotation is 12.8. The query for the hard task in Figure 7 is: “Pro-vide the accuracy (%) of the model with the second highest time.” The corresponding ground truth an-notation is 94. The corresponding chain-of-thought (CoT) rea-soning trajectory from GPT-4o is shown below: 
+
+Figure 6: An example of easy task for RL training. 
+
+Figure 7: An example of hard task for RL training. 
+
+CoT Reasoning Trajectory for the Hard Example 
+
+<think>To determine the accuracy of the model with the second highest execution time, we first observe the x-axis labeled “Time (s)” and identify the models based on their execution times. The longest time corresponds to the model Xception at approximately 6 seconds. The second longest time corresponds to DenseNet201 at approximately 5 seconds. Next, we look at the y-axis labeled “Accuracy (%)” to find the accuracy value for DenseNet201. The accuracy for DenseNet201 is clearly marked as 94%.</think> <answer>94</answer> 
+
+12

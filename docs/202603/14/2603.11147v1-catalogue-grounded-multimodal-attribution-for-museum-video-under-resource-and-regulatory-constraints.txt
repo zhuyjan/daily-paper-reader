@@ -1,0 +1,302 @@
+Title: Catalogue Grounded Multimodal Attribution for Museum Video under Resource and Regulatory Constraints
+
+URL Source: https://arxiv.org/pdf/2603.11147v1
+
+Published Time: Fri, 13 Mar 2026 00:06:16 GMT
+
+Number of Pages: 9
+
+Markdown Content:
+# Catalogue-Grounded Multimodal Attribution for Museum Video under Resource and Regulatory Constraints 
+
+## Minsak Nanang, Adrian Hilton, Armin Mustafa University of Surrey jn00767@surrey.ac.uk 
+
+# Abstract 
+
+Audiovisual (AV) archives in museums and galleries are grow-ing rapidly, but much of this material remains effectively “locked away” because it lacks consistent, searchable metadata. Existing method for archiving requires extensive manual effort. We address this by automating the most labor-intensive part of the workflow: catalogue-style metadata curation for in-gallery video, grounded in an existing collection database. Concretely, we propose catalogue-grounded multimodal attribution for museum AV content using an open, locally deployable video-language model. We design a multi-pass pipeline that (i) summarises artworks in a video, (ii) generates catalogue-style descriptions and genre labels, and (iii) attempts to attribute title and artist via conservative similarity matching to the struc-tured catalogue. Early deployments on a painting catalogue suggest that this framework can improve AV archive discover-ability while respecting resource constraints, data sovereignty, and emerging regulation, offering a transferable template for application-driven machine learning in other high-stakes do-mains. 
+
+# 1 Introduction 
+
+The era of digitalisation has enabled Audiovisual (AV) archives in museums and galleries to expand rapidly, yet much of this material remains effectively “locked away” because it lacks consistent, searchable, catalogue-linked metadata. Cur-rent archiving practice relies on manual viewing and logging, which does not scale with ongoing AV production. This work targets the most labour-intensive part of that workflow: gener-ating catalogue-style metadata for in-gallery video, grounded in an existing collection database. Two constraints shape the problem setting. First, museum AV content is frequently rights-restricted or operationally sen-sitive, making local deployment and data sovereignty central requirements. Second, the cost of mistakes is asymmetric: misattributed titles or artists can propagate into search, scholar-ship, and internal decision-making, so the system must prefer conservative attribution with explicit abstention when evidence is weak [ 1 ]. In parallel, sustained investment in moving-image ecosystems underscores the value of making filmed cultural output findable and reusable within institutions [2]. Multimodal large language models (MLLMs) provide a mechanism for this automation. Image–language systems such as LLaVA [ 3], Qwen-VL [ 4], BLIP-2 [ 5 ], and Flamingo [ 6], together with video-capable variants including Video-LLaMA [7] and VideoLLaMA2 [ 8], can generate rich natural-language outputs from visual inputs. However, heritage settings im-pose constraints that typical benchmarks do not capture: (i) data sovereignty and rights restrictions limit the use of third-party cloud APIs; (ii) regulatory and ethical requirements de-mand auditable behaviour; and (iii) attribution errors (wrong artist/title) can be more damaging than abstention. We therefore study catalogue-grounded multimodal learn-ing for in-gallery video, and make two technical contributions, each directly tied to a curatorial requirement: • Two-stage retrieval-and-disambiguation for video identifi-cation. Motivation: In-gallery video often lacks readable wall labels and differs from canonical catalogue images (motion, glare, occlusion), making direct title/artist generation unreli-able. Technical contribution: We perform catalogue retrieval followed by a deterministic multiple-choice disambiguation with conservative acceptance rules (majority voting and robust parsing) to reduce single-pass brittleness. We address miss-ing identities with an explicit abstention applied within the framework. • Training-time supervision aligned to deployment outputs. 
+
+Motivation: Operational metadata fields must be consistent, auditable, and easy to ingest into existing systems. Technical contribution: We propose finetuning VideoLLaMA2.1-7B-16F with LoRA [ 9] on curated catalogue-derived dialogues augmented with structured ID for grounded catalogue retrieval Operationally, the resulting system produces (i) a multi-artwork summary for clip-level discovery, (ii) a catalogue-style description and genre for the main work, and (iii) catalogue-aligned identity fields returned only when accepted by the grounding rules. This positions the model as a metadata assis-tant rather than an untrusted authority, aligning automated AV description with institutional governance and risk tolerance. 1
+
+> arXiv:2603.11147v1 [cs.MM] 11 Mar 2026
+
+# 2 Related Work 
+
+Multimodal large language models. Multimodal large lan-guage models (MLLMs) combine visual encoders with LLM backbones to support image- and video-conditioned genera-tion, instruction following, and visual reasoning. Represen-tative systems include Flamingo [ 6], BLIP-2 [ 5], LLaVA [ 3 ], Qwen-VL [ 4], and video-oriented extensions such as Video-LLaMA [ 7] and VideoLLaMA2 [ 8 ]. Architecturally, many fol-low a shared template: a vision tower (e.g. ViT/SigLIP/CLIP-style), a projection module that maps visual features into the language token space, and a decoder-only LM. Our base model follows this pattern (SigLIP + mm projector + Qwen2), but our emphasis is not on video understanding; it is on produc-ing catalogue-compatible fields and enforcing conservative attribution under institutional constraints. 
+
+Grounding and retrieval-augmented generation. Ground-ing in language models is often implemented through retrieval-augmented generation (RAG), where generation is condi-tioned on retrieved documents from large text corpora [ 10 ], or through retrieval-augmented LLM variants and systems that formalise retrieval as part of the model’s computation [ 11 ]. Related approaches incorporate structured knowledge sources (e.g. knowledge graphs) for factual control and attribution [ 12 ], or learn to invoke external tools and APIs to access non-parametric information [ 13 ]. In contrast, our retrieval tar-get is not open-domain text but a finite, structured museum catalogue ; matching is performed over canonical fields (title variants, artist strings, subject terms) using lightweight similar-ity, closer in spirit to entity linking and record linkage than to open-corpus RAG [ 14 , 15 ]. This framing enables explicit ac-ceptance thresholds and auditable failure modes aligned with curatorial risk. 
+
+Selective prediction and abstention. Selective prediction studies when models should defer or abstain to control risk, typically via confidence estimates, calibration, or rejection rules [ 16 ]. Classical formulations treat abstention as a princi-pled trade-off between coverage and error [ 17 ]. In museum attribution, the cost of false positives is particularly high: misidentified artists or titles can contaminate search and cura-torial work. We therefore implement abstention as a first-class output, using explicit “not visible” targets during training and conservative catalogue-based acceptance rules at inference, so that uncertainty is surfaced rather than hallucinated. 
+
+AI for cultural heritage. Machine learning for cultural her-itage has addressed tasks such as style and period analysis, art-historical pattern discovery, and content-based retrieval over digitised collections [ 18 , 19 , 20 ]. Work in digital heritage also highlights interoperability, linked data practices, and gov-ernance concerns around reuse and interpretation [ 21 ]. Our work differs by targeting in-gallery video rather than static collection images, prioritising local deployment under data sovereignty constraints, and treating catalogue grounding with abstention as the central mechanism for safe identity attribu-tion in an operational AV archive. 
+
+# 3 Methodology 
+
+Our goal is to turn in-gallery video into catalogue-compatible metadata that makes an AV archive searchable in the same way as the core collection: by title, artist, subject, genre, and description. This section describes how we structure that task, the design choices behind our pipeline, and the formal problem we solve. 
+
+## 3.1 Motivation and Design Choices 
+
+Baseline foundations. Our system builds on VideoL-LaMA2.1, a video-enabled multimodal LLM with a trans-former language backbone and a vision tower used to en-code sampled frames into a token sequence for instruction-following generation [ 8 ]. We operate under institutional con-straints that favour lightweight adaptation (e.g., low-rank fine-tuning and quantised loading) over full model retrain-ing [ 9, 22 ], and we use standard vision–language pretraining components (e.g., SigLIP-style vision encoders) as part of the underlying model stack [ 23 ]. These components constitute the 
+
+baseline modelling ; our contribution is a catalogue-grounded identification regime and deployment-aligned supervision that turn in-gallery video into catalogue-compatible metadata. 
+
+Problem-driven requirements. From the perspective of AV staff and curators, the key requirement is trustwor-thy, catalogue-linked metadata rather than generic captions. Wrong titles or artists are more damaging than missing data, so the system must prefer conservative attribution and be able to abstain explicitly in uncertain cases (the reject-option setting) [24 , 25 ]. These requirements motivate a catalogue-grounded multimodal learning approach and drive three design princi-ples: • P1: Separate description from identification. Rather than asking the model to output identity, description, and interpre-tation in a single pass, we decouple (i) descriptive outputs that remain useful under uncertainty (multi-artwork summary, main-work description, genre), from (ii) identity attribution that must be verified against the catalogue. • P2: Treat identity as a closed-set catalogue decision. Title and artist are not free text fields; they must resolve to an ex-isting museum record. We therefore treat any model identity output as a proposal that is checked and stabilised using de-terministic catalogue indexing, retrieval, and disambiguation rather than accepted as unconstrained generation. • P3: Make abstention a first-class outcome. Curators prefer no attribution to a wrong one, the identification subsystem must be able to return unknown /not visible when evi-dence is weak or inconsistent, while still producing descriptive metadata(P1). 2How principles map to the implemented pipeline. We in-stantiate these principles as a five-stage end-to-end pipeline (Stages 1–5 in Section 3.2). Importantly, identity attribution is a three-step subroutine within that pipeline: ID-JSON proposal 
+
+→ catalogue retrieval → robust disambiguation / abstention .The five stages describe the complete system, while the three-step stack refers only to identity resolution. Concretely, P1 governs Stage 3 (descriptive outputs), P2 governs Stage 2 and Stage 5 (catalogue indexing and retrieval/disambiguation), and P3 governs Stage 4–5 (structured ID-JSON supervision plus explicit acceptance/abstention rules). These choices lead to the catalogue-grounded pipeline illustrated in Figure 1. Given an in-gallery video clip and a painting catalogue, the system produces (i) a multi-artwork summary, (ii) a catalogue-style description and genre for the main work, and (iii) catalogue-aligned identity fields with explicit abstention [ 24 , 25 ] when needed. Identity attribution is treated as a closed-set decision 
+
+over the finite catalogue plus abstention, rather than open-ended text generation. 
+
+## 3.2 System Overview 
+
+Figure 1 provides a high-level view of the inference pipeline. The inputs are: • an in-gallery video v (typically 30 seconds–5 minutes) cap-tured by curators or technicians as they move through a room; and • a structured painting catalogue C, exported from the museum collections system. 
+
+Figure 1: High-level overview of our catalogue-grounded pipeline. The outputs are a structured metadata record for the clip: • a multi-artwork summary , listing up to three artworks in order of appearance with approximate location, visual description, and any readable label text; • a main-work description and genre , in the house style of the museum catalogue; and • catalogue-grounded identity fields , returning acatalogue id/title/artist when a confident match can be made, and Title: not visible /
+
+Artist: not visible otherwise. The pipeline proceeds in five stages: 
+
+1. Video pre-processing. We segment long archival videos into shorter clips and sample T frames per clip using the Vide-oLLaMA2 processor [ 8 ]. Frames are normalised and packed into a tensor for the SigLIP vision tower. In practice, T is selected to satisfy compute constraints (e.g. T ∈ { 2, 4, 8} un-der 4-bit training/inference on a single GPU using parameter-efficient adaptation [ 9, 22 ], while preserving enough temporal context for the main decision. 
+
+2. Catalogue indexing for retrieval and disambiguation. 
+
+From the training JSON (mirrors the catalogue fields used for fine-tuning), we construct an index of entries C and pre-compute retrieval features for each entry c. For each c we form a retrieval text that concatenates its canonical title string, any alternative title forms present in the museum record, the stored artist field, and available subject text. We normalise these strings (Unicode normalisation, punctuation and quote unification, diacritics stripping, roman numeral mapping) and compute token sets with a retrieval-specific stopword list that suppresses highly generic terms (e.g. woman , dress , blue ). IDF weights are computed over the catalogue so that rare iconographic or subject terms contribute more than generic descriptors. This stage is fully deterministic, auditable, and independent of the model. 
+
+3. Descriptive outputs (multi-artwork summary, descrip-tion, genre). We prompt the model to describe up to three art-works in order of appearance, restricting it to visual attributes and approximate locations (e.g. “left wall near doorway”). We then elicit (i) a catalogue-style description of the main work (without naming title or artist), and (ii) a short genre label (e.g. Portrait , Religious painting , Landscape ). These outputs remain valuable even when the system abstains on attribution. 
+
+4. Identity proposal via a trained ID-JSON head. A core contribution of this work is aligning training-time supervision with deployment-time identity outputs. During fine-tuning, we append auxiliary identification turns that require the model to return strict JSON :
+
+{"id":"...","title":"...","artist":"..." } .
+
+This supervision encourages the model to internalise catalogue identifiers and to treat identity as a structured decision rather than free-form text generation. At inference time, we first invoke this trained behaviour deterministically. If the predicted 
+
+id resolves to a catalogue entry, we accept it as the identity output. If the model abstains (id= unknown ) or yields an id not present in C, this is treated as an explicit signal that 
+
+direct attribution is not safe , and we proceed to catalogue-grounded retrieval and disambiguation. This alignment is critical, without explicit exposure to structured identity outputs and abstention during training, a model is unlikely to respect these constraints at inference. 
+
+5. Catalogue-grounded retrieval → robust multiple-choice disambiguation → abstention. When direct ID-JSON at-tribution is unavailable or unsafe, we fall back to a two-3stage retrieval-and-disambiguation process designed to reduce single-pass brittleness. First, we elicit a compact visual repre-sentation of the main work by prompting the model to output 
+
+strict JSON consisting of (i) 6–10 short iconography-first key-words (avoiding generic descriptors), and (ii) a coarse genre label. These keywords are used to retrieve top-k candidate entries from C using an asymmetric IDF-weighted token scor-ing function. When retrieval yields a high-confidence, well-separated top candidate, we auto-accept it. Otherwise, we disambiguate among candidates using a deterministic multiple-choice (MC) prompt. Because models sometimes violate “id only” constraints, we apply robust parsing and conservative fuzzy mapping from raw text to candidate ids. MC disam-biguation is repeated over shuffled candidate orders and ac-cepted only under a clear majority rule; otherwise, the system abstains. We emphasise that this pipeline is not a generic post-processing wrapper applied to arbitrary multimodal mod-els. Its stages particularly structured ID-JSON prediction, catalogue-aware keyword generation, and conservative ab-stention are explicitly reflected in the fine-tuning data and supervision signals described below. As a result, models not trained under this regime are not expected to behave reliably when forced into the same structured decision process. 
+
+## 3.3 Problem Formulation 
+
+We now formalise the task solved by the pipeline above. Let C
+
+be a painting catalogue with N entries. Each entry c ∈ C con-tains: c. title raw : the full museum title string, possibly with alternative titles or epithets, c. artist : the artist name stored in the collections system, c. subject text : subject description or iconographic terms (when available), c. image : a reference image of the work (training only). We define a deterministic normalisation function Norm( ·) to perform Unicode normali-sation, quote/dash unification, diacritics stripping, and roman numeral mapping. We define a retrieval tokenisation function 
+
+Tok ret (·) that removes generic stopwords (including retrieval-specific stopwords for person/clothing) and returns a set of content tokens. For each catalogue entry we construct retrieval tokens as 
+
+Tok ret 
+
+
+
+Norm  c. title raw ∥ c. artist ∥ c. subject text 
+
+(1) and build IDF weights over the catalogue 
+
+IDF( t) = log N + 1 df( t) + 1 + 1 , (2) where df( t) counts entries whose retrieval tokens contain t. At inference time we are given an in-gallery video clip v that may contain several artworks and visitors. Our system produces a structured record 
+
+R(v, C) = ( D(v), M (v), G (v), I (v, C)) , (3) where: • D(v) is a multi-artwork summary : a list of at most three entries 
+
+D(v) = {di}ki=1 , k ≤ 3, (4) each di containing an approximate location (e.g. “left wall”), a short visual description, and any visible label text (or “none” if not legible). • M (v) is the main-work description : a catalogue-style para-graph describing the painting that the video focuses on. • G(v) is the main-work genre : a short label such as Portrait or 
+
+Religious painting .• I(v, C) is the catalogue-grounded identity , defined below. Identity is solved as a staged decision problem with abstention. 
+
+Stage 1: model proposal (ID-JSON). Let hid be the fine-tuned MLLM identification module that maps video to a strict JSON proposal: 
+
+ˆy = hid (v), ˆy ∈ { id , title , artist }. (5) If ˆy. id resolves to an entry in C, we accept it; otherwise we proceed to retrieval. 
+
+Stage 2: keyword-based retrieval over the catalogue. Let 
+
+hkw be a model module that outputs a set of iconography-first keywords (and a coarse genre label used for reporting, not as a hard constraint): K(v) = {kj }mj=1 = hkw (v) We tokenise the keyword set into a query token set 
+
+Q =
+
+> m
+
+[
+
+> j=1
+
+Tok ret (Norm( kj )) . (6) We score each catalogue entry c using an asymmetric, IDF-weighted combination of recall and precision:        
+
+> Rec( Q, c ) =
+> P
+> t∈Q∩c. retrieval tok IDF( t)
+> P
+> t∈QIDF( t),Pre( Q, c ) =
+> P
+> t∈Q∩c. retrieval tok IDF( t)
+> P
+> t∈c. retrieval tok IDF( t),
+
+Sret (c) = 0 .75 Rec( Q, c ) + 0 .25 Pre( Q, c ). (7) We retrieve the top-k candidates by Sret .
+
+Stage 3: auto-accept vs. multiple-choice disambiguation. 
+
+Let c1 and c2 be the top two candidates under Sret , and define the margin ∆ = Sret (c1) − Sret (c2). If Sret (c1) is sufficiently large and well-separated (a tunable threshold-and-margin rule), we auto-accept c1. Otherwise, we call a multiple-choice disam-biguator hmc that selects an id from the candidate list, repeated over multiple shuffled passes and accepted only under a clear majority rule. If hmc outputs non-id text, we apply a conserva-tive fuzzy mapping from the raw text to the closest candidate by token and character-trigram similarity; if no stable decision emerges, we abstain. Finally, we define the identity function as       
+
+> I(v, C) =
+> 
+> (Title: c∗.title raw ,Artist: c∗.artist)
+> if a catalogue entry c∗is accepted by Stage 1 (ID-JSON), Stage 2 (retrieval auto-accept), or Stage 3 (MC majority).
+> (Title:not visible ,Artist:not visible )
+> if no entry satisfies the acceptance rules (explicit abstention).
+
+(8) 4Imperatively, we note that these design choices imply a spe-cific evaluation regime. Because identity attribution is treated as a structured, catalogue-grounded decision with explicit ab-stention rather than open-ended text, generation models must be evaluated under the inference conditions for which they were trained. Accordingly, our experiments compare (i) a base VideoLLaMA2 model evaluated using standard, paper-faithful identification prompting, against (ii) our fine-tuned model evaluated using the full catalogue-grounded pipeline described above. In summary, the methodology treats AV metadata genera-tion as a structured prediction problem over a finite catalogue, with an explicit separation between (i) multimodal understand-ing handled by a fine-tuned VideoLLaMA2 model trained with deployment-aligned supervision, and (ii) deterministic cata-logue retrieval, conservative disambiguation, and abstention. This separation is central to trustworthiness: descriptive fields remain usable under abstention, while identity fields are only produced when catalogue-grounded evidence supports a stable match. 
+
+# 4 Data and Fine-Tuning 
+
+## 4.1 Dialogue Construction from Catalogues 
+
+We construct 210 image–dialogue pairs from a painting cata-logue of 60 images in order to teach the model museum-grade behaviour : concise identification when evidence is present, and explicit abstention when it is not. For each catalogue entry c ∈ C , we synthesise a short dialogue that mirrors a curator querying a multimodal assistant about a single artwork. Questions are sampled from a small set of paraphrased tem-plates for each functional slot (title, artist, subject, description, genre), for example: • "<image>\nDo you know the title of this painting? If you are not certain, answer exactly: not visible."                           
+
+> •"Name the artist of this work. If you are not certain, answer exactly: not visible."
+> •"What or who is the subject of this piece?"
+> •"Please describe what you see in this painting."
+
+An-swers are populated from c. title raw , c. artist , and 
+
+c. subject text , plus long-form catalogue descriptions where available. We apply lightweight normalisation to ensure that 
+
+identification targets are short and consistent: boilerplate such as “The title is . . . ” is stripped, quoted strings are preferred when present, and uncertainty markers are mapped to the canonical abstention token not visible . This design ensures: a missing attribution is preferable to an incorrect one, and the dataset should teach the model that “not visible” is a desirable outcome under weak evidence. 
+
+Synthetic abstention augmentation. In real in-gallery footage, the title plaque is frequently out of focus, occluded, or absent. To align the training distribution with this reality, we additionally synthesise abstention examples with small proba-bility pabs by (i) prefixing the user question with a visibility cue (e.g. In this view, the wall label is not readable. ) and (ii) forcing the assistant target to not visible. When synthetic abstention is applied to a sample, we skip any auxiliary identifi-cation tasks for that sample to avoid contradictory supervision within a single training instance. 
+
+Alias construction for downstream matching. From 
+
+c. title raw we also extract a set of alternative title strings by taking the primary segment before ‘;‘ and harvest-ing parenthesised or quoted variants (splitting on “or” and other separators). This yields alias sets such as: • ["Portrait of Charles William Lambton (’The Red Boy’)", "The Red Boy"]     
+
+> •["The Entombment", "( or Christ being carried to his Tomb)"]
+
+These aliases are not used as training targets; instead used later in retrieval and disambiguation for catalogue-grounded inference in for partial or paraphrased model outputs. 
+
+Figure 2: Overview of dataset curation and dialogue construc-tion from the museum catalogue. 
+
+## 4.2 Base Architecture and Parameter-Efficient Fine-Tuning 
+
+Our base model is VideoLLaMA2.1-7B-16F [ 8] combines: a SigLIP vision tower that encodes sampled frames into visual tokens, an MLP mm projector that maps visual tokens to the language embedding dimension, and a Qwen2-style transformer decoder that generates answers conditioned on the multimodal context. We use LoRA [ 9] to adapt the lan-guage backbone under institutional compute constraints. We inject LoRA modules into the attention projections and MLP blocks (e.g. q proj , k proj , v proj , o proj , up proj ,
+
+down proj , gate proj ). Frozen weights are loaded in 4-bit quantised form for memory efficiency, while the LoRA parameters are trained in mixed precision. We optionally allow additional adaptation of the multimodal interface via the pro-jector ( mm projector ) when GPU memory permits. This 5is exposed as a training-time switch rather than a code-path change: when enabled, we unfreeze the projector and train it with a separate learning rate ηmm while keeping the vision tower frozen. This is particularly relevant for in-gallery video, where motion blur and viewpoint changes can alter the distri-bution of visual tokens presented to the language model. 
+
+## 4.3 Auxiliary Identification Tasks for Cata-logue Grounding 
+
+In addition to the descriptive and slot-filling dialogue turns, we inject two auxiliary tasks that explicitly align the model with catalogue identities. These tasks operationalise the “catalogue-first” motive of our research: the model must learn to treat identity as a closed-set decision rather than free-form text generation. 
+
+(i) ID-JSON supervision. With probability pid , we append a turn that requires the model to emit a strict JSON object: 
+
+{"id":"...","title":"...","artist":"..." }
+
+if confident. We also include an explicit abstention ob-ject:  
+
+> {"id":"unknown","title":"not visible","artist":"not visible" }
+
+if uncertain. This supervision is directly matched by Stage 1 of inference (ID-JSON), ensuring that the model’s training interface corresponds to the downstream API con-tract. 
+
+Figure 3: Model architecture: VideoLLaMA2 with SigLIP vi-sion tower, Qwen2 backbone, and LoRA adapters on language layers (high-level view above, detailed view below). 
+
+(ii) Multiple-choice disambiguation. With probability pmc ,we append a multiple-choice task that presents k candidate catalogue entries (one positive and k −1 negatives sampled from the dataset) and asks the model to output only the correct id. This encourages the model to learn discriminative visual cues under a constrained decision space, and it supports a later inference-time MC majority procedure used when free-form ID-JSON abstains. 
+
+## 4.4 Training Objective and Practical Con-straints 
+
+We fine-tune by minimising token-level cross-entropy over assistant turns, using the standard instruction-tuning masking scheme that ignores user tokens. Because our deployment set-ting is compute-limited (single-GPU training and on-premises inference), the training protocol is engineered for stability under low memory: • frozen weights are quantised (4-bit) while LoRA parameters remain trainable; • gradient checkpointing to reduce activation memory; • sequence length is bounded by model max length to avoid indexing errors from overly long dialogues; • media tensors are cached on disk to reduce CPU–GPU pipeline overhead during repeated epochs. Overall, the dataset design and PEFT strategy jointly target the curatorial objective: produce rich, catalogue-style descriptions and genres, while treating title/artist attribution as a high-precision decision with an explicit abstention mechanism. This alignment is critical because our inference stack later combines model outputs with retrieval and disambiguation against C; the fine-tuning stage therefore focuses on interfaces and behaviour 
+
+(structured outputs, short targets, abstention) rather than purely improving unconstrained captioning quality. 
+
+# 5 Experiments and Results 
+
+## 5.1 Catalogue-Grounded Inference 
+
+Our objective is searchable, catalogue-compatible metadata 
+
+for AV material under institutional compute constraints for in-gallery videos. In-gallery video is noisy (motion blur, oc-clusion, visitors) and wall labels are often illegible; therefore, the pipeline prioritises high precision and explicit abstention 
+
+over aggressive attribution. 
+
+5.1.1 Inference Pipeline 
+
+Given a clip v and catalogue C, we sample T frames and run a three-stage identification stack, with descriptive metadata generated independently. 
+
+Pre-processing. We sample T frames (e.g. T = 16 ) and construct a video tensor using the VideoLLaMA2 processor; inference runs on GPU with gradients disabled. 
+
+Multi-artwork summary, description, and genre. We prompt for a brief structured summary of up to three artworks (order of appearance, rough location, visual attributes), fol-lowed by a catalogue-style description and a single genre label for the main work. Prompts explicitly forbid inventing titles/artists; identity is handled only by the stages below. 
+
+Stage 1: ID-JSON (direct identification). We request strict ID-JSON if confident, as highlighted in Section 4.3 within the ID-JSON supervision. 
+
+Stage 2: retrieval auto-accept (keyword grounding). If Stage 1 abstains, we prompt for visual keywords (iconography-focused phrases) and a coarse genre, then score each c ∈C using IDF-weighted token overlap between the keyword set and a catalogue token set as in Eq. (1) and in Eq. (7) 6with q built from keyword tokens. If the top candidate is both strong and well-separated (score and margin thresholds), we accept it without further model calls. 
+
+Stage 3: MC majority (disambiguation). If retrieval is not decisive, we present the top-k catalogue candidates to the model and ask for only the id . We repeat over multiple shuffled candidate lists and accept the majority winner only under a clear margin; otherwise we abstain. 
+
+5.1.2 Acceptance and Abstention 
+
+As referenced in Eq. (8) , we implement the auto-accept vs. multiple-choice disambiguation function. Based on the output and the threshold, it is either accepted, moved to the multi-choice disambiguation, or abstains. 
+
+## 5.2 System Pipeline and Technical Limitations 
+
+5.2.1 Operational Pipeline 
+
+We implement an end-to-end workflow aligned with institu-tional practice: 1. Ingest: segment long AV assets; sample frames; normalise media. 2. Enrich: generate multi-artwork summaries, main-work de-scriptions, and genre; run catalogue-grounded identification (Stages 1–3). 3. Validate: cross-check against C via explicit acceptance rules; abstain when evidence is weak; optionally route uncertain cases to human review. 4. Search: index validated fields into existing discovery sys-tems for cross-collection retrieval over AV and core catalogue records. 
+
+5.2.2 Constraints and Trade-offs 
+
+• Long, heterogeneous video: we process short clips rather than full-length assets to reduce cost and attention drift. • Limited video supervision: training is primarily catalogue-derived (image–dialogue), so robustness depends on view-point/visibility; abstention mitigates risk. • Single-GPU budgets: quantised backbones and PEFT enable feasibility, but require conservative identification logic. • Early-stage data scale: modest initial coverage demonstrates feasibility; scaling catalogue images and curated in-gallery video is the direct path to improved recall while preserving precision. 
+
+## 5.3 Evaluation and Early Results 
+
+Setup. To reflect the intended contribution, we evaluate two different system configurations on the same in-gallery videos and ground truth (GT) title/artist pairs. Baseline: the base VideoLLaMA2.1-7B-16F model is tested using a direct iden-tification protocol (a minimal prompting baseline in the style of standard MLLM evaluation), where the model is asked to output the title and artist of the main painting from the video without catalogue grounding or deterministic disam-biguation. Ours: the fine-tuned museum-v5 model is eval-uated using our catalogue-grounded pipeline (ID-JSON →
+
+retrieval → robust multiple-choice → abstention), which is the core methodological contribution. All runs use 4-bit loading, 
+
+model max length=1024 , a fixed random seed (0), and a soft match threshold of 0.92 .
+
+Data. This evaluation covers 16 videos from 
+
+assets/eval/1 . Ground truth title/artist pairs are currently available for 13/16 videos; the remaining five are included for qualitative inspection only. 
+
+Metrics. For each GT-labelled video, we report: (i) cover-age (rate of non-abstaining predictions), (ii) exact accuracy 
+
+(normalised exact string match, abstentions counted as incor-rect), (iii) precision among covered (exact and soft), and (iv) token-level F1 for titles and artists. 
+
+Baseline: base model under direct identification. This con-dition measures how well the unadapted video MLLM can produce catalogue identity fields from in-gallery footage with-out access to the structured catalogue. Because in-gallery viewpoints often differ substantially from canonical repro-ductions (motion blur, glare, occlusion, partial framing), this baseline is expected to be brittle and to conflate plausible free-text guesses with catalogue-correct strings. 
+
+Ours: fine-tuned model under catalogue-grounded iden-tification. This condition evaluates the full system contribu-tion: structured ID-JSON supervision aligned to deployment outputs, coupled with catalogue retrieval and conservative de-terministic disambiguation with explicit abstention. The key objective is precision-first attribution : titles/artists should be returned only when the evidence supports a stable catalogue match, while still producing useful descriptive metadata under abstention.             
+
+> Model / Configuration Joint Cov. Joint Acc. Utility
+> Base VideoLLaMA2 (Direct ID) 0.46 0.00 −0.92
+> Ours (ID-JSON only, no retrieval) 0.31 0.00 −0.31
+> Ours (Full Pipeline lite) 0.15 0.08 −0.08
+
+Table 1: Joint coverage is the non-abstaining rate; joint ac-curacy is exact title+artist match with abstentions counted as incorrect. Utility assigns +1 to correct joint attribution, −2 to incorrect attribution, and 0 to abstention.          
+
+> Raw Model Guess Final Output Ground-Truth Outcome
+> Girl with a Butterfly not visible The Painter’s Daughters chasing a Butterfly
+> Correct abstention
+> The Hay Wain not visible The Hay Wain Conservative miss
+> Michelangelo Michelangelo Michelangelo Correct attribution
+
+Table 2: Examples illustrating the distinction between raw model guesses and catalogue-grounded outputs. While the full pipeline reduces raw coverage relative to 7direct identification, it substantially lowers the rate of incorrect catalogue attributions, yielding a markedly improved expected utility under an institutionally realistic cost model. 
+
+Observed failure modes. Across the labelled failures, the pipeline often produces plausible visual guesses (e.g., short or approximate titles such as “Girl with a Parasol” , or near-miss transcriptions such as “The Gdansk Children” vs. The Graham Children ) but ultimately abstains at the final decision stage, yielding not visible for both title and artist. This pattern suggests that the current confidence gating and/or candidate scoring is conservative, favouring precision over recall. 
+
+Runtime (pipeline lite). With pipeline lite enabled, the base pipeline completes in approximately 13.7–17.8s/video (includ-ing preprocessing) on this configuration. 
+
+Figure 4: Qualitative examples of catalogue-grounded attribu-tion on in-gallery videos. 
+
+Results. Tables 1 and 2 show that the catalogue-grounded pipeline reduces incorrect attributions by trading coverage for higher expected utility under an asymmetric cost model, while Figure 4 provides qualitative examples of this precision-first behaviour. 
+
+# 6 Conclusion 
+
+We have introduced a catalogue-grounded multimodal pipeline for generating museum metadata from in-gallery video, built on an open VideoLLaMA2–Qwen2 backbone with lightweight LoRA fine-tuning. By converting a painting catalogue into image–dialogue supervision and combining it with a similarity-based matcher at inference, we obtain a system that: • produces rich, catalogue-style descriptions and genre labels; • leverages existing catalogues to propose canonical titles and artists; • abstains with an explicit “not visible” when catalogue evidence is insufficient. This work is motivated by the needs and constraints of real institutions rather than benchmark optimisation alone. The pat-tern we explore open MLLM plus structured registry plus ab-stention plus human-in-the-loop is applicable beyond cultural heritage to application-driven ML in healthcare, biosciences, and environmental monitoring. 
+
+# 7 Impact statement 
+
+Catalogue-grounded multimodal attribution has the poten-tial to unlock museum AV archives by producing searchable, catalogue-linked metadata under local deployment constraints. Because misattribution can propagate harm, the system is de-signed to abstain explicitly when evidence is weak and to support curator-in-the-loop review. Responsible use requires governance, calibration, and monitoring to manage configu-ration errors, catalogue bias, and misuse outside the heritage setting. 
+
+# References 
+
+[1] Gaurav Shinde, Tiana Kirstein, Souvick Ghosh, and Pa-tricia C. Franks. Ai in archival science – a systematic review. arXiv preprint arXiv:2410.09086 , 2024. [2] Stuart Kemp. Bafta secures share of $50 million fund. The Hollywood Reporter, 2014. Online; accessed 2026-01-26. [3] Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong Jae Lee. Visual instruction tuning. arXiv preprint arXiv:2304.08485 , 2023. [4] Yutong Bai et al. Qwen-VL: A versatile vision-language model for understanding, localization, and generation. 
+
+arXiv preprint arXiv:2308.12966 , 2023. [5] Junnan Li, Dongxu Li, Caiming Xiong, and Steven C. H. Hoi. BLIP-2: Bootstrapping language-image pre-training for unified vision-language understanding and generation. arXiv preprint arXiv:2301.12597 , 2023. [6] Jean-Baptiste Alayrac et al. Flamingo: A visual lan-guage model for few-shot learning. Advances in Neural Information Processing Systems , 2022. [7] Wentao Zhang et al. Video-LLaMA: A video large lan-guage model for video understanding and generation. 
+
+arXiv preprint arXiv:2306.02858 , 2023. [8] Wentao Zhang et al. VideoLLaMA 2: Advancing spatial-temporal modeling and video-language alignment. arXiv preprint arXiv:2406.07476 , 2024. [9] Edward J. Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Lulu Wang, Lijuan Wang, and Weizhu Chen. LoRA: Low-rank adaptation of large lan-guage models. arXiv preprint arXiv:2106.09685 , 2021. 8[10] Patrick S. H. Lewis, Ethan Perez, Aleksandra Pik-tus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich K ¨uttler, Mike Lewis, Wen-tau Yih, Tim Rockt ¨aschel, Sebastian Riedel, and Douwe Kiela. Retrieval-augmented generation for knowledge-intensive NLP tasks. Advances in Neural Information Processing Systems , 2020. [11] Wei Zhang et al. RET-LLM: Retrieval-augmented large language models. arXiv preprint , 2024. Preprint on retrieval-augmented large language models. [12] Robert Logan, Nelson F. Liu, Matthew E. Peters, Matt Gardner, and Sameer Singh. KGLM: Pretrained knowl-edge graph language models for generative question an-swering. In Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics , 2019. [13] Timo Schick, Jane Dwivedi-Yu, Roberta Raileanu, Alek-sandra Piktus, Vladimir Karpukhin, Patrick Lewis, Na-man Goyal, Sebastian Riedel, and Maria Schmid. Tool-former: Language models can teach themselves to use tools. arXiv preprint arXiv:2302.04761 , 2023. [14] Octavian-Eugen Ganea and Thomas Hofmann. Deep joint entity disambiguation with local neural attention. In Proceedings of the 2017 Conference on Empirical Methods in Natural Language Processing , 2017. [15] Peter Christen. Data Matching: Concepts and Tech-niques for Record Linkage, Entity Resolution, and Dupli-cate Detection . Springer, 2012. [16] Yonatan Geifman and Ran El-Yaniv. Selective classifi-cation for deep neural networks. In Advances in Neural Information Processing Systems , 2017. [17] Corinna Cortes, Giulia DeSalvo, and Mehryar Mohri. Learning with rejection. In Advances in Neural Informa-tion Processing Systems , 2016. [18] Ahmed Elgammal, Bingchen Liu, Dan Kim, and Mo-hamed Elhoseiny. The shape of art history in the eyes of the machine. In Proceedings of the AAAI Conference on Artificial Intelligence , 2018. [19] Thomas Mensink, Jakob Verbeek, Florent Perronnin, and Gabriela Csurka. Costa: Co-occurrence statistics for zero-shot classification. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition ,2014. [20] Noemi Garcia et al. Context-aware retrieval and rec-ommendation for cultural heritage images. Journal on Computing and Cultural Heritage , 2019. [21] Melissa Terras. Linked art: Linked open data for cultural heritage. Digital Scholarship in the Humanities , 2021. [22] Tim Dettmers, Artidoro Pagnoni, Ari Holtzman, and Luke Zettlemoyer. Qlora: Efficient finetuning of quan-tized llms. arXiv preprint arXiv:2305.14314 , 2023. [23] Xiaohua Zhai, Basil Mustafa, Alexander Kolesnikov, and Lucas Beyer. Sigmoid loss for language image pre-training. arXiv preprint arXiv:2303.15343 , 2023. [24] Corinna Cortes, Giulia DeSalvo, and Mehryar Mohri. Learning with rejection. Proceedings of Algorithmic Learning Theory (ALT) , 2016. [25] Vojt ˇech Franc and Daniel Prusa. Optimal strategies for reject option classifiers. Journal of Machine Learning Research , 2023. 9
