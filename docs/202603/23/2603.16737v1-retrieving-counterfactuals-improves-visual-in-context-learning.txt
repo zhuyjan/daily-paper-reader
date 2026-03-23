@@ -1,0 +1,619 @@
+Title: Retrieving Counterfactuals Improves Visual In-Context Learning
+
+URL Source: https://arxiv.org/pdf/2603.16737v1
+
+Published Time: Wed, 18 Mar 2026 01:44:23 GMT
+
+Number of Pages: 19
+
+Markdown Content:
+# Retrieving Counterfactuals Improves Visual In-Context Learning 
+
+# Guangzhi Xiong Sanchit Sinha Zhenghao He Aidong Zhang University of Virginia 
+
+# Abstract 
+
+Vision-language models (VLMs) have achieved impressive performance across a wide range of multimodal reasoning tasks, but they often struggle to disentangle fine-grained vi-sual attributes and reason about underlying causal relation-ships. In-context learning (ICL) offers a promising avenue for VLMs to adapt to new tasks, but its effectiveness criti-cally depends on the selection of demonstration examples. Existing retrieval-augmented approaches typically rely on passive similarity-based retrieval, which tends to select cor-related but non-causal examples, amplifying spurious as-sociations and limiting model robustness. We introduce CIRCLES (Composed Image Retrieval for Causal Learn-ing Example Selection), a novel framework that actively constructs demonstration sets by retrieving counterfactual-style examples through targeted, attribute-guided composed image retrieval. By incorporating counterfactual-style ex-amples, CIRCLES enables VLMs to implicitly reason about the causal relations between attributes and outcomes, mov-ing beyond superficial correlations and fostering more ro-bust and grounded reasoning. Comprehensive experiments on four diverse datasets demonstrate that CIRCLES consis-tently outperforms existing methods across multiple archi-tectures, especially on small-scale models, with pronounced gains under information scarcity. Furthermore, CIRCLES retrieves more diverse and causally informative examples, providing qualitative insights into how models leverage in-context demonstrations for improved reasoning. Our code is available at https://github.com/gzxiong/ CIRCLES .
+
+# 1. Introduction 
+
+Vision-language models (VLMs) have recently demon-strated remarkable generalization across a wide spectrum of visual reasoning tasks, achieving impressive results on tasks such as visual question answering [4, 16, 47], im-age captioning [8, 50], and multimodal classification [1, 14, 38]. This progress is largely attributed to their rich multimodal representations learned through large-scale pre-training. However, in practice, VLMs often struggle with fine-grained and attribute-sensitive visual reasoning, set-tings prevalent in real-world vision applications [11, 19, 24]. To address these challenges, in-context learning (ICL) has emerged as a powerful paradigm, enabling VLMs to rapidly adapt to new tasks by conditioning on a small set of demonstration examples provided at test time [3, 43, 51]. Recent work in visual ICL has highlighted the crucial role of retrieval-based selection strategies for constructing effec-tive demonstration sets [9, 12, 28]. Standard approaches, such as RICES (Retrieval-based In-Context Example Se-lection) [3, 48], assemble in-context examples by identi-fying the nearest neighbors to the query image within the embedding space. Follow-up works such as MUIER [32] and MMICES [13] augment this process by leveraging mul-timodal similarity metrics that jointly consider both visual and textual features, enhancing the relevance of retrieved examples to the query. Despite these advances, such similarity-oriented selec-tion can lead to systematic errors when critical attributes are entangled with irrelevant co-occurrences. Because these retrieval baselines do not explicitly control or intervene on causal factors, models prompted with their selected demon-strations often learn to mimic surface correlations rather than identify the attributes that truly determine the answer. This limitation becomes more pronounced under informa-tion scarcity or distribution shifts, where relying solely on correlated neighbors offers little guidance on how chang-ing specific attributes affects the outcome. These obser-vations motivate approaches that go beyond similarity and instead curate demonstration sets that expose disentangled, attribute-level variations. To address the limitations above, we introduce CIR-CLES (Composed Image Retrieval for Causal Learning Ex-ample Selection), a new framework for visual in-context learning that explicitly incorporates counterfactual reason-ing signals into the example selection process. Unlike prior work that selects examples only by image similarity, CIR-CLES constructs demonstration sets by explicitly collecting attribute-level counterfactual-style examples via composed image retrieval (CIR), and combining them with standard similarity-based examples to create an informative context.    
+
+> arXiv:2603.16737v1 [cs.CV] 17 Mar 2026 belly
+> pattern
+> to solid
+> Golden-winged Warbler
+> Standard Image Retrieval
+> Pine Warbler
+> breast
+> color
+> to grey
+> Composed Image Retrieval
+> Causal Understanding Correlational Understanding Figure 1. Illustration of how composed image retrieval provides additional causal understanding.
+
+As illustrated in Figure 1, standard similarity-based re-trieval provides examples that are visually close to the query but may share irrelevant or confounding attributes. In con-trast, by retrieving and composing images that reflect con-trolled interventions on key attributes (e.g., changing the belly pattern to solid while keeping other attributes as simi-lar as possible), CIR identifies examples that isolate the ef-fect of each attribute on the answer (e.g., similar images with a solid belly pattern are labeled as Pine Warbler), pro-viding more causally informative demonstrations for ICL. By composing causally informative examples with similarity-based demonstrations, CIRCLES constructs demonstration sets that better reveal the underlying fac-tors driving the correct answer, enabling VLMs to learn disentangled, robust, and interpretable reasoning strategies. Our experiments on four benchmark datasets demonstrate that CIRCLES consistently outperforms existing ICL meth-ods across a range of VLM architectures, with pronounced improvements on small-scale VLMs where models’ inter-nal knowledge is limited. CIRCLES is especially effective under challenging conditions such as information scarcity, where the performance gap widens as relevant data becomes limited. Qualitative analysis further shows that CIRCLES retrieves more diverse and informative examples that clar-ify critical attributes, providing insights into the ICL pro-cess. Our main contributions are as follows: • We propose CIRCLES, a novel ICL framework that en-riches demonstration sets by retrieving counterfactual examples, moving beyond standard similarity-based re-trieval. • Empirical evaluations on multiple image classification and visual question answering datasets demonstrate con-sistent improvements over existing ICL methods. • Additional analyses highlight the strength of CIRCLES in low-data regimes and explore optimal practices for con-structing informative demonstration sets. 
+
+# 2. Related Work 
+
+2.1. Multimodal Reasoning 
+
+Vision-language models (VLMs) have rapidly advanced vi-sual tasks such as visual question answering (VQA), im-age captioning, and multimodal classification by integrat-ing powerful visual encoders with large language models [3, 25, 27]. Despite these gains, several studies have high-lighted the limitations of VLMs in compositional and causal reasoning, revealing that state-of-the-art systems often rely on dataset priors or spurious correlations, rather than truly understanding fine-grained attributes or relational structure [2, 22, 39]. For instance, models can achieve high aver-age scores but struggle when asked to reason about the ef-fect of specific attribute changes or to generalize to out-of-distribution queries [21]. These observations motivate methods that structure inference-time evidence around at-tributes and relations rather than surface similarity. 
+
+2.2. Visual In-Context Learning 
+
+In-context learning (ICL) enables VLMs to adapt at infer-ence time via conditioning on a small set of demonstration examples [3, 10, 43], but the effectiveness of this process is highly dependent on the structure of the demonstration set [28, 31, 37]. Recent research has shown the sensitivity of VLMs to the order, diversity, and retrieval strategies used to assemble demonstrations [12, 20, 26, 49], demonstrating that naive similarity-based selection can lead to inconsistent performance, sensitivity to confounders, and susceptibility to spurious correlations [7, 18, 52]. These findings motivate moving beyond nearest-neighbor similarity toward example sets that are deliberately diverse and task-aligned. Our ap-proach complements this literature by explicitly introducing counterfactual examples into the demonstration pool, thus enriching the reasoning signal available to the model. 
+
+2.3. Composed Image Retrieval 
+
+Composed image retrieval (CIR) is a closely related area that focuses on retrieving images matching complex, com-positionally specified queries, typically combining a refer-ence image and a manipulation text [15, 40]. Existing CIR techniques are optimized for retrieval accuracy rather than downstream reasoning or ICL composition [5, 44]. Datasets such as FashionIQ [46] and CIRR [29] have advanced re-search on controlled attribute modifications, but these works treat CIR as an end task. Our use of CIR diverges from this paradigm: instead of retrieving a single modified image, we leverage CIR to construct a set of counterfactually informa-tive demonstrations for in-context learning. By integrating attribute-guided text modifications with VLM-driven cap-tioning, our method operationalizes CIR as a tool for coun-terfactual intervention, revealing which attributes meaning-fully influence downstream predictions. Causal Understanding via Composed Image Retrieval 
+
+> Text
+> Encoder
+> Q
+> Q
+> Q
+> Q
+> Key
+> Attribute
+
+Correlational Understanding via Standard Image Retrieval  Retrieval-Augmented 
+
+Inference           
+
+> User
+> Inputs
+> In-context
+> Examples
+> Answer
+> Prediction
+> Image
+> Encoder
+> Modified
+> Caption Figure 2. Overview of the CIRCLES framework. Given a query image Iqand question Qq, the top branch illustrates correlational understanding via standard image retrieval, while the bottom branch depicts causal understanding using attribute-guided composed image retrieval with counterfactual captions from the VLM Φ. Blue/orange rounded rectangles represent image/text embeddings. Rcorr and Rcausal
+> denote the retrieved in-context examples for answer prediction.
+
+# 3. Methodology 
+
+In this section, we introduce the CIRCLES (Composed Image Retrieval for Causal Learning Example Selection) framework, designed to enhance visual in-context learn-ing for vision-language models (VLMs). CIRCLES does not aim to perform formal causal identification. Instead, it leverages composed image retrieval (CIR) to approxi-mate interventions on key attributes and to facilitate im-plicit in-context reasoning through contrastive retrieved ex-amples. We begin by formalizing the problem and estab-lishing notation. We then detail the CIRCLES pipeline, which consists of three main components: (1) causal under-standing through attribute-guided CIR, (2) correlational un-derstanding via standard image retrieval, and (3) retrieval-augmented inference. 
+
+3.1. Task Formulation and Notation 
+
+Let K = {(Ij , Q j , A j )}Nj=1 denote a visual question an-swering corpus, where Ij is an image, Qj a natural lan-guage question, and Aj the answer. Given a query (Iq , Q q ),a VLM Φ produces an answer Aq conditioned on the query and an optional retrieved context R ⊆ K .We use a frozen CLIP model E = ( fI , f T ) with image encoder fI and text encoder fT to obtain L2-normalized embeddings. For each candidate in the training corpus, we precompute embeddings zIj = fI (Ij ) and zQj = fT (Qj ).At test time, we compute zIq = fI (Iq ) and zQq = fT (Qq )
+
+for the query. An overview of our CIRCLES framework is illustrated in Figure 2. 
+
+3.2. Causal Understanding via Attribute-Guided Composed Image Retrieval 
+
+To collect demonstrations for causal understanding, CIR-CLES identifies semantically meaningful attributes and re-trieves counterfactual examples through a two-stage pro-cess. 
+
+Key Attribute Identification. Given (Iq , Q q ), we prompt the VLM Φ to extract decisive attribute-value pairs for an-swering Qq (e.g., the attribute “breast color” has the value “grey” in Figure 1). Let the set of attributes be 
+
+A = {a1, . . . , a m}, (1) with corresponding values on Iq as 
+
+v = ( v1, . . . , v m), vi = ai(Iq ). (2) Each attribute ai has a finite value set Vi (e.g., possible col-ors for “breast color”). These attributes form the basis for counterfactual intervention. 
+
+Counterfactual Example Retrieval. To isolate the influ-ence of each attribute on the answer, we consider coun-terfactual variants of the query image by changing one at-tribute ai from its original value vi to an alternative v′ 
+
+> i
+
+∈Vi \ { vi} while keeping all other attributes fixed. Direct identification of such counterfactuals in real datasets is gen-erally infeasible. Therefore, for each attribute ai and can-didate counterfactual value v′
+
+> i
+
+, we prompt the VLM to gen-erate a counterfactual caption cdo (ai=v′ 
+
+> i)
+
+which describes Iq
+
+under the atomic intervention do (ai = v′
+
+> i
+
+) [35] with only attribute ai set to v′ 
+
+> i
+
+and all ak̸ =i unchanged. For each candidate example (Ij , Q j , A j ) in K, we com-pute the image-caption similarity score 
+
+simg  
+
+> j
+
+= zI⊤ 
+
+> j
+
+fT (cdo (ai=v′
+
+> i)
+
+), (3) which measures the visual faithfulness of Ij to the counter-factual scenario described by cdo (ai=v′
+
+> i)
+
+.However, relying solely on image-caption similarity can result in retrieving examples that visually align with the counterfactual but are not semantically relevant to the origi-nal query, particularly when attribute changes alter the con-text in unintended ways. To address this, we introduce an additional question-question similarity score 
+
+stxt  
+
+> j
+
+= zQ⊤ 
+
+> q
+
+zQj , (4) which serves as a semantic constraint to ensure that re-trieved examples not only match the counterfactual at-tributes but also remain closely related to the original ques-tion context. The score for each candidate is computed as 
+
+Sj = simg  
+
+> j
+
++ stxt  
+
+> j
+
+. (5) By combining both visual faithfulness and semantic rele-vance, this scoring function identifies training examples that best approximate the intended counterfactual scenario for the given query. All candidates are ranked according to Sj , and the top-
+
+kcausal examples are selected to form the set 
+
+Rcomp  
+
+> i
+
+(vi → v′
+
+> i
+
+) = TopK j (Sj ), (6) where TopK j returns the top examples by the scores. Aggregating across attributes and sampled counterfactuals yields the causal retrieval pool: 
+
+Rcausal =
+
+> m
+
+[
+
+> i=1
+
+Rcomp  
+
+> i
+
+(vi → ˜v′
+
+> i
+
+), (7) where ˜v′ 
+
+> i
+
+is one alternative value sampled from Vi \ { vi}
+
+for efficiency, especially when Vi is large. In practice, we implement this sampling by prompting the VLM to suggest a plausible alternative value for each attribute. 
+
+3.3. Correlational Understanding via Standard Im-age Retrieval 
+
+To complement causal understanding given by the coun-terfactual examples, CIRCLES incorporates a correlation-oriented retrieval stage that provides broader contextual in-formation. Here, we retrieve images that are most similar to the query image in the embedding space, without enforcing any attribute-based intervention or counterfactual modifica-tion. This approach helps the model leverage common vi-sual or semantic patterns present in the dataset, supporting recognition and grounding even when explicit causal factors are absent. For query image Iq , we compute the image-image simi-larity score for all candidates in K as 
+
+scorr  
+
+> j
+
+= zI⊤ 
+
+> q
+
+zIj , (8) and select the top-kcorr most similar examples to form the correlation retrieval set 
+
+Rcorr = TopK j (scorr  
+
+> j
+
+). (9) While advanced retrieval methods exist [13, 32], we adopt this standard image-only retrieval for its efficiency and gen-erality, which matches the standard RICES-style baseline [3, 48] and cleanly isolates the added value of the pro-posed causal understanding module. Our experiments in Appendix E further illustrate that image-only retrieval is sufficient when the task is dominated by visual similarity (e.g., classification), while incorporating task text into re-trieval becomes important as question semantics become more diverse (e.g., visual question answering). 
+
+3.4. Retrieval-Augmented In-Context Learning 
+
+The causal and correlational retrieval results are integrated into a unified context for model inference. The final re-trieved context is constructed as 
+
+R = Rcausal ∪ R corr , (10) which is used as context for answer generation: 
+
+Aq = Φ( Iq , Q q , R). (11) By exposing the model to both correlated and counterfac-tual instances, CIRCLES encourages reasoning that goes beyond surface-level associations and provides deeper in-sights into the in-context learning process. 
+
+# 4. Experiments 
+
+4.1. Experimental Settings 
+
+Datasets. For evaluation, we consider a diverse set of datasets: CUB [45] and Flowers [34] for fine-grained image classification, OK-VQA [33] for open-ended visual ques-tion answering, and VizWiz [17] for real-world visual ques-tion answering under challenging conditions. For CUB and Flowers, we report classification accuracy (Acc) and weighted F1 scores. For OK-VQA and VizWiz, we use ex-act match (EM) and word-level F1 metrics. These datasets enable a comprehensive assessment of visual reasoning ca-pabilities across various domains. Table 1. Performance comparison between CIRCLES and baseline methods across different models and datasets. Average scores are computed by treating accuracy (Acc) as EM for classification tasks and averaging EM and F1 across all datasets. The best results for each model and dataset are highlighted in bold. Model Method CUB Flowers OK-VQA VizWiz Average Acc F1 Acc F1 EM F1 EM F1 EM F1 Gemma3 -4B None 10.56 8.19 46.76 46.50 19.12 26.70 39.85 57.26 29.07 34.66 Random 9.98 8.10 37.01 39.51 24.81 30.74 51.84 67.08 30.91 36.36 RICES 65.40 67.62 86.70 87.43 26.65 32.72 56.08 70.40 58.71 64.54 MUIER 65.21 67.42 86.39 87.28 26.87 32.82 56.59 70.75 58.77 64.57 MMICES 13.95 10.98 38.09 38.20 26.24 32.41 52.72 68.21 32.75 37.45 CIRCLES 71.97 72.39 93.32 93.49 31.27 36.89 57.61 71.35 63.54 68.53                                                                                                                                                                                     
+
+> Gemma3 -12B None 30.34 25.02 67.51 64.33 25.47 33.89 56.82 71.26 45.04 48.62 Random 29.27 25.82 71.28 71.56 33.59 39.56 70.13 80.54 51.07 54.37 RICES 76.37 76.25 96.44 96.29 36.86 42.61 73.98 83.43 70.91 74.65 MUIER 76.51 76.39 96.42 96.28 36.58 42.30 73.72 83.04 70.81 74.50 MMICES 36.37 31.61 71.36 69.13 35.12 40.85 71.50 81.56 53.59 55.79 CIRCLES 77.03 76.90 97.77 97.75 37.75 43.23 74.30 82.35 71.71 75.06
+> Qwen2.5 -VL-3B None 7.09 5.97 22.57 24.04 42.29 46.12 75.83 78.58 36.95 38.68 Random 15.81 15.63 41.76 44.57 41.54 45.30 74.48 77.40 43.40 45.73 RICES 72.26 73.88 93.06 92.84 42.57 46.26 70.80 73.37 69.67 71.59 MUIER 72.25 73.87 93.06 92.83 41.66 45.82 71.61 74.74 69.64 71.81 MMICES 17.26 15.38 33.84 35.47 39.32 42.95 73.23 76.21 40.91 42.50 CIRCLES 74.89 76.34 94.70 94.77 43.24 47.27 72.93 75.33 71.44 73.43
+> Qwen2.5 -VL-7B None 14.83 11.79 43.47 42.14 33.31 38.33 68.70 73.30 40.08 41.39 Random 26.27 24.42 47.15 49.74 41.66 46.20 76.11 78.34 47.80 49.67 RICES 82.15 81.91 98.83 98.85 43.66 48.32 73.79 76.13 74.61 76.30 MUIER 82.14 81.90 98.93 98.95 44.29 48.76 74.67 77.08 75.01 76.67 MMICES 34.57 29.72 49.15 47.62 43.40 47.66 70.69 72.77 49.45 49.44 CIRCLES 82.17 82.13 98.99 99.04 43.54 48.53 77.63 82.36 75.58 78.02
+
+Baselines. We compare CIRCLES against several in-context learning baselines: None : zero-shot prompting without in-context examples. Random : in-context learn-ing with randomly sampled examples. RICES [3, 48]: re-trieval based on nearest neighbors using image-image sim-ilarity. MUIER [32]: multimodal retrieval leveraging both image-image and image-text similarities for example se-lection. MMICES [13]: a two-stage multimodal selec-tor that first retrieves candidates by image-image similar-ity and then re-ranks them using text-image similarity for improved query alignment. All methods are implemented with Gemma3 (4B/12B) [42] and Qwen2.5-VL (3B/7B) [6] backbones. CLIP (ViT-g/14) [36] is used as the image/text encoder for retrieval, and the in-context example budget is set to 32 for all methods, where CIRCLES has 16 images in Rcausal and 16 in Rcorr . More implementation details are provided in Appendix A. 
+
+4.2. Performance Comparison 
+
+Table 1 presents a comprehensive evaluation of CIRCLES and baseline methods across multiple datasets and vision-language models (VLMs). The results show that all VLMs benefit from in-context learning, achieving 6.33% to 118.58% relative EM improvements over the zero-shot baseline (None). Additionally, retrieval-based methods (RICES, MUIER, MMICES, CIRCLES) consistently out-perform random selection, with up to 105.56% relative im-provement, highlighting the importance of selecting rele-vant examples for effective in-context learning. Moreover, CIRCLES consistently surpasses other exam-ple selection baselines across nearly all datasets and back-bone configurations, achieving average relative EM im-provements ranging from 0.76% to 94.02%. This high-lights the effectiveness of composed image retrieval (CIR) in CIRCLES, which complements the similarity-based re-trieval with causal understanding. The performance gains are especially pronounced for smaller backbone models such as Gemma3-4B and Qwen2.5-VL-3B, indicating that CIRCLES provides substantial contextual support when the model’s internal knowledge is limited. Comparing performance improvements across datasets, we find that CIRCLES yields especially pronounced gains on fine-grained classification tasks (CUB, Flowers), where Magnolia Warbler  Myrtle Warbler  Myrtle Warbler  Myrtle Warbler    
+
+> Intervention on "black
+> head markings"
+> Blue-winged Warbler White-eyed Vireo
+> Intervention on "white
+> wing patches"
+> Myrtle Warbler Golden-winged Warbler
+> IR
+> CIR
+> Query
+> Image
+> CIRCLES
+> RICES Myrtle
+> Warbler
+> Magnolia
+> Warbler Figure 3. Qualitative comparison of in-context examples retrieved by RICES and CIRCLES for a CUB test image ( Magnolia Warbler ). Top: standard image retrieval (IR) neighbors used by RICES, leading to incorrect predictions. Bottom: counterfactual examples from composed image retrieval (CIR) in CIRCLES, highlighting key attribute changes and guiding the model to the correct label.
+
+distinguishing subtle attribute differences is critical for ac-curate predictions. This underscores the value of CIR in scenarios requiring nuanced visual reasoning. While im-provements on visual question answering tasks (OK-VQA, VizWiz) are more modest, CIRCLES consistently achieves leading results, demonstrating its effectiveness and versatil-ity across diverse vision-language challenges. 
+
+4.3. Qualitative Analysis of CIRCLES 
+
+Figure 3 provides a qualitative comparison of in-context ex-amples retrieved by RICES (images via standard image re-trieval) and CIRCLES (images via both standard and com-posed image retrieval) for a test sample from the CUB dataset. The query image is a Magnolia Warbler , whose la-bel is largely determined by key attributes like “black head markings” and “white wing patches”. RICES, which op-erates purely in the visual similarity space, retrieves a se-quence of images that are globally similar to the query (top row). Because these retrieved examples overrepresent Myr-tle Warblers, the in-context prompt encourages the model toward the incorrect Myrtle Warbler prediction. In contrast, CIRCLES explicitly constructs counterfac-tual examples with CIR that intervene on semantically meaningful attributes (bottom row), retrieving images that closely resemble the query but differ in targeted features such as the presence or absence of “black head markings.” This approach retrieves counterfactual examples that clearly demonstrate how changes in key attributes result in different bird species labels. By illustrating class transitions across these counterfactuals, CIRCLES provides the VLM with explicit cues about which attributes are decisive, enabling accurate predictions and offering a more interpretable per-spective on the in-context learning process. 
+
+4.4. CIRCLES under Information Scarcity 
+
+CIRCLES complements standard image retrieval (IR) with CIR to provide diverse and informative in-context exam-ples, which should be particularly beneficial when the train-ing set contains limited information relevant to the query. To validate this hypothesis, we assess the robustness of CIRCLES and RICES under varying degrees of information scarcity in the training set. Specifically, we simulate differ-ent levels of information scarcity by randomly removing a certain percentage of samples from the training set (rang-ing from 0% to 75%) and evaluate the performance of each method on the CUB dataset using different backbone mod-els. The attribute set used in CIRCLES is fixed across all levels of information scarcity to ensure a fair comparison. As shown in Figure 4, both RICES and CIRCLES ex-perience performance degradation as more training samples are removed. However, CIRCLES consistently outperforms RICES across all levels of information scarcity. Notably, as the percentage of removed training samples increases, CIRCLES’s performance advantage over RICES becomes more pronounced. In small-scale VLMs such as Gemma3-4B, the relative improvement of CIRCLES over RICES in-creases from 10.05% to 16.28% when the removal percent-age is increased from 0% to 75%. For larger models such as Gemma3-12B, the relative improvements are smaller but still show a consistent upward trend, rising from 0.86% with the full training set to 4.31% when 75% of the samples are removed. Since CIRCLES shares the same standard image re-trieval component as RICES, these results indicate that the CIR component in CIRCLES effectively mitigates the chal-lenges posed by limited relevant information in the training set, enhancing the robustness of in-context learning under information scarcity. 
+
+4.5. Impact of CIR Implementation on CIRCLES 
+
+To assess the impact of different CIR methods on CIRCLES performance, we compare two representative training-free CIR implementations: CIReVL [23] and OSrCIR [41]. CIReVL generates counterfactual captions by first produc-64        
+
+> 68
+> 72
+> Accuracy (%)
+> Qwen2.5-VL-3B
+> 60
+> 65
+> 70
+> Gemma3-4B
+> 025 50 75
+> Removal Percentage (%)
+> 74
+> 76
+> 78
+> 80
+> 82
+> Accuracy (%)
+> Qwen2.5-VL-7B
+> 025 50 75
+> Removal Percentage (%)
+> 68
+> 70
+> 72
+> 74
+> 76
+> Gemma3-12B
+> RICES CIRCLES
+
+Figure 4. Performance comparison between CIRCLES and RICES on the CUB dataset under varying levels of information scarcity in the training set. 
+
+ing a caption for the original image and then editing it to modify target attributes, which can sometimes result in generic or less contextually grounded descriptions. In con-trast, OSrCIR directly synthesizes captions conditioned on both the query image and manipulation text, enabling more flexible and fine-grained descriptions of attribute changes and their interactions. This approach allows OSrCIR to capture subtle attribute variations and complex dependen-cies, producing counterfactuals that are more informative and relevant for in-context learning. In our implementa-tion of CIRCLES, we adopt OSrCIR due to its demonstrated superiority in generating high-quality composed image re-trievals [41]. Figure 5 compares CIRCLES instantiated with CIReVL and OSrCIR on the CUB dataset using Gemma3-4B and Gemma3-12B backbones. As shown, CIRCLES with CIR implemented by OSrCIR consistently outperforms CIReVL on both backbone VLMs, achieving relative accuracy im-provements ranging from 5.39% to 5.56% and relative F1 improvements from 5.08% to 5.50%. These results align with the CIR performance comparison reported in [41], where OSrCIR demonstrated superior retrieval accuracy over CIReVL. Overall, the quality of the CIR method di-rectly impacts the effectiveness of CIRCLES, as more ac-curate and contextually relevant composed image retrievals yield better counterfactual examples for in-context learning. As discussed in Section 3, we further augment CIR with 68   
+
+> 70
+> 72
+> 74
+> 76
+> 78
+> Accuracy (%)
+> 68.29
+> 71.97
+> Gemma3-4B
+> 72.97
+> 77.03
+> Gemma3-12B
+> CIReVL OSrCIR
+> 68
+> 70
+> 72
+> 74
+> 76
+> 78
+> F1 (%)
+> 68.89
+> 72.39
+> CIReVL OSrCIR
+> 72.89
+> 76.90
+
+Figure 5. Comparison of CIRCLES performance using CIR im-plemented by CIReVL and OSrCIR on the CUB dataset with Gemma3 (4B/12B) backbones. 
+
+a question-question similarity component to make the re-trieval aware of task similarity (Equation (4)), which is not present in the original CIR formulation [41]. Intuitively, this term biases retrieval toward examples that not only share visual content but also require similar reasoning skills or knowledge types. Because CUB and Flowers have identi-cal questions for all samples, this similarity will not have an effect. Therefore, we evaluate the impact of our proposed enhancement on OK-VQA and VizWiz, where questions are more diverse. 
+
+Table 2. Performance comparison of CIRCLES on OK-VQA and VizWiz with (w/) and without (w/o) the question-question similar-ity component in CIR. Model Setting OK-VQA VizWiz EM F1 EM F1 Gemma -4B w/o 27.72 33.64 57.40 71.65 w/ 31.27 36.89 57.61 71.35 Gemma -12B w/o 33.02 39.07 74.37 83.20 w/ 37.75 43.23 74.30 82.35 Qwen -3B w/o 41.12 45.33 73.28 75.94 w/ 43.24 47.27 72.93 75.33 Qwen -7B w/o 40.80 46.22 77.29 81.72 w/ 43.54 48.53 77.63 82.36 
+
+Table 2 compares CIRCLES performance with and with-4 6 8 10 12 14 16                          
+
+> #CIR
+> 55
+> 60
+> 65
+> 70
+> Accuracy (%)
+> #IR = 4
+> #IR = 8
+> #IR = 16
+> #IR = 32 (a) 4816
+> #CIR
+> 1
+> 2
+> 4
+> #Attributes
+> 53.40 62.62 68.47
+> 57.63 61.91 66.17
+> 59.58 64.91 62.27
+> #IR = 4
+> 4816
+> #CIR
+> 61.70 67.28 70.31
+> 66.95 66.24 67.24
+> 68.50 68.57 66.10
+> #IR = 8
+> 4816
+> #CIR
+> 68.24 67.33 71.97
+> 70.88 65.53 70.90
+> 70.94 69.40 70.35
+> #IR = 16
+> 55.0
+> 57.5
+> 60.0
+> 62.5
+> 65.0
+> 67.5
+> 70.0
+> Accuracy (%) (b)
+
+Figure 6. Retrieval budget analysis on CUB with Gemma3-4B. (a) CIRCLES accuracy vs. number of composed images retrieved (#CIR) under different standard retrievals (#IR). (b) Accuracy as a function of the number of intervened attributes (#Attributes) and composed images (#CIR). 
+
+out the question-question similarity term. On OK-VQA, we observe consistent improvements across all backbone mod-els, with relative EM gains of +5.16% to 14.32% and F1 gains of +4.28% to 10.65%. This demonstrates that explic-itly matching questions enables retrieval of demonstrations with similar reasoning requirements, which is particularly beneficial for knowledge-intensive, open-ended queries. On VizWiz, the improvements are more modest, likely due to the highly diverse and often noisy user-generated questions and challenging images, where textual similarity is a weaker signal and visual cues are more influential. Nevertheless, the addition of the similarity term does not cause signifi-cant performance degradation, suggesting it is a robust de-fault that can yield substantial gains when task structures are more regular, as in OK-VQA. 
+
+4.6. Retrieval Budget Analysis 
+
+We further analyze how to best allocate the in-context ex-ample budget between standard image retrieval (IR) and composed image retrieval (CIR) in CIRCLES. Figure 6a shows classification accuracy as a function of the number of composed images retrieved (#CIR) for different settings of standard retrievals (#IR). Increasing #CIR consistently im-proves accuracy across all #IR configurations, highlighting the benefit of CIR for providing targeted and informative context. Importantly, adding composed images yields sub-stantial gains, even when the total number of retrieved ex-amples is lower than using only standard retrieval (grey line: #CIR=0, #IR=32). This indicates that CIR enables more ef-ficient use of the retrieval budget, as composed examples focus the model on key attribute-level changes and support causal reasoning. Overall, these results demonstrate that combining CIR and IR leads to more informative in-context examples and improved model performance. While Figure 6a examines the effect of varying the num-ber of composed images (#CIR) when only a single attribute is intervened on (#Attributes = 1), we further analyze how accuracy changes as both #Attributes and #CIR are var-ied. Figure 6b presents a heatmap of CIRCLES accuracy on CUB across different hyperparameter settings. When the retrieval budget is limited (e.g., #CIR = 4), distribut-ing interventions across more attributes per query yields better performance than focusing retrievals on a single at-tribute. As the budget increases (e.g., #CIR = 16), allocat-ing more compositions to fewer attributes becomes advan-tageous. This suggests that the optimal allocation of the in-context example budget shifts from breadth (intervening on more attributes) to depth (focusing on fewer attributes) as #CIR grows. In practice, these results indicate that un-der tight budgets, spreading compositions across attributes maximizes coverage, while with larger budgets, concentrat-ing CIR on a smaller subset of attributes provides more pre-cise and informative interventions, because imperfect CIR methods may not always rank the most relevant images at the top. Further discussions on efficiency and additional de-sign ablations are provided in Appendices B, D, and E. 
+
+# 5. Conclusion 
+
+We proposed CIRCLES, a retrieval-augmented ICL method that introduces counterfactual demonstrations through attribute-guided composed image retrieval, enabling VLMs to reason beyond surface similarity and better capture the causal structure underlying visual tasks. By integrating compositional interventions with conventional similarity-based retrieval, CIRCLES offers a principled mechanism for enriching demonstration sets with examples that ex-pose disentangled attribute-level variations. Our experi-ments highlight not only consistent quantitative gains but also qualitative improvements in the diversity and causal informativeness of retrieved examples, particularly un-der information-scarce regimes where traditional retrieval methods degrade most sharply. These findings suggest that counterfactual retrieval is a practical and effective approach for enhancing visual in-context learning in VLMs. Acknowledgments 
+
+This work is supported in part by the US Na-tional Science Foundation (NSF) and the National In-stitute of Health (NIH) under grants IIS-2106913, IIS-2538206, IIS-2529378, CCF-2217071, CNS-2213700, and R01LM014012-01A1. Any recommendations expressed in this material are those of the authors and do not necessarily reflect the views of NIH or NSF. 
+
+# References 
+
+[1] Abdelrahman Abdelhamed, Mahmoud Afifi, and Alec Go. What do you see? enhancing zero-shot image classification with multimodal large language models, 2025. 1 [2] Aishwarya Agrawal, Dhruv Batra, Devi Parikh, and Anirud-dha Kembhavi. Don’t just assume; look and answer: Over-coming priors for visual question answering. In Proceed-ings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR) , 2018. 2 [3] Jean-Baptiste Alayrac, Jeff Donahue, Pauline Luc, Antoine Miech, Iain Barr, Yana Hasson, Karel Lenc, Arthur Men-sch, Katherine Millican, Malcolm Reynolds, Roman Ring, Eliza Rutherford, Serkan Cabi, Tengda Han, Zhitao Gong, Sina Samangooei, Marianne Monteiro, Jacob L Menick, Sebastian Borgeaud, Andy Brock, Aida Nematzadeh, Sa-hand Sharifzadeh, Mikoł aj Bi´ nkowski, Ricardo Barreira, Oriol Vinyals, Andrew Zisserman, and Kar´ en Simonyan. Flamingo: a visual language model for few-shot learning. In 
+
+Advances in Neural Information Processing Systems , pages 23716–23736. Curran Associates, Inc., 2022. 1, 2, 4, 5 [4] Stanislaw Antol, Aishwarya Agrawal, Jiasen Lu, Margaret Mitchell, Dhruv Batra, C. Lawrence Zitnick, and Devi Parikh. Vqa: Visual question answering. In Proceedings of the IEEE International Conference on Computer Vision (ICCV) , 2015. 1 [5] Muhammad Umer Anwaar, Egor Labintcev, and Martin Kle-insteuber. Compositional learning of image-text query for image retrieval. In Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV) ,pages 1140–1149, 2021. 2 [6] Shuai Bai, Keqin Chen, Xuejing Liu, Jialin Wang, Wenbin Ge, Sibo Song, Kai Dang, Peng Wang, Shijie Wang, Jun Tang, Humen Zhong, Yuanzhi Zhu, Mingkun Yang, Zhao-hai Li, Jianqiang Wan, Pengfei Wang, Wei Ding, Zheren Fu, Yiheng Xu, Jiabo Ye, Xi Zhang, Tianbao Xie, Zesen Cheng, Hang Zhang, Zhibo Yang, Haiyang Xu, and Junyang Lin. Qwen2.5-vl technical report, 2025. 5, 1 [7] Ivana Balazevic, David Steiner, Nikhil Parthasarathy, Relja Arandjelovi´ c, and Olivier Henaff. Towards in-context scene understanding. In Advances in Neural Information Process-ing Systems , pages 63758–63778. Curran Associates, Inc., 2023. 2 [8] Davide Bucciarelli, Nicholas Moratelli, Marcella Cornia, Lorenzo Baraldi, and Rita Cucchiara. Personalizing mul-timodal large language models for image captioning: An experimental analysis. In Computer Vision – ECCV 2024 Workshops , pages 351–368, Cham, 2025. Springer Nature Switzerland. 1 [9] Cheng Chen, Yunpeng Zhai, Yifan Zhao, Jinyang Gao, Bolin Ding, and Jia Li. Provoking multi-modal few-shot lvlm via exploration-exploitation in-context learning. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pat-tern Recognition (CVPR) , pages 3826–3835, 2025. 1 [10] Huiyi Chen, Jiawei Peng, Kaihua Tang, Xin Geng, and Xu Yang. Enhancing multimodal in-context learning for image classification through coreset optimization. In Proceedings of the 33rd ACM International Conference on Multimedia ,pages 5130–5139, 2025. 2 [11] Meiqi Chen, Bo Peng, Yan Zhang, and Chaochao Lu. CELLO: Causal evaluation of large vision-language models. In Proceedings of the 2024 Conference on Empirical Meth-ods in Natural Language Processing , pages 22353–22374, Miami, Florida, USA, 2024. Association for Computational Linguistics. 1 [12] Shuo Chen, Zhen Han, Bailan He, Mark Buckley, Philip Torr, Volker Tresp, and Jindong Gu. Understanding and im-proving in-context learning on vision-language models. In 
+
+ICLR 2024 Workshop on Mathematical and Empirical Un-derstanding of Foundation Models , 2024. 1, 2 [13] Shuo Chen, Zhen Han, Bailan He, Jianzhe Liu, Mark Buck-ley, Yao Qin, Philip Torr, Volker Tresp, and Jindong Gu. Can multimodal large language models truly perform multimodal in-context learning? In 2025 IEEE/CVF Winter Conference on Applications of Computer Vision (WACV) , pages 6000– 6010, 2025. 1, 4, 5 [14] Avi Cooper, Keizo Kato, Chia-Hsien Shih, Hiroaki Yamane, Kasper Vinken, Kentaro Takemoto, Taro Sunagawa, Hao-Wei Yeh, Jin Yamanaka, Ian Mason, and Xavier Boix. Re-thinking vlms and llms for image classification. Scientific Reports , 15(1):19692, 2025. 1 [15] Longye Du, Shuaiyu Deng, Ying Li, Jun Li, and Qi Tian. A survey on composed image retrieval. ACM Trans. Multime-dia Comput. Commun. Appl. , 21(7), 2025. 2 [16] Yifan Du, Junyi Li, Tianyi Tang, Wayne Xin Zhao, and Ji-Rong Wen. Zero-shot visual question answering with lan-guage model feedback. In Findings of the Association for Computational Linguistics: ACL 2023 , pages 9268–9281, Toronto, Canada, 2023. Association for Computational Lin-guistics. 1 [17] Danna Gurari, Qing Li, Abigale J. Stangl, Anhong Guo, Chi Lin, Kristen Grauman, Jiebo Luo, and Jeffrey P. Bigham. Vizwiz grand challenge: Answering visual questions from blind people. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR) , 2018. 4 [18] Hrayr Harutyunyan, Rafayel Darbinyan, Samvel Kara-petyan, and Hrant Khachatrian. In-context learning in pres-ence of spurious correlations. In ICML 2024 Workshop on In-Context Learning , 2024. 2 [19] Cheng-Yu Hsieh, Jieyu Zhang, Zixian Ma, Aniruddha Kem-bhavi, and Ranjay Krishna. Sugarcrepe: Fixing hackable benchmarks for vision-language compositionality. In Ad-vances in Neural Information Processing Systems , pages 31096–31116. Curran Associates, Inc., 2023. 1 [20] Brandon Huang, Chancharik Mitra, Assaf Arbelle, Leonid Karlinsky, Trevor Darrell, and Roei Herzig. Multimodal task vectors enable many-shot multimodal in-context learning. In 
+
+Advances in Neural Information Processing Systems , pages 22124–22153. Curran Associates, Inc., 2024. 2 [21] Drew A. Hudson and Christopher D. Manning. Gqa: Anew dataset for real-world visual reasoning and composi-tional question answering. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2019. 2 [22] Justin Johnson, Bharath Hariharan, Laurens van der Maaten, Li Fei-Fei, C. Lawrence Zitnick, and Ross Girshick. Clevr: A diagnostic dataset for compositional language and elemen-tary visual reasoning. In Proceedings of the IEEE Confer-ence on Computer Vision and Pattern Recognition (CVPR) ,2017. 2 [23] Shyamgopal Karthik, Karsten Roth, Massimiliano Mancini, and Zeynep Akata. Vision-by-language for training-free compositional image retrieval. In The Twelfth International Conference on Learning Representations , 2024. 6 [24] Jeonghwan Kim and Heng Ji. Finer: Investigating and en-hancing fine-grained visual concept recognition in large vi-sion language models. In Proceedings of the 2024 Confer-ence on Empirical Methods in Natural Language Processing ,pages 6187–6207, Miami, Florida, USA, 2024. Association for Computational Linguistics. 1 [25] Junnan Li, Dongxu Li, Silvio Savarese, and Steven Hoi. BLIP-2: Bootstrapping language-image pre-training with frozen image encoders and large language models. In Pro-ceedings of the 40th International Conference on Machine Learning , pages 19730–19742. PMLR, 2023. 2 [26] Li Li, Jiawei Peng, Huiyi Chen, Chongyang Gao, and Xu Yang. How to configure good in-context sequence for vi-sual question answering. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , pages 26710–26720, 2024. 2 [27] Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong Jae Lee. Visual instruction tuning. In Advances in Neural Information Processing Systems , pages 34892–34916. Curran Associates, Inc., 2023. 2 [28] Jiachang Liu, Dinghan Shen, Yizhe Zhang, William B Dolan, Lawrence Carin, and Weizhu Chen. What makes good in-context examples for gpt-3? In Proceedings of Deep Learn-ing Inside Out (DeeLIO 2022): The 3rd workshop on knowl-edge extraction and integration for deep learning architec-tures , pages 100–114, 2022. 1, 2 [29] Zheyuan Liu, Cristian Rodriguez-Opazo, Damien Teney, and Stephen Gould. Image retrieval on real-life images with pre-trained vision-and-language models. In Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV) , pages 2125–2134, 2021. 2 [30] Pan Lu, Swaroop Mishra, Tanglin Xia, Liang Qiu, Kai-Wei Chang, Song-Chun Zhu, Oyvind Tafjord, Peter Clark, and Ashwin Kalyan. Learn to explain: Multimodal reason-ing via thought chains for science question answering. In 
+
+Advances in Neural Information Processing Systems , pages 2507–2521. Curran Associates, Inc., 2022. 5 [31] Yao Lu, Max Bartolo, Alastair Moore, Sebastian Riedel, and Pontus Stenetorp. Fantastically ordered prompts and where to find them: Overcoming few-shot prompt order sensitiv-ity. In Proceedings of the 60th Annual Meeting of the Asso-ciation for Computational Linguistics (Volume 1: Long Pa-pers) , pages 8086–8098, Dublin, Ireland, 2022. Association for Computational Linguistics. 2 [32] Yang Luo, Zangwei Zheng, Zirui Zhu, and Yang You. How does the textual information affect the retrieval of multi-modal in-context learning? In Proceedings of the 2024 Con-ference on Empirical Methods in Natural Language Process-ing , pages 5321–5335, Miami, Florida, USA, 2024. Associ-ation for Computational Linguistics. 1, 4, 5 [33] Kenneth Marino, Mohammad Rastegari, Ali Farhadi, and Roozbeh Mottaghi. Ok-vqa: A visual question answering benchmark requiring external knowledge. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2019. 4 [34] Maria-Elena Nilsback and Andrew Zisserman. Automated flower classification over a large number of classes. In 2008 Sixth Indian Conference on Computer Vision, Graphics & Image Processing , pages 722–729, 2008. 4 [35] Judea Pearl. Causality . Cambridge University Press, 2 edi-tion, 2009. 4 [36] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, Gretchen Krueger, and Ilya Sutskever. Learning transferable visual models from natural language supervision. In Proceedings of the 38th International Conference on Machine Learning ,pages 8748–8763. PMLR, 2021. 5, 1 [37] Ohad Rubin, Jonathan Herzig, and Jonathan Berant. Learn-ing to retrieve prompts for in-context learning. In Proceed-ings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies , pages 2655–2671, Seattle, United States, 2022. Association for Computational Linguistics. 2 [38] Oindrila Saha, Grant Van Horn, and Subhransu Maji. Im-proved zero-shot classification by adapting vlms with text descriptions. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , pages 17542–17552, 2024. 1 [39] Sanchit Sinha, Guangzhi Xiong, and Aidong Zhang. COCO-tree: Compositional hierarchical concept trees for enhanced reasoning in vision-language models. In Proceedings of the 2025 Conference on Empirical Methods in Natural Lan-guage Processing , pages 2695–2711, Suzhou, China, 2025. Association for Computational Linguistics. 2 [40] Xuemeng Song, Haoqiang Lin, Haokun Wen, Bohan Hou, Mingzhu Xu, and Liqiang Nie. A comprehensive survey on composed image retrieval. ACM Trans. Inf. Syst. , 44(1), 2025. 2 [41] Yuanmin Tang, Jue Zhang, Xiaoting Qin, Jing Yu, Gaopeng Gou, Gang Xiong, Qingwei Lin, Saravan Rajmohan, Dong-mei Zhang, and Qi Wu. Reason-before-retrieve: One-stage reflective chain-of-thoughts for training-free zero-shot com-posed image retrieval. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , pages 14400–14410, 2025. 6, 7, 2, 5 [42] Gemma Team, Aishwarya Kamath, Johan Ferret, Shreya Pathak, Nino Vieillard, Ramona Merhej, Sarah Perrin, Ta-tiana Matejovicova, Alexandre Ram´ e, Morgane Rivi` ere, Louis Rouillard, Thomas Mesnard, Geoffrey Cideron, Jean bastien Grill, Sabela Ramos, Edouard Yvinec, Michelle Cas-bon, Etienne Pot, Ivo Penchev, Ga¨ el Liu, Francesco Visin, Kathleen Kenealy, Lucas Beyer, Xiaohai Zhai, Anton Tsit-sulin, Robert Busa-Fekete, Alex Feng, Noveen Sachdeva, Benjamin Coleman, Yi Gao, Basil Mustafa, Iain Barr, Emilio Parisotto, David Tian, Matan Eyal, Colin Cherry, Jan-Thorsten Peter, Danila Sinopalnikov, Surya Bhupatiraju, Rishabh Agarwal, Mehran Kazemi, Dan Malkin, Ravin Ku-mar, David Vilar, Idan Brusilovsky, Jiaming Luo, Andreas Steiner, Abe Friesen, Abhanshu Sharma, Abheesht Sharma, Adi Mayrav Gilady, Adrian Goedeckemeyer, Alaa Saade, Alex Feng, Alexander Kolesnikov, Alexei Bendebury, Alvin Abdagic, Amit Vadi, Andr´ as Gy¨ orgy, Andr´ e Susano Pinto, Anil Das, Ankur Bapna, Antoine Miech, Antoine Yang, An-tonia Paterson, Ashish Shenoy, Ayan Chakrabarti, Bilal Piot, Bo Wu, Bobak Shahriari, Bryce Petrini, Charlie Chen, Char-line Le Lan, Christopher A. Choquette-Choo, CJ Carey, Cor-mac Brick, Daniel Deutsch, Danielle Eisenbud, Dee Cat-tle, Derek Cheng, Dimitris Paparas, Divyashree Shivaku-mar Sreepathihalli, Doug Reid, Dustin Tran, Dustin Zelle, Eric Noland, Erwin Huizenga, Eugene Kharitonov, Frederick Liu, Gagik Amirkhanyan, Glenn Cameron, Hadi Hashemi, Hanna Klimczak-Pluci´ nska, Harman Singh, Harsh Mehta, Harshal Tushar Lehri, Hussein Hazimeh, Ian Ballantyne, Idan Szpektor, Ivan Nardini, Jean Pouget-Abadie, Jetha Chan, Joe Stanton, John Wieting, Jonathan Lai, Jordi Or-bay, Joseph Fernandez, Josh Newlan, Ju yeong Ji, Jyotin-der Singh, Kat Black, Kathy Yu, Kevin Hui, Kiran Vodra-halli, Klaus Greff, Linhai Qiu, Marcella Valentine, Marina Coelho, Marvin Ritter, Matt Hoffman, Matthew Watson, Mayank Chaturvedi, Michael Moynihan, Min Ma, Nabila Babar, Natasha Noy, Nathan Byrd, Nick Roy, Nikola Mom-chev, Nilay Chauhan, Noveen Sachdeva, Oskar Bunyan, Pankil Botarda, Paul Caron, Paul Kishan Rubenstein, Phil Culliton, Philipp Schmid, Pier Giuseppe Sessa, Pingmei Xu, Piotr Stanczyk, Pouya Tafti, Rakesh Shivanna, Renjie Wu, Renke Pan, Reza Rokni, Rob Willoughby, Rohith Vallu, Ryan Mullins, Sammy Jerome, Sara Smoot, Sertan Girgin, Shariq Iqbal, Shashir Reddy, Shruti Sheth, Siim P˜ oder, Sijal Bhatnagar, Sindhu Raghuram Panyam, Sivan Eiger, Susan Zhang, Tianqi Liu, Trevor Yacovone, Tyler Liechty, Uday Kalra, Utku Evci, Vedant Misra, Vincent Roseberry, Vlad Feinberg, Vlad Kolesnikov, Woohyun Han, Woosuk Kwon, Xi Chen, Yinlam Chow, Yuvein Zhu, Zichuan Wei, Zoltan Egyed, Victor Cotruta, Minh Giang, Phoebe Kirk, Anand Rao, Kat Black, Nabila Babar, Jessica Lo, Erica Moreira, Luiz Gustavo Martins, Omar Sanseviero, Lucas Gonzalez, Zach Gleicher, Tris Warkentin, Vahab Mirrokni, Evan Sen-ter, Eli Collins, Joelle Barral, Zoubin Ghahramani, Raia Hadsell, Yossi Matias, D. Sculley, Slav Petrov, Noah Fiedel, Noam Shazeer, Oriol Vinyals, Jeff Dean, Demis Hassabis, Koray Kavukcuoglu, Clement Farabet, Elena Buchatskaya, Jean-Baptiste Alayrac, Rohan Anil, Dmitry, Lepikhin, Se-bastian Borgeaud, Olivier Bachem, Armand Joulin, Alek Andreev, Cassidy Hardin, Robert Dadashi, and L´ eonard Hussenot. Gemma 3 technical report, 2025. 5, 1 [43] Maria Tsimpoukelli, Jacob L Menick, Serkan Cabi, S. M. Ali Eslami, Oriol Vinyals, and Felix Hill. Multimodal few-shot learning with frozen language models. In Advances in Neu-ral Information Processing Systems , pages 200–212. Curran Associates, Inc., 2021. 1, 2 [44] Nam Vo, Lu Jiang, Chen Sun, Kevin Murphy, Li-Jia Li, Li Fei-Fei, and James Hays. Composing text and image for image retrieval - an empirical odyssey. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2019. 2 [45] Catherine Wah, Steve Branson, Peter Welinder, Pietro Per-ona, and Serge Belongie. The caltech-ucsd birds-200-2011 dataset. 2011. 4 [46] Hui Wu, Yupeng Gao, Xiaoxiao Guo, Ziad Al-Halah, Steven Rennie, Kristen Grauman, and Rogerio Feris. Fashion iq: A new dataset towards retrieving images by natural language feedback. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , pages 11307–11317, 2021. 2 [47] Qi Wu, Damien Teney, Peng Wang, Chunhua Shen, Anthony Dick, and Anton van den Hengel. Visual question answering: A survey of methods and datasets. Computer Vision and Im-age Understanding , 163:21–40, 2017. Language in Vision. 1[48] Zhengyuan Yang, Zhe Gan, Jianfeng Wang, Xiaowei Hu, Yumao Lu, Zicheng Liu, and Lijuan Wang. An empirical study of gpt-3 for few-shot knowledge-based vqa. In Pro-ceedings of the AAAI conference on artificial intelligence ,pages 3081–3089, 2022. 1, 4, 5 [49] Ellen Yi-Ge, Jiechao Gao, Wei Han, and Wei Zhu. DRUM: Learning demonstration retriever for large MUlti-modal models. In Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 4: Stu-dent Research Workshop) , pages 1051–1063, Vienna, Aus-tria, 2025. Association for Computational Linguistics. 2 [50] Luowei Zhou, Hamid Palangi, Lei Zhang, Houdong Hu, Ja-son Corso, and Jianfeng Gao. Unified vision-language pre-training for image captioning and vqa. In Proceedings of the AAAI conference on artificial intelligence , pages 13041– 13049, 2020. 1 [51] Yucheng Zhou, Xiang Li, Qianning Wang, and Jianbing Shen. Visual in-context learning for large vision-language models. In Findings of the Association for Computational Linguistics: ACL 2024 , pages 15890–15902, Bangkok, Thai-land, 2024. Association for Computational Linguistics. 1 [52] Yuhang Zhou, Paiheng Xu, Xiaoyu Liu, Bang An, Wei Ai, and Furong Huang. Explore spurious correlations at the con-cept level in language models for text classification. In Pro-ceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) , pages 478–492, Bangkok, Thailand, 2024. Association for Compu-tational Linguistics. 2 Retrieving Counterfactuals Improves Visual In-Context Learning 
+
+# Supplementary Material 
+
+# A. Implementation Details 
+
+A.1. Baseline Implementations 
+
+Backbone vision-language models. All baselines and CIRCLES are instantiated with the same backbone vision-language models (VLMs) to ensure a fair comparison. We use Gemma3 [42] with 4B and 12B parameters (denoted as Gemma3-4B and Gemma3-12B) and Qwen2.5-VL [6] with 3B and 7B parameters (denoted as Qwen2.5-VL-3B and Qwen2.5-VL-7B) from the HuggingFace platform. For all models, we run inference with BFloat16 precision using the vLLM library. 
+
+Retrieval backbone. For all retrieval-based baselines, in-cluding RICES, MUIER, MMICES, and CIRCLES, we use CLIP ViT-g/14 (”laion/CLIP-ViT-g-14-laion2B-s12B-b42K”) [36] as the shared image-text encoder. Unless other-wise specified, all visual and textual features are extracted from the CLIP image/text encoder and L2-normalized be-fore similarity computation. 
+
+Prompting setup. We use a unified prompting template across all methods for each task. For each instance, the prompt includes the query image and question, followed by in-context demonstrations selected by the respective method. The input query is repeated at the end of the prompt for clarity. All methods and VLMs use a decod-ing temperature of 0.0 for deterministic generation, and the maximum output length is set to 512 tokens for all ex-periments. For VQA tasks (OK-VQA and VizWiz), in-context demonstrations consist of the original question-answer pairs. For classification tasks (CUB and Flowers), we use fixed question templates and the corresponding class labels as in-context examples. Specifically, the question template for CUB is “What is the category of the bird in this image?”, and for Flowers, “What is the category of the flower in this image?”. 
+
+Baselines. We implement the following baselines: • None (zero-shot): The backbone VLM receives only the task description and query example, without any in-context demonstrations. • Random : In-context demonstrations are uniformly sam-pled from the training set for each query, without re-trieval. • RICES [3, 48]: For each query, CLIP image embeddings are computed and the top-K nearest neighbors in the vi-sual feature space are retrieved by cosine similarity. Re-trieved examples are sorted by similarity and added to the prompt. • MUIER [32]: Following the original paper, we use a multimodal similarity score combining image-image and image-text similarities, with the same CLIP backbone as RICES. The image-text similarity is computed between the query image and each candidate example’s question text. Candidates are ranked by the multimodal score, and the top-K are selected as demonstrations. • MMICES [13]: MMICES is implemented as a two-stage selector. First, 1024 candidate demonstrations are re-trieved using image-image similarity. Second, these can-didates are re-ranked by a text-image similarity score measuring how well each candidate’s image matches the query’s question. The top-K re-ranked examples are used as in-context demonstrations. All baselines are evaluated with a fixed in-context bud-get of K = 32 demonstrations per query, unless otherwise specified in ablations. Demonstrations are selected from the training set of each dataset. 
+
+A.2. Implementation of CIRCLES 
+
+CIRCLES augments standard image retrieval (IR) with composed image retrieval (CIR) to construct richer and more causally informative in-context examples. For each query, CIRCLES first retrieves visually similar neighbors (IR) using CLIP, and then invokes a training-free CIR module to generate counterfactual examples via language-guided attribute interventions. The final in-context set is composed of both IR and CIR examples, constrained by a fixed total budget of 32 examples unless otherwise stated. 
+
+Attribute Extraction. For each query, we prompt the backbone VLM to identify the most prominent attributes visible in the image that are relevant to the given question. The VLM outputs a ranked list of attributes, ordered from most to least important for answering the query. This ap-proach does not rely on explicit attribute labels or fixed vo-cabularies; instead, attribute phrases are generated dynami-cally by the VLM based on the image and question context. 
+
+Standard image retrieval (IR). The IR component in CIRCLES is identical to RICES: CLIP image embeddings are computed for all training images and the query image, and we retrieve the top-KIR neighbors by cosine similarity. For a full in-context budget of 32 examples, we set KIR =16 and allocate the remaining budget to CIR (e.g., KCIR =16). Composed image retrieval (CIR) with OSrCIR. We implement CIR using OSrCIR [41], a training-free frame-work that synthesizes captions conditioned on the query im-age and attribute-manipulation text. For each selected at-tribute of a query image, we prompt the VLM to generate a counterfactual caption describing the image with the de-sired attribute change. This composed caption is encoded with CLIP and used to retrieve images from the training set whose visual embeddings best match the description. As detailed in Section 3, candidates are ranked by the sum of image-image and text-text similarity scores, both normal-ized to the range [0 , 1] via L2-normalization. The top KCIR 
+
+candidates are selected as CIR examples and combined with IR examples to form the final in-context set. The detailed prompts used in our implementation are provided in Appendix G. 
+
+# B. Discussions on Efficiency 
+
+Compared to retrieval-only in-context learning baselines such as RICES, MUIER, and MMICES, CIRCLES intro-duces additional computation at inference time due to at-tribute extraction and composed image retrieval. For each query, we first invoke the VLM once to identify salient attributes, and then issue one VLM call per selected at-tribute to generate a counterfactual caption describing the desired manipulation. These calls are in addition to the fi-nal answer-generation call, which is shared by all methods. In contrast, standard retrieval baselines perform only CLIP-based retrieval followed by a single VLM call for answer generation. Although CIRCLES introduces additional VLM calls for attribute extraction and composed retrieval, these calls use short prompts, and the dominant cost still comes from the final in-context inference step with 32 demonstrations. To quantify this overhead, Table 3 reports the average number of tokens processed per question for RICES and CIRCLES across datasets. Overall, CIRCLES adds only about 10% token overhead relative to RICES, while providing consis-tently better performance in the main experiments.                      
+
+> Table 3. Average token usage per question for RICES and CIR-CLES. The additional VLM calls in CIRCLES introduce only a modest overhead (around 10%). Model Method CUB Flowers OK-VQA VizWiz Gemma3 -4B RICES 11.1k 10.0k 9.4k 10.2k CIRCLES 12.2k 11.2k 10.6k 11.4k Qwen2.5 -VL-3B RICES 9.9k 15.8k 12.8k 33.3k CIRCLES 10.9k 17.2k 14.1k 35.9k
+
+To further compare CIRCLES with baseline methods under the same VLM call budget, we test a compute-matched variant of RICES, denoted RICES*, which per-forms multiple answer generations ( K = 3 ) followed by self-consistency. As shown in Table 4, CIRCLES con-sistently outperforms RICES* across datasets and model scales. This suggests that the improvements of CIRCLES are not explained solely by additional generations, but by the quality of the attribute-guided retrieved demonstrations.                        
+
+> Table 4. Compute-matched comparison between CIRCLES and RICES*. RICES* uses multiple generations ( K= 3 ) with self-consistency under the same inference-time call budget. Model Method CUB Flowers OK-VQA VizWiz Gemma3 -4B RICES* 64.73 86.60 26.34 56.17 CIRCLES 71.97 93.32 31.27 57.61 Gemma3 -12B RICES* 75.70 96.02 36.64 74.09 CIRCLES 77.03 97.77 37.75 74.30
+
+Finally, we view CIRCLES as a first, training-free instantiation of counterfactual retrieval rather than an efficiency-optimized endpoint. Our current implementa-tion relies on an LLM to generate counterfactual captions, which are then encoded with CLIP and used for composed retrieval. As composed image retrieval models and multi-modal embedding architectures mature, one could instead directly embed joint (image, manipulation text) queries, or precompute attribute-aware embeddings, thereby reduc-ing or even eliminating the need for multiple online LLM calls. Such designs would bring the computational profile of counterfactual retrieval closer to that of standard similarity-based retrieval, while retaining the robustness and causal benefits demonstrated by CIRCLES. 
+
+# C. Robustness and Sensitivity 
+
+Our main experiments use deterministic decoding with tem-perature 0.0. To assess robustness under stochastic gener-ation, we additionally evaluate RICES and CIRCLES with Gemma3-4B using temperature 1.0 and repeat decoding five times. Table 5 reports the mean and standard deviation across the benchmark datasets.         
+
+> Table 5. Robustness under stochastic decoding for Gemma3-4B. We set temperature = 1.0, repeat decoding five times, and report mean ±standard deviation. Method CUB Flowers OK-VQA VizWiz RICES 64.42
+> ±0.32
+> 86.42
+> ±0.24
+> 26.08
+> ±0.23
+> 55.69
+> ±0.07
+> CIRCLES 70.30
+> ±0.28
+> 92.87
+> ±0.13
+> 30.54
+> ±0.21
+> 57.04
+> ±0.23
+
+CIRCLES consistently outperforms RICES under stochastic decoding on all four datasets. Moreover, the Query 
+
+## Image 
+
+> Nest
+> Nearby
+> Small
+> Size
+> Small
+> Size
+
++ Images from 
+
+Standard IR 
+
+Acadian 
+
+Flycatcher 
+
+Least 
+
+Flycatcher 
+
++ Images from 
+
+Standard IR 
+
++ Images from 
+
+Standard IR 
+
+Least 
+
+Flycatcher Figure 7. Qualitative examples of CIRCLES. Top: failure due to a non-discriminative extracted attribute. Middle: failure due to weak composed retrieval. Bottom: success case with better matched composed examples. Red denotes unhelpful retrieved examples or incorrect predictions, and green denotes helpful retrieved examples or the correct prediction. 
+
+standard deviations are small relative to the performance gaps between the two methods, suggesting that the gains from CIRCLES are stable across repeated stochastic runs rather than driven by favorable sampling variation. Figure 7 shows two representative failure modes of CIR-CLES and one successful case. In the top row, the extracted attribute ( nest nearby ) is visually plausible but not discrim-inative, so the composed examples provide little useful sig-nal beyond standard IR. In the middle row, the extracted attribute ( small size ) is relevant, but the composed retrieval is only weakly aligned with the target, limiting its benefit for prediction. In the bottom row, the same attribute yields better matched composed examples and leads to the cor-rect answer. These cases suggest that the effectiveness of CIRCLES depends on both reliable attribute extraction and high-quality attribute-conditioned retrieval, which we view as promising directions for future improvement. 
+
+# D. Effect of Attribute Quality and Counterfac-tual Retrieval 
+
+We first investigate how the quality of attribute information affects the performance of CIRCLES. On CUB, in addition to the attributes extracted by the backbone VLM, we have access to class-specific attribute frequency tables provided by the dataset. For each attribute, we compute a discrimi-nativeness score as the gap between its frequency within a given class and its highest frequency across all other classes, and rank attributes for each class by this score. Then, for a query image, we form a sample-specific attribute list by tak-ing the top-ranked attributes for its class and pruning those that are not annotated as present in the image. This provides a set of clean, image-level attribute descriptions that we feed to CIRCLES in place of VLM-extracted attributes. As shown in Table 6, using these ground-truth attributes yields consistent improvements over VLM-extracted attributes for both Gemma3-4B and Gemma3-12B, confirming that accu-rate attribute identification is beneficial for composed image retrieval and, consequently, for in-context learning. At the same time, the gains are relatively modest, suggesting that the backbone VLM is already able to recover attributes that are close to the dataset oracle.              
+
+> Table 6. Effect of replacing VLM-extracted attributes with ground-truth attribute annotations on CUB. Attribute Source Gemma3-4B Gemma3-12B Acc F1 Acc F1 LLM 71.97 72.39 77.03 76.90 Dataset 72.44 72.82 77.65 77.46
+
+Next, we explore whether it is the explicit use of at-tributes or the counterfactual retrieval itself that drives the gains of CIRCLES. To disentangle these factors, we com-pare three settings on all four benchmarks: (1) standard im-age retrieval only (IR), which corresponds to the RICES-style baseline; (2) IR with attribute information but with-out CIR (IR+Attr), where we retrieve images using IR and append the extracted attributes as additional textual con-text without composing counterfactual queries; and (3) IR with full CIR (IR+CIR), which is our proposed CIRCLES setting where attributes are used to generate counterfactual captions and retrieve manipulated visual examples. The results for Gemma3-4B are summarized in Table 7. We observe that providing attribute information alone (IR+Attr) substantially improves performance over IR on fine-grained classification tasks such as CUB and Flow-ers, where attribute recognition is central to the task. In contrast, on open-ended VQA benchmarks like OK-VQA Table 7. Ablation of CIR versus attribute-only prompting on Gemma3-4B. IR denotes standard image retrieval; Attr denotes adding textual attributes without CIR. Setting CUB Flowers OK-VQA VizWiz Acc F1 Acc F1 EM F1 EM F1 IR 65.40 67.62 86.70 87.43 26.65 32.72 56.08 70.40 IR + Attr 71.99 71.91 92.91 93.53 26.16 32.63 53.83 68.82 IR + CIR 71.97 72.39 93.32 93.49 31.27 36.89 57.61 71.35 
+
+and VizWiz, simply adding attributes without counterfac-tual retrieval slightly degrades performance, likely because the added textual descriptions can bias the model toward spurious cues without offering new visual evidence. In all cases, enabling CIR on top of IR and attributes (IR+CIR) yields the best performance, with clear gains over both IR and IR+Attr across all datasets. This suggests that attributes are most effective when they are grounded through counter-factual visual examples, which help the model better inter-pret and utilize fine-grained attribute cues in diverse down-stream tasks. 
+
+# E. More Ablations on CIRCLES Designs 
+
+While Section 4.5 ablates several design choices within the CIR module itself, here we further probe the overall CIR-CLES framework by examining (i) different implementa-tions of the underlying image retrieval (IR) component and (ii) the relative contributions of IR and CIR. 
+
+Alternative IR similarity functions. In the main exper-iments, we implement IR using image-image similarity in CLIP space, following the RICES design. To under-stand whether richer similarity measures can further help CIRCLES, we consider two additional variants inspired by prior work. First, we augment image-image similarity with image-text similarity as in MUIER, where we also match the query image against the question text associated with each candidate example. Second, we combine image-image similarity with the text-text similarity used in our CIR im-plementation to capture task similarity between questions. Since CUB and Flowers are classification tasks with an identical question template for all test images, text-based similarity is uninformative there. We therefore restrict these IR ablations to OK-VQA and VizWiz. Results in Table 8 show that simply adding image-text similarity does not improve performance, and in fact slightly degrades results on OK-VQA, mirroring the small gap between RICES and MUIER observed in Table 1. In contrast, incorporating text-text similarity on top of image-image similarity yields small but consistent gains on both datasets, especially on VizWiz. This suggests that, for open-ended VQA, capturing task similarity at the text level is ben-                 
+
+> Table 8. CIRCLES with different implementations of the image retrieval component (Gemma3-4B). Similarity OK-VQA VizWiz EM F1 EM F1 image-image 31.27 36.89 57.61 71.35 image-image + image-text 30.14 35.67 57.81 71.63 image-image + text-text 31.37 36.74 59.09 72.64
+
+eficial, while the simple image-image retrieval used in our main CIRCLES configuration is already a strong baseline. 
+
+IR versus CIR versus IR+CIR. We also disentangle the effects of IR and CIR by comparing three variants: (1) IR only , which corresponds to a standard retrieval-based ICL setup using only retrieved images and their labels; (2) CIR only , where we discard the original retrieved examples and retain only the counterfactual examples produced by CIR; and (3) IR + CIR (full CIRCLES), which includes both the original retrieved examples and their counterfactual coun-terparts in the in-context prompt. The results on Gemma3-4B are summarized in Table 9. On fine-grained classification benchmarks (CUB and Flowers), CIR only lags far behind IR only, indicating that counterfactual examples alone are not sufficient to capture the subtle visual prototypes needed for class recognition. In contrast, on OK-VQA and VizWiz, CIR only achieves performance comparable to IR only, slightly improving EM and F1 on OK-VQA while being close on VizWiz. Across all four datasets, however, the combined IR + CIR variant consistently yields the best performance, sometimes by a large margin (e.g., +6-7 accuracy points over IR only on CUB and Flowers). These trends highlight that IR and CIR play complementary roles: IR provides realistic, prototypi-cal examples that anchor the model’s understanding of the task, while CIR introduces targeted counterfactual varia-tions that clarify the role of key attributes and reduce spuri-ous correlations. Together, they enable CIRCLES to lever-age both factual and counterfactual experience for more ro-bust in-context learning. Table 9. Ablation of IR and CIR in CIRCLES, tested on Gemma3-4B. Setting CUB Flowers OK-VQA VizWiz Acc F1 Acc F1 EM F1 EM F1 IR only 65.40 67.62 86.70 87.43 26.65 32.72 56.08 70.40 CIR only 25.16 26.14 60.24 65.85 29.81 35.52 54.06 68.29 IR + CIR 71.97 72.39 93.32 93.49 31.27 36.89 57.61 71.35 
+
+# F. Additional Results on Benchmarks and Model Scaling 
+
+Results on ScienceQA. To further examine the generality of CIRCLES beyond image classification and visual ques-tion answering tasks, we additionally evaluate CIRCLES on ScienceQA [30], a more challenging multimodal reasoning benchmark. Following the same in-context learning proto-col used in the main paper, we construct the demonstration pool from the ScienceQA validation split and report perfor-mance on the test split. Table 10 shows that CIRCLES con-sistently outperforms all compared example selection base-lines on ScienceQA. The gains are modest but consistent across both model sizes.             
+
+> Table 10. Test accuracy (%) on ScienceQA. In-context examples are retrieved from the validation split. The experiments are run on the Qwen2.5-VL model family. Size Random RICES MUIER CIRCLES 3B 78.33 80.12 80.66 80.71
+> 7B 85.18 88.05 87.90 88.35
+
+Scaling to Larger Models: Gemma3-27B. To examine whether the gains of CIRCLES persist at a larger model scale, we additionally evaluate Gemma3-27B, a larger model in the Gemma3 family, on the same four benchmarks used in the main paper. Table 11 shows that CIRCLES con-tinues to outperform RICES across all datasets, indicating that the benefit of attribute-conditioned, contrastive retrieval is not limited to smaller or mid-sized backbones.             
+
+> Table 11. Performance comparison on Gemma3-27B. Method CUB Flowers OKVQA VizWiz RICES 69.76 93.98 38.66 67.24 CIRCLES 72.21 97.51 39.14 68.72
+
+# G. Prompt Templates 
+
+We provide the detailed prompt templates used for each dataset in this section. Figure 8 shows the template used to extract key visual attributes that are relevant for answer-ing the question. Given an input image and question, the VLM is instructed to list a small set of concise attributes, which are then used as the basis for constructing counter-factual manipulations. Figure 9 contains the template used to generate counterfactual captions with targeted attribute changes. The system prompt in Figure 9 follows the one used in OSrCIR [41]. Figures 10–12 show the templates used for VLM in-ference under different in-context learning settings: Fig-ure 10 corresponds to the setting without in-context exam-ples (“None” in Table 1); Figure 11 illustrates the base-line prompt used for in-context learning methods such as RICES; and Figure 12 presents the full CIRCLES prompt, which augments the standard retrieved demonstrations with the counterfactual examples produced by CIR. Across all of these templates, the value of {{Task Type}} is set to “Image Classification” for CUB and Flowers, and to “Visual Question Answering” for OK-VQA and VizWiz, so that the VLM is explicitly informed of the task format. For the classification datasets (CUB and Flowers), we additionally enforce a closed set of answer options to align with the standard evaluation protocol. Concretely, for these datasets, we append the sentence “You need to choose one of the following options: {{Options}} ” immedi-ately after the first sentence describing the task type, where 
+
+{{Options}} is replaced by the list of candidate class names for the given example. For OK-VQA and VizWiz, which are evaluated in an open-ended manner, we do not provide such options and instead allow the model to freely generate answers conditioned on the image, question, and in-context demonstrations. Prompt template for attribute extraction 
+
+Identify the key attributes of the following image that are most relevant to answering the question. 
+
+{{Image}} 
+
+Question: {{Question}} 
+
+Please list the top {{num_attributes}} key attributes as short phrases in a section named ‘### Attributes’, one per line, ordered from most to least important. 
+
+> Figure 8. Prompt template for attribute extraction.
+
+Prompt template for generating counterfactual caption 
+
+{{System Prompt by OSrCIR}} {{Image}} 
+
+Manipulation Text: Change the attribute {{Attribute}} to a different plausible value. Ensure the modified caption is concise and contains no more than 77 tokens. 
+
+> Figure 9. Prompt template for generating counterfactual caption based on the query image and identified key attribute.
+
+Prompt template for VLM inference used by None 
+
+Your task is to perform {{Task Type}} .
+
+{{Image}} 
+
+Question: {{Question}} 
+
+Please provide your response by directly outputting the answer. 
+
+> Figure 10. Prompt template for VLM inference used by None (zero-shot learning).
+
+Prompt template for VLM inference used by Random/RICES/MUIER/MMICES 
+
+Your task is to perform {{Task Type}} .
+
+{{Image}} 
+
+Question: {{Question}} 
+
+Here are {{K_IR}} in-context examples to help you answer the question: 
+
+{{Retrieved Image}} 
+
+Question: {{Retrieved Question}} 
+
+Answer: {{Retrieved Answer}} {{Retrieved Image}} 
+
+...... Here is the original question again. 
+
+{{Image}} 
+
+Question: {{Question}} 
+
+Please provide your response by directly outputting the answer. 
+
+> Figure 11. Prompt template for VLM inference used by Random, RICES, MUIER, and MMICES.
+
+Prompt template for VLM inference used by CIRCLES 
+
+Your task is to perform {{Task Type}} .
+
+{{Image}} 
+
+Question: {{Question}} 
+
+Here are {{K_IR}} in-context examples to help you answer the question: 
+
+{{Retrieved Image}} 
+
+Question: {{Retrieved Question}} 
+
+Answer: {{Retrieved Answer}} {{Retrieved Image}} 
+
+...... Examples retrieved based on the target image description after changing 
+
+{{Attribute}} (caption: {{Caption}} ): 
+
+{{Retrieved Image}} 
+
+Question: {{Retrieved Question}} 
+
+Answer: {{Retrieved Answer}} {{Retrieved Image}} 
+
+...... Here is the original question again. 
+
+{{Image}} 
+
+Question: {{Question}} 
+
+Please provide your response by directly outputting the answer.

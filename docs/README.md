@@ -6,100 +6,172 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-03-14
-- 运行时间：2026-03-14 19:54:07 UTC
+- 最新运行日期：2026-03-23
+- 运行时间：2026-03-23 20:09:41 UTC
 - 运行状态：成功
-- 本次总论文数：26
-- 精读区：14
+- 本次总论文数：50
+- 精读区：38
 - 速读区：12
 
 ### 今日简报（AI）
-今日深度研读 26 篇 AI 论文，聚焦 LLM 智能体记忆治理与多模态检索等 14 项前沿突破。
-满分论文 SSGM 框架为智能体演化记忆提供了安全保障，而 FrameVGGT 则显著提升了流式视频任务的记忆效率。
-建议开发者重点关注智能体长效记忆的稳定性与安全性，这是构建可靠复杂系统的核心趋势。
-- 详情：[/202603/14/README](/202603/14/README)
+今日深度研读 50 篇 AI 论文，聚焦多模态大模型在复杂环境导航与长视频理解中的记忆机制突破。
+核心结论指出，分层记忆系统与问题引导的视觉压缩能显著提升零样本导航的可靠性及长时视频处理效率。
+建议读者关注推理过程中感知受损的缓解方案，并探索检索智能体的计算资源优化策略。
+- 详情：[/202603/23/README](/202603/23/README)
 
 ### 精读区论文标签
-1. [Governing Evolving Memory in LLM Agents: Risks, Mechanisms, and the Stability and Safety Governed Memory (SSGM) Framework](/202603/14/2603.11768v1-governing-evolving-memory-in-llm-agents-risks-mechanisms-and-the-stability-and-safety-governed-memory-ssgm-framework)  
+1. [HiMemVLN: Enhancing Reliability of Open-Source Zero-Shot Vision-and-Language Navigation with Hierarchical Memory System](/202603/23/2603.14807v1-himemvln-enhancing-reliability-of-open-source-zero-shot-vision-and-language-navigation-with-hierarchical-memory-system)  
    标签：评分：10.0/10、query:multi-modal-memory
-   evidence：LLM智能体中演化长期记忆的治理
-2. [FrameVGGT: Frame Evidence Rolling Memory for streaming VGGT](/202603/14/2603.07690v1-framevggt-frame-evidence-rolling-memory-for-streaming-vggt)  
-   标签：评分：9.0/10、query:multi-modal-memory
-   evidence：流式视觉 Transformer 的帧证据滚动记忆
-3. [SPIRAL: A Closed-Loop Framework for Self-Improving Action World Models via Reflective Planning Agents](/202603/14/2603.08403v1-spiral-a-closed-loop-framework-for-self-improving-action-world-models-via-reflective-planning-agents)  
-   标签：评分：9.0/10、query:multi-modal-memory
-   evidence：具有长程记忆的智能体系统用于视频生成
-4. [Pooling Engram Conditional Memory in Large Language Models using CXL](/202603/14/2603.10087v1-pooling-engram-conditional-memory-in-large-language-models-using-cxl)  
-   标签：评分：9.0/10、query:multi-modal-memory
-   evidence：使用 CXL 进行可扩展存储的大模型 Engram 条件记忆
-5. [UAV traffic scene understanding: A cross-spectral guided approach and a unified benchmark](/202603/14/2603.10722v1-uav-traffic-scene-understanding-a-cross-spectral-guided-approach-and-a-unified-benchmark)  
+   evidence：视觉语言导航的层级记忆系统
+2. [Question-guided Visual Compression with Memory Feedback for Long-Term Video Understanding](/202603/23/2603.15167v1-question-guided-visual-compression-with-memory-feedback-for-long-term-video-understanding)  
+   标签：评分：10.0/10、query:multi-modal-memory
+   evidence：用于长期视频理解的记忆增强方法
+3. [Advancing Multimodal Agent Reasoning with Long-Term Neuro-Symbolic Memory](/202603/23/2603.15280v1-advancing-multimodal-agent-reasoning-with-long-term-neuro-symbolic-memory)  
+   标签：评分：10.0/10、query:multi-modal-memory
+   evidence：多模态智能体的长期神经符号记忆
+4. [Evo-Retriever: LLM-Guided Curriculum Evolution with Viewpoint-Pathway Collaboration for Multimodal Document Retrieval](/202603/23/2603.16455v1-evo-retriever-llm-guided-curriculum-evolution-with-viewpoint-pathway-collaboration-for-multimodal-document-retrieval)  
+   标签：评分：10.0/10、query:mmrag
+   evidence：多模态文档检索框架
+5. [V-DyKnow: A Dynamic Benchmark for Time-Sensitive Knowledge in Vision Language Models](/202603/23/2603.16581v1-v-dyknow-a-dynamic-benchmark-for-time-sensitive-knowledge-in-vision-language-models)  
+   标签：评分：10.0/10、query:mmrag
+   evidence：评估多模态RAG方法在时效性知识上的有效性
+6. [CurveStream: Boosting Streaming Video Understanding in MLLMs via Curvature-Aware Hierarchical Visual Memory Management](/202603/23/2603.19571v1-curvestream-boosting-streaming-video-understanding-in-mllms-via-curvature-aware-hierarchical-visual-memory-management)  
+   标签：评分：10.0/10、query:multi-modal-memory
+   evidence：流式视频的层次化视觉记忆管理
+7. [Agentic DAG-Orchestrated Planner Framework for Multi-Modal, Multi-Hop Question Answering in Hybrid Data Lakes](/202603/23/2603.14229v1-agentic-dag-orchestrated-planner-framework-for-multi-modal-multi-hop-question-answering-in-hybrid-data-lakes)  
    标签：评分：9.0/10、query:mmrag
-   evidence：基于知识的交通场景理解视觉问答
-6. [Catalogue Grounded Multimodal Attribution for Museum Video under Resource and Regulatory Constraints](/202603/14/2603.11147v1-catalogue-grounded-multimodal-attribution-for-museum-video-under-resource-and-regulatory-constraints)  
+   evidence：基于RAG系统的混合数据湖多模态多跳问答。
+8. [LongVidSearch: An Agentic Benchmark for Multi-hop Evidence Retrieval Planning in Long Videos](/202603/23/2603.14468v1-longvidsearch-an-agentic-benchmark-for-multi-hop-evidence-retrieval-planning-in-long-videos)  
    标签：评分：9.0/10、query:multi-modal-memory
-   evidence：博物馆视频档案的落地多模态归因
-7. [Follow the Saliency: Supervised Saliency for Retrieval-augmented Dense Video Captioning](/202603/14/2603.11460v1-follow-the-saliency-supervised-saliency-for-retrieval-augmented-dense-video-captioning)  
+   evidence：长视频中的智能体多跳证据检索
+9. [SuperLocalMemory V3: Information-Geometric Foundations for Zero-LLM Enterprise Agent Memory](/202603/23/2603.14588v1-superlocalmemory-v3-information-geometric-foundations-for-zero-llm-enterprise-agent-memory)  
    标签：评分：9.0/10、query:multi-modal-memory
-   evidence：利用显著性引导分割的检索增强密集视频描述
-8. [One Supervisor, Many Modalities: Adaptive Tool Orchestration for Autonomous Queries](/202603/14/2603.11545v1-one-supervisor-many-modalities-adaptive-tool-orchestration-for-autonomous-queries)  
-   标签：评分：9.0/10、query:mmrag
-   evidence：用于自主多模态查询处理的智能体AI框架
-9. [QChunker: Learning Question-Aware Text Chunking for Domain RAG via Multi-Agent Debate](/202603/14/2603.11650v1-qchunker-learning-question-aware-text-chunking-for-domain-rag-via-multi-agent-debate)  
-   标签：评分：9.0/10、query:mmrag
-   evidence：针对特定领域RAG的问答感知文本分块
-10. [Legal-DC: Benchmarking Retrieval-Augmented Generation for Legal Documents](/202603/14/2603.11772v1-legal-dc-benchmarking-retrieval-augmented-generation-for-legal-documents)  
-   标签：评分：9.0/10、query:mmrag
-   evidence：法律文档检索增强生成的基准测试
-11. [DocSage: An Information Structuring Agent for Multi-Doc Multi-Entity Question Answering](/202603/14/2603.11798v1-docsage-an-information-structuring-agent-for-multi-doc-multi-entity-question-answering)  
-   标签：评分：9.0/10、query:mmrag
-   evidence：用于多文档RAG和信息结构化的智能体框架
-12. [Think While Watching: Online Streaming Segment-Level Memory for Multi-Turn Video Reasoning in Multimodal Large Language Models](/202603/14/2603.11896v1-think-while-watching-online-streaming-segment-level-memory-for-multi-turn-video-reasoning-in-multimodal-large-language-models)  
+   evidence：智能体记忆检索与生命周期的数学基础
+10. [D-MEM: Dopamine-Gated Agentic Memory via Reward Prediction Error Routing](/202603/23/2603.14597v1-d-mem-dopamine-gated-agentic-memory-via-reward-prediction-error-routing)  
    标签：评分：9.0/10、query:multi-modal-memory
-   evidence：用于视频推理的在线流式片段级记忆
-13. [SciMDR: Benchmarking and Advancing Scientific Multimodal Document Reasoning](/202603/14/2603.12249v1-scimdr-benchmarking-and-advancing-scientific-multimodal-document-reasoning)  
-   标签：评分：9.0/10、query:mmrag
-   evidence：科学多模态文档推理与问答合成
-14. [Spatial-TTT: Streaming Visual-based Spatial Intelligence with Test-Time Training](/202603/14/2603.12255v1-spatial-ttt-streaming-visual-based-spatial-intelligence-with-test-time-training)  
+   evidence：受生物启发的大模型智能体长期记忆架构
+11. [RenderMem: Rendering as Spatial Memory Retrieval](/202603/23/2603.14669v1-rendermem-rendering-as-spatial-memory-retrieval)  
    标签：评分：9.0/10、query:multi-modal-memory
-   evidence：基于流式视觉的空间智能以及随时间保留空间证据
+   evidence：具身智能体的空间记忆框架
+12. [Shopping Companion: A Memory-Augmented LLM Agent for Real-World E-Commerce Tasks](/202603/23/2603.14864v1-shopping-companion-a-memory-augmented-llm-agent-for-real-world-e-commerce-tasks)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：用于长期偏好的记忆增强LLM智能体
+13. [Clue Matters: Leveraging Latent Visual Clues to Empower Video Reasoning](/202603/23/2603.15008v1-clue-matters-leveraging-latent-visual-clues-to-empower-video-reasoning)  
+   标签：评分：9.0/10、query:mmrag
+   evidence：视频问答中基于证据的答案生成
+14. [Beyond the Embedding Bottleneck: Adaptive Retrieval-Augmented 3D CT Report Generation](/202603/23/2603.15822v1-beyond-the-embedding-bottleneck-adaptive-retrieval-augmented-3d-ct-report-generation)  
+   标签：评分：9.0/10、query:mmrag
+   evidence：针对3D医学影像的自适应检索增强生成
+15. [Selective Memory for Artificial Intelligence: Write-Time Gating with Hierarchical Archiving](/202603/23/2603.15994v1-selective-memory-for-artificial-intelligence-write-time-gating-with-hierarchical-archiving)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：检索增强生成的选择性记忆门控
+16. [MemX: A Local-First Long-Term Memory System for AI Assistants](/202603/23/2603.16171v1-memx-a-local-first-long-term-memory-system-for-ai-assistants)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：面向AI助手的长期记忆系统，具有稳定性检索设计
+17. [VisBrowse-Bench: Benchmarking Visual-Native Search for Multimodal Browsing Agents](/202603/23/2603.16289v2-visbrowse-bench-benchmarking-visual-native-search-for-multimodal-browsing-agents)  
+   标签：评分：9.0/10、query:mmrag
+   evidence：为浏览智能体建立视觉原生搜索和图文检索的基准
+18. [InViC: Intent-aware Visual Cues for Medical Visual Question Answering](/202603/23/2603.16372v1-invic-intent-aware-visual-cues-for-medical-visual-question-answering)  
+   标签：评分：9.0/10、query:mmrag
+   evidence：用于医疗视觉问答的意图感知视觉线索
+19. [IndexRAG: Bridging Facts for Cross-Document Reasoning at Index Time](/202603/23/2603.16415v1-indexrag-bridging-facts-for-cross-document-reasoning-at-index-time)  
+   标签：评分：9.0/10、query:mmrag
+   evidence：跨文档推理与检索增强生成
+20. [AdaMem: Adaptive User-Centric Memory for Long-Horizon Dialogue Agents](/202603/23/2603.16496v1-adamem-adaptive-user-centric-memory-for-long-horizon-dialogue-agents)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：对话智能体的自适应用户中心记忆
+21. [Retrieving Counterfactuals Improves Visual In-Context Learning](/202603/23/2603.16737v1-retrieving-counterfactuals-improves-visual-in-context-learning)  
+   标签：评分：9.0/10、query:mmrag
+   evidence：使用反事实进行视觉语境学习的检索增强方法。
+22. [Chronos: Temporal-Aware Conversational Agents with Structured Event Retrieval for Long-Term Memory](/202603/23/2603.16862v1-chronos-temporal-aware-conversational-agents-with-structured-event-retrieval-for-long-term-memory)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：智能体长期记忆的结构化事件检索
+23. [MosaicMem: Hybrid Spatial Memory for Controllable Video World Models](/202603/23/2603.17117v1-mosaicmem-hybrid-spatial-memory-for-controllable-video-world-models)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：用于视频世界模型的混合空间记忆
+24. [Graph-Native Cognitive Memory for AI Agents: Formal Belief Revision Semantics for Versioned Memory Architectures](/202603/23/2603.17244v1-graph-native-cognitive-memory-for-ai-agents-formal-belief-revision-semantics-for-versioned-memory-architectures)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：面向AI智能体的图原生认知记忆架构
+25. [Symphony: A Cognitively-Inspired Multi-Agent System for Long-Video Understanding](/202603/23/2603.17307v1-symphony-a-cognitively-inspired-multi-agent-system-for-long-video-understanding)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：利用类人认知和推理进行长视频理解的多智能体系统。
+26. [Adaptive Guidance for Retrieval-Augmented Masked Diffusion Models](/202603/23/2603.17677v1-adaptive-guidance-for-retrieval-augmented-masked-diffusion-models)  
+   标签：评分：9.0/10、query:mmrag
+   evidence：扩散模型的检索增强生成
+27. [Governed Memory: A Production Architecture for Multi-Agent Workflows](/202603/23/2603.17787v1-governed-memory-a-production-architecture-for-multi-agent-workflows)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：多智能体工作流的共享记忆与治理层
+28. [RPMS: Enhancing LLM-Based Embodied Planning through Rule-Augmented Memory Synergy](/202603/23/2603.17831v1-rpms-enhancing-llm-based-embodied-planning-through-rule-augmented-memory-synergy)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：基于大语言模型的具身规划的规则增强记忆协同
+29. [VideoAtlas: Navigating Long-Form Video in Logarithmic Compute](/202603/23/2603.17948v1-videoatlas-navigating-long-form-video-in-logarithmic-compute)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：用于无损长视频记忆的分层网格
+30. [MemArchitect: A Policy Driven Memory Governance Layer](/202603/23/2603.18330v1-memarchitect-a-policy-driven-memory-governance-layer)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：自主智能体的记忆治理层
+31. [AndroTMem: From Interaction Trajectories to Anchored Memory in Long-Horizon GUI Agents](/202603/23/2603.18429v1-androtmem-from-interaction-trajectories-to-anchored-memory-in-long-horizon-gui-agents)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：长程GUI智能体的锚定记忆
+32. [MemoAct: Atkinson-Shiffrin-Inspired Memory-Augmented Visuomotor Policy for Robotic Manipulation](/202603/23/2603.18494v1-memoact-atkinson-shiffrin-inspired-memory-augmented-visuomotor-policy-for-robotic-manipulation)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：机器人智能体的分层长短期记忆系统
+33. [MemMA: Coordinating the Memory Cycle through Multi-Agent Reasoning and In-Situ Self-Evolution](/202603/23/2603.18718v1-memma-coordinating-the-memory-cycle-through-multi-agent-reasoning-and-in-situ-self-evolution)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：具有外部记忆库的记忆增强LLM智能体，支持长程交互。
+34. [Memento-Skills: Let Agents Design Agents](/202603/23/2603.18743v1-memento-skills-let-agents-design-agents)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：基于记忆的强化学习，将可重用技能作为持久记忆
+35. [GSMem: 3D Gaussian Splatting as Persistent Spatial Memory for Zero-Shot Embodied Exploration and Reasoning](/202603/23/2603.19137v1-gsmem-3d-gaussian-splatting-as-persistent-spatial-memory-for-zero-shot-embodied-exploration-and-reasoning)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：3D 高斯泼溅作为智能体的持久空间记忆
+36. [All-Mem: Agentic Lifelong Memory via Dynamic Topology Evolution](/202603/23/2603.19595v1-all-mem-agentic-lifelong-memory-via-dynamic-topology-evolution)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：交互式智能体的终身记忆框架
+37. [Memori: A Persistent Memory Layer for Efficient, Context-Aware LLM Agents](/202603/23/2603.19935v1-memori-a-persistent-memory-layer-for-efficient-context-aware-llm-agents)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：上下文感知 LLM 智能体的持久记忆层
+38. [VideoSeek: Long-Horizon Video Agent with Tool-Guided Seeking](/202603/23/2603.20185v1-videoseek-long-horizon-video-agent-with-tool-guided-seeking)  
+   标签：评分：9.0/10、query:multi-modal-memory
+   evidence：具有工具引导寻踪证据收集的长程视频智能体
 
 ### 速读区论文标签
-1. [EchoGuard: An Agentic Framework with Knowledge-Graph Memory for Detecting Manipulative Communication in Longitudinal Dialogue](/202603/14/2603.04815v1-echoguard-an-agentic-framework-with-knowledge-graph-memory-for-detecting-manipulative-communication-in-longitudinal-dialogue)  
-   标签：评分：8.0/10、query:multi-modal-memory
-   evidence：具有知识图谱记忆的智能体框架
-2. [Beyond Text: Aligning Vision and Language for Multimodal E-Commerce Retrieval](/202603/14/2603.04836v1-beyond-text-aligning-vision-and-language-for-multimodal-e-commerce-retrieval)  
+1. [Deeper Thought, Weaker Aim: Understanding and Mitigating Perceptual Impairment during Reasoning in Multimodal Large Language Models](/202603/23/2603.14184v1-deeper-thought-weaker-aim-understanding-and-mitigating-perceptual-impairment-during-reasoning-in-multimodal-large-language-models)  
    标签：评分：8.0/10、query:mmrag
-   evidence：电子商务中的文本-图像融合多模态检索
-3. [STRUCTUREDAGENT: Planning with AND/OR Trees for Long-Horizon Web Tasks](/202603/14/2603.05294v1-structuredagent-planning-with-andor-trees-for-long-horizon-web-tasks)  
+   evidence：减轻视觉问答任务中的感知受损
+2. [Uni-MDTrack: Learning Decoupled Memory and Dynamic States for Parameter-Efficient Visual Tracking in All Modality](/202603/23/2603.14452v1-uni-mdtrack-learning-decoupled-memory-and-dynamic-states-for-parameter-efficient-visual-tracking-in-all-modality)  
    标签：评分：8.0/10、query:multi-modal-memory
-   evidence：用于在长程任务中跟踪历史和候选方案的结构化记忆模块。
-4. [EdgeDAM: Real-time Object Tracking for Mobile Devices](/202603/14/2603.05463v1-edgedam-real-time-object-tracking-for-mobile-devices)  
+   evidence：多模态视觉追踪的解耦记忆
+3. [Compute Allocation for Reasoning-Intensive Retrieval Agents](/202603/23/2603.14635v1-compute-allocation-for-reasoning-intensive-retrieval-agents)  
    标签：评分：8.0/10、query:multi-modal-memory
-   evidence：用于目标跟踪的干扰感知记忆
-5. [Chart-RL: Generalized Chart Comprehension via Reinforcement Learning with Verifiable Rewards](/202603/14/2603.06958v1-chart-rl-generalized-chart-comprehension-via-reinforcement-learning-with-verifiable-rewards)  
+   evidence：针对记忆库不断增长的智能体进行推理密集型检索。
+4. [VisionCoach: Reinforcing Grounded Video Reasoning via Visual-Perception Prompting](/202603/23/2603.14659v1-visioncoach-reinforcing-grounded-video-reasoning-via-visual-perception-prompting)  
+   标签：评分：8.0/10、query:multi-modal-memory
+   evidence：通过视觉感知提示增强定位视频推理
+5. [Improving Visual Reasoning with Iterative Evidence Refinement](/202603/23/2603.14117v1-improving-visual-reasoning-with-iterative-evidence-refinement)  
    标签：评分：7.0/10、query:mmrag
-   evidence：增强多模态系统中的图表问答能力
-6. [VirtueBench: Evaluating Trustworthiness under Uncertainty in Long Video Understanding](/202603/14/2603.07071v1-virtuebench-evaluating-trustworthiness-under-uncertainty-in-long-video-understanding)  
+   evidence：重新获取视觉证据进行推理
+6. [MMOU: A Massive Multi-Task Omni Understanding and Reasoning Benchmark for Long and Complex Real-World Videos](/202603/23/2603.14145v1-mmou-a-massive-multi-task-omni-understanding-and-reasoning-benchmark-for-long-and-complex-real-world-videos)  
+   标签：评分：7.0/10、query:mmrag
+   evidence：长视频中的多模态理解与推理
+7. [Memory as Asset: From Agent-centric to Human-centric Memory Management](/202603/23/2603.14212v1-memory-as-asset-from-agent-centric-to-human-centric-memory-management)  
    标签：评分：7.0/10、query:multi-modal-memory
-   evidence：评估不确定性和关键帧缺失下的长视频理解
-7. [Deep Expert Injection for Anchoring Retinal VLMs with Domain-Specific Knowledge](/202603/14/2603.07131v1-deep-expert-injection-for-anchoring-retinal-vlms-with-domain-specific-knowledge)  
-   标签：评分：7.0/10、query:mmrag
-   evidence：通过领域专家知识锚定视网膜视觉语言模型，弥合推理差距
-8. [Deep Expert Injection for Anchoring Retinal VLMs with Domain-Specific Knowledge](/202603/14/2603.07131v2-deep-expert-injection-for-anchoring-retinal-vlms-with-domain-specific-knowledge)  
-   标签：评分：7.0/10、query:mmrag
-   evidence：利用领域专家知识锚定视觉语言模型
-9. [A Dynamic Self-Evolving Extraction System](/202603/14/2603.06915v1-a-dynamic-self-evolving-extraction-system)  
+   evidence：面向通用人工智能智能体的人本个人记忆管理
+8. [Self-Indexing KVCache: Predicting Sparse Attention from Compressed Keys](/202603/23/2603.14224v1-self-indexing-kvcache-predicting-sparse-attention-from-compressed-keys)  
+   标签：评分：7.0/10、query:multi-modal-memory
+   evidence：统一KV缓存的压缩与检索以提升长文本记忆效率
+9. [Automatic Inter-document Multi-hop Scientific QA Generation](/202603/23/2603.14257v1-automatic-inter-document-multi-hop-scientific-qa-generation)  
    标签：评分：6.0/10、query:mmrag
-   evidence：用于文档检索和知识库填充的自进化提取系统
-10. [VirtueBench: Evaluating Trustworthiness under Uncertainty in Long Video Understanding](/202603/14/2603.07071v2-virtuebench-evaluating-trustworthiness-under-uncertainty-in-long-video-understanding)  
+   evidence：多文档多跳科学问答的自动化框架
+10. [Learning Image-Text Matching with Optimal Partial Transport](/202603/23/2603.14349v1-learning-image-text-matching-with-optimal-partial-transport)  
+   标签：评分：6.0/10、query:mmrag
+   evidence：用于连接视觉和语言的跨模态图文匹配
+11. [GenState-AI: State-Aware Dataset for Text-to-Video Retrieval on AI-Generated Videos](/202603/23/2603.14426v1-genstate-ai-state-aware-dataset-for-text-to-video-retrieval-on-ai-generated-videos)  
    标签：评分：6.0/10、query:multi-modal-memory
-   evidence：评估视觉语言模型中的长视频理解能力
-11. [LiveWorld: Simulating Out-of-Sight Dynamics in Generative Video World Models](/202603/14/2603.07145v1-liveworld-simulating-out-of-sight-dynamics-in-generative-video-world-models)  
+   evidence：针对状态转换的文本-视频检索基准
+12. [Zoom to Essence: Trainless GUI Grounding by Inferring upon Interface Elements](/202603/23/2603.14448v1-zoom-to-essence-trainless-gui-grounding-by-inferring-upon-interface-elements)  
    标签：评分：6.0/10、query:multi-modal-memory
-   evidence：模拟视线外动态和内存中的冻结状态
-12. [Rethinking Deep Research from the Perspective of Web Content Distribution Matching](/202603/14/2603.07241v1-rethinking-deep-research-from-the-perspective-of-web-content-distribution-matching)  
-   标签：评分：6.0/10、query:multi-modal-memory
-   evidence：具有查询结果对齐功能的搜索智能体用于证据检索
+   evidence：多模态智能体的GUI定位
 
 
 <div class="dpr-home-promo-card">
