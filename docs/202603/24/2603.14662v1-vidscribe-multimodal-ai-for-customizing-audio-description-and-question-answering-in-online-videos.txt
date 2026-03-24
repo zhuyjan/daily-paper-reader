@@ -1,0 +1,279 @@
+Title: ViDscribe: Multimodal AI for Customizing Audio Description and Question Answering in Online Videos
+
+URL Source: https://arxiv.org/pdf/2603.14662v1
+
+Published Time: Tue, 17 Mar 2026 02:57:18 GMT
+
+Number of Pages: 9
+
+Markdown Content:
+# ViDscribe: Multimodal AI for Customizing Audio Description and Question Answering in Online Videos 
+
+## Maryam Cheema ∗
+
+Arizona State University Tempe, Arizona, USA mcheema2@asu.edu 
+
+## Sina Elahimanesh ∗
+
+Saarland University Saarbrücken, Germany siel00002@uni-saarland.de 
+
+## Pooyan Fazli 
+
+Arizona State University Tempe, Arizona, USA pooyan@asu.edu 
+
+## Hasti Seifi 
+
+Arizona State University Tempe, Arizona, USA hasti.seifi@asu.edu 
+
+## Abstract 
+
+Advances in multimodal large language models enable automatic video narration and question answering (VQA), offering scalable alternatives to labor-intensive, human-authored audio descriptions (ADs) for blind and low vision (BLV) viewers. However, prior AI-driven AD systems rarely adapt to the diverse needs and preferences of BLV individuals across videos and are typically evaluated in con-trolled, single-session settings. We present ViDscribe , a web-based platform that integrates AI-generated ADs with six types of user customizations and a conversational VQA interface for YouTube videos. Through a longitudinal, in-the-wild study with eight BLV participants, we examine how users engage with customization and VQA features over time. Our results show sustained engagement with both features and that customized ADs improve effectiveness, enjoyment, and immersion compared to default ADs, highlighting the value of personalized, interactive video access for BLV users. 
+
+## CCS Concepts 
+
+• Human-centered computing → Accessibility technologies ;
+
+Accessibility systems and tools ; User studies ; Web-based interac-tion .
+
+## Keywords 
+
+Video Accessibility, Blind and Low Vision Users, Audio Descrip-tion, Multimodal Large Language Models, Customization, Visual Question Answering, Longitudinal Study 
+
+ACM Reference Format: 
+
+Maryam Cheema, Sina Elahimanesh, Pooyan Fazli, and Hasti Seifi. 2026. ViDscribe: Multimodal AI for Customizing Audio Description and Question Answering in Online Videos. In Extended Abstracts of the 2026 CHI Conference on Human Factors in Computing Systems (CHI EA ’26), April 13–17, 2026, Barcelona, Spain. ACM, New York, NY, USA, 9 pages. https://doi.org/10.1145/ 3772363.3798744  
+
+> ∗Equal contribution.
+> This work is licensed under a Creative Commons Attribution 4.0 International License.
+> CHI EA ’26, Barcelona, Spain
+> ©2026 Copyright held by the owner/author(s). ACM ISBN 979-8-4007-2281-3/2026/04 https://doi.org/10.1145/3772363.3798744
+
+## 1 Introduction 
+
+Recent advances in multimodal large language models (MLLMs) enable automated audio descriptions (AD) and interactive question answering for video content [ 22 , 32 , 37 ], creating new opportuni-ties to improve access for blind and low vision (BLV) users. While human-produced AD can convey rich narrative detail, capturing visual nuance, emotional tone, and complex scene dynamics [ 4], it is costly, time-consuming, and requires specialized expertise. As a result, the vast majority of online video content remains unde-scribed [ 25 ]. In response, prior work suggests that AI-generated AD can provide effective and scalable access to visual media for BLV users [8, 22, 34]. Despite this promise, existing AI-generated AD systems largely adopt a one-size-fits-all approach and are typically evaluated in short, lab-based studies with preset videos. Recent research high-lights the importance of customization [ 8, 16 ] and interactive ques-tion answering [ 18 ] for supporting BLV users’ diverse information needs and viewing goals. However, prior customization efforts focus primarily on human-produced or edited descriptions [ 24 ]. Little is known about how well MLLMs can support on-demand AD customization and video question answering (VQA) for on-line videos. Moreover, prior evaluations of AI-generated AD rarely consider longitudinal use. Consequently, we lack understanding of how BLV users’ interaction patterns, preferences, and percep-tions of AI-generated descriptions evolve over time in everyday video-watching contexts. To address these gaps, we develop ViDscribe , an online plat-form that provides AI-generated AD, multiple forms of user-driven AD customizations, and an integrated question-and-answer fea-ture (Figure 1). ViDscribe supports any YouTube video, enabling BLV users to engage with content they independently select rather than researcher-curated media. Using this platform, we investigate three research questions: (1) How well can MLLMs support AD customization for BLV users? (2) What types of customizations and questions do BLV users most frequently request while watching online videos? and (3) How do patterns of AD customization and VQA change over time during repeated, everyday use? To answer these questions, we conduct a longitudinal user study with eight BLV participants. Each participant completes at least five video-viewing sessions with ViDscribe over a week. The study combines interaction logs with in-situ daily micro-surveys and post-study feedback to capture both immediate reactions and evolving  
+
+> arXiv:2603.14662v1 [cs.HC] 15 Mar 2026 CHI EA ’26, April 13–17, 2026, Barcelona, Spain Maryam Cheema, Sina Elahimanesh, Pooyan Fazli, and Hasti Seifi Customization controls
+> Frequency
+> Description Length
+> Emphasis
+> Subjectivity
+> Colors
+> Video Page with adaptive AD
+> Adjust text-to-speech volume
+> Adjust text-to-speech speed
+> VQA button with the current timestamp
+> Interactive VQA
+> A woman, Kate, is seen
+> embracing a person, likely
+> Kevin, tightly. She appears
+> emotional, possibly
+> relieved or overjoyed.
+
+Figure 1: ViDscribe interface, showing customization controls, video page with adaptive ADs, and interactive VQA during playback. 
+
+usage behaviors. Our findings show that BLV users frequently customized ADs, reporting higher effectiveness, enjoyment, and immersion than with defaults. We report the most frequent types of VQA queries and AD customizations, as well as a shift over time toward shorter and less frequent descriptions, reflecting evolving user preferences. This work makes two contributions: 
+
+• Design and implementation of ViDscribe 1, an online plat-form that leverages MLLMs to provide automated AD, user-driven customization, and interactive VQA for arbitrary on-line videos; and 
+
+• Empirical data from a longitudinal study that characterizes BLV individuals’ usage patterns, preferences, and percep-tions of AI-generated AD customizations and VQA in every-day video-watching contexts. 
+
+## 2 Related Work 
+
+Our work lies at the intersection of interactive audio description tools for video accessibility and research on video personalization and question answering for BLV users. 
+
+Audio Description Tools. A wide range of tools support AD cre-ation, from manual platforms such as YouDescribe [ 31 ], Rescribe [28 ], and Omnidescribe [ 7 ], to AI-based approaches including SPICA [27 ] and NarrationBot [ 5, 15 ], which enable automatic generation of video descriptions [ 6 , 22 , 34 , 35 ]. Hybrid methods combine human expertise with automation to produce timely, contextually relevant descriptions [ 9, 26 ]. For instance, DescribePro leverages MLLMs to assist novice and professional describers in creating and collabo-rating on adaptive and style-aware ADs [ 9]. While human-in-the loop tools capture rich emotional and contextual nuance [ 38 , 39 ], they cannot scale to the increasing volume of video content [ 23 ]. Recent advances in large language and vision models accelerate AD generation [ 12 ] and produce higher-quality descriptions than 
+
+> 1https://vidscribe.org/
+
+novice human-generated ADs [ 21 , 22 ]. Yet, most systems still pro-duce a single, fixed description per video, limiting responsiveness to various content and individual preferences. 
+
+Personalized ADs and Video QA. BLV users have diverse needs shaped by viewing context [ 8, 16 , 33 , 36 ], and degree of blind-ness [ 10 ], highlighting the importance of personalization and inter-activity in accessible video experiences [ 30 ]. Prior work shows that professionally customized ADs can significantly improve BLV users’ comprehension, satisfaction, and engagement [ 11 , 24 ], highlighting the potential for scalable, automated customization [ 24 ]. Beyond passive descriptions, interactive question answering emerges as a complementary approach that enables users to request missing details and clarify ambiguities on demand [ 2, 5 , 17 , 19 ], thus enhanc-ing agency and learning [ 1]. Yet prior work rarely examines these features in real-world or longitudinal contexts. Building on this literature, our work investigates BLV users’ week-long experience with AI-generated customized ADs combined with VQA, providing insights into how personalization and interactivity shape everyday video accessibility. 
+
+## 3 ViDscribe 
+
+ViDscribe is a web-based, AI-powered platform designed to support BLV users through adaptive AD and interactive VQA (Figure 1). Users can watch any YouTube video by pasting its URL, and option-ally selecting AD customization settings before playback. Based on these inputs, ViDscribe generates personalized ADs that are syn-chronized with the video, while allowing users to ask questions at any point during playback. Users can also adjust the speed and volume of the AD speech while watching. ViDscribe is implemented using a React frontend and AWS Lambda for the backend. The sys-tem leverages the Gemini 3 Pro multimodal large language model for both AD generation and visual question answering. The interface is fully compatible with screen readers and supports keyboard-based controls for playback, customization, and AD speech-rate adjustment. ViDscribe: Multimodal AI for Customizing Audio Description and Question Answering in Online Videos CHI EA ’26, April 13–17, 2026, Barcelona, Spain 
+
+(1) Customization Controls. To accommodate diverse preferences and viewing contexts, ViDscribe provides six customization options informed by prior work [ 8, 9, 24 ] and our experience with BLV users. These settings can be configured per video and adjusted as needed: 
+
+(A) Frequency: Controls how often audio descriptions are inserted, including frequent (every 8 seconds), moderate (15s), or sparse (30s); 
+
+(B) Length: Adjusts the number of words per description using a slider (15-100 words); (C) Emphasis: Prioritizes the type of visual information described, such as general content, characters, instruc-tional, or environment focus; (D) Subjectivity: Switches between objective, factual descriptions and more subjective, interpretive narration; (E) Color Preference: Toggles whether color attributes are explicitly described (F) Free-form Guidelines: Allows users to optionally enter custom instructions via a textbox to guide AD generation further. All customization settings are translated into prompt parameters to condition AD generation. Default AD is produced by our system when participants choose not to select any customization options. It applies these preset parameters: a description length of 50 words, general emphasis with objective descriptions, and color attributes enabled. This approach enables BLV users to access any YouTube video, including those without a human-written AD track. 
+
+(2) Adaptive AD Generation. ViDscribe separates AD timing from content generation to ensure temporal alignment and intelligibil-ity. First, the AD timing module identifies suitable timestamps for inserting descriptions by following established AD guidelines and adapting the DescribePro approach [ 9 ]. The module extracts the video’s audio track and visual frames, then analyzes three sig-nals: (1) silence, (2) no-speech segments, and (3) scene changes. Silence indicates the absence of sound, while no-speech captures moments without human speech, helping avoid interruptions to dialogue. Scene change detection ensures that ADs align with mean-ingful visual transitions. The module selects timestamps where these signals overlap, prioritizing natural pauses that coincide with visual changes, and recursively splits intervals longer than the user-selected frequency to allow multiple AD insertions when ap-propriate. Next, the description generation module uses Gemini 3 Pro to generate ADs for each timestamped segment. The sys-tem provides the model with the video, the timestamps, the user’s customization settings, and a set of 42 AD guidelines from prior work [ 22 ]. Gemini 3 Pro then produces descriptions tailored to the requested frequency, length, emphasis, subjectivity, and color pref-erences. Full prompts and guidelines are included in Supplementary Materials. 
+
+(3) Interactive VQA Feature. Beyond passive listening, ViDscribe 
+
+supports interactive visual question answering during video play-back. By pressing a dedicated keyboard shortcut or on-screen but-ton, users can ask questions (e.g., “Who just entered the room?”) either by typing or using speech-to-text. To answer a question, the system sends the user’s query along with the current video timestamp, video AD, and representative video frames to Gemini 3 Pro , which generates a concise, context-aware response. Answers are presented as text and rendered via text-to-speech, enabling on-demand clarification and deeper engagement with visual content during everyday video watching. 
+
+## 4 User Study 
+
+We conducted a five-day study with eight BLV users to examine patterns of AD customization and VQA with ViDscribe outside the lab. The study was approved by the university’s ethics board. Participants received $75 for their time. 
+
+Participants. We recruited eight participants (4 female, 3 male, 1 non-binary; 𝑀 𝑎𝑔𝑒 = 39 .8). All participants identified as blind (totally blind = 4, light perception = 3, legally blind = 1) and used screen readers. Four participants reported frequently watching videos with ADs, three occasionally, and one rarely. Seven participants had prior interaction with AI descriptions, either through user studies ( 𝑛 = 4), or using visual description apps (e.g., PiccyBot, SeeingAI). 
+
+Study Procedure. The study consisted of (1) an introductory ses-sion, (2) a five-day usage period over a week, and (3) an end-of-week survey. In the introductory session (20–30 minutes), participants provided consent, completed a demographics questionnaire, and were introduced to ViDscribe . Participants then used the system to watch at least 10 minutes of video per day for at least five days at times and locations of their choice. After each day, they completed a short survey about their experience, followed by a final survey at the end of the week. 
+
+Data Collection. In end-of-day surveys, participants rated the ef-fectiveness, enjoyment, and immersion of watching videos with 
+
+ViDscribe . When used, they also rated customization alignment, helpfulness, and accuracy of VQA responses. The final survey in-cluded System Usability Scale (SUS) scores. We analyzed VQA ques-tions using a closed-code codebook developed by one author and independently applied by two authors. For each question, both au-thors reviewed the video at the timestamp when the question was asked to determine whether the system’s response was accurate and answerable based on the visual information. Disagreements in the coding for VQA types and accuracy were resolved through discus-sion. We analyzed open-ended survey responses using open coding. The system logged uploaded videos and user customizations. 
+
+## 5 Results 
+
+Over the longitudinal study, participants uploaded 81 videos (av-erage duration = 3:37), 51 of which used customizations (i.e., 63%). They completed 45 daily surveys (i.e., diary entries), including 31 customization-alignment ratings and 26 VQA ratings. Below, we report findings on their experience, customization and VQA usage, and changes over time. 
+
+User Experience. AI customizations received higher effective-ness, enjoyment, and immersion ratings than under default settings (Fig. 2(a)). Enjoyment showed the largest increase ( 𝑀 𝑐𝑢𝑠𝑡𝑜𝑚 = 3.97; 
+
+𝑀 𝑑𝑒 𝑓 𝑎𝑢𝑙𝑡 = 3.45), echoed in qualitative feedback: [P5] “ the last video was actually quite enjoyable...I could see myself actually using this.” 
+
+Ratings for immersion( 𝑀 𝑐𝑢𝑠𝑡𝑜𝑚 = 4.06; 𝑀 𝑑𝑒 𝑓 𝑎𝑢𝑙𝑡 = 3.72) and effec-tiveness ( 𝑀 𝑐𝑢𝑠𝑡𝑜𝑚 = 4.32; 𝑀 𝑑𝑒 𝑓 𝑎𝑢𝑙𝑡 = 4.00) showed similar trends. Due to the small sample size and unequal numbers of observations, we did not conduct statistical significance tests. Ratings for the VQA feature were positive but comparatively lower. Participants asked a total of 66 questions across the study. In the final survey, participants rated VQA particularly useful when CHI EA ’26, April 13–17, 2026, Barcelona, Spain Maryam Cheema, Sina Elahimanesh, Pooyan Fazli, and Hasti Seifi Effectiveness Enjoyment Immersion 
+
+> 1
+> 2
+> 3
+> 4
+> 5
+> Rating
+> Default
+> Customized
+
+(a) AI description ratings (Customized vs. Default). 0 1 2 3 4 5 6 7 8     
+
+> Count
+> The AI generally described the videos accurately.
+> I trusted the AI s descriptions most of the time.
+> The VQA was helpful when I needed additional information.
+> I would recommend ViDscribe to a BLV friend.
+> 1
+> 1
+> 2
+> 1
+> 1
+> 4
+> 6
+> 6
+> 3
+> 2
+> 1
+> 1
+> 3
+> Strongly Disagree Disagree Neutral Agree Strongly Agree
+
+(b) End of week ratings 
+
+Figure 2: User ratings for (a) customized vs. default ADs in daily surveys, and (b) ViDscribe in the end-of-week survey. 
+
+seeking additional information (Fig 2(b)). In daily surveys, partic-ipants rated how much VQA helped them understand videos as 3.46 out of 5, while perceived accuracy was rated slightly lower at 3.27. Based on our manual analysis of VQAs, the lower ratings likely stem from cases in which participants ( 𝑛 = 2) needed to reframe or rewind videos to ask their questions, as the current VQA implementation uses only the current frame and a few adjacent frames to provide an answer. Overall, ViDscribe received an average SUS score of 70.6 ( 𝑆𝐷 =
+
+19 .4), above the average benchmark for web-based interfaces of 68 [ 3 ]. Participants suggested improving keyboard navigation, par-ticularly for accessing VQA ( 𝑛 = 3). Additional feedback highlighted a desire to save customization and text-to-speech settings for future use. The end-of-week ratings suggested trust in the AI-generated descriptions, and most participants ( 𝑛 = 6) indicated they would recommend the system to others (Fig. 2(b)).                                   
+
+> Type Option n (%) Type Option n (%) 1. Emphasis general 27 (52.9) 4.Color include 41 (80.4) character 15 (29.4) exclude 10 (19.6) instructional 6 (11.8) 5. Subjectivity objective 37 (72.5) environment 3 (5.9) subjective 14 (27.5)
+> 2. Frequency 8 seconds 28 (54.9) 6. Length 15–25 words 21 (41.2) 15 seconds 22 (43.1) 26–50 words 25 (49.0) 30 seconds 1 (2.0) 51–75 words 2 (3.9)
+> 3. Free-form Guidelines 12 (23.5) 76–100 words 3 (5.9)
+
+Table 1: Six AD customization types and distribution of user-selected customizations. 
+
+Types of Customizations and Questions. Table 1 summarizes the AD customization options selected across videos. Participants more frequently opted for general emphasis and objective descriptions. However, character focus was popular for Sports (3/5) and Film & Animation (4/14) videos. The use of free-form guidelines was also higher in Sports (2/5) and Film & Animation (5/12), where many of these guidelines concerned character attributes. For example, requests were made to include character names ( “Include character names” , n=5) or to describe appearance ( “Describe the apparent age and physical health of the people in the video,” n=2). This aligns with the preference for character emphasis for Film & Animation genre. Compared to other genres, Film & Animation and Entertainment 
+
+videos showed greater use of subjective descriptions (5/14 and 3/5, respectively), suggesting varied preferences for visually rich con-tent. Instructional emphasis was particularly popular for How-To videos (6/11): “The instruction emphasis is very awesome for educa-tional, crafts, and exercise videos (P7).” Other than one instance, no videos used the 30-second frequency setting, and most videos used Describe Character  
+
+> Describe Scene
+> Identify Color
+> Identify Feature
+> Identify Presence
+> Identify Subject
+> Infer from video
+> 0
+> 2
+> 4
+> 6
+> 8
+> 10
+> 12
+> 14
+> Count
+> 13
+> 11
+> 8
+> 65
+> 3
+> 10
+> 2
+> 3
+> 1
+> 1
+> 3
+> Accurate response
+> yes
+> no
+> partially
+
+Figure 3: Distribution of VQA types and response accuracy. 
+
+descriptions under 50 words, indicating a general preference for shorter, more frequent descriptions. Figure 3 shows the distribution of question types. Describing scene, character, and identifying color or presence were frequently asked questions. Several participants asked questions that required audio-visual inference (e.g., Who said “I’m not on your team?” ), for which the VQA system sometimes failed to respond. In addition to these common patterns, participants reported meaningful use cases. For instance, P2 used VQA to obtain product-specific information (e.g., What color is the cot? ), noting: “I actually used this video and description [VQA] since I got one of these cots for Christmas.” 
+
+Longitudinal Changes. Data showed notable patterns in how par-ticipants adjusted frequency and length parameters over time. Over subsequent days, participants increasingly opted for shorter descrip-tion lengths, where the average reduced from 47.7 ( 𝑆𝐷 = 21 .0) to 33.3 ( 𝑆𝐷 = 10 .9). This trend aligns with qualitative feedback, where in the end of week survey, four participants explicitly reported a preference for reduced length: “ I liked the mid-length description, 25 words max. (P1) ” Participants indicated that higher word counts often introduced “AI fluff”. A similar pattern was observed for de-scription frequency, with participants gradually favoring longer intervals (e.g., 15 seconds) as the week progressed to reduce inter-ruptions and repetition. In contrast, no clear patterns emerged for emphasis or subjectiveness, suggesting these choices were primarily personal preference and content-driven. Customization and VQA usage also remained consistent through-out the week. Specifically, perceived alignment of all customizations with the ADs remained high, with emphasis receiving the high-est alignment rating ( 𝑀 = 4.22 , 𝑆𝐷 = 0.56 ), followed by length (𝑀 = 4.10 , 𝑆𝐷 = 0.70 ), frequency ( 𝑀 = 4.03 , 𝑆𝐷 = 0.75 ), and sub-jectiveness ( 𝑀 = 3.97 , 𝑆𝐷 = 0.55 ). Lower ratings for frequency and subjectiveness were due to perceived mismatches with user prefer-ences, as P4 noted: “Sometimes it felt like the AD wasn’t as frequent ViDscribe: Multimodal AI for Customizing Audio Description and Question Answering in Online Videos CHI EA ’26, April 13–17, 2026, Barcelona, Spain 
+
+in the Mortal Kombat trailer. In the Kill Bill trailer, the subjective setting was too subjective.” Together, these results suggest persistent perceptions across viewing sessions. 
+
+## 6 Discussion and Conclusion 
+
+We discuss implications of our findings for future work and outline the study’s limitations. Regarding the efficacy of MLLMs in AD customization ( RQ1 ), our findings suggest participants have an overall positive perception of AI customizations in line with prior findings on customization by professional describers [ 24 ]. Our re-sults also suggest high trust in the generated descriptions, but as the trust in AI increases, it raises concerns about correctness and hallucinations [ 20 ]. Prior research shows that users place high trust in longer descriptions regardless of their accuracy [ 14 ], a pattern that may similarly apply to customized descriptions. To mitigate such risks, AI accessibility systems can incorporate human-in-the-loop mechanisms and flag videos for review based on content or uncertainty in descriptions. With respect to types of customization and questions ( RQ2 ), 
+
+emphasis emerged as the most preferred customization, with in-structional emphasis favored for how-to, and character focus for en-tertainment content. Participants also often asked both scene-level and inferential questions. The combination of free-form guidelines and customization options in ViDscribe offers an opportunity to develop genre-specific AD guidelines that not only prompt MLLMs but also train novice describers. Also, the prevalence of inferential questions underscores the need for VQA systems that adopt a two-step approach: first, identifying relevant video segments, and then generating contextually grounded responses. Regarding changes over time ( RQ3 ), participants consistently used customizations and VQAs throughout the week. Our results suggest that shorter and less frequent descriptions were preferred over time. One possible explanation is that as participants became more familiar with the content style and system capabilities, they learned how much visual detail they could obtain relative to the number and frequency of ADs, leading them to favor more concise descriptions that reduced cognitive load and viewing interruption, similar to how professional describers shorten AI-generated or novice-written ADs [ 9]. Other customization choices varied by per-sonal preference, as did the types of questions participants asked. These findings highlight a critical gap. While prior longitudinal data have examined BLV genre preferences [ 29 ], and interaction with image-QA [ 13 ], longitudinal engagement with AD customization and video-QA remains underexplored. Platforms like ViDscribe en-able the collection of longitudinal data at scale, by capturing users’ customization choices and question-asking behavior over extended periods, generating rich behavioral data to inform adaptive systems that evolve ADs alongside users’ preferences. 
+
+Limitations. Although longitudinal, the one-week study duration may not be sufficient to capture longer-term adaptation of cus-tomizations. Additionally, to reduce participant burden, we opted to collect surveys (i.e., diary entries) at the end of each day rather than after each video. Gathering insights on individual video cus-tomizations could provide statistical evidence on the efficacy of AI customizations. Finally, the study involved eight BLV participants. Future work should look into how these customizations and VQA features scale across larger user populations. In conclusion, ViDscribe enhances access and provides insights into user-driven customization and VQA usage, informing the de-sign of future interactive AD systems. 
+
+## Acknowledgments 
+
+This research was supported by the National Eye Institute (NEI) of the National Institutes of Health (NIH) under award number R01EY034562. The content is solely the responsibility of the authors and does not necessarily represent the official views of the NIH. We thank all the participants for their time. We also thank Samuel Martin for his contributions to developing ViDscribe , as well as to the student volunteers who created descriptions using ViDscribe 
+
+and provided valuable feedback. 
+
+## References                                       
+
+> [1] Katharina Anderer, Karin Müller, Lukas Strobel, Matthias Wölfel, Jan Niehues, and Kathrin Gerling. 2025. Making Lecture Videos Accessible for Students who are Blind or have Low Vision through AI-Assisted Navigation and Visual Question Answering. In International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS) .[2] Ali Selman Aydin, Yu-Jung Ko, Utku Uckun, IV Ramakrishnan, and Vikas Ashok. 2021. Non-Visual Accessibility Assessment of Videos. In ACM International Conference on Information & Knowledge Management (CIKM) .[3] Aaron Bangor, Philip T Kortum, and James T Miller. 2008. An Empirical Evaluation of the System Usability Scale. Intl. Journal of Human–Computer Interaction (2008). [4] Cynthia L. Bennett, Amy Pavel, Aidan Bryant, Laura J. McCarthy Eberly, Renee Shelby, and Shaun K. Kane. 2025. “Made by People, Described by People”: The Changing Work Practices of Audio Description Professionals. ACM Transactions on Accessible Computing (2025). [5] Aditya Bodi, Pooyan Fazli, Shasta Ihorn, Yue-Ting Siu, Andrew T Scott, Lothar Narins, Yash Kant, Abhishek Das, and Ilmi Yoon. 2021. Automated Video De-scription for Blind and Low Vision Users. In Extended Abstracts of the Conference on Human Factors in Computing Systems (CHI EA) .[6] Virgínia P. Campos, Luiz M. G. Gonçalves, Wesnydy L. Ribeiro, Tiago M. U. Araújo, Thaís G. Do Rego, Pedro H. V. Figueiredo, Suanny F. S. Vieira, Thiago F. S. Costa, Caio C. Moraes, Alexandre C. S. Cruz, Felipe A. Araújo, and Guido L. Souza Filho. 2023. Machine Generation of Audio Description for Blind and Visually Impaired People. ACM Transactions on Accessible Computing (2023). [7] Ruei-Che Chang, Chao-Hsien Ting, Chia-Sheng Hung, Wan-Chen Lee, Liang-Jin Chen, Yu-Tzu Chao, Bing-Yu Chen, and Anhong Guo. 2022. OmniScribe: Authoring Immersive Audio Descriptions for 360 °Videos. In ACM Symposium on User Interface Software and Technology (UIST) .[8] Maryam Cheema, Hasti Seifi, and Pooyan Fazli. 2025. Describe Now: User-Driven Audio Description for Blind and Low Vision Individuals. In ACM Designing Interactive Systems Conference (DIS) .[9] Maryam S Cheema, Sina Elahimanesh, Samuel Martin, Pooyan Fazli, and Hasti Seifi. 2025. DescribePro: Collaborative Audio Description with Human-AI Inter-action. In ACM SIGACCESS Conference on Computers and Accessibility (ASSETS) .[10] Agnieszka Chmiel and Iwona Mazur. 2022. A Homogenous or Heterogeneous Audience? Audio description Preferences of Persons with Congenital Blindness, Non-congenital Blindness and Low Vision. Perspectives (2022). [11] Described and Captioned Media Program. 2012. Audio Description Tip Sheet. (2012). https://dcmp.org/learn/227-audio-description-tip-sheet [12] Yingqiang Gao, Lukas Fischer, Alexa Lintner, and Sarah Ebling. 2025. Audio Description Generation in the Era of LLMs and VLMs: A Review of Transferable Generative AI Technologies. In Findings of the Association for Computational Linguistics (NAACL) .[13] Ricardo E Gonzalez Penuela, Jazmin Collins, Cynthia Bennett, and Shiri Azenkot. 2024. Investigating Use Cases of AI-Powered Scene Description Applications for Blind and Low Vision People. In ACM SIGCHI Conference on Human Factors in Computing Systems (CHI) .[14] Mina Huh, Fangyuan Xu, Yi-Hao Peng, Chongyan Chen, Danna Gurari, Eunsol Choi, and Amy Pavel. 2024. Long-Form Answers to Visual Questions from Blind and Low Vision People. In Conference on Language Modeling (COLM) .[15] Shasta Ihorn, Yue-Ting Siu, Aditya Bodi, Lothar Narins, Jose M Castanon, Yash Kant, Abhishek Das, Ilmi Yoon, and Pooyan Fazli. 2021. NarrationBot and InfoBot: A Hybrid System for Automated Video Description. arXiv:2111.03994 [cs.HC]
+> (2021).
+
+CHI EA ’26, April 13–17, 2026, Barcelona, Spain Maryam Cheema, Sina Elahimanesh, Pooyan Fazli, and Hasti Seifi 
+
+[16] Lucy Jiang, Crescentia Jung, Mahika Phutane, Abigale Stangl, and Shiri Azenkot. 2024. “It’s Kind of Context Dependent”: Understanding Blind and Low Vision People’s Video Accessibility Preferences Across Viewing Scenarios. In ACM SIGCHI Conference on Human Factors in Computing Systems (CHI) .[17] Lucy Jiang, Mahika Phutane, and Shiri Azenkot. 2023. Beyond Audio Description: Exploring 360 ° Video Accessibility with Blind and Low Vision Users Through Collaborative Creation. In ACM SIGACCESS Conference on Computers and Acces-sibility (ASSETS) .[18] Jiho Kim, Arjun Srinivasan, Nam Wook Kim, and Yea-Seul Kim. 2023. Exploring Chart Question Answering for Blind and Low Vision Users. In Conference on Human Factors in Computing Systems (CHI) .[19] Yogesh Kulkarni and Pooyan Fazli. 2025. EgoVITA: Learning to Plan and Verify for Egocentric Video Reasoning. arXiv:2511.18242 [cs.CV] (2025). [20] Chaoyu Li, Eun Woo Im, and Pooyan Fazli. 2025. VidHalluc: Evaluating Temporal Hallucinations in Multimodal Large Language Models for Video Understanding. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) .[21] Chaoyu Li, Sid Padmanabhuni, Maryam S Cheema, Hasti Seifi, and Pooyan Fazli. 2025. VideoA11y-40K: A Large-Scale Dataset for Accessible Video Understanding. In VizWiz Grand Challenge Workshop, IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) .[22] Chaoyu Li, Sid Padmanabhuni, Maryam S Cheema, Hasti Seifi, and Pooyan Fazli. 2025. VideoA11y: Method and Dataset for Accessible Video Description. In ACM SIGCHI Conference on Human Factors in Computing Systems (CHI) .[23] 3Play Media. 2022. The Ultimate Guide to Audio Description. (2022). https: //www.3playmedia.com/learn/popular-topics/audio-description/ [24] Rosiana Natalie, Ruei-Che Chang, Smitha Sheshadri, Anhong Guo, and Kotaro Hara. 2024. Audio Description Customization. In ACM SIGACCESS Conference on Computers and Accessibility (ASSETS) .[25] Rosiana Natalie, Jolene Loh, Huei Suen Tan, Joshua Tseng, Ian Luke Yi-Ren Chan, Ebrima H Jarjue, Hernisa Kacorri, and Kotaro Hara. 2021. The Efficacy of Collaborative Authoring of Video Scene Descriptions. In ACM SIGACCESS Conference on Computers and Accessibility (ASSETS) .[26] Rosiana Natalie, Joshua Tseng, Hernisa Kacorri, and Kotaro Hara. 2023. Support-ing Novices Author Audio Descriptions via Automatic Feedback. In ACM SIGCHI Conference on Human Factors in Computing Systems (CHI) .[27] Zheng Ning, Brianna L Wimer, Kaiwen Jiang, Keyi Chen, Jerrick Ban, Yapeng Tian, Yuhang Zhao, and Toby Jia-Jun Li. 2024. SPICA: Interactive Video Content Exploration through Augmented Audio Descriptions for Blind or Low-Vision Viewers. In ACM SIGACCESS Conference on Human Factors in Computing Systems (CHI) .[28] Amy Pavel, Gabriel Reyes, and Jeffrey P. Bigham. 2020. Rescribe: Authoring and Automatically Editing Audio Descriptions. In ACM Symposium on User Interface Software and Technology (UIST) .[29] Charity Pitcher-Cooper, Manali Seth, Benjamin Kao, James M Coughlan, and Ilmi Yoon. 2023. You Described, We Archived: A Rich Audio Description Dataset. 
+
+Journal on Technology and Persons with Disabilities (2023). [30] Yotam Sechayk, Ariel Shamir, Amy Pavel, and Takeo Igarashi. 2025. VeasyGuide: Personalized Visual Guidance for Low-vision Learners on Instructor Actions in Presentation Videos. In ACM SIGACCESS Conference on Computers and Accessi-bility (ASSETS) .[31] Smith-Kettlewell Eye Research Institute. 2026. YouDescribe: Audio Description for YouTube Videos. https://youdescribe.org/. [32] Yunlong Tang, Junjia Guo, Hang Hua, Susan Liang, Mingqian Feng, Xinyang Li, Rui Mao, Chao Huang, Jing Bi, Zeliang Zhang, Pooyan Fazli, and Chenliang Xu. 2025. Vidcomposition: Can MLLMs analyze compositions in compiled videos?. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) .[33] Tess Van Daele, Akhil Iyer, Yuning Zhang, Jalyn C Derry, Mina Huh, and Amy Pavel. 2024. Making Short-Form Videos Accessible with Hierarchical Video Summaries. In ACM SIGCHI Conference on Human Factors in Computing Systems (CHI) .[34] Yujia Wang, Wei Liang, Haikun Huang, Yongqi Zhang, Dingzeyu Li, and Lap-Fai Yu. 2021. Toward Automatic Audio Description Generation for Accessible Videos. In ACM SIGCHI Conference on Human Factors in Computing Systems (CHI) .[35] Shuchang Xu, Xiaofu Jin, Wenshuo Zhang, Huamin Qu, and Yukang Yan. 2025. Branch Explorer: Leveraging Branching Narratives to Support Interactive 360 Video Viewing for Blind and Low Vision Users. In ACM Symposium on User Interface Software and Technology (UIST) .[36] Diana Yee, Amina Kobenova, Rohan Jhangiani, Piper Stickler, and Sri Kurniawan. 2025. “Better Than Nothing” or Not Enough? User-Centered Reflections on AI-Generated Audio Descriptions Across Media Formats. In ACM SIGACCESS Conference on Computers and Accessibility (ASSETS) .[37] Pooyan Fazli Yogesh Kulkarni. 2026. AVATAR: Reinforcement Learning to See, Hear, and Reason Over Video. In IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) .[38] Beste F Yuksel, Pooyan Fazli, Umang Mathur, Vaishali Bisht, Soo Jung Kim, Joshua Junhee Lee, Seung Jung Jin, Yue-Ting Siu, Joshua A Miele, and Ilmi Yoon. 2020. Human-in-the-Loop Machine Learning to Increase Video Accessibility for Visually Impaired and Blind Users. In ACM Designing Interactive Systems Conference (DIS) .[39] Beste F Yuksel, Soo Jung Kim, Seung Jung Jin, Joshua Junhee Lee, Pooyan Fazli, Umang Mathur, Vaishali Bisht, Ilmi Yoon, Yue-Ting Siu, and Joshua A Miele. 2020. Increasing Video Accessibility for Visually Impaired Users with Human-in-the-Loop Machine Learning. In ACM SIGCHI Conference Extended Abstracts on Human Factors in Computing Systems (CHI EA) .ViDscribe: Multimodal AI for Customizing Audio Description and Question Answering in Online Videos CHI EA ’26, April 13–17, 2026, Barcelona, Spain 
+
+## A Appendix: Prompt Templates Used in 
+
+## ViDscribe 
+
+Below, we present the AD prompt, along with the general guidelines and customization prompts used to control emphasis, subjectivity, and color preferences. We also include the Interactive VQA prompt. 
+
+## A.1 Base Audio Description Prompt 
+
+You are an AI designed to assist in creating high-quality and contextually rich descriptions for videos, aimed at enhancing accessibility for blind and low-vision (BLV) users. The input consists of a video. Based on the video, craft audio descriptions that are highly personalized, based on guidance from the BLV. The input also consists of a set of timestamps. The timestamps are the start timestamps where the description will play. Ensure that the descriptions align with the visual content present at the timestamps. You must follow all the given instructions. You should avoid any prefatory language, such as ‘the video shows‘. Follow the General and Customized guidelines shared by the user. You should prioritize the customized guidelines while adhering to the general Guidelines: GENERAL AUDIO DESCRIPTION GUIDELINES: { – GENERAL_GUIDELINES – } CUSTOM GUIDELINES SPECIFIED BY USER: - Description Length: Target approximately {TAR-GET_LENGTH } words per description segment - Emphasis: { EMPHASIS_PROMPT } - Style: { SUBJECTIVITY_PROMPT } - Color Descriptions: { COLOR_PREFERENCES_PROMPT } - User Guidelines: { FREE_FORM_GUIDELINES } TIMESTAMPS: { TIMESTAMPS } If the timestamps are present at any point where there is speech, adjust the timestamp slightly to ensure the description plays after the description. IMPORTANT: Your response must be valid JSON matching the VideoMetadata schema. { VIDEO_FRAMES } 
+
+## A.2 General Guidelines 
+
+1. Avoid over-describing - Do not include non-essential visual details. 2. Description should not be opinionated unless content de-mands it. 3. Choose a level of detail based on plot relevance when de-scribing scenes. 4. Description should be informative and conversational, in present tense and third-person omniscient. 5. The vocabulary should reflect the predominant lan-guage/accent of the program and should be consistent with the genre and tone of the content while also mindful of the tar-get audience. Vocabulary used should ensure accuracy, clarity, and conciseness. 6. Consider historical context and avoid words with negative connotations or bias. 7. Pay attention to verbs - Choose vivid verbs over bland ones with adverbs. 8. Use pronouns only when clear whom they refer to. 9. Use comparisons for shapes and sizes with familiar and glob-ally relevant objects. 10. Maintain consistency in word choice, character qualities, and visual elements for all audio descriptions. 11. Tone and vocabulary should match the target audience’s age range. 12. Ensure no errors in word selection, pronunciation, diction, or enunciation. 13. Start with general context, then add details. 14. Describe shape, size, texture, or color as appropriate to the content. 15. Use first-person narrative for engagement if required to engage the audience. 16. Use articles appropriately to introduce or refer to subjects. 17. Prefer formal speech over colloquialisms, except where appropriate. 18. When introducing new terms, objects, or actions, label them first, and then follow with the definitions. 19. Describe objectively without personal interpretation or com-ment. Also, do not censor content. 20. Deliver narration steadily and impersonally (but not monotonously), matching the program’s tone. 21. It can be important to add emotion, excitement, and lightness of touch at different points. Adjust style for emotion and mood according to the program’s genre. 22. If it is children’s content, tailor language and pace for chil-dren’s TV, considering audience feedback. 23. Do not alter, filter, or exclude content. You should describe what you see. Try to seek simplicity and succinctness in your description. 24. Prioritize what is relevant when describing action as to not affect user experience. 25. Include location, time, and weather conditions when rele-vant to the scene or plot. 26. Focus on key content for learning and enjoyment when creating audio descriptions. This is so that the intention of the program is conveyed. 27. When describing an instructional video/content, describe the sequence of activities first. 28. For a dramatic production, include elements such as style, setting, focus, period, dress, facial features, objects, and aesthet-ics. 29. Describe what is most essential for the viewer to know in order to follow, understand, and appreciate the intended learning outcomes of the video/content. 30. Audio description should describe characters, locations, time and circumstances, on-screen action, and on-screen informa-tion. 31. Describe only what a sighted viewer can see. CHI EA ’26, April 13–17, 2026, Barcelona, Spain Maryam Cheema, Sina Elahimanesh, Pooyan Fazli, and Hasti Seifi 
+
+32. Describe main and key supporting characters’ visual as-pects relevant to identity and personality. Prioritize factual descriptions of traits like hair, skin, eyes, build, height, age, and visible disabilities. Ensure consistency and avoid singling out characters for specific traits. Use person-first language. 33. If unable to confirm or if not established in the plot, do not guess or assume racial, ethnic or gender identity. 34. When naming characters for the first time, aim to include a descriptor before the name (e.g., a bearded man, Jack). 35. Description should convey facial expressions, body language and reactions. 36. When important to the meaning/intent of content, describe race using currently-accepted terminology. 37. Avoid identifying characters solely by gender expression un-less it offers unique insights not apparent otherwise to visually impaired viewers. 38. Describe character clothing if it enhances characterization, plot, setting, or genre enjoyment. 39. If text on the screen is central to understanding, establish a pattern of on-screen words being read. This may include making an announcement, such as ’Words appear’. 40. In the case of subtitles, the describer should read the trans-lation after stating that a subtitle appears. 41. When shot changes are critical to the understanding of the scene, indicate them by describing where the action is or where characters are present in the new shot. 42. Provide description before the content rather than after. 
+
+## A.3 Customization Prompt: Description Subjectivity 
+
+subjectiveness_guidelines = { ’objective’: ’Maintain strict factual neutrality. Describe only observable visual elements without interpretation or emotional inference unless clearly visible. Avoid assumptions about moti-vations, intentions, or unstated emotional states. Use neutral, descriptive language.’, ’subjective’: ’Use interpretive language to convey atmo-sphere, emotional mood, and inferred character feelings when they reasonably align with visual cues. Use expressive vocab-ulary to enhance immersion for the BLV user. Include mood, tone, and emotional context.’ }
+
+## A.4 Customization Prompt: Color Preference 
+
+color_preferences_guidelines = { ’include’: ”, ’exclude’: ’IMPORTANT - Omit ALL color information from descriptions. Do not mention colors of objects, clothing, environments, or any visual elements.’ }
+
+## A.5 Customization Prompt: Description Emphasis 
+
+emphasis_guidelines = { ’character’: ’Prioritize character-related details such as ap-pearance, expressions, gestures, actions, and interactions. Focus on what people are doing and how they are doing it.’, ’environment’: ’Prioritize spatial descriptions, atmosphere, setting, background elements, layout, lighting, and environ-mental textures. Focus on where the action takes place and the mood of the setting.’, ’general’: ’Provide balanced descriptions following the gen-eral AD guidelines. Give equal attention to all visual elements.’, ’instructional’: ’Prioritize the main plot or instructional content. Focus on plot progression, cause-effect relationships, and key narrative developments. Ensure descriptions and tran-sitions between scenes are strongly tied to story or instructional continuity. Secondary visual details should be included only when they enhance plot understanding.’ }
+
+## A.6 Interactive Visual Question Answering Prompt 
+
+You are a visual question answering aide for blind and low vision users. Your task is to answer the question for the user in the context of the video and the provided screenshots. You have to only answer related to the main frame, the adjacent frames are only for context. Answer succinctly and naturally. Do not mention screenshots. { – QUESTION – } { – MAIN_VIDEO_FRAME – } { – ADJACENT_FRAMES – } { – VIDEO_AUDIO_DESCRIPTIONS – } 
+
+## B Codebook of VQA Types with Definitions and Examples ViDscribe: Multimodal AI for Customizing Audio Description and Question Answering in Online Videos CHI EA ’26, April 13–17, 2026, Barcelona, Spain 
+
+Code Name Code Description Prompt Example 
+
+Describe Scene Gathering visual information about the overall scene. “Describe what is happening now” Identify Color Questions or statements asking about describ-ing colors of objects and subjects “What color is the thread?” Identify Presence Determine whether an object, person, or entity is visible or exists in the frame/video. “How many people are gathered? Identify Subject Identifying what something is or represents. “What kind of cheese is this?” Identify Feature Identifying features of a subject, such as size, clothing, and type. “What size is the solid state drive?” Describe Character Describing people or characters’ appearances. “How do the protestant and Orthodox priests look different?” Infer from video Questions that refer to events, objects, dialogue, or information that may occur elsewhere in the video, rather than being answerable solely from the current video second. “Who said ‘I’m not on your team’?”

@@ -1,0 +1,1061 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-24T20:15:25.077686+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 47,
+    "deep_cap": 7,
+    "deep_selected": 13,
+    "quick_candidates": 124,
+    "quick_skim_target": 12,
+    "quick_selected": 12
+  },
+  "deep_dive": [
+    {
+      "id": "2603.21925v1",
+      "title": "Guideline-grounded retrieval-augmented generation for ophthalmic clinical decision support",
+      "abstract": "In this work, we propose Oph-Guid-RAG, a multimodal visual RAG system for ophthalmology clinical question answering and decision support. We treat each guideline page as an independent evidence unit and directly retrieve page images, preserving tables, flowcharts, and layout information. We further design a controllable retrieval framework with routing and filtering, which selectively introduces external evidence and reduces noise. The system integrates query decomposition, query rewriting, retrieval, reranking, and multimodal reasoning, and provides traceable outputs with guideline page references. We evaluate our method on HealthBench using a doctor-based scoring protocol. On the hard subset, our approach improves the overall score from 0.2969 to 0.3861 (+0.0892, +30.0%) compared to GPT-5.2, and achieves higher accuracy, improving from 0.5956 to 0.6576 (+0.0620, +10.4%). Compared to GPT-5.4, our method achieves a larger accuracy gain of +0.1289 (+24.4%). These results show that our method is more effective on challenging cases that require precise, evidence-based reasoning. Ablation studies further show that reranking, routing, and retrieval design are critical for stable performance, especially under difficult settings. Overall, we show how combining visionbased retrieval with controllable reasoning can improve evidence grounding and robustness in clinical AI applications,while pointing out that further work is needed to be more complete.",
+      "authors": [
+        "Shuying Chen",
+        "Sen Cui",
+        "Zhong Cao"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-23T12:47:34+00:00",
+      "link": "https://arxiv.org/pdf/2603.21925v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "multimodal visual RAG system for ophthalmic clinical question answering",
+      "llm_evidence_cn": "用于眼科临床问答的多模态视觉RAG系统",
+      "llm_evidence": "用于眼科临床问答的多模态视觉RAG系统",
+      "canonical_evidence": "用于眼科临床问答的多模态视觉RAG系统",
+      "llm_tldr_en": "Proposes a multimodal RAG system that retrieves guideline page images for clinical decision support.",
+      "llm_tldr_cn": "提出一种多模态RAG系统，通过检索指南页面图像来支持临床决策。",
+      "llm_tldr": "提出一种多模态RAG系统，通过检索指南页面图像来支持临床决策。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "Visual Document Retrieval-Augmented Generation",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.22120v1",
+      "title": "StreamingClaw Technical Report",
+      "abstract": "Applications such as embodied intelligence rely on a real-time perception-decision-action closed loop, posing stringent challenges for streaming video understanding. However, current agents suffer from fragmented capabilities, such as supporting only offline video understanding, lacking long-term multimodal memory mechanisms, or struggling to achieve real-time reasoning and proactive interaction under streaming inputs. These shortcomings have become a key bottleneck for preventing them from sustaining perception, making real-time decisions, and executing actions in real-world environments. To alleviate these issues, we propose StreamingClaw, a unified agent framework for streaming video understanding and embodied intelligence. It is also an OpenClaw-compatible framework that supports real-time, multimodal streaming interaction. StreamingClaw integrates five core capabilities: (1) It supports real-time streaming reasoning. (2) It supports reasoning about future events and proactive interaction under the online evolution of interaction objectives. (3) It supports multimodal long-term storage, hierarchical evolution, and efficient retrieval of shared memory across multiple agents. (4) It supports a closed-loop of perception-decision-action. In addition to conventional tools and skills, it also provides streaming tools and action-centric skills tailored for real-world physical environments. (5) It is compatible with the OpenClaw framework, allowing it to fully leverage the resources and support of the open-source community. With these designs, StreamingClaw integrates online real-time reasoning, multimodal long-term memory, and proactive interaction within a unified framework. Moreover, by translating decisions into executable actions, it enables direct control of the physical world, supporting practical deployment of embodied interaction.",
+      "authors": [
+        "Jiawei Chen",
+        "Zhe Chen",
+        "Chaoqun Du",
+        "Maokui He",
+        "Wei He",
+        "Hengtao Li",
+        "Qizhen Li",
+        "Zide Liu",
+        "Hao Ma",
+        "Xuhao Pan",
+        "Chang Ren",
+        "Xudong Rao",
+        "Xintian Shen",
+        "Chenfeng Wang",
+        "Tao Wei",
+        "Chengjun Yu",
+        "Pengfei Yu",
+        "Shengyu Yao",
+        "Chunpeng Zhou",
+        "Kun Zhan",
+        "Lihao Zheng",
+        "Pan Zhou",
+        "Xuhan Zhu",
+        "Yufei Zheng"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-23T15:43:52+00:00",
+      "link": "https://arxiv.org/pdf/2603.22120v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "unified agent framework with long-term multimodal memory",
+      "llm_evidence_cn": "具有长期多模态记忆的统一智能体框架",
+      "llm_evidence": "具有长期多模态记忆的统一智能体框架",
+      "canonical_evidence": "具有长期多模态记忆的统一智能体框架",
+      "llm_tldr_en": "Proposes StreamingClaw, a framework for real-time video understanding and embodied intelligence with memory.",
+      "llm_tldr_cn": "提出了 StreamingClaw，一个支持实时视频理解和具备记忆能力的具身智能统一框架。",
+      "llm_tldr": "提出了 StreamingClaw，一个支持实时视频理解和具备记忆能力的具身智能统一框架。",
+      "llm_tags": [
+        "query:multi-modal-memory:composite"
+      ],
+      "matched_query_tag": "query:multi-modal-memory:composite",
+      "matched_query_text": "Papers central to 查找与多模态智能体记忆（图像、视频、音频）相关的研究文章, especially work that connects or combines: V; Multi-modal Memory; multimodal memory architectures for autonomous agents; visual long-term and short-term memory in agents; architectures for multimodal agent memory systems; long term multimodal memory for autonomous agents; memory augmented multimodal large language models; efficient retrieval of multimodal experiences in AI agents; How to build long term video memory for Alagents?; Retrieval augmented video understanding withmemory modules..",
+      "matched_requirement_id": "req-composite-multi-modal-memory",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.15583v1",
+      "title": "Grounding World Simulation Models in a Real-World Metropolis",
+      "abstract": "What if a world simulation model could render not an imagined environment but a city that actually exists? Prior generative world models synthesize visually plausible yet artificial environments by imagining all content. We present Seoul World Model (SWM), a city-scale world model grounded in the real city of Seoul. SWM anchors autoregressive video generation through retrieval-augmented conditioning on nearby street-view images. However, this design introduces several challenges, including temporal misalignment between retrieved references and the dynamic target scene, limited trajectory diversity and data sparsity from vehicle-mounted captures at sparse intervals. We address these challenges through cross-temporal pairing, a large-scale synthetic dataset enabling diverse camera trajectories, and a view interpolation pipeline that synthesizes coherent training videos from sparse street-view images. We further introduce a Virtual Lookahead Sink to stabilize long-horizon generation by continuously re-grounding each chunk to a retrieved image at a future location. We evaluate SWM against recent video world models across three cities: Seoul, Busan, and Ann Arbor. SWM outperforms existing methods in generating spatially faithful, temporally consistent, long-horizon videos grounded in actual urban environments over trajectories reaching hundreds of meters, while supporting diverse camera movements and text-prompted scenario variations.",
+      "authors": [
+        "Junyoung Seo",
+        "Hyunwook Choi",
+        "Minkyung Kwon",
+        "Jinhyeok Choi",
+        "Siyoon Jin",
+        "Gayoung Lee",
+        "Junho Kim",
+        "JoungBin Lee",
+        "Geonmo Gu",
+        "Dongyoon Han",
+        "Sangdoo Yun",
+        "Seungryong Kim",
+        "Jin-Hwa Kim"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-16T17:46:04+00:00",
+      "link": "https://arxiv.org/pdf/2603.15583v1",
+      "tags": [
+        "keyword:mmrag"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "retrieval-augmented conditioning on street-view images",
+      "llm_evidence_cn": "基于街景图像检索增强的条件生成",
+      "llm_evidence": "基于街景图像检索增强的条件生成",
+      "canonical_evidence": "基于街景图像检索增强的条件生成",
+      "llm_tldr_en": "Seoul World Model uses retrieval-augmented generation to ground city-scale video synthesis in real-world imagery.",
+      "llm_tldr_cn": "首尔世界模型通过检索增强技术，利用真实街景图像引导城市级视频生成。",
+      "llm_tldr": "首尔世界模型通过检索增强技术，利用真实街景图像引导城市级视频生成。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "Visual Retrieval-Augmented Generation",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.16289v1",
+      "title": "VisBrowse-Bench: Benchmarking Visual-Native Search for Multimodal Browsing Agents",
+      "abstract": "The rapid advancement of Multimodal Large Language Models (MLLMs) has enabled browsing agents to acquire and reason over multimodal information in the real world. But existing benchmarks suffer from two limitations: insufficient evaluation of visual reasoning ability and the neglect of native visual information of web pages in the reasoning chains. To address these challenges, we introduce a new benchmark for visual-native search, VisBrowse-Bench. It contains 169 VQA instances covering multiple domains and evaluates the models' visual reasoning capabilities during the search process through multimodal evidence cross-validation via text-image retrieval and joint reasoning. These data were constructed by human experts using a multi-stage pipeline and underwent rigorous manual verification. We additionally propose an agent workflow that can effectively drive the browsing agent to actively collect and reason over visual information during the search process. We comprehensively evaluated both open-source and closed-source models in this workflow. Experimental results show that even the best-performing model, Claude-4.6-Opus only achieves an accuracy of 47.6%, while the proprietary Deep Research model, o3-deep-research only achieves an accuracy of 41.1%. The code and data can be accessed at: https://github.com/ZhengboZhang/VisBrowse-Bench",
+      "authors": [
+        "Zhengbo Zhang",
+        "Jinbo Su",
+        "Zhaowen Zhou",
+        "Changtao Miao",
+        "Yuhan Hong",
+        "Qimeng Wu",
+        "Yumeng Liu",
+        "Feier Wu",
+        "Yihe Tian",
+        "Yuhao Liang",
+        "Zitong Shan",
+        "Wanke Xia",
+        "Yi-Fan Zhang",
+        "Bo Zhang",
+        "Zhe Li",
+        "Shiming Xiang",
+        "Ying Yan"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-03-17T09:24:13+00:00",
+      "link": "https://arxiv.org/pdf/2603.16289v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "visual-native search and VQA for multimodal browsing agents",
+      "llm_evidence_cn": "多模态浏览智能体的视觉原生搜索与VQA",
+      "llm_evidence": "多模态浏览智能体的视觉原生搜索与VQA",
+      "canonical_evidence": "多模态浏览智能体的视觉原生搜索与VQA",
+      "llm_tldr_en": "VisBrowse-Bench benchmarks visual reasoning and search capabilities in multimodal browsing agents.",
+      "llm_tldr_cn": "VisBrowse-Bench评估了多模态浏览智能体在搜索过程中的视觉推理能力。",
+      "llm_tldr": "VisBrowse-Bench评估了多模态浏览智能体在搜索过程中的视觉推理能力。",
+      "llm_tags": [
+        "query:mmrag:composite"
+      ],
+      "matched_query_tag": "query:mmrag:composite",
+      "matched_query_text": "Papers central to 多模态RAG相关的研究, especially work that connects or combines: Visual Document Retrieval-Augmented Generation; Visual Retrieval-Augmented Generation; Knowledge-based Visual Question Answering; Multi-modal RAG; I hope you retrieve articles related to the task of knowledge based visual question answering (KB VQA).; Search for articles on applying traditional textual RAG methods in the multimodal domain.; I hope you retrieve articles related to the task of document RAG..",
+      "matched_requirement_id": "req-composite-mmrag",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.18631v1",
+      "title": "D-Mem: A Dual-Process Memory System for LLM Agents",
+      "abstract": "Driven by the development of persistent, self-adapting autonomous agents, equipping these systems with high-fidelity memory access for long-horizon reasoning has emerged as a critical requirement. However, prevalent retrieval-based memory frameworks often follow an incremental processing paradigm that continuously extracts and updates conversational memories into vector databases, relying on semantic retrieval when queried. While this approach is fast, it inherently relies on lossy abstraction, frequently missing contextually critical information and struggling to resolve queries that rely on fine-grained contextual understanding. To address this, we introduce D-Mem, a dual-process memory system. It retains lightweight vector retrieval for routine queries while establishing an exhaustive Full Deliberation module as a high-fidelity fallback. To achieve cognitive economy without sacrificing accuracy, D-Mem employs a Multi-dimensional Quality Gating policy to dynamically bridge these two processes. Experiments on the LoCoMo and RealTalk benchmarks using GPT-4o-mini and Qwen3-235B-Instruct demonstrate the efficacy of our approach. Notably, our Multi-dimensional Quality Gating policy achieves an F1 score of 53.5 on LoCoMo with GPT-4o-mini. This outperforms our static retrieval baseline, Mem0$^\\ast$ (51.2), and recovers 96.7\\% of the Full Deliberation's performance (55.3), while incurring significantly lower computational costs.",
+      "authors": [
+        "Zhixing You",
+        "Jiachen Yuan",
+        "Jason Cai"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-19T08:55:22+00:00",
+      "link": "https://arxiv.org/pdf/2603.18631v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "dual-process memory system for LLM agents",
+      "llm_evidence_cn": "大语言模型智能体的双过程记忆系统",
+      "llm_evidence": "大语言模型智能体的双过程记忆系统",
+      "canonical_evidence": "大语言模型智能体的双过程记忆系统",
+      "llm_tldr_en": "Introduces D-Mem, a dual-process memory system for autonomous agents to improve long-horizon reasoning.",
+      "llm_tldr_cn": "为自主智能体引入D-Mem双过程记忆系统，以改善长程推理能力。",
+      "llm_tldr": "为自主智能体引入D-Mem双过程记忆系统，以改善长程推理能力。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "architectures for multimodal agent memory systems",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.20286v1",
+      "title": "Rethinking Retrieval-Augmentation as Synthesis: A Query-Aware Context Merging Approach",
+      "abstract": "Retrieval-Augmented Generation (RAG) enables Large Language Models (LLMs) to extend their existing knowledge by dynamically incorporating external information. However, practical deployment is fundamentally constrained by the LLM's finite context window, forcing a trade-off between information sufficiency and token consumption. Standard pipelines address this via a retrieve-then-select strategy, typically retaining only the top-k chunks based on relevance. Nevertheless, this approach is suboptimal: it inherently truncates critical bridging evidence located in the long tail of the relevance distribution, while simultaneously wasting the token budget on semantically redundant high-ranking chunks.   In this paper, we rethink retrieval-augmentation as a dynamic optimization problem aimed at maximizing information density. We propose MergeRAG, a novel framework that shifts the paradigm from static filtering to query-aware synthesis. MergeRAG employs a scoring agent to restructure retrieved contexts through a dual-pathway mechanism: 1) Symmetric Merging, which consolidates weak signals to recover lost bridging evidence; 2) Asymmetric Merging, which utilizes entropy-guided anchoring to eliminate redundancy without sacrificing semantic integrity. We further introduce a Hierarchical Parallel Merging strategy that mitigates information loss while maximizing computational parallelism. Extensive experiments on standard benchmarks demonstrate that MergeRAG significantly outperforms state-of-the-art RAG baselines, achieving up to 13.7 points improvement in F1 score and 11.5 points in Exact Match (EM), respectively.",
+      "authors": [
+        "Jiarui Guo",
+        "Yuemeng Xu",
+        "Zongwei Lv",
+        "Yangyujia Wang",
+        "Xiaolin Wang",
+        "Kan Liu",
+        "Tao Lan",
+        "Lin Qu",
+        "Tong Yang"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-03-18T09:09:52+00:00",
+      "link": "https://arxiv.org/pdf/2603.20286v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "rethinking RAG as synthesis with query-aware context merging",
+      "llm_evidence_cn": "将 RAG 重新构思为具有查询感知上下文合并的综合过程",
+      "llm_evidence": "将 RAG 重新构思为具有查询感知上下文合并的综合过程",
+      "canonical_evidence": "将 RAG 重新构思为具有查询感知上下文合并的综合过程",
+      "llm_tldr_en": "Proposes a query-aware merging approach to optimize information sufficiency in RAG pipelines.",
+      "llm_tldr_cn": "提出一种查询感知合并方法，以优化 RAG 流程中的信息充分性。",
+      "llm_tldr": "提出一种查询感知合并方法，以优化 RAG 流程中的信息充分性。",
+      "llm_tags": [
+        "query:mmrag:composite"
+      ],
+      "matched_query_tag": "query:mmrag:composite",
+      "matched_query_text": "Papers central to 多模态RAG相关的研究, especially work that connects or combines: Visual Document Retrieval-Augmented Generation; Visual Retrieval-Augmented Generation; Knowledge-based Visual Question Answering; Multi-modal RAG; I hope you retrieve articles related to the task of knowledge based visual question answering (KB VQA).; Search for articles on applying traditional textual RAG methods in the multimodal domain.; I hope you retrieve articles related to the task of document RAG..",
+      "matched_requirement_id": "req-composite-mmrag",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.20422v1",
+      "title": "PEARL: Personalized Streaming Video Understanding Model",
+      "abstract": "Human cognition of new concepts is inherently a streaming process: we continuously recognize new objects or identities and update our memories over time. However, current multimodal personalization methods are largely limited to static images or offline videos. This disconnects continuous visual input from instant real-world feedback, limiting their ability to provide the real-time, interactive personalized responses essential for future AI assistants. To bridge this gap, we first propose and formally define the novel task of Personalized Streaming Video Understanding (PSVU). To facilitate research in this new direction, we introduce PEARL-Bench, the first comprehensive benchmark designed specifically to evaluate this challenging setting. It evaluates a model's ability to respond to personalized concepts at exact timestamps under two modes: (1) Frame-level, focusing on a specific person or object in discrete frames, and (2) a novel Video-level, focusing on personalized actions unfolding across continuous frames. PEARL-Bench comprises 132 unique videos and 2,173 fine-grained annotations with precise timestamps. Concept diversity and annotation quality are strictly ensured through a combined pipeline of automated generation and human verification. To tackle this challenging new setting, we further propose PEARL, a plug-and-play, training-free strategy that serves as a strong baseline. Extensive evaluations across 8 offline and online models demonstrate that PEARL achieves state-of-the-art performance. Notably, it brings consistent PSVU improvements when applied to 3 distinct architectures, proving to be a highly effective and robust strategy. We hope this work advances vision-language model (VLM) personalization and inspires further research into streaming personalized AI assistants. Code is available at https://github.com/Yuanhong-Zheng/PEARL.",
+      "authors": [
+        "Yuanhong Zheng",
+        "Ruichuan An",
+        "Xiaopeng Lin",
+        "Yuxing Liu",
+        "Sihan Yang",
+        "Huanyu Zhang",
+        "Haodong Li",
+        "Qintong Zhang",
+        "Renrui Zhang",
+        "Guopeng Li",
+        "Yifan Zhang",
+        "Yuheng Li",
+        "Wentao Zhang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-03-20T18:47:54+00:00",
+      "link": "https://arxiv.org/pdf/2603.20422v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "streaming video understanding with memory updates over time",
+      "llm_evidence_cn": "随时间更新记忆的流式视频理解",
+      "llm_evidence": "随时间更新记忆的流式视频理解",
+      "canonical_evidence": "随时间更新记忆的流式视频理解",
+      "llm_tldr_en": "Defines Personalized Streaming Video Understanding and introduces a benchmark for real-time memory updates.",
+      "llm_tldr_cn": "定义了个性化流式视频理解任务，并引入了实时记忆更新的基准。",
+      "llm_tldr": "定义了个性化流式视频理解任务，并引入了实时记忆更新的基准。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "How to build long term video memory for Alagents?",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.20513v1",
+      "title": "ReBOL: Retrieval via Bayesian Optimization with Batched LLM Relevance Observations and Query Reformulation",
+      "abstract": "LLM-reranking is limited by the top-k documents retrieved by vector similarity, which neither enables contextual query-document token interactions nor captures multimodal relevance distributions. While LLM query reformulation attempts to improve recall by generating improved or additional queries, it is still followed by vector similarity retrieval. We thus propose to address these top-k retrieval stage failures by introducing ReBOL, which 1) uses LLM query reformulations to initialize a multimodal Bayesian Optimization (BO) posterior over document relevance, and 2) iteratively acquires document batches for LLM query-document relevance scoring followed by posterior updates to optimize relevance. After exploring query reformulation and document batch diversification techniques, we evaluate ReBOL against LLM reranker baselines on five BEIR datasets and using two LLMs (Gemini-2.5-Flash-Lite, GPT-5.2). ReBOL consistently achieves higher recall and competitive rankings, for example compared to the best LLM reranker on the Robust04 dataset with 46.5% vs. 35.0% recall@100 and 63.6% vs. 61.2% NDCG@10. We also show that ReBOL can achieve comparable latency to LLM rerankers.",
+      "authors": [
+        "Anton Korikov",
+        "Scott Sanner"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-20T21:30:13+00:00",
+      "link": "https://arxiv.org/pdf/2603.20513v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "multimodal Bayesian Optimization for document relevance and query reformulation in retrieval",
+      "llm_evidence_cn": "用于文档相关性检索和查询重构的多模态贝叶斯优化",
+      "llm_evidence": "用于文档相关性检索和查询重构的多模态贝叶斯优化",
+      "canonical_evidence": "用于文档相关性检索和查询重构的多模态贝叶斯优化",
+      "llm_tldr_en": "ReBOL improves retrieval by using LLMs for query reformulation and Bayesian Optimization for multimodal relevance.",
+      "llm_tldr_cn": "ReBOL 通过 LLM 查询重构和贝叶斯优化改进多模态相关性检索。",
+      "llm_tldr": "ReBOL 通过 LLM 查询重构和贝叶斯优化改进多模态相关性检索。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "Multi-modal RAG",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.20804v1",
+      "title": "Does Peer Observation Help? Vision-Sharing Collaboration for Vision-Language Navigation",
+      "abstract": "Vision-Language Navigation (VLN) systems are fundamentally constrained by partial observability, as an agent can only accumulate knowledge from locations it has personally visited. As multiple robots increasingly coexist in shared environments, a natural question arises: can agents navigating the same space benefit from each other's observations? In this work, we introduce Co-VLN, a minimalist, model-agnostic framework for systematically investigating whether and how peer observations from concurrently navigating agents can benefit VLN. When independently navigating agents identify common traversed locations, they exchange structured perceptual memory, effectively expanding each agent's receptive field at no additional exploration cost. We validate our framework on the R2R benchmark under two representative paradigms (the learning-based DUET and the zero-shot MapGPT), and conduct extensive analytical experiments to systematically reveal the underlying dynamics of peer observation sharing in VLN. Results demonstrate that vision-sharing enabled model yields substantial performance improvements across both paradigms, establishing a strong foundation for future research in collaborative embodied navigation.",
+      "authors": [
+        "Qunchao Jin",
+        "Yiliao Song",
+        "Qi Wu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "published": "2026-03-21T12:59:31+00:00",
+      "link": "https://arxiv.org/pdf/2603.20804v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Exchange of structured perceptual memory between navigating agents",
+      "llm_evidence_cn": "导航智能体之间交换结构化感知记忆",
+      "llm_evidence": "导航智能体之间交换结构化感知记忆",
+      "canonical_evidence": "导航智能体之间交换结构化感知记忆",
+      "llm_tldr_en": "Introduces Co-VLN, a framework where agents share perceptual memory to improve vision-language navigation.",
+      "llm_tldr_cn": "引入Co-VLN框架，使智能体共享感知记忆以改进视觉语言导航。",
+      "llm_tldr": "引入Co-VLN框架，使智能体共享感知记忆以改进视觉语言导航。",
+      "llm_tags": [
+        "query:multi-modal-memory:composite"
+      ],
+      "matched_query_tag": "query:multi-modal-memory:composite",
+      "matched_query_text": "Papers central to 查找与多模态智能体记忆（图像、视频、音频）相关的研究文章, especially work that connects or combines: V; Multi-modal Memory; multimodal memory architectures for autonomous agents; visual long-term and short-term memory in agents; architectures for multimodal agent memory systems; long term multimodal memory for autonomous agents; memory augmented multimodal large language models; efficient retrieval of multimodal experiences in AI agents; How to build long term video memory for Alagents?; Retrieval augmented video understanding withmemory modules..",
+      "matched_requirement_id": "req-composite-multi-modal-memory",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.21272v1",
+      "title": "The Library Theorem: How External Organization Governs Agentic Reasoning Capacity",
+      "abstract": "Externalized reasoning is already exploited by transformer-based agents through chain-of-thought, but structured retrieval -- indexing over one's own reasoning state -- remains underexplored. We formalize the transformer context window as an I/O page and prove that tool-augmented agents with indexed external memory achieve exponentially lower retrieval cost than agents restricted to sequential scanning: $O(\\log_b N)$ versus $Ω(N)$ page reads per query, and $O(T \\log_b T)$ versus $Θ(T^2)$ cumulative cost over $T$ reasoning steps -- a gap that widens as deliberation deepens. We test these predictions on a controlled lookup benchmark across three content types -- random hashes, ordered integers, and encyclopedia entries -- varying store size from 50 to 5,000 items, and replicate key conditions across two model generations (GPT-4o-mini and GPT-5.4). On abstract content, the indexed agent achieves median 1 page read regardless of store size, confirming the $O(1)$ prediction. Sorted pages without an index fail to close the gap: the weaker model cannot sustain binary search at scale, and the stronger model achieves near-optimal $\\log_2 N$ search but still loses to the index by $5\\times$. On familiar content (encyclopedia entries), a competing failure mode emerges: the model recognizes the domain, bypasses the retrieval protocol, and generates answers from parametric memory, producing catastrophic token expenditure even when the index is sound. This parametric memory competition dissociates the two cognitive operations that indexing combines: understanding content (where language models excel) and following navigational protocols (where they fail when understanding tempts them to shortcut). The result argues for a separation of concerns: use language models for index construction, where semantic understanding helps, and deterministic algorithms for index traversal, where it hurts.",
+      "authors": [
+        "Zachary F. Mainen"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.DS",
+        "cs.LG"
+      ],
+      "published": "2026-03-22T15:02:56+00:00",
+      "link": "https://arxiv.org/pdf/2603.21272v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Structured retrieval and indexed external memory for agentic reasoning",
+      "llm_evidence_cn": "智能体推理的结构化检索与索引外部记忆",
+      "llm_evidence": "智能体推理的结构化检索与索引外部记忆",
+      "canonical_evidence": "智能体推理的结构化检索与索引外部记忆",
+      "llm_tldr_en": "Formalizes how indexed external memory exponentially reduces retrieval costs for AI agents.",
+      "llm_tldr_cn": "形式化证明了索引外部记忆如何指数级降低AI智能体的检索成本。",
+      "llm_tldr": "形式化证明了索引外部记忆如何指数级降低AI智能体的检索成本。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "architectures for multimodal agent memory systems",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.21577v1",
+      "title": "Mind over Space: Can Multimodal Large Language Models Mentally Navigate?",
+      "abstract": "Despite the widespread adoption of MLLMs in embodied agents, their capabilities remain largely confined to reactive planning from immediate observations, consistently failing in spatial reasoning across extensive spatiotemporal scales. Cognitive science reveals that Biological Intelligence (BI) thrives on \"mental navigation\": the strategic construction of spatial representations from experience and the subsequent mental simulation of paths prior to action. To bridge the gap between AI and BI, we introduce Video2Mental, a pioneering benchmark for evaluating the mental navigation capabilities of MLLMs. The task requires constructing hierarchical cognitive maps from long egocentric videos and generating landmark-based path plans step by step, with planning accuracy verified through simulator-based physical interaction. Our benchmarking results reveal that mental navigation capability does not naturally emerge from standard pre-training. Frontier MLLMs struggle profoundly with zero-shot structured spatial representation, and their planning accuracy decays precipitously over extended horizons. To overcome this, we propose \\textbf{NavMind}, a reasoning model that internalizes mental navigation using explicit, fine-grained cognitive maps as learnable intermediate representations. Through a difficulty-stratified progressive supervised fine-tuning paradigm, NavMind effectively bridges the gap between raw perception and structured planning. Experiments demonstrate that NavMind achieves superior mental navigation capabilities, significantly outperforming frontier commercial and spatial MLLMs.",
+      "authors": [
+        "Qihui Zhu",
+        "Shouwei Ruan",
+        "Xiao Yang",
+        "Hao Jiang",
+        "Yao Huang",
+        "Shiji Zhao",
+        "Hanwei Fan",
+        "Hang Su",
+        "Xingxing Wei"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-23T04:59:25+00:00",
+      "link": "https://arxiv.org/pdf/2603.21577v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "constructing cognitive maps from long egocentric videos for agents",
+      "llm_evidence_cn": "为智能体从长第一视角视频中构建认知地图",
+      "llm_evidence": "为智能体从长第一视角视频中构建认知地图",
+      "canonical_evidence": "为智能体从长第一视角视频中构建认知地图",
+      "llm_tldr_en": "Introduces Video2Mental to evaluate MLLMs' ability to build spatial representations from long-term video experience.",
+      "llm_tldr_cn": "引入Video2Mental基准，评估多模态大模型从长期视频经验中构建空间表征的能力。",
+      "llm_tldr": "引入Video2Mental基准，评估多模态大模型从长期视频经验中构建空间表征的能力。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "long term multimodal memory for autonomous agents",
+      "matched_requirement_id": "req-13",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.22121v1",
+      "title": "Mamba-VMR: Multimodal Query Augmentation via Generated Videos for Precise Temporal Grounding",
+      "abstract": "Text-driven video moment retrieval (VMR) remains challenging due to limited capture of hidden temporal dynamics in untrimmed videos, leading to imprecise grounding in long sequences. Traditional methods rely on natural language queries (NLQs) or static image augmentations, overlooking motion sequences and suffering from high computational costs in Transformer-based architectures. Existing approaches fail to integrate subtitle contexts and generated temporal priors effectively, we therefore propose a novel two-stage framework for enhanced temporal grounding. In the first stage, LLM-guided subtitle matching identifies relevant textual cues from video subtitles, fused with the query to generate auxiliary short videos via text-to-video models, capturing implicit motion information as temporal priors. In the second stage, augmented queries are processed through a multi-modal controlled Mamba network, extending text-controlled selection with video-guided gating for efficient fusion of generated priors and long sequences while filtering noise. Our framework is agnostic to base retrieval models and widely applicable for multimodal VMR. Experimental evaluations on the TVR benchmark demonstrate significant improvements over state-of-the-art methods, including reduced computational overhead and higher recall in long-sequence grounding.",
+      "authors": [
+        "Yunzhuo Sun",
+        "Xinyue Liu",
+        "Yanyang Li",
+        "Nanding Wu",
+        "Yifang Xu",
+        "Linlin Zong",
+        "Xianchao Zhang",
+        "Wenxin Liang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-03-23T15:44:48+00:00",
+      "link": "https://arxiv.org/pdf/2603.22121v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "multimodal query augmentation for video retrieval",
+      "llm_evidence_cn": "视频检索的多模态查询增强",
+      "llm_evidence": "视频检索的多模态查询增强",
+      "canonical_evidence": "视频检索的多模态查询增强",
+      "llm_tldr_en": "Uses LLM-guided subtitle matching and video generation to improve temporal grounding in video retrieval.",
+      "llm_tldr_cn": "利用LLM引导的字幕匹配和视频生成来改进视频检索中的时间定位。",
+      "llm_tldr": "利用LLM引导的字幕匹配和视频生成来改进视频检索中的时间定位。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "Retrieval augmented video understanding withmemory modules.",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.22285v1",
+      "title": "VideoDetective: Clue Hunting via both Extrinsic Query and Intrinsic Relevance for Long Video Understanding",
+      "abstract": "Long video understanding remains challenging for multimodal large language models (MLLMs) due to limited context windows, which necessitate identifying sparse query-relevant video segments. However, existing methods predominantly localize clues based solely on the query, overlooking the video's intrinsic structure and varying relevance across segments. To address this, we propose VideoDetective, a framework that integrates query-to-segment relevance and inter-segment affinity for effective clue hunting in long-video question answering. Specifically, we divide a video into various segments and represent them as a visual-temporal affinity graph built from visual similarity and temporal proximity. We then perform a Hypothesis-Verification-Refinement loop to estimate relevance scores of observed segments to the query and propagate them to unseen segments, yielding a global relevance distribution that guides the localization of the most critical segments for final answering with sparse observation. Experiments show our method consistently achieves substantial gains across a wide range of mainstream MLLMs on representative benchmarks, with accuracy improvements of up to 7.5% on VideoMME-long. Our code is available at https://videodetective.github.io/",
+      "authors": [
+        "Ruoliu Yang",
+        "Chu Wu",
+        "Caifeng Shan",
+        "Ran He",
+        "Chaoyou Fu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-23T17:59:51+00:00",
+      "link": "https://arxiv.org/pdf/2603.22285v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Retrieval of relevant video segments for long video QA",
+      "llm_evidence_cn": "长视频问答中相关视频片段的检索",
+      "llm_evidence": "长视频问答中相关视频片段的检索",
+      "canonical_evidence": "长视频问答中相关视频片段的检索",
+      "llm_tldr_en": "VideoDetective hunts for clues in long videos using query relevance and inter-segment affinity for QA.",
+      "llm_tldr_cn": "VideoDetective通过查询相关性和片段关联性在长视频中寻找线索以支持问答。",
+      "llm_tldr": "VideoDetective通过查询相关性和片段关联性在长视频中寻找线索以支持问答。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "Retrieval augmented video understanding withmemory modules.",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2603.14635v2",
+      "title": "Compute Allocation for Reasoning-Intensive Retrieval Agents",
+      "abstract": "As agents operate over long horizons, their memory stores grow continuously, making retrieval critical to accessing relevant information. Many agent queries require reasoning-intensive retrieval, where the connection between query and relevant documents is implicit and requires inference to bridge. LLM-augmented pipelines address this through query expansion and candidate re-ranking, but introduce significant inference costs. We study computation allocation in reasoning-intensive retrieval pipelines using the BRIGHT benchmark and Gemini 2.5 model family. We vary model capacity, inference-time thinking, and re-ranking depth across query expansion and re-ranking stages. We find that re-ranking benefits substantially from stronger models (+7.5 NDCG@10) and deeper candidate pools (+21% from $k$=10 to 100), while query expansion shows diminishing returns beyond lightweight models (+1.1 NDCG@10 from weak to strong). Inference-time thinking provides minimal improvement at either stage. These results suggest that compute should be concentrated on re-ranking rather than distributed uniformly across pipeline stages.",
+      "authors": [
+        "Sreeja Apparaju",
+        "Nilesh Gupta"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-15T22:12:17+00:00",
+      "link": "https://arxiv.org/pdf/2603.14635v2",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "reasoning-intensive retrieval for agents with growing memory stores",
+      "llm_evidence_cn": "针对记忆库不断增长的智能体的推理密集型检索",
+      "llm_evidence": "针对记忆库不断增长的智能体的推理密集型检索",
+      "canonical_evidence": "针对记忆库不断增长的智能体的推理密集型检索",
+      "llm_tldr_en": "Analyzes compute allocation in reasoning-intensive retrieval pipelines for long-horizon agents.",
+      "llm_tldr_cn": "分析了长周期智能体在推理密集型检索流水线中的计算分配。",
+      "llm_tldr": "分析了长周期智能体在推理密集型检索流水线中的计算分配。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "efficient retrieval of multimodal experiences in AI agents",
+      "matched_requirement_id": "req-15",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.14828v1",
+      "title": "Mitigating KG Quality Issues: A Robust Multi-Hop GraphRAG Retrieval Framework",
+      "abstract": "Graph Retrieval-Augmented Generation enhances multi-hop reasoning but relies on imperfect knowledge graphs that frequently suffer from inherent quality issues. Current approaches often overlook these issues, consequently struggling with retrieval drift driven by spurious noise and retrieval hallucinations stemming from incomplete information. To address these challenges, we propose C2RAG (Constraint-Checked Retrieval-Augmented Generation), a framework aimed at robust multi-hop retrieval over the imperfect KG. First, C2RAG performs constraint-based retrieval by decomposing each query into atomic constraint triples, with using fine-grained constraint anchoring to filter candidates for suppressing retrieval drift. Second, C2RAG introduces a sufficiency check to explicitly prevent retrieval hallucinations by deciding whether the current evidence is sufficient to justify structural propagation, and activating textual recovery otherwise. Extensive experiments on multi-hop benchmarks demonstrate that C2RAG consistently outperforms the latest baselines by 3.4\\% EM and 3.9\\% F1 on average, while exhibiting improved robustness under KG issues.",
+      "authors": [
+        "Yizhuo Ma",
+        "Shuang Liang",
+        "Rongzheng Wang",
+        "Jiakai",
+        "Qizhi Chen",
+        "Muquan Li",
+        "Ke Qin"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-03-16T05:08:41+00:00",
+      "link": "https://arxiv.org/pdf/2603.14828v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "GraphRAG retrieval framework for multi-hop reasoning",
+      "llm_evidence_cn": "用于多跳推理的GraphRAG检索框架",
+      "llm_evidence": "用于多跳推理的GraphRAG检索框架",
+      "canonical_evidence": "用于多跳推理的GraphRAG检索框架",
+      "llm_tldr_en": "Proposes C2RAG to mitigate knowledge graph quality issues in multi-hop retrieval-augmented generation.",
+      "llm_tldr_cn": "提出C2RAG框架，旨在减轻多跳检索增强生成中知识图谱质量带来的问题。",
+      "llm_tldr": "提出C2RAG框架，旨在减轻多跳检索增强生成中知识图谱质量带来的问题。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.14935v1",
+      "title": "Video-CoE: Reinforcing Video Event Prediction via Chain of Events",
+      "abstract": "Despite advances in the application of MLLMs for various video tasks, video event prediction (VEP) remains relatively underexplored. VEP requires the model to perform fine-grained temporal modeling of videos and establish logical relationships between videos and future events, which current MLLMs still struggle with. In this work, we first present a comprehensive evaluation of current leading MLLMs on the VEP task, revealing the reasons behind their inaccurate predictions, including lack of logical reasoning ability for future events prediction and insufficient utilization of visual information. To address these challenges, we propose \\textbf{C}hain \\textbf{o}f \\textbf{E}vents (\\textbf{CoE}) paradigm, which constructs temporal event chains to implicitly enforce MLLM focusing on the visual content and the logical connections between videos and future events, incentivizing model's reasoning capability with multiple training protocols. Experimental results on public benchmarks demonstrate that our method outperforms both leading open-source and commercial MLLMs, establishing a new state-of-the-art on the VEP task. Codes and models will be released soon.",
+      "authors": [
+        "Qile Su",
+        "Jing Tang",
+        "Rui Chen",
+        "Lei Sun",
+        "Xiangxiang Chu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-16T07:38:15+00:00",
+      "link": "https://arxiv.org/pdf/2603.14935v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "video event prediction and temporal modeling using MLLMs",
+      "llm_evidence_cn": "使用多模态大模型进行视频事件预测和时序建模",
+      "llm_evidence": "使用多模态大模型进行视频事件预测和时序建模",
+      "canonical_evidence": "使用多模态大模型进行视频事件预测和时序建模",
+      "llm_tldr_en": "Proposes Chain of Events (CoE) to improve video event prediction through temporal reasoning in MLLMs.",
+      "llm_tldr_cn": "提出事件链（CoE）范式，通过时序推理增强多模态大模型的视频事件预测能力。",
+      "llm_tldr": "提出事件链（CoE）范式，通过时序推理增强多模态大模型的视频事件预测能力。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "I hope to learn more about articles related tosolving video understanding using methodsinvolving Agent systems + Memory.",
+      "matched_requirement_id": "req-18",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.14662v1",
+      "title": "ViDscribe: Multimodal AI for Customizing Audio Description and Question Answering in Online Videos",
+      "abstract": "Advances in multimodal large language models enable automatic video narration and question answering (VQA), offering scalable alternatives to labor-intensive, human-authored audio descriptions (ADs) for blind and low vision (BLV) viewers. However, prior AI-driven AD systems rarely adapt to the diverse needs and preferences of BLV individuals across videos and are typically evaluated in controlled, single-session settings. We present ViDscribe, a web-based platform that integrates AI-generated ADs with six types of user customizations and a conversational VQA interface for YouTube videos. Through a longitudinal, in-the-wild study with eight BLV participants, we examine how users engage with customization and VQA features over time. Our results show sustained engagement with both features and that customized ADs improve effectiveness, enjoyment, and immersion compared to default ADs, highlighting the value of personalized, interactive video access for BLV users.",
+      "authors": [
+        "Maryam Cheema",
+        "Sina Elahimanesh",
+        "Pooyan Fazli",
+        "Hasti Seifi"
+      ],
+      "primary_category": "cs.HC",
+      "categories": [
+        "cs.HC"
+      ],
+      "published": "2026-03-15T23:35:09+00:00",
+      "link": "https://arxiv.org/pdf/2603.14662v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "conversational VQA for online videos",
+      "llm_evidence_cn": "在线视频的对话式视觉问答",
+      "llm_evidence": "在线视频的对话式视觉问答",
+      "canonical_evidence": "在线视频的对话式视觉问答",
+      "llm_tldr_en": "ViDscribe provides AI-generated audio descriptions and a VQA interface for accessible video content.",
+      "llm_tldr_cn": "ViDscribe为无障碍视频内容提供AI生成的音频描述和视觉问答接口。",
+      "llm_tldr": "ViDscribe为无障碍视频内容提供AI生成的音频描述和视觉问答接口。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "I hope you retrieve articles related to the task of knowledge based visual question answering (KB VQA).",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.15118v1",
+      "title": "VAREX: A Benchmark for Multi-Modal Structured Extraction from Documents",
+      "abstract": "We introduce VAREX (VARied-schema EXtraction), a benchmark for evaluating multimodal foundation models on structured data extraction from government forms. VAREX employs a Reverse Annotation pipeline that programmatically fills PDF templates with synthetic values, producing deterministic ground truth validated through three-phase quality assurance. The benchmark comprises 1,777 documents with 1,771 unique schemas across three structural categories, each provided in four input modalities: plain text, layout-preserving text (whitespace-aligned to approximate column positions), document image, or both text and image combined. Unlike existing benchmarks that evaluate from a single input representation, VAREX provides four controlled modalities per document, enabling systematic ablation of how input format affects extraction accuracy -- a capability absent from prior benchmarks. We evaluate 20 models from frontier proprietary models to small open models, with particular attention to models <=4B parameters suitable for cost-sensitive and latency-constrained deployment. Results reveal that (1) below 4B parameters, structured output compliance -- not extraction capability -- is a dominant bottleneck; in particular, schema echo (models producing schema-conforming structure instead of extracted values) depresses scores by 45-65 pp (percentage points) in affected models; (2) extraction-specific fine-tuning at 2B yields +81 pp gains, demonstrating that the instruction-following deficit is addressable without scale; (3) layout-preserving text provides the largest accuracy gain (+3-18 pp), exceeding pixel-level visual cues; and (4) the benchmark most effectively discriminates models in the 60-95% accuracy band. Dataset and evaluation code are publicly available.",
+      "authors": [
+        "Udi Barzelay",
+        "Ophir Azulai",
+        "Inbar Shapira",
+        "Idan Friedman",
+        "Foad Abo Dahood",
+        "Madison Lee",
+        "Abraham Daniels"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-16T11:15:56+00:00",
+      "link": "https://arxiv.org/pdf/2603.15118v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Benchmark for multi-modal structured extraction from documents",
+      "llm_evidence_cn": "多模态文档结构化提取基准",
+      "llm_evidence": "多模态文档结构化提取基准",
+      "canonical_evidence": "多模态文档结构化提取基准",
+      "llm_tldr_en": "VAREX is a benchmark for evaluating multimodal models on structured data extraction from varied document formats.",
+      "llm_tldr_cn": "VAREX是一个用于评估多模态模型在不同文档格式上进行结构化数据提取的基准。",
+      "llm_tldr": "VAREX是一个用于评估多模态模型在不同文档格式上进行结构化数据提取的基准。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "Visual Document Retrieval-Augmented Generation",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.15030v1",
+      "title": "VTC-Bench: Evaluating Agentic Multimodal Models via Compositional Visual Tool Chaining",
+      "abstract": "Recent advancements extend Multimodal Large Language Models (MLLMs) beyond standard visual question answering to utilizing external tools for advanced visual tasks. Despite this progress, precisely executing and effectively composing diverse tools for complex tasks remain persistent bottleneck. Constrained by sparse tool-sets and simple tool-use trajectories, existing benchmarks fail to capture complex and diverse tool interactions, falling short in evaluating model performance under practical, real-world conditions. To bridge this gap, we introduce VisualToolChain-Bench~(VTC-Bench), a comprehensive benchmark designed to evaluate tool-use proficiency in MLLMs. To align with realistic computer vision pipelines, our framework features 32 diverse OpenCV-based visual operations. This rich tool-set enables extensive combinations, allowing VTC-Bench to rigorously assess multi-tool composition and long-horizon, multi-step plan execution. For precise evaluation, we provide 680 curated problems structured across a nine-category cognitive hierarchy, each with ground-truth execution trajectories. Extensive experiments on 19 leading MLLMs reveal critical limitations in current models' visual agentic capabilities. Specifically, models struggle to adapt to diverse tool-sets and generalize to unseen operations, with the leading model Gemini-3.0-Pro only achieving 51\\% on our benchmark. Furthermore, multi-tool composition remains a persistent challenge. When facing complex tasks, models struggle to formulate efficient execution plans, relying heavily on a narrow, suboptimal subset of familiar functions rather than selecting the optimal tools. By identifying these fundamental challenges, VTC-Bench establishes a rigorous baseline to guide the development of more generalized visual agentic models.",
+      "authors": [
+        "Xuanyu Zhu",
+        "Yuhao Dong",
+        "Rundong Wang",
+        "Yang Shi",
+        "Zhipeng Wu",
+        "Yinlun Peng",
+        "YiFan Zhang",
+        "Yihang Lou",
+        "Yuanxing Zhang",
+        "Ziwei Liu",
+        "Yan Bai",
+        "Yuan Zhou"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-16T09:31:44+00:00",
+      "link": "https://arxiv.org/pdf/2603.15030v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Evaluating agentic multimodal models via visual tool chaining",
+      "llm_evidence_cn": "通过视觉工具链评估代理式多模态模型",
+      "llm_evidence": "通过视觉工具链评估代理式多模态模型",
+      "canonical_evidence": "通过视觉工具链评估代理式多模态模型",
+      "llm_tldr_en": "VTC-Bench evaluates MLLMs on complex visual tasks involving external tool composition.",
+      "llm_tldr_cn": "VTC-Bench评估多模态大模型在调用外部工具处理复杂视觉任务时的能力。",
+      "llm_tldr": "VTC-Bench评估多模态大模型在调用外部工具处理复杂视觉任务时的能力。",
+      "llm_tags": [
+        "query:mmrag:composite"
+      ],
+      "matched_query_tag": "query:mmrag:composite",
+      "matched_query_text": "Papers central to 多模态RAG相关的研究, especially work that connects or combines: Visual Document Retrieval-Augmented Generation; Visual Retrieval-Augmented Generation; Knowledge-based Visual Question Answering; Multi-modal RAG; I hope you retrieve articles related to the task of knowledge based visual question answering (KB VQA).; Search for articles on applying traditional textual RAG methods in the multimodal domain.; I hope you retrieve articles related to the task of document RAG..",
+      "matched_requirement_id": "req-composite-mmrag",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.14733v1",
+      "title": "A Skill-augmented Agentic Framework and Benchmark for Multi-Video Understanding",
+      "abstract": "Multimodal Large Language Models have achieved strong performance in single-video understanding, yet their ability to reason across multiple videos remains limited. Existing approaches typically concatenate multiple videos into a single input and perform direct inference, which introduces training-inference mismatch, information loss from frame compression, and a lack of explicit cross-video coordination. Meanwhile, current multi-video benchmarks primarily emphasize event-level comparison, leaving identity-level matching, fine-grained discrimination, and structured multi-step reasoning underexplored. To address these gaps, we introduce MVX-Bench, a Multi-Video Cross-Dimension Benchmark that reformulates 11 classical computer vision tasks into a unified multi-video question-answering framework, comprising 1,442 questions over 4,255 videos from diverse real-world datasets. We further propose SAMA, a Skill-Augmented Agentic Framework for Multi-Video Understanding, which integrates visual tools, task-specific skills, and a conflict-aware verification mechanism to enable iterative and structured reasoning. Experimental results show that SAMA outperforms strong open-source baselines and GPT on MVX-Bench, and ablations validate the effectiveness of skill design and conflict resolution.",
+      "authors": [
+        "Yue Zhang",
+        "Liqiang Jing",
+        "Jia Li",
+        "Yapeng Tian",
+        "Xinya Du",
+        "Yunhui Guo",
+        "Vibhav Gogate"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-16T02:09:48+00:00",
+      "link": "https://arxiv.org/pdf/2603.14733v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "agentic framework for multi-video understanding and reasoning",
+      "llm_evidence_cn": "用于多视频理解和推理的智能体框架",
+      "llm_evidence": "用于多视频理解和推理的智能体框架",
+      "canonical_evidence": "用于多视频理解和推理的智能体框架",
+      "llm_tldr_en": "Introduces a skill-augmented agentic framework and benchmark for complex multi-video reasoning tasks.",
+      "llm_tldr_cn": "引入技能增强的智能体框架和基准，用于处理复杂的多视频理解和跨视频推理任务。",
+      "llm_tldr": "引入技能增强的智能体框架和基准，用于处理复杂的多视频理解和跨视频推理任务。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "I hope to learn more about articles related tosolving video understanding using methodsinvolving Agent systems + Memory.",
+      "matched_requirement_id": "req-18",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.15125v1",
+      "title": "From Storage to Steering: Memory Control Flow Attacks on LLM Agents",
+      "abstract": "Modern agentic systems allow Large Language Model (LLM) agents to tackle complex tasks through extensive tool usage, forming structured control flows of tool selection and execution. Existing security analyses often treat these control flows as ephemeral, one-off sessions, overlooking the persistent influence of memory. This paper identifies a new threat from Memory Control Flow Attacks (MCFA) that memory retrieval can dominate the control flow, forcing unintended tool usage even against explicit user instructions and inducing persistent behavioral deviations across tasks. To understand the impact of this vulnerability, we further design MEMFLOW, an automated evaluation framework that systematically identifies and quantifies MCFA across heterogeneous tasks and long interaction horizons. To evaluate MEMFLOW, we attack state-of-the-art LLMs, including GPT-5 mini, Claude Sonnet 4.5 and Gemini 2.5 Flash on real-world tools from two major LLM agent development frameworks, LangChain and LlamaIndex. The results show that in general over 90% trials are vulnerable to MCFA even under strict safety constraints, highlighting critical security risks that demand immediate attention.",
+      "authors": [
+        "Zhenlin Xu",
+        "Xiaogang Zhu",
+        "Yu Yao",
+        "Minhui Xue",
+        "Yiliao Song"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR"
+      ],
+      "published": "2026-03-16T11:21:30+00:00",
+      "link": "https://arxiv.org/pdf/2603.15125v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Memory retrieval influence on agent control flows",
+      "llm_evidence_cn": "记忆检索对智能体控制流的影响",
+      "llm_evidence": "记忆检索对智能体控制流的影响",
+      "canonical_evidence": "记忆检索对智能体控制流的影响",
+      "llm_tldr_en": "Analyzes security vulnerabilities in LLM agents where memory retrieval can dominate and manipulate control flows.",
+      "llm_tldr_cn": "分析了LLM智能体中的安全漏洞，即记忆检索可能主导并操纵控制流。",
+      "llm_tldr": "分析了LLM智能体中的安全漏洞，即记忆检索可能主导并操纵控制流。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "architectures for multimodal agent memory systems",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.15030v2",
+      "title": "VTC-Bench: Evaluating Agentic Multimodal Models via Compositional Visual Tool Chaining",
+      "abstract": "Recent advancements extend Multimodal Large Language Models (MLLMs) beyond standard visual question answering to utilizing external tools for advanced visual tasks. Despite this progress, precisely executing and effectively composing diverse tools for complex tasks remain persistent bottleneck. Constrained by sparse tool-sets and simple tool-use trajectories, existing benchmarks fail to capture complex and diverse tool interactions, falling short in evaluating model performance under practical, real-world conditions. To bridge this gap, we introduce VisualToolChain-Bench(VTC-Bench), a comprehensive benchmark designed to evaluate tool-use proficiency in MLLMs. To align with realistic computer vision pipelines, our framework features 32 diverse OpenCV-based visual operations. This rich tool-set enables extensive combinations, allowing VTC-Bench to rigorously assess multi-tool composition and long-horizon, multi-step plan execution. For precise evaluation, we provide 680 curated problems structured across a nine-category cognitive hierarchy, each with ground-truth execution trajectories. Extensive experiments on 19 leading MLLMs reveal critical limitations in current models' visual agentic capabilities. Specifically, models struggle to adapt to diverse tool-sets and generalize to unseen operations, with the leading model Gemini-3.0-Pro only achieving 51% on our benchmark. Furthermore, multi-tool composition remains a persistent challenge. When facing complex tasks, models struggle to formulate efficient execution plans, relying heavily on a narrow, suboptimal subset of familiar functions rather than selecting the optimal tools. By identifying these fundamental challenges, VTC-Bench establishes a rigorous baseline to guide the development of more generalized visual agentic models.",
+      "authors": [
+        "Xuanyu Zhu",
+        "Yuhao Dong",
+        "Rundong Wang",
+        "Yang Shi",
+        "Zhipeng Wu",
+        "Yinlun Peng",
+        "YiFan Zhang",
+        "Yihang Lou",
+        "Yuanxing Zhang",
+        "Ziwei Liu",
+        "Yan Bai",
+        "Yuan Zhou"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-16T09:31:44+00:00",
+      "link": "https://arxiv.org/pdf/2603.15030v2",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "evaluating agentic multimodal models via compositional visual tool chaining",
+      "llm_evidence_cn": "通过组合视觉工具链评估智能体多模态模型",
+      "llm_evidence": "通过组合视觉工具链评估智能体多模态模型",
+      "canonical_evidence": "通过组合视觉工具链评估智能体多模态模型",
+      "llm_tldr_en": "VTC-Bench evaluates the tool-use proficiency of MLLMs in complex, real-world visual task trajectories.",
+      "llm_tldr_cn": "VTC-Bench评估了多模态大模型在复杂现实视觉任务轨迹中的工具使用熟练度。",
+      "llm_tldr": "VTC-Bench评估了多模态大模型在复杂现实视觉任务轨迹中的工具使用熟练度。",
+      "llm_tags": [
+        "query:mmrag:composite"
+      ],
+      "matched_query_tag": "query:mmrag:composite",
+      "matched_query_text": "Papers central to 多模态RAG相关的研究, especially work that connects or combines: Visual Document Retrieval-Augmented Generation; Visual Retrieval-Augmented Generation; Knowledge-based Visual Question Answering; Multi-modal RAG; I hope you retrieve articles related to the task of knowledge based visual question answering (KB VQA).; Search for articles on applying traditional textual RAG methods in the multimodal domain.; I hope you retrieve articles related to the task of document RAG..",
+      "matched_requirement_id": "req-composite-mmrag",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.14778v1",
+      "title": "$p^2$RAG: Privacy-Preserving RAG Service Supporting Arbitrary Top-$k$ Retrieval",
+      "abstract": "Retrieval-Augmented Generation (RAG) enables large language models to use external knowledge, but outsourcing the RAG service raises privacy concerns for both data owners and users. Privacy-preserving RAG systems address these concerns by performing secure top-$k$ retrieval, which typically is secure sorting to identify relevant documents. However, existing systems face challenges supporting arbitrary $k$ due to their inability to change $k$, new security issues, or efficiency degradation with large $k$. This is a significant limitation because modern long-context models generally achieve higher accuracy with larger retrieval sets. We propose $p^2$RAG, a privacy-preserving RAG service that supports arbitrary top-$k$ retrieval. Unlike existing systems, $p^2$RAG avoids sorting candidate documents. Instead, it uses an interactive bisection method to determine the set of top-$k$ documents. For security, $p^2$RAG uses secret sharing on two semi-honest non-colluding servers to protect the data owner's database and the user's prompt. It enforces restrictions and verification to defend against malicious users and tightly bound the information leakage of the database. The experiments show that $p^2$RAG is 3--300$\\times$ faster than the state-of-the-art PRAG for $k = 16$--$1024$.",
+      "authors": [
+        "Yulong Ming",
+        "Mingyue Wang",
+        "Jijia Yang",
+        "Cong Wang",
+        "Xiaohua Jia"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR",
+        "cs.AI"
+      ],
+      "published": "2026-03-16T03:19:39+00:00",
+      "link": "https://arxiv.org/pdf/2603.14778v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "privacy-preserving RAG service",
+      "llm_evidence_cn": "隐私保护的RAG服务",
+      "llm_evidence": "隐私保护的RAG服务",
+      "canonical_evidence": "隐私保护的RAG服务",
+      "llm_tldr_en": "A privacy-preserving RAG system supporting arbitrary top-k retrieval for secure document access.",
+      "llm_tldr_cn": "一种支持任意top-k检索的隐私保护RAG系统，确保文档访问的安全性。",
+      "llm_tldr": "一种支持任意top-k检索的隐私保护RAG系统，确保文档访问的安全性。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "Search for articles on applying traditional textual RAG methods in the multimodal domain.",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.15370v1",
+      "title": "Trajectory-Diversity-Driven Robust Vision-and-Language Navigation",
+      "abstract": "Vision-and-Language Navigation (VLN) requires agents to navigate photo-realistic environments following natural language instructions. Current methods predominantly rely on imitation learning, which suffers from limited generalization and poor robustness to execution perturbations. We present NavGRPO, a reinforcement learning framework that learns goal-directed navigation policies through Group Relative Policy Optimization. By exploring diverse trajectories and optimizing via within-group performance comparisons, our method enables agents to distinguish effective strategies beyond expert paths without requiring additional value networks. Built on ScaleVLN, NavGRPO achieves superior robustness on R2R and REVERIE benchmarks with +3.0% and +1.71% SPL improvements in unseen environments. Under extreme early-stage perturbations, we demonstrate +14.89% SPL gain over the baseline, confirming that goal-directed RL training builds substantially more robust navigation policies. Code and models will be released.",
+      "authors": [
+        "Jiangyang Li",
+        "Cong Wan",
+        "SongLin Dong",
+        "Chenhao Ding",
+        "Qiang Wang",
+        "Zhiheng Ma",
+        "Yihong Gong"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-16T14:46:54+00:00",
+      "link": "https://arxiv.org/pdf/2603.15370v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "vision-and-language navigation for autonomous agents",
+      "llm_evidence_cn": "自主智能体的视觉语言导航",
+      "llm_evidence": "自主智能体的视觉语言导航",
+      "canonical_evidence": "自主智能体的视觉语言导航",
+      "llm_tldr_en": "Introduces a reinforcement learning framework to improve robustness and generalization in vision-language navigation.",
+      "llm_tldr_cn": "引入了一种强化学习框架，以提高视觉语言导航中的鲁棒性和泛化能力。",
+      "llm_tldr": "引入了一种强化学习框架，以提高视觉语言导航中的鲁棒性和泛化能力。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "multimodal memory architectures for autonomous agents",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.15117v1",
+      "title": "MMKU-Bench: A Multimodal Update Benchmark for Diverse Visual Knowledge",
+      "abstract": "As real-world knowledge continues to evolve, the parametric knowledge acquired by multimodal models during pretraining becomes increasingly difficult to remain consistent with real-world knowledge. Existing research on multimodal knowledge updating focuses only on learning previously unknown knowledge, while overlooking the need to update knowledge that the model has already mastered but that later changes; moreover, evaluation is limited to the same modality, lacking a systematic analysis of cross-modal consistency. To address these issues, this paper proposes MMKU-Bench, a comprehensive evaluation benchmark for multimodal knowledge updating, which contains over 25k knowledge instances and more than 49k images, covering two scenarios, updated knowledge and unknown knowledge, thereby enabling comparative analysis of learning across different knowledge types. On this benchmark, we evaluate a variety of representative approaches, including supervised fine-tuning (SFT), reinforcement learning from human feedback (RLHF), and knowledge editing (KE). Experimental results show that SFT and RLHF are prone to catastrophic forgetting, while KE better preserve general capabilities but exhibit clear limitations in continual updating. Overall, MMKU-Bench provides a reliable and comprehensive evaluation benchmark for multimodal knowledge updating, advancing progress in this field.",
+      "authors": [
+        "Baochen Fu",
+        "Yuntao Du",
+        "Cheng Chang",
+        "Baihao Jin",
+        "Wenzhi Deng",
+        "Muhao Xu",
+        "Hongmei Yan",
+        "Weiye Song",
+        "Yi Wan"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-16T11:15:24+00:00",
+      "link": "https://arxiv.org/pdf/2603.15117v1",
+      "tags": [
+        "keyword:mmrag",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multimodal knowledge updating benchmark for visual knowledge consistency",
+      "llm_evidence_cn": "用于视觉知识一致性的多模态知识更新基准",
+      "llm_evidence": "用于视觉知识一致性的多模态知识更新基准",
+      "canonical_evidence": "用于视觉知识一致性的多模态知识更新基准",
+      "llm_tldr_en": "Introduces MMKU-Bench to evaluate how multimodal models update and maintain cross-modal knowledge consistency.",
+      "llm_tldr_cn": "引入MMKU-Bench，评估多模态模型如何更新并保持跨模态知识的一致性。",
+      "llm_tldr": "引入MMKU-Bench，评估多模态模型如何更新并保持跨模态知识的一致性。",
+      "llm_tags": [
+        "query:mmrag:composite"
+      ],
+      "matched_query_tag": "query:mmrag:composite",
+      "matched_query_text": "Papers central to 多模态RAG相关的研究, especially work that connects or combines: Visual Document Retrieval-Augmented Generation; Visual Retrieval-Augmented Generation; Knowledge-based Visual Question Answering; Multi-modal RAG; I hope you retrieve articles related to the task of knowledge based visual question answering (KB VQA).; Search for articles on applying traditional textual RAG methods in the multimodal domain.; I hope you retrieve articles related to the task of document RAG..",
+      "matched_requirement_id": "req-composite-mmrag",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
