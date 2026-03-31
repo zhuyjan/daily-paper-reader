@@ -1,0 +1,86 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.28474v1/fig-001.webp",
+      "caption": "Table 1: Overall statistics of CiQi-VQA dataset and CiQi-Bench.",
+      "page": 6,
+      "index": 1,
+      "width": 936,
+      "height": 260
+    },
+    {
+      "url": "assets/figures/arxiv/2603.28474v1/fig-002.webp",
+      "caption": "Table 5: Ablation study on GPT-5, Qwen2.5-VL-7B-Instruct and CiQi-Agent with different tool configurations. Bold indicates the best performance.",
+      "page": 11,
+      "index": 2,
+      "width": 944,
+      "height": 382
+    },
+    {
+      "url": "assets/figures/arxiv/2603.28474v1/fig-003.webp",
+      "caption": "Figure 1: Comparison between (a) General-purpose MLLM and (b) CiQi-Agent. (a) Conventional MLLMs rely on single-pass answering, directly outputting a label leading to superficial or inaccurate identifications. (b) The proposed CiQi-Agent introduces Tool-Augmented Reasoning, enabling multi-step porcelain analysis through image zoom-in, image/text retrieval. This iterative process yields more reliable final answers aligned with expert connoisseurship reasoning.",
+      "page": 2,
+      "index": 3,
+      "width": 937,
+      "height": 599
+    },
+    {
+      "url": "assets/figures/arxiv/2603.28474v1/fig-004.webp",
+      "caption": "Figure 4: Framework of the CiQi-Agent. The agent integrates visual zoom-in, image/text retrieval tools within a two-phase training pipeline. Supervised fine-tuning establishes toolcalling skills and porcelain connoisseurship knowledge, while reinforcement learning with an LLM-as-a-Judge refines accuracy and strategic tool-calling.",
+      "page": 7,
+      "index": 4,
+      "width": 875,
+      "height": 524
+    },
+    {
+      "url": "assets/figures/arxiv/2603.28474v1/fig-005.webp",
+      "caption": "Table 3: Performance on CiQi-Bench (Multiple-choice & Free-form). Bold indicates the best performance, and underline indicates the second-best performance.",
+      "page": 10,
+      "index": 5,
+      "width": 940,
+      "height": 229
+    },
+    {
+      "url": "assets/figures/arxiv/2603.28474v1/fig-006.webp",
+      "caption": "Table 7: Comparative experiments on the Hu et al. [12] dataset.",
+      "page": 33,
+      "index": 6,
+      "width": 777,
+      "height": 390
+    },
+    {
+      "url": "assets/figures/arxiv/2603.28474v1/fig-007.webp",
+      "caption": "Figure 2: Visualization of the four key attributes in porcelain connoisseurship. Shown are the distributions of dynasty, glaze color, vessel shape, and decorative motif in the raw porcelain dataset. For each attribute, the top 10 most frequent categories are presented.",
+      "page": 4,
+      "index": 7,
+      "width": 943,
+      "height": 327
+    },
+    {
+      "url": "assets/figures/arxiv/2603.28474v1/fig-008.webp",
+      "caption": "Table 6: Dataset Comparison.",
+      "page": 32,
+      "index": 8,
+      "width": 994,
+      "height": 215
+    },
+    {
+      "url": "assets/figures/arxiv/2603.28474v1/fig-009.webp",
+      "caption": "Table 2: Pearson Correlation and MAE between human expert scores and LLM-as-a-Judge scores on CiQi-Bench. All values are reported to three decimal places.",
+      "page": 9,
+      "index": 9,
+      "width": 944,
+      "height": 195
+    },
+    {
+      "url": "assets/figures/arxiv/2603.28474v1/fig-010.webp",
+      "caption": "Figure 3: Examples from CiQi-VQA dataset. The figure illustrates annotations across four key attributes: dynasty, glaze color, decorative motif and vessel shape.",
+      "page": 5,
+      "index": 10,
+      "width": 943,
+      "height": 402
+    }
+  ]
+}

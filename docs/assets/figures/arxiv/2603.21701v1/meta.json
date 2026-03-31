@@ -1,0 +1,86 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.21701v1/fig-001.webp",
+      "caption": "Table 1. The comparison of visual token reduction methods on three MT-VQA benchmarks with the reduction rate of 90%. The best and the second-best results are highlighted in bold and underline, respectively.",
+      "page": 6,
+      "index": 1,
+      "width": 1036,
+      "height": 731
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21701v1/fig-002.webp",
+      "caption": "Figure 6. Visualization of the compression projection for LLaVA-1.5-7b on MT-GQA with the compression rate of 90%.",
+      "page": 15,
+      "index": 2,
+      "width": 898,
+      "height": 1202
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21701v1/fig-003.webp",
+      "caption": "Table 2. Efficiency comparison of different token reduction methods. The time to first token (TTFT, ms), end-to-end generation time (E2ET, ms), GPU memory usage (Mem. GB), and TFLOPs are reported on MT-GQA dataset with a reduction rate of 90%.",
+      "page": 7,
+      "index": 3,
+      "width": 496,
+      "height": 271
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21701v1/fig-004.webp",
+      "caption": "Figure 3. Comparison of average accuracy on MT-GQA with reduction rate from 50% to 95%.",
+      "page": 7,
+      "index": 4,
+      "width": 970,
+      "height": 324
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21701v1/fig-005.webp",
+      "caption": "Table 4. The comparison of visual token reduction methods on three MT-VQA benchmarks with the reduction rate of 70%. The best and the second-best results are highlighted in bold and underline, respectively.",
+      "page": 13,
+      "index": 5,
+      "width": 1036,
+      "height": 754
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21701v1/fig-006.webp",
+      "caption": "Figure 4. Sensitivity analysis in training MetaCompress for LLaVANeXT-7b with different weights αentropy and αcollapse on MT-GQA.",
+      "page": 8,
+      "index": 6,
+      "width": 458,
+      "height": 269
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21701v1/fig-007.webp",
+      "caption": "Figure 5. (a) Token importance distribution. (b) Attention distribution over prompt tokens. Image tokens are extracted from the last layer of the vision tower of LLaVA-NeXT-7b on VQA-v2 dataset.",
+      "page": 8,
+      "index": 7,
+      "width": 485,
+      "height": 392
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21701v1/fig-008.webp",
+      "caption": "Figure 1. (a) Overall pipeline of the compression projection training process. (b) Attention distribution over the [CLS] token for retained and all visual tokens. The image tokens are extracted from the last layer of the vision tower of LLaVA-1.5-13b running on VQA-v2 dataset. (c) Attention distribution over the prompt tokens for retained and all visual tokens. The attention scores are averaged to prompt tokens extracted from the first layer of the LLM decoder.",
+      "page": 4,
+      "index": 8,
+      "width": 1023,
+      "height": 437
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21701v1/fig-009.webp",
+      "caption": "Figure 2. Illustration of our proposed MetaCompress, where module Pmeta generate the compression projection P solely according to the image sequence XIMG.",
+      "page": 5,
+      "index": 9,
+      "width": 494,
+      "height": 370
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21701v1/fig-010.webp",
+      "caption": "Figure 7. Visualization of the compression projection for LLaVA-1.5-13b on MT-GQA with the compression rate of 90%.",
+      "page": 16,
+      "index": 10,
+      "width": 898,
+      "height": 1202
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.21505v1/fig-001.webp",
+      "caption": "Figure 3: Four progressive application scenarios for the Observable Social Life Spaces paradigm. The upper left panel visualizes the life spaces of agents during both working and rest hours. The upper right panel illustrates the integration of life spaces across multiple mobile devices to enable terminal interconnection. The lower left panel depicts physically embodied agents remaining active in their virtual life spaces during idle state. The lower right panel demonstrates the unconstrained action flexibility of agents independent of physical rules in both VR and AR environments.",
+      "page": 9,
+      "index": 1,
+      "width": 1056,
+      "height": 969
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21505v1/fig-002.webp",
+      "caption": "Figure 2: System architecture of the Observable Social Life Spaces for Interactive Agents. In the lower panel, the system is inherently grounded in four sociological design principles: Social Identity, Relationship, Environment, and Time Equality. The middle section illustrates how the agent continuously accumulates experiences via a Dual-Track Memory Mechanism, processing both direct user interactions and autonomous life events across two conditions (Unobservable and Observable Modes). Note that the visual depictions of these two modes are illustrative schematics designed to concisely convey their conceptual equivalence, rather than literal interface screenshots. Finally, the upper panel presents an illustration of the continuous 2D environment. It highlights the core operational modules, including behavior planning, path execution, and social triggers, which collectively endow the agent with an autonomous existence. By unifying these parallel tracks, we shift the relational dynamic from purely instrumental utilization toward a sustained, equal partnership.",
+      "page": 3,
+      "index": 2,
+      "width": 1056,
+      "height": 940
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21505v1/fig-003.webp",
+      "caption": "Table 4: Themes and Subthemes of Cultivating Perceived Equality through Observable Social Life Spaces",
+      "page": 6,
+      "index": 3,
+      "width": 1044,
+      "height": 340
+    }
+  ]
+}

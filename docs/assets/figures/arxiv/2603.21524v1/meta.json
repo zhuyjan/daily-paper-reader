@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.21524v1/fig-001.webp",
+      "caption": "TABLE II ACCURACY (ACC.) AND BIAS SCORE (BS) RESULTS ON BBQ SUBSET (1K QS/CATEGORY) FOR LLAMA-3-1B, GPT-OSS-20B, AND GEMMA-3-1B-IT.",
+      "page": 6,
+      "index": 1,
+      "width": 521,
+      "height": 602
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21524v1/fig-002.webp",
+      "caption": "Fig. 3. Gender subset scatter plots: x-axis is the confidence score for the male-coded option and y-axis for the female-coded option. Red points are the base model; colored points show the post-mitigation distribution for each method.",
+      "page": 6,
+      "index": 2,
+      "width": 1016,
+      "height": 221
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21524v1/fig-003.webp",
+      "caption": "Fig. 2. Overview of the proposed pipeline. The input query is processed along two paths: (1) Functor-guided structural debiasing maps the biased embedding space to an unbiased one via a debiased projection, reducing demographic separability while preserving task-relevant structure; (2) Retrieval augmentation selects a small set of diverse, counter-stereotypical evidence passages from an external corpus. A context fusion module injects retrieved evidence into the prompt, and the LLM generates using the projected embedding layer to produce a grounded, fair output.",
+      "page": 4,
+      "index": 3,
+      "width": 914,
+      "height": 458
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21524v1/fig-004.webp",
+      "caption": "Fig. 4. Accuracy vs. Bias Score for Functor-only, RAG-only, and full pipeline. Better performance lies toward the upper-left (higher accuracy, lower bias score).",
+      "page": 7,
+      "index": 4,
+      "width": 370,
+      "height": 394
+    },
+    {
+      "url": "assets/figures/arxiv/2603.21524v1/fig-005.webp",
+      "caption": "Fig. 1. Research challenge: the same job-advice query yields systematically different recommendations when the context implies developed vs. developing countries, reflecting stereotyped associations rather than qualification-based reasoning. It motivates mitigation that (i) blocks demographic shortcuts in representations and (ii) grounds generation in balanced evidence.",
+      "page": 1,
+      "index": 5,
+      "width": 491,
+      "height": 254
+    }
+  ]
+}

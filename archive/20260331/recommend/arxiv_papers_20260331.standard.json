@@ -1,0 +1,1575 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-31T19:56:22.627513+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 62,
+    "deep_cap": 7,
+    "deep_selected": 25,
+    "quick_candidates": 140,
+    "quick_skim_target": 12,
+    "quick_selected": 12
+  },
+  "deep_dive": [
+    {
+      "id": "2603.22120v2",
+      "source": "arxiv",
+      "title": "StreamingClaw Technical Report",
+      "abstract": "Emerging applications such as embodied intelligence, AI hardware, autonomous driving, and intelligent cockpits rely on a real-time perception-decision-action closed loop, posing stringent challenges for streaming video understanding. However, current agents mostly suffer from fragmented capabilities, such as supporting only offline video understanding, lacking long-term multimodal memory mechanisms, or struggling to achieve real-time reasoning and proactive interaction under streaming input. These shortcomings have become a key bottleneck for preventing agents from sustaining perception, making real-time decisions, and executing closed-loop actions in complex real-world environments, constraining their deployment and potential in dynamic, open physical worlds. To alleviate these issues, we propose StreamingClaw, a unified agent framework for streaming video understanding and embodied intelligence. Beyond maintaining full compatibility with the OpenClaw framework, it natively supports real-time, multimodal streaming interactions. StreamingClaw integrates five core capabilities: (1) It supports real-time streaming reasoning. (2) It supports reasoning about future events and proactive interaction under the online evolution of interaction objectives. (3) It supports multimodal long-term memory storage, hierarchical memory evolution, efficient memory retrieval, and memory sharing across multiple agents. (4) It supports a closed loop of perception-decision-action. In addition to conventional tools and skills, it also provides streaming tools and action-centric skills tailored for real-world physical environments. (5) It is compatible with the OpenClaw framework, allowing it to leverage the resources and support of the open-source community.",
+      "authors": [
+        "Jiawei Chen",
+        "Zhe Chen",
+        "Chaoqun Du",
+        "Maokui He",
+        "Wei He",
+        "Hengtao Li",
+        "Qizhen Li",
+        "Zide Liu",
+        "Hao Ma",
+        "Xuhao Pan",
+        "Chang Ren",
+        "Xudong Rao",
+        "Xintian Shen",
+        "Chenfeng Wang",
+        "Tao Wei",
+        "Chengjun Yu",
+        "Pengfei Yu",
+        "Shengyu Yao",
+        "Chunpeng Zhou",
+        "Kun Zhan",
+        "Lihao Zheng",
+        "Pan Zhou",
+        "Xuhan Zhu",
+        "Yufei Zheng"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-23T15:43:52+00:00",
+      "link": "https://arxiv.org/pdf/2603.22120v2",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "long-term multimodal memory mechanisms for streaming video understanding",
+      "llm_evidence_cn": "流式视频理解的长时多模态记忆机制",
+      "llm_evidence": "流式视频理解的长时多模态记忆机制",
+      "canonical_evidence": "流式视频理解的长时多模态记忆机制",
+      "llm_tldr_en": "Addresses the lack of long-term multimodal memory in agents for real-time streaming video tasks.",
+      "llm_tldr_cn": "解决了智能体在实时流视频任务中缺乏长期多模态记忆的问题。",
+      "llm_tldr": "解决了智能体在实时流视频任务中缺乏长期多模态记忆的问题。",
+      "llm_tags": [
+        "query:multi-modal-memory:composite"
+      ],
+      "matched_query_tag": "query:multi-modal-memory:composite",
+      "matched_query_text": "Papers central to 查找与多模态智能体记忆（图像、视频、音频）相关的研究文章, especially work that connects or combines: V; Multi-modal Memory; multimodal memory architectures for autonomous agents; visual long-term and short-term memory in agents; architectures for multimodal agent memory systems; long term multimodal memory for autonomous agents; memory augmented multimodal large language models; efficient retrieval of multimodal experiences in AI agents; How to build long term video memory for Alagents?; Retrieval augmented video understanding withmemory modules..",
+      "matched_requirement_id": "req-composite-multi-modal-memory",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.24257v1",
+      "source": "arxiv",
+      "title": "Memory-Augmented Vision-Language Agents for Persistent and Semantically Consistent Object Captioning",
+      "abstract": "Vision-Language Models (VLMs) often yield inconsistent descriptions of the same object across viewpoints, hindering the ability of embodied agents to construct consistent semantic representations over time. Previous methods resolved inconsistencies using offline multi-view aggregation or multi-stage pipelines that decouple exploration, data association, and caption learning, with limited capacity to reason over previously observed objects. In this paper, we introduce a unified, memory-augmented Vision-Language agent that simultaneously handles data association, object captioning, and exploration policy within a single autoregressive framework. The model processes the current RGB observation, a top-down explored map, and an object-level episodic memory serialized into object-level tokens, ensuring persistent object identity and semantic consistency across extended sequences. To train the model in a self-supervised manner, we collect a dataset in photorealistic 3D environments using a disagreement-based policy and a pseudo-captioning model that enforces consistency across multi-view caption histories. Extensive evaluation on a manually annotated object-level test set, demonstrate improvements of up to +11.86% in standard captioning scores and +7.39% in caption self-similarity over baseline models, while enabling scalable performance through a compact scene representation. Code, model weights, and data are available at https://github.com/hsp-iit/epos-vlm",
+      "authors": [
+        "Tommaso Galliena",
+        "Stefano Rosa",
+        "Tommaso Apicella",
+        "Pietro Morerio",
+        "Alessio Del Bue",
+        "Lorenzo Natale"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-25T12:52:32+00:00",
+      "link": "https://arxiv.org/pdf/2603.24257v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "memory-augmented Vision-Language agent for consistent representations",
+      "llm_evidence_cn": "用于一致性表示的记忆增强视觉语言智能体",
+      "llm_evidence": "用于一致性表示的记忆增强视觉语言智能体",
+      "canonical_evidence": "用于一致性表示的记忆增强视觉语言智能体",
+      "llm_tldr_en": "Introduces a memory-augmented VLM agent that maintains semantic consistency across different viewpoints.",
+      "llm_tldr_cn": "引入一种记忆增强的视觉语言智能体，在不同视角下保持语义一致性。",
+      "llm_tldr": "引入一种记忆增强的视觉语言智能体，在不同视角下保持语义一致性。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "memory augmented multimodal large language models",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.24576v1",
+      "source": "arxiv",
+      "title": "Chameleon: Episodic Memory for Long-Horizon Robotic Manipulation",
+      "abstract": "Robotic manipulation often requires memory: occlusion and state changes can make decision-time observations perceptually aliased, making action selection non-Markovian at the observation level because the same observation may arise from different interaction histories. Most embodied agents implement memory via semantically compressed traces and similarity-based retrieval, which discards disambiguating fine-grained perceptual cues and can return perceptually similar but decision-irrelevant episodes. Inspired by human episodic memory, we propose Chameleon, which writes geometry-grounded multimodal tokens to preserve disambiguating context and produces goal-directed recall through a differentiable memory stack. We also introduce Camo-Dataset, a real-robot UR5e dataset spanning episodic recall, spatial tracking, and sequential manipulation under perceptual aliasing. Across tasks, Chameleon consistently improves decision reliability and long-horizon control over strong baselines in perceptually confusable settings.",
+      "authors": [
+        "Xinying Guo",
+        "Chenxi Jiang",
+        "Hyun Bin Kim",
+        "Ying Sun",
+        "Yang Xiao",
+        "Yuhang Han",
+        "Jianfei Yang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-03-25T17:52:43+00:00",
+      "link": "https://arxiv.org/pdf/2603.24576v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "episodic memory with geometry-grounded multimodal tokens for robotic manipulation",
+      "llm_evidence_cn": "用于机器人操作的几何接地多模态标记情景记忆",
+      "llm_evidence": "用于机器人操作的几何接地多模态标记情景记忆",
+      "canonical_evidence": "用于机器人操作的几何接地多模态标记情景记忆",
+      "llm_tldr_en": "Proposes Chameleon, an episodic memory system using multimodal tokens for long-horizon robot tasks.",
+      "llm_tldr_cn": "提出了Chameleon，一种在长程机器人任务中使用多模态标记的情景记忆系统。",
+      "llm_tldr": "提出了Chameleon，一种在长程机器人任务中使用多模态标记的情景记忆系统。",
+      "llm_tags": [
+        "query:multi-modal-memory:composite"
+      ],
+      "matched_query_tag": "query:multi-modal-memory:composite",
+      "matched_query_text": "Papers central to 查找与多模态智能体记忆（图像、视频、音频）相关的研究文章, especially work that connects or combines: V; Multi-modal Memory; multimodal memory architectures for autonomous agents; visual long-term and short-term memory in agents; architectures for multimodal agent memory systems; long term multimodal memory for autonomous agents; memory augmented multimodal large language models; efficient retrieval of multimodal experiences in AI agents; How to build long term video memory for Alagents?; Retrieval augmented video understanding withmemory modules..",
+      "matched_requirement_id": "req-composite-multi-modal-memory",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.27910v1",
+      "source": "arxiv",
+      "title": "GAAMA: Graph Augmented Associative Memory for Agents",
+      "abstract": "AI agents that interact with users across multiple sessions require persistent long-term memory to maintain coherent, personalized behavior. Current approaches either rely on flat retrieval-augmented generation (RAG), which loses structural relationships between memories, or use memory compression and vector retrieval that cannot capture the associative structure of multi-session conversations. There are few graph based techniques proposed in the literature, however they still suffer from hub dominated retrieval and poor hierarchical reasoning over evolving memory. We propose GAAMA, a graph-augmented associative memory system that constructs a concept-mediated hierarchical knowledge graph through a three-step pipeline: (1)~verbatim episode preservation from raw conversations, (2)~LLM-based extraction of atomic facts and topic-level concept nodes, and (3)~synthesis of higher-order reflections. The resulting graph uses four node types (episode, fact, reflection, concept) connected by five structural edge types, with concept nodes providing cross-cutting traversal paths that complement semantic similarity. Retrieval combines cosine-similarity-based $k$-nearest neighbor search with edge-type-aware Personalized PageRank (PPR) through an additive scoring function. On the LoCoMo-10 benchmark (1,540 questions across 10 multi-session conversations), GAAMA achieves 78.9\\% mean reward, outperforming a tuned RAG baseline (75.0\\%), HippoRAG (69.9\\%), A-Mem (47.2\\%), and Nemori (52.1\\%). Ablation analysis shows that augmenting graph-traversal-based ranking (Personalized PageRank) with semantic search consistently improves over pure semantic search on graph nodes (+1.0 percentage point overall).",
+      "authors": [
+        "Swarna Kamal Paul",
+        "Shubhendu Sharma",
+        "Nitin Sareen"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.IR",
+        "cs.MA"
+      ],
+      "published": "2026-03-29T23:33:38+00:00",
+      "link": "https://arxiv.org/pdf/2603.27910v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "graph augmented associative memory for agents",
+      "llm_evidence_cn": "智能体的图增强关联记忆",
+      "llm_evidence": "智能体的图增强关联记忆",
+      "canonical_evidence": "智能体的图增强关联记忆",
+      "llm_tldr_en": "Proposes GAAMA, a graph-augmented associative memory system for persistent long-term agent interactions.",
+      "llm_tldr_cn": "提出 GAAMA，一种图增强关联记忆系统，用于智能体的持久长期交互。",
+      "llm_tldr": "提出 GAAMA，一种图增强关联记忆系统，用于智能体的持久长期交互。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "multimodal memory architectures for autonomous agents",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.28474v1",
+      "source": "arxiv",
+      "title": "CiQi-Agent: Aligning Vision, Tools and Aesthetics in Multimodal Agent for Cultural Reasoning on Chinese Porcelains",
+      "abstract": "The connoisseurship of antique Chinese porcelain demands extensive historical expertise, material understanding, and aesthetic sensitivity, making it difficult for non-specialists to engage. To democratize cultural-heritage understanding and assist expert connoisseurship, we introduce CiQi-Agent -- a domain-specific Porcelain Connoisseurship Agent for intelligent analysis of antique Chinese porcelain. CiQi-Agent supports multi-image porcelain inputs and enables vision tool invocation and multimodal retrieval-augmented generation, performing fine-grained connoisseurship analysis across six attributes: dynasty, reign period, kiln site, glaze color, decorative motif, and vessel shape. Beyond attribute classification, it captures subtle visual details, retrieves relevant domain knowledge, and integrates visual and textual evidence to produce coherent, explainable connoisseurship descriptions. To achieve this capability, we construct a large-scale, expert-annotated dataset CiQi-VQA, comprising 29,596 porcelain specimens, 51,553 images, and 557,940 visual question--answering pairs, and further establish a comprehensive benchmark CiQi-Bench aligned with the previously mentioned six attributes. CiQi-Agent is trained through supervised fine-tuning, reinforcement learning, and a tool-augmented reasoning framework that integrates two categories of tools: a vision tool and multimodal retrieval tools. Experimental results show that CiQi-Agent (7B) outperforms all competitive open- and closed-source models across all six attributes on CiQi-Bench, achieving on average 12.2\\% higher accuracy than GPT-5. The model and dataset have been released and are publicly available at https://huggingface.co/datasets/SII-Monument-Valley/CiQi-VQA.",
+      "authors": [
+        "Wenhan Wang",
+        "Zhixiang Zhou",
+        "Zhongtian Ma",
+        "Yanzhu Chen",
+        "Ziyu Lin",
+        "Hao Sheng",
+        "Pengfei Liu",
+        "Honglin Ma",
+        "Wenqi Shao",
+        "Qiaosheng Zhang",
+        "Yu Qiao"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-03-30T14:13:47+00:00",
+      "link": "https://arxiv.org/pdf/2603.28474v1",
+      "tags": [
+        "keyword:mmrag",
+        "query:mmrag"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "Multimodal retrieval-augmented generation for cultural reasoning",
+      "llm_evidence_cn": "用于文化推理的多模态检索增强生成",
+      "llm_evidence": "用于文化推理的多模态检索增强生成",
+      "canonical_evidence": "用于文化推理的多模态检索增强生成",
+      "llm_tldr_en": "CiQi-Agent uses multimodal RAG and tool invocation for expert-level Chinese porcelain analysis.",
+      "llm_tldr_cn": "CiQi-Agent利用多模态RAG和工具调用进行专家级的中国瓷器分析。",
+      "llm_tldr": "CiQi-Agent利用多模态RAG和工具调用进行专家级的中国瓷器分析。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "Multi-modal RAG",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.28554v1",
+      "source": "arxiv",
+      "title": "Hydra: Unifying Document Retrieval and Generation in a Single Vision-Language Model",
+      "abstract": "Visual document understanding typically requires separate retrieval and generation models, doubling memory and system complexity. We present Hydra, a dual-head approach that provides both ColBERT-style late-interaction retrieval and autoregressive generation from a single vision-language model (VLM). A single LoRA adapter, trained only for retrieval, is toggled at inference: enabling it produces multi-vector embeddings; disabling it recovers the base model's generation quality -- byte-identical outputs in 100% of 10,500 greedy and stochastic samples, with max delta-ANLS = 0.0044 across 15,301 samples on four VQA benchmarks (three informative; ChartQA is near-zero for both models under greedy decoding) when compared against an independent base-model pipeline. We identify three engineering requirements (attention-mode restoration, lm_head preservation, KV-cache-aware decoding) whose omission silently breaks generation despite correct weight recovery. On ViDoRe V1, Hydra (4B) is within 1 percentage point of a controlled single-head baseline in a single training run, with higher aggregate scores on V2 and V3 that are concentrated on a subset of tasks; multi-seed experiments are needed to confirm these trends. The single-model design reduces peak GPU memory by 41%, though adapter switching introduces throughput overhead under concurrent serving loads. An ablation shows that GritLM-style joint training provides no benefit within the LoRA-based (r=16) training regime. A proof-of-concept extension to Qwen2.5-Omni-3B demonstrates that the mechanism generalizes to audio retrieval and video embedding, with speech generation.",
+      "authors": [
+        "Athos Georgiou"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-03-30T15:17:41+00:00",
+      "link": "https://arxiv.org/pdf/2603.28554v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "unifying document retrieval and generation in a single VLM",
+      "llm_evidence_cn": "在单个视觉语言模型中统一文档检索和生成",
+      "llm_evidence": "在单个视觉语言模型中统一文档检索和生成",
+      "canonical_evidence": "在单个视觉语言模型中统一文档检索和生成",
+      "llm_tldr_en": "Hydra enables both late-interaction retrieval and generation in one VLM for document understanding.",
+      "llm_tldr_cn": "Hydra 在单个视觉语言模型中实现了文档检索与生成的统一，降低了系统复杂度。",
+      "llm_tldr": "Hydra 在单个视觉语言模型中实现了文档检索与生成的统一，降低了系统复杂度。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "Visual Document Retrieval-Augmented Generation",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.21562v1",
+      "source": "arxiv",
+      "title": "Exploring Multimodal Prompts For Unsupervised Continuous Anomaly Detection",
+      "abstract": "Unsupervised Continuous Anomaly Detection (UCAD) is gaining attention for effectively addressing the catastrophic forgetting and heavy computational burden issues in traditional Unsupervised Anomaly Detection (UAD). However, existing UCAD approaches that rely solely on visual information are insufficient to capture the manifold of normality in complex scenes, thereby impeding further gains in anomaly detection accuracy. To overcome this limitation, we propose an unsupervised continual anomaly detection framework grounded in multimodal prompting. Specifically, we introduce a Continual Multimodal Prompt Memory Bank (CMPMB) that progressively distills and retains prototypical normal patterns from both visual and textual domains across consecutive tasks, yielding a richer representation of normality. Furthermore, we devise a Defect-Semantic-Guided Adaptive Fusion Mechanism (DSG-AFM) that integrates an Adaptive Normalization Module (ANM) with a Dynamic Fusion Strategy (DFS) to jointly enhance detection accuracy and adversarial robustness. Benchmark experiments on MVTec AD and VisA datasets show that our approach achieves state-of-the-art (SOTA) performance on image-level AUROC and pixel-level AUPR metrics.",
+      "authors": [
+        "Mingle Zhou",
+        "Jiahui Liu",
+        "Jin Wan",
+        "Gang Li",
+        "Min Li"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-23T04:33:11+00:00",
+      "link": "https://arxiv.org/pdf/2603.21562v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Continual Multimodal Prompt Memory Bank for retaining patterns across tasks",
+      "llm_evidence_cn": "用于跨任务保留模式的持续多模态提示记忆库",
+      "llm_evidence": "用于跨任务保留模式的持续多模态提示记忆库",
+      "canonical_evidence": "用于跨任务保留模式的持续多模态提示记忆库",
+      "llm_tldr_en": "Proposes a multimodal prompt memory bank to address forgetting in continuous anomaly detection.",
+      "llm_tldr_cn": "提出一种多模态提示记忆库，以解决持续异常检测中的遗忘问题。",
+      "llm_tldr": "提出一种多模态提示记忆库，以解决持续异常检测中的遗忘问题。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "memory augmented multimodal large language models",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.21577v1",
+      "source": "arxiv",
+      "title": "Mind over Space: Can Multimodal Large Language Models Mentally Navigate?",
+      "abstract": "Despite the widespread adoption of MLLMs in embodied agents, their capabilities remain largely confined to reactive planning from immediate observations, consistently failing in spatial reasoning across extensive spatiotemporal scales. Cognitive science reveals that Biological Intelligence (BI) thrives on \"mental navigation\": the strategic construction of spatial representations from experience and the subsequent mental simulation of paths prior to action. To bridge the gap between AI and BI, we introduce Video2Mental, a pioneering benchmark for evaluating the mental navigation capabilities of MLLMs. The task requires constructing hierarchical cognitive maps from long egocentric videos and generating landmark-based path plans step by step, with planning accuracy verified through simulator-based physical interaction. Our benchmarking results reveal that mental navigation capability does not naturally emerge from standard pre-training. Frontier MLLMs struggle profoundly with zero-shot structured spatial representation, and their planning accuracy decays precipitously over extended horizons. To overcome this, we propose \\textbf{NavMind}, a reasoning model that internalizes mental navigation using explicit, fine-grained cognitive maps as learnable intermediate representations. Through a difficulty-stratified progressive supervised fine-tuning paradigm, NavMind effectively bridges the gap between raw perception and structured planning. Experiments demonstrate that NavMind achieves superior mental navigation capabilities, significantly outperforming frontier commercial and spatial MLLMs.",
+      "authors": [
+        "Qihui Zhu",
+        "Shouwei Ruan",
+        "Xiao Yang",
+        "Hao Jiang",
+        "Yao Huang",
+        "Shiji Zhao",
+        "Hanwei Fan",
+        "Hang Su",
+        "Xingxing Wei"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-23T04:59:25+00:00",
+      "link": "https://arxiv.org/pdf/2603.21577v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "constructing hierarchical cognitive maps from long egocentric videos",
+      "llm_evidence_cn": "从长第一视角视频中构建分层认知地图",
+      "llm_evidence": "从长第一视角视频中构建分层认知地图",
+      "canonical_evidence": "从长第一视角视频中构建分层认知地图",
+      "llm_tldr_en": "Introduces Video2Mental to evaluate MLLMs' ability to build spatial memory and navigate from long videos.",
+      "llm_tldr_cn": "引入 Video2Mental 基准，评估多模态大模型从长视频中构建空间记忆和进行路径规划的能力。",
+      "llm_tldr": "引入 Video2Mental 基准，评估多模态大模型从长视频中构建空间记忆和进行路径规划的能力。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "long term multimodal memory for autonomous agents",
+      "matched_requirement_id": "req-13",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.22872v1",
+      "source": "arxiv",
+      "title": "ForeSea: AI Forensic Search with Multi-modal Queries for Video Surveillance",
+      "abstract": "Despite decades of work, surveillance still struggles to find specific targets across long, multi-camera video. Prior methods -- tracking pipelines, CLIP based models, and VideoRAG -- require heavy manual filtering, capture only shallow attributes, and fail at temporal reasoning. Real-world searches are inherently multimodal (e.g., \"When does this person join the fight?\" with the person's image), yet this setting remains underexplored. Also, there are no proper benchmarks to evaluate those setting - asking video with multimodal queries. To address this gap, we introduce ForeSeaQA, a new benchmark specifically designed for video QA with image-and-text queries and timestamped annotations of key events. The dataset consists of long-horizon surveillance footage paired with diverse multimodal questions, enabling systematic evaluation of retrieval, temporal grounding, and multimodal reasoning in realistic forensic conditions. Not limited to this benchmark, we propose ForeSea, an AI forensic search system with a 3-stage, plug-and-play pipeline. (1) A tracking module filters irrelevant footage; (2) a multimodal embedding module indexes the remaining clips; and (3) during inference, the system retrieves top-K candidate clips for a Video Large Language Model (VideoLLM) to answer queries and localize events. On ForeSeaQA, ForeSea improves accuracy by 3.5% and temporal IoU by 11.0 over prior VideoRAG models. To our knowledge, ForeSeaQA is the first benchmark to support complex multimodal queries with precise temporal grounding, and ForeSea is the first VideoRAG system built to excel in this setting.",
+      "authors": [
+        "Hyojin Park",
+        "Yi Li",
+        "Janghoon Cho",
+        "Sungha Choi",
+        "Jungsoo Lee",
+        "Taotao Jing",
+        "Shuai Zhang",
+        "Munawar Hayat",
+        "Dashan Gao",
+        "Ning Bi",
+        "Fatih Porikli"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-24T07:15:28+00:00",
+      "link": "https://arxiv.org/pdf/2603.22872v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "video QA with multimodal queries and VideoRAG context",
+      "llm_evidence_cn": "结合多模态查询和VideoRAG背景的视频问答",
+      "llm_evidence": "结合多模态查询和VideoRAG背景的视频问答",
+      "canonical_evidence": "结合多模态查询和VideoRAG背景的视频问答",
+      "llm_tldr_en": "Introduces ForeSeaQA for video QA using multimodal queries, addressing limitations in current VideoRAG methods.",
+      "llm_tldr_cn": "引入ForeSeaQA基准，利用多模态查询进行视频问答，解决现有VideoRAG方法的局限性。",
+      "llm_tldr": "引入ForeSeaQA基准，利用多模态查询进行视频问答，解决现有VideoRAG方法的局限性。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "Retrieval augmented video understanding withmemory modules.",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.23023v1",
+      "source": "arxiv",
+      "title": "Cog3DMap: Multi-View Vision-Language Reasoning with 3D Cognitive Maps",
+      "abstract": "Precise spatial understanding from multi-view images remains a fundamental challenge for Multimodal Large Language Models (MLLMs), as their visual representations are predominantly semantic and lack explicit geometric grounding. While existing approaches augment visual tokens with geometric cues from visual geometry models, their MLLM is still required to implicitly infer the underlying 3D structure of the scene from these augmented tokens, limiting its spatial reasoning capability. To address this issue, we introduce Cog3DMap, a framework that recurrently constructs an explicit 3D memory from multi-view images, where each token is grounded in 3D space and possesses both semantic and geometric information. By feeding these tokens into the MLLM, our framework enables direct reasoning over a spatially structured 3D map, achieving state-of-the-art performance on various spatial reasoning benchmarks. Code will be made publicly available.",
+      "authors": [
+        "Chanyoung Gwak",
+        "Yoonwoo Jeong",
+        "Byungwoo Jeon",
+        "Hyunseok Lee",
+        "Jinwoo Shin",
+        "Minsu Cho"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-24T10:05:32+00:00",
+      "link": "https://arxiv.org/pdf/2603.23023v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "recurrently constructs an explicit 3D memory from multi-view images for MLLMs",
+      "llm_evidence_cn": "为多模态大模型从多视图图像中循环构建显式3D记忆",
+      "llm_evidence": "为多模态大模型从多视图图像中循环构建显式3D记忆",
+      "canonical_evidence": "为多模态大模型从多视图图像中循环构建显式3D记忆",
+      "llm_tldr_en": "Cog3DMap builds a 3D cognitive map as memory to enhance spatial reasoning in Multimodal Large Language Models.",
+      "llm_tldr_cn": "Cog3DMap构建3D认知地图作为记忆，增强了多模态大模型的空间推理能力。",
+      "llm_tldr": "Cog3DMap构建3D认知地图作为记忆，增强了多模态大模型的空间推理能力。",
+      "llm_tags": [
+        "query:multi-modal-memory:composite"
+      ],
+      "matched_query_tag": "query:multi-modal-memory:composite",
+      "matched_query_text": "Papers central to 查找与多模态智能体记忆（图像、视频、音频）相关的研究文章, especially work that connects or combines: V; Multi-modal Memory; multimodal memory architectures for autonomous agents; visual long-term and short-term memory in agents; architectures for multimodal agent memory systems; long term multimodal memory for autonomous agents; memory augmented multimodal large language models; efficient retrieval of multimodal experiences in AI agents; How to build long term video memory for Alagents?; Retrieval augmented video understanding withmemory modules..",
+      "matched_requirement_id": "req-composite-multi-modal-memory",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.23234v1",
+      "source": "arxiv",
+      "title": "MemCollab: Cross-Agent Memory Collaboration via Contrastive Trajectory Distillation",
+      "abstract": "Large language model (LLM)-based agents rely on memory mechanisms to reuse knowledge from past problem-solving experiences. Existing approaches typically construct memory in a per-agent manner, tightly coupling stored knowledge to a single model's reasoning style. In modern deployments with heterogeneous agents, a natural question arises: can a single memory system be shared across different models? We found that naively transferring memory between agents often degrades performance, as such memory entangles task-relevant knowledge with agent-specific biases. To address this challenge, we propose MemCollab, a collaborative memory framework that constructs agent-agnostic memory by contrasting reasoning trajectories generated by different agents on the same task. This contrastive process distills abstract reasoning constraints that capture shared task-level invariants while suppressing agent-specific artifacts. We further introduce a task-aware retrieval mechanism that conditions memory access on task category, ensuring that only relevant constraints are used at inference time. Experiments on mathematical reasoning and code generation benchmarks demonstrate that MemCollab consistently improves both accuracy and inference-time efficiency across diverse agents, including cross-modal-family settings. Our results show that the collaboratively constructed memory can function as a shared reasoning resource for diverse LLM-based agents.",
+      "authors": [
+        "Yurui Chang",
+        "Yiran Wu",
+        "Qingyun Wu",
+        "Lu Lin"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-03-24T14:05:47+00:00",
+      "link": "https://arxiv.org/pdf/2603.23234v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "cross-agent memory collaboration and agent-agnostic memory",
+      "llm_evidence_cn": "跨智能体记忆协作与智能体无关记忆",
+      "llm_evidence": "跨智能体记忆协作与智能体无关记忆",
+      "canonical_evidence": "跨智能体记忆协作与智能体无关记忆",
+      "llm_tldr_en": "Proposes MemCollab for sharing agent-agnostic memory across heterogeneous LLM-based agents.",
+      "llm_tldr_cn": "提出MemCollab框架，实现异构LLM智能体之间的通用记忆共享与协作。",
+      "llm_tldr": "提出MemCollab框架，实现异构LLM智能体之间的通用记忆共享与协作。",
+      "llm_tags": [
+        "query:multi-modal-memory:composite"
+      ],
+      "matched_query_tag": "query:multi-modal-memory:composite",
+      "matched_query_text": "Papers central to 查找与多模态智能体记忆（图像、视频、音频）相关的研究文章, especially work that connects or combines: V; Multi-modal Memory; multimodal memory architectures for autonomous agents; visual long-term and short-term memory in agents; architectures for multimodal agent memory systems; long term multimodal memory for autonomous agents; memory augmented multimodal large language models; efficient retrieval of multimodal experiences in AI agents; How to build long term video memory for Alagents?; Retrieval augmented video understanding withmemory modules..",
+      "matched_requirement_id": "req-composite-multi-modal-memory",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.23413v1",
+      "source": "arxiv",
+      "title": "I3DM: Implicit 3D-aware Memory Retrieval and Injection for Consistent Video Scene Generation",
+      "abstract": "Despite remarkable progress in video generation, maintaining long-term scene consistency upon revisiting previously explored areas remains challenging. Existing solutions rely either on explicitly constructing 3D geometry, which suffers from error accumulation and scale ambiguity, or on naive camera Field-of-View (FoV) retrieval, which typically fails under complex occlusions. To overcome these limitations, we propose I3DM, a novel implicit 3D-aware memory mechanism for consistent video scene generation that bypasses explicit 3D reconstruction. At the core of our approach is a 3D-aware memory retrieval strategy, which leverages the intermediate features of a pre-trained Feed-Forward Novel View Synthesis (FF-NVS) model to score view relevance, enabling robust retrieval even in highly occluded scenarios. Furthermore, to fully utilize the retrieved historical frames, we introduce a 3D-aligned memory injection module. This module implicitly warps historical content to the target view and adaptively conditions the generation on reliable warping regions, leading to improved revisit consistency and accurate camera control. Extensive experiments demonstrate that our method outperforms state-of-the-art approaches, achieving superior revisit consistency, generation fidelity, and camera control precision.",
+      "authors": [
+        "Jia Li",
+        "Han Yan",
+        "Yihang Chen",
+        "Siqi Li",
+        "Xibin Song",
+        "Yifu Wang",
+        "Jianfei Cai",
+        "Tien-Tsin Wong",
+        "Pan Ji"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-24T16:45:40+00:00",
+      "link": "https://arxiv.org/pdf/2603.23413v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "implicit 3D-aware memory retrieval for video generation",
+      "llm_evidence_cn": "用于视频生成的隐式 3D 感知记忆检索",
+      "llm_evidence": "用于视频生成的隐式 3D 感知记忆检索",
+      "canonical_evidence": "用于视频生成的隐式 3D 感知记忆检索",
+      "llm_tldr_en": "Proposes I3DM, an implicit 3D-aware memory mechanism for maintaining scene consistency in video generation.",
+      "llm_tldr_cn": "提出 I3DM，一种隐式 3D 感知记忆机制，用于在视频生成中保持场景一致性。",
+      "llm_tldr": "提出 I3DM，一种隐式 3D 感知记忆机制，用于在视频生成中保持场景一致性。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "Retrieval augmented video understanding withmemory modules.",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.23571v1",
+      "source": "arxiv",
+      "title": "StateLinFormer: Stateful Training Enhancing Long-term Memory in Navigation",
+      "abstract": "Effective navigation intelligence relies on long-term memory to support both immediate generalization and sustained adaptation. However, existing approaches face a dilemma: modular systems rely on explicit mapping but lack flexibility, while Transformer-based end-to-end models are constrained by fixed context windows, limiting persistent memory across extended interactions. We introduce StateLinFormer, a linear-attention navigation model trained with a stateful memory mechanism that preserves recurrent memory states across consecutive training segments instead of reinitializing them at each batch boundary. This training paradigm effectively approximates learning on infinitely long sequences, enabling the model to achieve long-horizon memory retention. Experiments across both MAZE and ProcTHOR environments demonstrate that StateLinFormer significantly outperforms its stateless linear-attention counterpart and standard Transformer baselines with fixed context windows. Notably, as interaction length increases, persistent stateful training substantially improves context-dependent adaptation, suggesting an enhancement in the model's In-Context Learning (ICL) capabilities for navigation tasks.",
+      "authors": [
+        "Zhiyuan Chen",
+        "Yuxuan Zhong",
+        "Fan Wang",
+        "Bo Yu",
+        "Pengtao Shao",
+        "Shaoshan Liu",
+        "Ning Ding"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-03-24T11:04:50+00:00",
+      "link": "https://arxiv.org/pdf/2603.23571v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "stateful memory mechanism for long-term memory in navigation agents",
+      "llm_evidence_cn": "导航智能体长期记忆的状态内存机制",
+      "llm_evidence": "导航智能体长期记忆的状态内存机制",
+      "canonical_evidence": "导航智能体长期记忆的状态内存机制",
+      "llm_tldr_en": "StateLinFormer uses a stateful memory mechanism to enhance long-term memory for navigation agents.",
+      "llm_tldr_cn": "StateLinFormer 使用状态内存机制来增强导航智能体的长期记忆。",
+      "llm_tldr": "StateLinFormer 使用状态内存机制来增强导航智能体的长期记忆。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "long term multimodal memory for autonomous agents",
+      "matched_requirement_id": "req-13",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.23840v1",
+      "source": "arxiv",
+      "title": "VehicleMemBench: An Executable Benchmark for Multi-User Long-Term Memory in In-Vehicle Agents",
+      "abstract": "With the growing demand for intelligent in-vehicle experiences, vehicle-based agents are evolving from simple assistants to long-term companions. This evolution requires agents to continuously model multi-user preferences and make reliable decisions in the face of inter-user preference conflicts and changing habits over time. However, existing benchmarks are largely limited to single-user, static question-answer settings, failing to capture the temporal evolution of preferences and the multi-user, tool-interactive nature of real vehicle environments. To address this gap, we introduce VehicleMemBench, a multi-user long-context memory benchmark built on an executable in-vehicle simulation environment. The benchmark evaluates tool use and memory by comparing the post-action environment state with a predefined target state, enabling objective and reproducible evaluation without LLM-based or human scoring. VehicleMemBench includes 23 tool modules, and each sample contains over 80 historical memory events. Experiments show that powerful models perform well on direct instruction tasks but struggle in scenarios involving memory evolution, particularly when user preferences change dynamically. Even advanced memory systems struggle to handle domain-specific memory requirements in this environment. These findings highlight the need for more robust and specialized memory management mechanisms to support long-term adaptive decision-making in real-world in-vehicle systems. To facilitate future research, we release the data and code.",
+      "authors": [
+        "Yuhao Chen",
+        "Yi Xu",
+        "Xinyun Ding",
+        "Xiang Fang",
+        "Shuochen Liu",
+        "Luxi Lin",
+        "Qingyu Zhang",
+        "Ya Li",
+        "Quan Liu",
+        "Tong Xu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-03-25T01:54:28+00:00",
+      "link": "https://arxiv.org/pdf/2603.23840v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Long-term memory benchmark for in-vehicle agents",
+      "llm_evidence_cn": "车载智能体的长期记忆基准",
+      "llm_evidence": "车载智能体的长期记忆基准",
+      "canonical_evidence": "车载智能体的长期记忆基准",
+      "llm_tldr_en": "Introduces VehicleMemBench for evaluating multi-user long-term memory in executable vehicle simulations.",
+      "llm_tldr_cn": "引入 VehicleMemBench，用于在可执行车载模拟环境中评估多用户长期记忆。",
+      "llm_tldr": "引入 VehicleMemBench，用于在可执行车载模拟环境中评估多用户长期记忆。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "long term multimodal memory for autonomous agents",
+      "matched_requirement_id": "req-13",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.24257v2",
+      "source": "arxiv",
+      "title": "Memory-Augmented Vision-Language Agents for Persistent and Semantically Consistent Object Captioning",
+      "abstract": "Vision-Language Models (VLMs) often yield inconsistent descriptions of the same object across viewpoints, hindering the ability of embodied agents to construct consistent semantic representations over time. Previous methods resolved inconsistencies using offline multi-view aggregation or multi-stage pipelines that decouple exploration, data association, and caption learning, with limited capacity to reason over previously observed objects. In this paper, we introduce a unified, memory-augmented Vision-Language agent that simultaneously handles data association, object captioning, and exploration policy within a single autoregressive framework. The model processes the current RGB observation, a top-down explored map, and an object-level episodic memory serialized into object-level tokens, ensuring persistent object identity and semantic consistency across extended sequences. To train the model in a self-supervised manner, we collect a dataset in photorealistic 3D environments using a disagreement-based policy and a pseudo-captioning model that enforces consistency across multi-view caption histories. Extensive evaluation on a manually annotated object-level test set, demonstrate improvements of up to +11.86% in standard captioning scores and +7.39% in caption self-similarity over baseline models, while enabling scalable performance through a compact scene representation. Code, model weights, and data are available at https://hsp-iit.github.io/epos-vlm/.",
+      "authors": [
+        "Tommaso Galliena",
+        "Stefano Rosa",
+        "Tommaso Apicella",
+        "Pietro Morerio",
+        "Alessio Del Bue",
+        "Lorenzo Natale"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-25T12:52:32+00:00",
+      "link": "https://arxiv.org/pdf/2603.24257v2",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "memory-augmented Vision-Language agent for persistent semantic representations",
+      "llm_evidence_cn": "用于持久语义表示的记忆增强视觉语言智能体",
+      "llm_evidence": "用于持久语义表示的记忆增强视觉语言智能体",
+      "canonical_evidence": "用于持久语义表示的记忆增强视觉语言智能体",
+      "llm_tldr_en": "Introduces a memory-augmented VLM agent for consistent object captioning and exploration in embodied AI.",
+      "llm_tldr_cn": "引入记忆增强型VLM智能体，用于具身智能中的一致性物体描述和探索。",
+      "llm_tldr": "引入记忆增强型VLM智能体，用于具身智能中的一致性物体描述和探索。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "multimodal memory architectures for autonomous agents",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.24556v1",
+      "source": "arxiv",
+      "title": "Evaluating Chunking Strategies For Retrieval-Augmented Generation in Oil and Gas Enterprise Documents",
+      "abstract": "Retrieval-Augmented Generation (RAG) has emerged as a framework to address the constraints of Large Language Models (LLMs). Yet, its effectiveness fundamentally hinges on document chunking - an often-overlooked determinant of its quality. This paper presents an empirical study quantifying performance differences across four chunking strategies: fixed-size sliding window, recursive, breakpoint-based semantic, and structure-aware. We evaluated these methods using a proprietary corpus of oil and gas enterprise documents, including text-heavy manuals, table-heavy specifications, and piping and instrumentation diagrams (P and IDs). Our findings show that structure-aware chunking yields higher overall retrieval effectiveness, particularly in top-K metrics, and incurs significantly lower computational costs than semantic or baseline strategies. Crucially, all four methods demonstrated limited effectiveness on P and IDs, underscoring a core limitation of purely text-based RAG within visually and spatially encoded documents. We conclude that while explicit structure preservation is essential for specialised domains, future work must integrate multimodal models to overcome current limitations.",
+      "authors": [
+        "Samuel Taiwo",
+        "Mohd Amaluddin Yusoff"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-25T17:35:24+00:00",
+      "link": "https://arxiv.org/pdf/2603.24556v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Evaluating chunking strategies for RAG in enterprise documents including diagrams",
+      "llm_evidence_cn": "评估包括图表在内的企业文档RAG的分块策略",
+      "llm_evidence": "评估包括图表在内的企业文档RAG的分块策略",
+      "canonical_evidence": "评估包括图表在内的企业文档RAG的分块策略",
+      "llm_tldr_en": "Empirically evaluates document chunking strategies to improve retrieval effectiveness in RAG systems.",
+      "llm_tldr_cn": "实证评估文档分块策略，以提高RAG系统的检索有效性。",
+      "llm_tldr": "实证评估文档分块策略，以提高RAG系统的检索有效性。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "I hope you retrieve articles related to the task of document RAG.",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.25157v1",
+      "source": "arxiv",
+      "title": "Vision Hopfield Memory Networks",
+      "abstract": "Recent vision and multimodal foundation backbones, such as Transformer families and state-space models like Mamba, have achieved remarkable progress, enabling unified modeling across images, text, and beyond. Despite their empirical success, these architectures remain far from the computational principles of the human brain, often demanding enormous amounts of training data while offering limited interpretability. In this work, we propose the Vision Hopfield Memory Network (V-HMN), a brain-inspired foundation backbone that integrates hierarchical memory mechanisms with iterative refinement updates. Specifically, V-HMN incorporates local Hopfield modules that provide associative memory dynamics at the image patch level, global Hopfield modules that function as episodic memory for contextual modulation, and a predictive-coding-inspired refinement rule for iterative error correction. By organizing these memory-based modules hierarchically, V-HMN captures both local and global dynamics in a unified framework. Memory retrieval exposes the relationship between inputs and stored patterns, making decisions more interpretable, while the reuse of stored patterns improves data efficiency. This brain-inspired design therefore enhances interpretability and data efficiency beyond existing self-attention- or state-space-based approaches. We conducted extensive experiments on public computer vision benchmarks, and V-HMN achieved competitive results against widely adopted backbone architectures, while offering better interpretability, higher data efficiency, and stronger biological plausibility. These findings highlight the potential of V-HMN to serve as a next-generation vision foundation model, while also providing a generalizable blueprint for multimodal backbones in domains such as text and audio, thereby bridging brain-inspired computation with large-scale machine learning.",
+      "authors": [
+        "Jianfeng Wang",
+        "Amine M'Charrak",
+        "Luk Koska",
+        "Xiangtao Wang",
+        "Daniel Petriceanu",
+        "Mykyta Smyrnov",
+        "Ruizhi Wang",
+        "Michael Bumbar",
+        "Luca Pinchetti",
+        "Thomas Lukasiewicz"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CV",
+        "stat.ML"
+      ],
+      "published": "2026-03-26T08:23:03+00:00",
+      "link": "https://arxiv.org/pdf/2603.25157v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "hierarchical memory mechanisms for vision and multimodal backbones",
+      "llm_evidence_cn": "视觉和多模态骨干网络的层级记忆机制",
+      "llm_evidence": "视觉和多模态骨干网络的层级记忆机制",
+      "canonical_evidence": "视觉和多模态骨干网络的层级记忆机制",
+      "llm_tldr_en": "V-HMN integrates local and global Hopfield modules as associative and episodic memory for multimodal tasks.",
+      "llm_tldr_cn": "V-HMN集成了局部和全局Hopfield模块，作为多模态任务的联想和情境记忆。",
+      "llm_tldr": "V-HMN集成了局部和全局Hopfield模块，作为多模态任务的联想和情境记忆。",
+      "llm_tags": [
+        "query:multi-modal-memory:composite"
+      ],
+      "matched_query_tag": "query:multi-modal-memory:composite",
+      "matched_query_text": "Papers central to 查找与多模态智能体记忆（图像、视频、音频）相关的研究文章, especially work that connects or combines: V; Multi-modal Memory; multimodal memory architectures for autonomous agents; visual long-term and short-term memory in agents; architectures for multimodal agent memory systems; long term multimodal memory for autonomous agents; memory augmented multimodal large language models; efficient retrieval of multimodal experiences in AI agents; How to build long term video memory for Alagents?; Retrieval augmented video understanding withmemory modules..",
+      "matched_requirement_id": "req-composite-multi-modal-memory",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.25716v1",
+      "source": "arxiv",
+      "title": "Out of Sight but Not Out of Mind: Hybrid Memory for Dynamic Video World Models",
+      "abstract": "Video world models have shown immense potential in simulating the physical world, yet existing memory mechanisms primarily treat environments as static canvases. When dynamic subjects hide out of sight and later re-emerge, current methods often struggle, leading to frozen, distorted, or vanishing subjects. To address this, we introduce Hybrid Memory, a novel paradigm requiring models to simultaneously act as precise archivists for static backgrounds and vigilant trackers for dynamic subjects, ensuring motion continuity during out-of-view intervals. To facilitate research in this direction, we construct HM-World, the first large-scale video dataset dedicated to hybrid memory. It features 59K high-fidelity clips with decoupled camera and subject trajectories, encompassing 17 diverse scenes, 49 distinct subjects, and meticulously designed exit-entry events to rigorously evaluate hybrid coherence. Furthermore, we propose HyDRA, a specialized memory architecture that compresses memory into tokens and utilizes a spatiotemporal relevance-driven retrieval mechanism. By selectively attending to relevant motion cues, HyDRA effectively preserves the identity and motion of hidden subjects. Extensive experiments on HM-World demonstrate that our method significantly outperforms state-of-the-art approaches in both dynamic subject consistency and overall generation quality.",
+      "authors": [
+        "Kaijin Chen",
+        "Dingkang Liang",
+        "Xin Zhou",
+        "Yikang Ding",
+        "Xiaoqiang Liu",
+        "Pengfei Wan",
+        "Xiang Bai"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-03-26T17:56:01+00:00",
+      "link": "https://arxiv.org/pdf/2603.25716v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "hybrid memory for dynamic video world models to track out-of-sight subjects",
+      "llm_evidence_cn": "用于动态视频世界模型的混合记忆，以追踪视线外的目标",
+      "llm_evidence": "用于动态视频世界模型的混合记忆，以追踪视线外的目标",
+      "canonical_evidence": "用于动态视频世界模型的混合记忆，以追踪视线外的目标",
+      "llm_tldr_en": "Introduces Hybrid Memory to maintain motion continuity for dynamic subjects in video world models.",
+      "llm_tldr_cn": "引入混合记忆机制，确保视频世界模型在目标离开视野时仍能保持运动连续性。",
+      "llm_tldr": "引入混合记忆机制，确保视频世界模型在目标离开视野时仍能保持运动连续性。",
+      "llm_tags": [
+        "query:multi-modal-memory:composite"
+      ],
+      "matched_query_tag": "query:multi-modal-memory:composite",
+      "matched_query_text": "Papers central to 查找与多模态智能体记忆（图像、视频、音频）相关的研究文章, especially work that connects or combines: V; Multi-modal Memory; multimodal memory architectures for autonomous agents; visual long-term and short-term memory in agents; architectures for multimodal agent memory systems; long term multimodal memory for autonomous agents; memory augmented multimodal large language models; efficient retrieval of multimodal experiences in AI agents; How to build long term video memory for Alagents?; Retrieval augmented video understanding withmemory modules..",
+      "matched_requirement_id": "req-composite-multi-modal-memory",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.25716v2",
+      "source": "arxiv",
+      "title": "Out of Sight but Not Out of Mind: Hybrid Memory for Dynamic Video World Models",
+      "abstract": "Video world models have shown immense potential in simulating the physical world, yet existing memory mechanisms primarily treat environments as static canvases. When dynamic subjects hide out of sight and later re-emerge, current methods often struggle, leading to frozen, distorted, or vanishing subjects. To address this, we introduce Hybrid Memory, a novel paradigm requiring models to simultaneously act as precise archivists for static backgrounds and vigilant trackers for dynamic subjects, ensuring motion continuity during out-of-view intervals. To facilitate research in this direction, we construct HM-World, the first large-scale video dataset dedicated to hybrid memory. It features 59K high-fidelity clips with decoupled camera and subject trajectories, encompassing 17 diverse scenes, 49 distinct subjects, and meticulously designed exit-entry events to rigorously evaluate hybrid coherence. Furthermore, we propose HyDRA, a specialized memory architecture that compresses memory into tokens and utilizes a spatiotemporal relevance-driven retrieval mechanism. By selectively attending to relevant motion cues, HyDRA effectively preserves the identity and motion of hidden subjects. Extensive experiments on HM-World demonstrate that our method significantly outperforms state-of-the-art approaches in both dynamic subject consistency and overall generation quality. Code is publicly available at https://github.com/H-EmbodVis/HyDRA.",
+      "authors": [
+        "Kaijin Chen",
+        "Dingkang Liang",
+        "Xin Zhou",
+        "Yikang Ding",
+        "Xiaoqiang Liu",
+        "Pengfei Wan",
+        "Xiang Bai"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-03-26T17:56:01+00:00",
+      "link": "https://arxiv.org/pdf/2603.25716v2",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Hybrid memory for dynamic video world models and motion continuity",
+      "llm_evidence_cn": "用于动态视频世界模型和运动连续性的混合记忆",
+      "llm_evidence": "用于动态视频世界模型和运动连续性的混合记忆",
+      "canonical_evidence": "用于动态视频世界模型和运动连续性的混合记忆",
+      "llm_tldr_en": "Introduces Hybrid Memory to track dynamic subjects and static backgrounds in video world models.",
+      "llm_tldr_cn": "引入混合记忆，在视频世界模型中跟踪动态主体和静态背景。",
+      "llm_tldr": "引入混合记忆，在视频世界模型中跟踪动态主体和静态背景。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "long term multimodal memory for autonomous agents",
+      "matched_requirement_id": "req-13",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.26266v1",
+      "source": "arxiv",
+      "title": "GUIDE: Resolving Domain Bias in GUI Agents through Real-Time Web Video Retrieval and Plug-and-Play Annotation",
+      "abstract": "Large vision-language models have endowed GUI agents with strong general capabilities for interface understanding and interaction. However, due to insufficient exposure to domain-specific software operation data during training, these agents exhibit significant domain bias - they lack familiarity with the specific operation workflows (planning) and UI element layouts (grounding) of particular applications, limiting their real-world task performance. In this paper, we present GUIDE (GUI Unbiasing via Instructional-Video Driven Expertise), a training-free, plug-and-play framework that resolves GUI agent domain bias by autonomously acquiring domain-specific expertise from web tutorial videos through a retrieval-augmented automated annotation pipeline. GUIDE introduces two key innovations. First, a subtitle-driven Video-RAG pipeline unlocks video semantics through subtitle analysis, performing progressive three-stage retrieval - domain classification, topic extraction, and relevance matching - to identify task-relevant tutorial videos. Second, a fully automated annotation pipeline built on an inverse dynamics paradigm feeds consecutive keyframes enhanced with UI element detection into VLMs, inferring the required planning and grounding knowledge that are injected into the agent's corresponding modules to address both manifestations of domain bias. Extensive experiments on OSWorld demonstrate GUIDE's generality as a plug-and-play component for both multi-agent systems and single-model agents. It consistently yields over 5% improvements and reduces execution steps - without modifying any model parameters or architecture - validating GUIDE as an architecture-agnostic enhancement to bridge GUI agent domain bias.",
+      "authors": [
+        "Rui Xie",
+        "Zhi Gao",
+        "Chenrui Shi",
+        "Zirui Shang",
+        "Lu Chen",
+        "Qing Li"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-03-27T10:33:08+00:00",
+      "link": "https://arxiv.org/pdf/2603.26266v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "retrieval-augmented framework acquiring expertise from web tutorial videos",
+      "llm_evidence_cn": "从网络教学视频中获取专业知识的检索增强框架",
+      "llm_evidence": "从网络教学视频中获取专业知识的检索增强框架",
+      "canonical_evidence": "从网络教学视频中获取专业知识的检索增强框架",
+      "llm_tldr_en": "A training-free framework that uses video retrieval to help GUI agents learn domain-specific operation workflows.",
+      "llm_tldr_cn": "一种无需训练的框架，利用视频检索帮助 GUI 智能体学习特定领域的操作系统工作流。",
+      "llm_tldr": "一种无需训练的框架，利用视频检索帮助 GUI 智能体学习特定领域的操作系统工作流。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "Retrieval augmented video understanding withmemory modules.",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.26788v1",
+      "source": "arxiv",
+      "title": "ReMemNav: A Rethinking and Memory-Augmented Framework for Zero-Shot Object Navigation",
+      "abstract": "Zero-shot object navigation requires agents to locate unseen target objects in unfamiliar environments without prior maps or task-specific training which remains a significant challenge. Although recent advancements in vision-language models(VLMs) provide promising commonsense reasoning capabilities for this task, these models still suffer from spatial hallucinations, local exploration deadlocks, and a disconnect between high-level semantic intent and low-level control. In this regard, we propose a novel hierarchical navigation framework named ReMemNav, which seamlessly integrates panoramic semantic priors and episodic memory with VLMs. We introduce the Recognize Anything Model to anchor the spatial reasoning process of the VLM. We also design an adaptive dual-modal rethinking mechanism based on an episodic semantic buffer queue. The proposed mechanism actively verifies target visibility and corrects decisions using historical memory to prevent deadlocks. For low-level action execution, ReMemNav extracts a sequence of feasible actions using depth masks, allowing the VLM to select the optimal action for mapping into actual spatial movement. Extensive evaluations on HM3D and MP3D demonstrate that ReMemNav outperforms existing training-free zero-shot baselines in both success rate and exploration efficiency. Specifically, we achieve significant absolute performance improvements, with SR and SPL increasing by 1.7% and 7.0% on HM3D v0.1, 18.2% and 11.1% on HM3D v0.2, and 8.7% and 7.9% on MP3D.",
+      "authors": [
+        "Feng Wu",
+        "Wei Zuo",
+        "Wenliang Yang",
+        "Jun Xiao",
+        "Yang Liu",
+        "Xinhua Zeng"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-03-25T09:07:32+00:00",
+      "link": "https://arxiv.org/pdf/2603.26788v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Memory-augmented framework for zero-shot object navigation in agents",
+      "llm_evidence_cn": "智能体零样本目标导航的记忆增强框架",
+      "llm_evidence": "智能体零样本目标导航的记忆增强框架",
+      "canonical_evidence": "智能体零样本目标导航的记忆增强框架",
+      "llm_tldr_en": "Integrates episodic memory and VLMs to improve spatial reasoning and navigation for autonomous agents.",
+      "llm_tldr_cn": "将情节记忆与视觉语言模型集成，以提升自主智能体的空间推理和导航能力。",
+      "llm_tldr": "将情节记忆与视觉语言模型集成，以提升自主智能体的空间推理和导航能力。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "multimodal memory architectures for autonomous agents",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.26859v1",
+      "source": "arxiv",
+      "title": "Beyond Textual Knowledge-Leveraging Multimodal Knowledge Bases for Enhancing Vision-and-Language Navigation",
+      "abstract": "Vision-and-Language Navigation (VLN) requires an agent to navigate through complex unseen environments based on natural language instructions. However, existing methods often struggle to effectively capture key semantic cues and accurately align them with visual observations. To address this limitation, we propose Beyond Textual Knowledge (BTK), a VLN framework that synergistically integrates environment-specific textual knowledge with generative image knowledge bases. BTK employs Qwen3-4B to extract goal-related phrases and utilizes Flux-Schnell to construct two large-scale image knowledge bases: R2R-GP and REVERIE-GP. Additionally, we leverage BLIP-2 to construct a large-scale textual knowledge base derived from panoramic views, providing environment-specific semantic cues. These multimodal knowledge bases are effectively integrated via the Goal-Aware Augmentor and Knowledge Augmentor, significantly enhancing semantic grounding and cross-modal alignment. Extensive experiments on the R2R dataset with 7,189 trajectories and the REVERIE dataset with 21,702 instructions demonstrate that BTK significantly outperforms existing baselines. On the test unseen splits of R2R and REVERIE, SR increased by 5% and 2.07% respectively, and SPL increased by 4% and 3.69% respectively. The source code is available at https://github.com/yds3/IPM-BTK/.",
+      "authors": [
+        "Dongsheng Yang",
+        "Yinfeng Yu",
+        "Liejun Wang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "eess.IV"
+      ],
+      "published": "2026-03-27T15:25:30+00:00",
+      "link": "https://arxiv.org/pdf/2603.26859v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Synergistic integration of textual and generative image knowledge bases for navigation",
+      "llm_evidence_cn": "协同整合文本和生成式图像知识库以进行导航",
+      "llm_evidence": "协同整合文本和生成式图像知识库以进行导航",
+      "canonical_evidence": "协同整合文本和生成式图像知识库以进行导航",
+      "llm_tldr_en": "BTK enhances navigation by integrating environment-specific textual and multimodal image knowledge bases.",
+      "llm_tldr_cn": "BTK 通过整合特定环境的文本和多模态图像知识库来增强智能体导航能力。",
+      "llm_tldr": "BTK 通过整合特定环境的文本和多模态图像知识库来增强智能体导航能力。",
+      "llm_tags": [
+        "query:mmrag:composite"
+      ],
+      "matched_query_tag": "query:mmrag:composite",
+      "matched_query_text": "Papers central to 多模态RAG相关的研究, especially work that connects or combines: Visual Document Retrieval-Augmented Generation; Visual Retrieval-Augmented Generation; Knowledge-based Visual Question Answering; Multi-modal RAG; I hope you retrieve articles related to the task of knowledge based visual question answering (KB VQA).; Search for articles on applying traditional textual RAG methods in the multimodal domain.; I hope you retrieve articles related to the task of document RAG..",
+      "matched_requirement_id": "req-composite-mmrag",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.27813v1",
+      "source": "arxiv",
+      "title": "MuSEAgent: A Multimodal Reasoning Agent with Stateful Experiences",
+      "abstract": "Research agents have recently achieved significant progress in information seeking and synthesis across heterogeneous textual and visual sources. In this paper, we introduce MuSEAgent, a multimodal reasoning agent that enhances decision-making by extending the capabilities of research agents to discover and leverage stateful experiences. Rather than relying on trajectory-level retrieval, we propose a stateful experience learning paradigm that abstracts interaction data into atomic decision experiences through hindsight reasoning. These experiences are organized into a quality-filtered experience bank that supports policy-driven experience retrieval at inference time. Specifically, MuSEAgent enables adaptive experience exploitation through complementary wide- and deep-search strategies, allowing the agent to dynamically retrieve multimodal guidance across diverse compositional semantic viewpoints. Extensive experiments demonstrate that MuSEAgent consistently outperforms strong trajectory-level experience retrieval baselines on both fine-grained visual perception and complex multimodal reasoning tasks. These results validate the effectiveness of stateful experience modeling in improving multimodal agent reasoning.",
+      "authors": [
+        "Shijian Wang",
+        "Jiarui Jin",
+        "Runhao Fu",
+        "Zexuan Yan",
+        "Xingjian Wang",
+        "Mengkang Hu",
+        "Eric Wang",
+        "Xiaoxi Li",
+        "Kangning Zhang",
+        "Li Yao",
+        "Wenxiang Jiao",
+        "Xuelian Cheng",
+        "Yuan Lu",
+        "Zongyuan Ge"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-29T18:54:31+00:00",
+      "link": "https://arxiv.org/pdf/2603.27813v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "multimodal reasoning agent with stateful experience bank and retrieval",
+      "llm_evidence_cn": "具有状态经验库和检索功能的多模态推理智能体",
+      "llm_evidence": "具有状态经验库和检索功能的多模态推理智能体",
+      "canonical_evidence": "具有状态经验库和检索功能的多模态推理智能体",
+      "llm_tldr_en": "MuSEAgent uses a stateful experience bank to enable multimodal agents to retrieve and leverage past interactions.",
+      "llm_tldr_cn": "MuSEAgent 通过状态经验库使多模态智能体能够检索并利用过去的交互经验。",
+      "llm_tldr": "MuSEAgent 通过状态经验库使多模态智能体能够检索并利用过去的交互经验。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "efficient retrieval of multimodal experiences in AI agents",
+      "matched_requirement_id": "req-15",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.28088v1",
+      "source": "arxiv",
+      "title": "GEMS: Agent-Native Multimodal Generation with Memory and Skills",
+      "abstract": "Recent multimodal generation models have achieved remarkable progress on general-purpose generation tasks, yet continue to struggle with complex instructions and specialized downstream tasks. Inspired by the success of advanced agent frameworks such as Claude Code, we propose \\textbf{GEMS} (Agent-Native Multimodal \\textbf{GE}neration with \\textbf{M}emory and \\textbf{S}kills), a framework that pushes beyond the inherent limitations of foundational models on both general and downstream tasks. GEMS is built upon three core components. Agent Loop introduces a structured multi-agent framework that iteratively improves generation quality through closed-loop optimization. Agent Memory provides a persistent, trajectory-level memory that hierarchically stores both factual states and compressed experiential summaries, enabling a global view of the optimization process while reducing redundancy. Agent Skill offers an extensible collection of domain-specific expertise with on-demand loading, allowing the system to effectively handle diverse downstream applications. Across five mainstream tasks and four downstream tasks, evaluated on multiple generative backends, GEMS consistently achieves significant performance gains. Most notably, it enables the lightweight 6B model Z-Image-Turbo to surpass the state-of-the-art Nano Banana 2 on GenEval2, demonstrating the effectiveness of agent harness in extending model capabilities beyond their original limits.",
+      "authors": [
+        "Zefeng He",
+        "Siyuan Huang",
+        "Xiaoye Qu",
+        "Yafu Li",
+        "Tong Zhu",
+        "Yu Cheng",
+        "Yang Yang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-30T06:42:55+00:00",
+      "link": "https://arxiv.org/pdf/2603.28088v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Agent-native multimodal generation with persistent trajectory-level memory",
+      "llm_evidence_cn": "具有持久轨迹级记忆的智能体原生多模态生成",
+      "llm_evidence": "具有持久轨迹级记忆的智能体原生多模态生成",
+      "canonical_evidence": "具有持久轨迹级记忆的智能体原生多模态生成",
+      "llm_tldr_en": "Introduces GEMS, a framework for multimodal generation using structured agent loops and hierarchical memory.",
+      "llm_tldr_cn": "引入GEMS框架，利用结构化智能体循环和分层记忆进行多模态生成。",
+      "llm_tldr": "引入GEMS框架，利用结构化智能体循环和分层记忆进行多模态生成。",
+      "llm_tags": [
+        "query:multi-modal-memory:composite"
+      ],
+      "matched_query_tag": "query:multi-modal-memory:composite",
+      "matched_query_text": "Papers central to 查找与多模态智能体记忆（图像、视频、音频）相关的研究文章, especially work that connects or combines: V; Multi-modal Memory; multimodal memory architectures for autonomous agents; visual long-term and short-term memory in agents; architectures for multimodal agent memory systems; long term multimodal memory for autonomous agents; memory augmented multimodal large language models; efficient retrieval of multimodal experiences in AI agents; How to build long term video memory for Alagents?; Retrieval augmented video understanding withmemory modules..",
+      "matched_requirement_id": "req-composite-multi-modal-memory",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.28696v1",
+      "source": "arxiv",
+      "title": "AdaptToken: Entropy-based Adaptive Token Selection for MLLM Long Video Understanding",
+      "abstract": "Long video understanding remains challenging for Multi-modal Large Language Models (MLLMs) due to high memory costs and context-length limits. Prior approaches mitigate this by scoring and selecting frames/tokens within short clips, but they lack a principled mechanism to (i) compare relevance across distant video clips and (ii) stop processing once sufficient evidence has been gathered. We propose AdaptToken, a training-free framework that turns an MLLM's self-uncertainty into a global control signal for long-video token selection. AdaptToken splits a video into groups, extracts cross-modal attention to rank tokens within each group, and uses the model's response entropy to estimate each group's prompt relevance. This entropy signal enables a global token budget allocation across groups and further supports early stopping (AdaptToken-Lite), skipping the remaining groups when the model becomes sufficiently certain. Across four long-video benchmarks (VideoMME, LongVideoBench, LVBench, and MLVU) and multiple base MLLMs (7B-72B), AdaptToken consistently improves accuracy (e.g., +6.7 on average over Qwen2.5-VL 7B) and continues to benefit from extremely long inputs (up to 10K frames), while AdaptToken-Lite reduces inference time by about half with comparable performance. Project page: https://haozheqi.github.io/adapt-token",
+      "authors": [
+        "Haozhe Qi",
+        "Kevin Qu",
+        "Mahdi Rad",
+        "Rui Wang",
+        "Alexander Mathis",
+        "Marc Pollefeys"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-03-30T17:14:15+00:00",
+      "link": "https://arxiv.org/pdf/2603.28696v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Adaptive token selection for long video understanding in MLLMs",
+      "llm_evidence_cn": "多模态大模型长视频理解中的自适应Token选择",
+      "llm_evidence": "多模态大模型长视频理解中的自适应Token选择",
+      "canonical_evidence": "多模态大模型长视频理解中的自适应Token选择",
+      "llm_tldr_en": "AdaptToken uses model entropy to select relevant video tokens, enabling efficient long video understanding.",
+      "llm_tldr_cn": "AdaptToken利用模型熵选择相关的视频Token，实现高效的长视频理解。",
+      "llm_tldr": "AdaptToken利用模型熵选择相关的视频Token，实现高效的长视频理解。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "Retrieval augmented video understanding withmemory modules.",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2603.15409v1",
+      "title": "SEA-Vision: A Multilingual Benchmark for Comprehensive Document and Scene Text Understanding in Southeast Asia",
+      "abstract": "Multilingual document and scene text understanding plays an important role in applications such as search, finance, and public services. However, most existing benchmarks focus on high-resource languages and fail to evaluate models in realistic multilingual environments. In Southeast Asia, the diversity of languages, complex writing systems, and highly varied document types make this challenge even greater. We introduce SEA-Vision, a benchmark that jointly evaluates Document Parsing and Text-Centric Visual Question Answering (TEC-VQA) across 11 Southeast Asian languages. SEA-Vision contains 15,234 document parsing pages from nine representative document types, annotated with hierarchical page-, block-, and line-level labels. It also provides 7,496 TEC-VQA question-answer pairs that probe text recognition, numerical calculation, comparative analysis, logical reasoning, and spatial understanding. To make such multilingual, multi-task annotation feasible, we design a hybrid pipeline for Document Parsing and TEC-VQA. It combines automated filtering and scoring with MLLM-assisted labeling and lightweight native-speaker verification, greatly reducing manual labeling while maintaining high quality. We evaluate several leading multimodal models and observe pronounced performance degradation on low-resource Southeast Asian languages, highlighting substantial remaining gaps in multilingual document and scene text understanding. We believe SEA-Vision will help drive global progress in document and scene text understanding.",
+      "authors": [
+        "Pengfei Yue",
+        "Xingran Zhao",
+        "Juntao Chen",
+        "Peng Hou",
+        "Wang Longchao",
+        "Jianghang Lin",
+        "Shengchuan Zhang",
+        "Anxiang Zeng",
+        "Liujuan Cao"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-16T15:21:12+00:00",
+      "link": "https://arxiv.org/pdf/2603.15409v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "benchmark for document parsing and text-centric VQA",
+      "llm_evidence_cn": "文档解析和以文本为中心的视觉问答基准",
+      "llm_evidence": "文档解析和以文本为中心的视觉问答基准",
+      "canonical_evidence": "文档解析和以文本为中心的视觉问答基准",
+      "llm_tldr_en": "Presents SEA-Vision, a multilingual benchmark for document and scene text understanding in Southeast Asia.",
+      "llm_tldr_cn": "发布SEA-Vision，一个针对东南亚多语言文档和场景文本理解的基准。",
+      "llm_tldr": "发布SEA-Vision，一个针对东南亚多语言文档和场景文本理解的基准。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "I hope you retrieve articles related to the task of document RAG.",
+      "matched_requirement_id": "req-7",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.15409v1",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.21520v1",
+      "source": "arxiv",
+      "title": "Generalizable Self-Evolving Memory for Automatic Prompt Optimization",
+      "abstract": "Automatic prompt optimization is a promising approach for adapting large language models (LLMs) to downstream tasks, yet existing methods typically search for a specific prompt specialized to a fixed task. This paradigm limits generalization across heterogeneous queries and prevents models from accumulating reusable prompting knowledge over time. In this paper, we propose MemAPO, a memory-driven framework that reconceptualizes prompt optimization as generalizable and self-evolving experience accumulation. MemAPO maintains a dual-memory mechanism that distills successful reasoning trajectories into reusable strategy templates while organizing incorrect generations into structured error patterns that capture recurrent failure modes. Given a new prompt, the framework retrieves both relevant strategies and failure patterns to compose prompts that promote effective reasoning while discouraging known mistakes. Through iterative self-reflection and memory editing, MemAPO continuously updates its memory, enabling prompt optimization to improve over time rather than restarting from scratch for each task. Experiments on diverse benchmarks show that MemAPO consistently outperforms representative prompt optimization baselines while substantially reducing optimization cost.",
+      "authors": [
+        "Guanbao Liang",
+        "Yuanchen Bei",
+        "Sheng Zhou",
+        "Yuheng Qin",
+        "Huan Zhou",
+        "Bingxin Jia",
+        "Bin Li",
+        "Jiajun Bu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-23T03:29:54+00:00",
+      "link": "https://arxiv.org/pdf/2603.21520v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "memory-driven framework for prompt optimization in LLMs",
+      "llm_evidence_cn": "用于大语言模型提示优化的记忆驱动框架",
+      "llm_evidence": "用于大语言模型提示优化的记忆驱动框架",
+      "canonical_evidence": "用于大语言模型提示优化的记忆驱动框架",
+      "llm_tldr_en": "MemAPO uses a dual-memory mechanism to accumulate reasoning experiences and error patterns.",
+      "llm_tldr_cn": "MemAPO 利用双重记忆机制积累推理经验和错误模式，实现提示词的自我演化。",
+      "llm_tldr": "MemAPO 利用双重记忆机制积累推理经验和错误模式，实现提示词的自我演化。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "memory augmented multimodal large language models",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.21505v1",
+      "source": "arxiv",
+      "title": "Would You Like to Visit My World? Cultivating Perceived Equality in Human-Agent Interaction via Observable Social Life Spaces",
+      "abstract": "Most AI agents remain confined to an instrumental \"command-execution\" model, resulting in unequal, one-sided interactions. While recent works attempt to build relationships through hidden memory backends, these invisible processes often fail to break the instrumental bias. In this paper, we argue that true relational equality requires agents to have an independent, observable existence. We introduce the \\textit{Observable Life Spaces} paradigm, where agents inhabit a continuous virtual environment, engage in daily activities, and form social relationships that users can directly observe. Through a mixed-methods study ($N=24$), we demonstrate that only when agents are endowed with a socialized life space that is visually observable to humans can the perceived equality during interaction be significantly enhanced ($p = 0.015$). Our findings suggest that visually representing an agent's social life space can effectively shift the human-agent dynamic from a purely instrumental relationship to one characterized by perceived equality.",
+      "authors": [
+        "Zihong He",
+        "Shuqin Wang",
+        "Songchen Zhou",
+        "Qinghui Lin",
+        "Jialin Wang",
+        "Chen Liang",
+        "Hai-Ning Liang"
+      ],
+      "primary_category": "cs.HC",
+      "categories": [
+        "cs.HC"
+      ],
+      "published": "2026-03-23T02:52:10+00:00",
+      "link": "https://arxiv.org/pdf/2603.21505v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "AI agents with observable social life spaces and memory backends",
+      "llm_evidence_cn": "具有可观察社交生活空间和存储后端的 AI 智能体",
+      "llm_evidence": "具有可观察社交生活空间和存储后端的 AI 智能体",
+      "canonical_evidence": "具有可观察社交生活空间和存储后端的 AI 智能体",
+      "llm_tldr_en": "The paper introduces observable life spaces for agents to foster perceived equality in human-agent interaction.",
+      "llm_tldr_cn": "本文为智能体引入了可观察的生活空间，以在人机交互中培养感知平等。",
+      "llm_tldr": "本文为智能体引入了可观察的生活空间，以在人机交互中培养感知平等。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "multimodal memory architectures for autonomous agents",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.15997v1",
+      "title": "Visual Set Program Synthesizer",
+      "abstract": "A user pointing their phone at a supermarket shelf and asking \"Which soda has the least sugar?\" poses a difficult challenge for current visual Al assistants. Such queries require not only object recognition, but explicit set-based reasoning such as filtering, comparison, and aggregation. Standard endto-end MLLMs often fail at these tasks because they lack an explicit mechanism for compositional logic. We propose treating visual reasoning as Visual Program Synthesis, where the model first generates a symbolic program that is executed by a separate engine grounded in visual scenes. We also introduce Set-VQA, a new benchmark designed specifically for evaluating set-based visual reasoning. Experiments show that our approach significantly outperforms state-of-the-art baselines on complex reasoning tasks, producing more systematic and transparent behavior while substantially improving answer accuracy. These results demonstrate that program-driven reasoning provides a principled alternative to black-box visual-language inference.",
+      "authors": [
+        "Zehua Cheng",
+        "Wei Dai",
+        "Wenhu Zhang",
+        "Thomas Lukasiewicz",
+        "Jiahao Sun"
+      ],
+      "primary_category": "cs.MM",
+      "categories": [
+        "cs.MM",
+        "cs.CL",
+        "cs.SC"
+      ],
+      "published": "2026-03-16T23:15:54+00:00",
+      "link": "https://arxiv.org/pdf/2603.15997v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Knowledge-based visual reasoning and Set-VQA benchmark",
+      "llm_evidence_cn": "基于知识的视觉推理与Set-VQA基准",
+      "llm_evidence": "基于知识的视觉推理与Set-VQA基准",
+      "canonical_evidence": "基于知识的视觉推理与Set-VQA基准",
+      "llm_tldr_en": "Treats visual reasoning as program synthesis to improve compositional logic in MLLMs.",
+      "llm_tldr_cn": "将视觉推理视为程序合成，以改进多模态大模型的组合逻辑。",
+      "llm_tldr": "将视觉推理视为程序合成，以改进多模态大模型的组合逻辑。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "Knowledge-based Visual Question Answering",
+      "matched_requirement_id": "req-3",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.15997v1",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.21701v1",
+      "source": "arxiv",
+      "title": "Rethinking Token Reduction for Large Vision-Language Models",
+      "abstract": "Large Vision-Language Models (LVLMs) excel in visual understanding and reasoning, but the excessive visual tokens lead to high inference costs. Although recent token reduction methods mitigate this issue, they mainly target single-turn Visual Question Answering (VQA), leaving the more practical multi-turn VQA (MT-VQA) scenario largely unexplored. MT-VQA introduces additional challenges, as subsequent questions are unknown beforehand and may refer to arbitrary image regions, making existing reduction strategies ineffective. Specifically, current approaches fall into two categories: prompt-dependent methods, which bias toward the initial text prompt and discard information useful for subsequent turns; prompt-agnostic ones, which, though technically applicable to multi-turn settings, rely on heuristic reduction metrics such as attention scores, leading to suboptimal performance. In this paper, we propose a learning-based prompt-agnostic method, termed MetaCompress, overcoming the limitations of heuristic designs. We begin by formulating token reduction as a learnable compression mapping, unifying existing formats such as pruning and merging into a single learning objective. Upon this formulation, we introduce a data-efficient training paradigm capable of learning optimal compression mappings with limited computational costs. Extensive experiments on MT-VQA benchmarks and across multiple LVLM architectures demonstrate that MetaCompress achieves superior efficiency-accuracy trade-offs while maintaining strong generalization across dialogue turns. Our code is available at https://github.com/MArSha1147/MetaCompress.",
+      "authors": [
+        "Yi Wang",
+        "Haofei Zhang",
+        "Qihan Huang",
+        "Anda Cao",
+        "Gongfan Fang",
+        "Wei Wang",
+        "Xuan Jin",
+        "Jie Song",
+        "Mingli Song",
+        "Xinchao Wang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-03-23T08:40:08+00:00",
+      "link": "https://arxiv.org/pdf/2603.21701v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "token reduction for multi-turn visual question answering",
+      "llm_evidence_cn": "多轮视觉问答中的令牌缩减技术",
+      "llm_evidence": "多轮视觉问答中的令牌缩减技术",
+      "canonical_evidence": "多轮视觉问答中的令牌缩减技术",
+      "llm_tldr_en": "Proposes token reduction strategies for multi-turn VQA to improve efficiency in vision-language models.",
+      "llm_tldr_cn": "针对多轮视觉问答提出令牌缩减策略，旨在提高视觉语言模型的推理效率。",
+      "llm_tldr": "针对多轮视觉问答提出令牌缩减策略，旨在提高视觉语言模型的推理效率。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "Knowledge-based Visual Question Answering",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.21524v1",
+      "source": "arxiv",
+      "title": "CatRAG: Functor-Guided Structural Debiasing with Retrieval Augmentation for Fair LLMs",
+      "abstract": "Large Language Models (LLMs) are deployed in high-stakes settings but can show demographic, gender, and geographic biases that undermine fairness and trust. Prior debiasing methods, including embedding-space projections, prompt-based steering, and causal interventions, often act at a single stage of the pipeline, resulting in incomplete mitigation and brittle utility trade-offs under distribution shifts. We propose CatRAG Debiasing, a dual-pronged framework that integrates functor with Retrieval-Augmented Generation (RAG) guided structural debiasing. The functor component leverages category-theoretic structure to induce a principled, structure-preserving projection that suppresses bias-associated directions in the embedding space while retaining task-relevant semantics. On the Bias Benchmark for Question Answering (BBQ) across three open-source LLMs (Meta Llama-3, OpenAI GPT-OSS, and Google Gemma-3), CatRAG achieves state-of-the-art results, improving accuracy by up to 40% over the corresponding base models and by more than 10% over prior debiasing methods, while reducing bias scores to near zero (from 60% for the base models) across gender, nationality, race, and intersectional subgroups.",
+      "authors": [
+        "Ravi Ranjan",
+        "Utkarsh Grover",
+        "Mayur Akewar",
+        "Xiaomin Lin",
+        "Agoritsa Polyzou"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-03-23T03:33:13+00:00",
+      "link": "https://arxiv.org/pdf/2603.21524v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "integrating RAG guided structural debiasing for fair LLMs",
+      "llm_evidence_cn": "集成 RAG 引导的结构化去偏以实现公平的 LLM",
+      "llm_evidence": "集成 RAG 引导的结构化去偏以实现公平的 LLM",
+      "canonical_evidence": "集成 RAG 引导的结构化去偏以实现公平的 LLM",
+      "llm_tldr_en": "CatRAG combines category theory and RAG to mitigate demographic and geographic biases in LLMs.",
+      "llm_tldr_cn": "CatRAG 结合范畴论与检索增强技术，缓解大语言模型中的人口和地理偏见。",
+      "llm_tldr": "CatRAG 结合范畴论与检索增强技术，缓解大语言模型中的人口和地理偏见。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "I hope you retrieve articles related to the task of document RAG.",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.17055v1",
+      "title": "PaAgent: Portrait-Aware Image Restoration Agent via Subjective-Objective Reinforcement Learning",
+      "abstract": "Image Restoration (IR) agents, leveraging multimodal large language models to perceive degradation and invoke restoration tools, have shown promise in automating IR tasks. However, existing IR agents typically lack an insight summarization mechanism for past interactions, which results in an exhaustive search for the optimal IR tool. To address this limitation, we propose a portrait-aware IR agent, dubbed PaAgent, which incorporates a self-evolving portrait bank for IR tools and Retrieval-Augmented Generation (RAG) to select a suitable IR tool for input. Specifically, to construct and evolve the portrait bank, the PaAgent continuously enriches it by summarizing the characteristics of various IR tools with restored images, selected IR tools, and degraded images. In addition, the RAG is employed to select the optimal IR tool for the input image by retrieving relevant insights from the portrait bank. Furthermore, to enhance PaAgent's ability to perceive degradation in complex scenes, we propose a subjective-objective reinforcement learning strategy that considers both image quality scores and semantic insights in reward generation, which accurately provides the degradation information even under partial and non-uniform degradation. Extensive experiments across 8 IR benchmarks, covering six single-degradation and eight mixed-degradation scenarios, validate PaAgent's superiority in addressing complex IR tasks. Our project page is \\href{https://wyjgr.github.io/PaAgent.html}{PaAgent}.",
+      "authors": [
+        "Yijian Wang",
+        "Qingsen Yan",
+        "Jiantao Zhou",
+        "Duwei Dai",
+        "Wei Dong"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-17T18:41:36+00:00",
+      "link": "https://arxiv.org/pdf/2603.17055v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "RAG used to select suitable image restoration tools in a multimodal agent",
+      "llm_evidence_cn": "在多模态智能体中使用RAG选择合适的图像修复工具",
+      "llm_evidence": "在多模态智能体中使用RAG选择合适的图像修复工具",
+      "canonical_evidence": "在多模态智能体中使用RAG选择合适的图像修复工具",
+      "llm_tldr_en": "Proposes PaAgent, an image restoration agent using RAG and a self-evolving portrait bank for tool selection.",
+      "llm_tldr_cn": "提出PaAgent，利用RAG和自演进肖像库进行工具选择的图像修复智能体。",
+      "llm_tldr": "提出PaAgent，利用RAG和自演进肖像库进行工具选择的图像修复智能体。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "Multi-modal RAG",
+      "matched_requirement_id": "req-4",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.17055v1",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.21886v1",
+      "source": "arxiv",
+      "title": "ADaFuSE: Adaptive Diffusion-generated Image and Text Fusion for Interactive Text-to-Image Retrieval",
+      "abstract": "Recent advances in interactive text-to-image retrieval (I-TIR) use diffusion models to bridge the modality gap between the textual information need and the images to be searched, resulting in increased effectiveness. However, existing frameworks fuse multi-modal views of user feedback by simple embedding addition. In this work, we show that this static and undifferentiated fusion indiscriminately incorporates generative noise produced by the diffusion model, leading to performance degradation for up to 55.62% samples. We further propose ADaFuSE (Adaptive Diffusion-Text Fusion with Semantic-aware Experts), a lightweight fusion model designed to align and calibrate multi-modal views for diffusion-augmented I-TIR, which can be plugged into existing frameworks without modifying the backbone encoder. Specifically, we introduce a dual-branch fusion mechanism that employs an adaptive gating branch to dynamically balance modality reliability, alongside a semantic-aware mixture-of-experts branch to capture fine-grained cross-modal nuances. Via thorough evaluation over four standard I-TIR benchmarks, ADaFuSE achieves state-of-the-art performance, surpassing DAR by up to 3.49% in Hits@10 with only a 5.29% parameter increase, while exhibiting stronger robustness to noisy and longer interactive queries. These results show that generative augmentation coupled with principled fusion provides a simple, generalizable alternative to fine-tuning for interactive retrieval.",
+      "authors": [
+        "Zhuocheng Zhang",
+        "Xingwu Zhang",
+        "Kangheng Liang",
+        "Guanxuan Li",
+        "Richard Mccreadie",
+        "Zijun Long"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.CV"
+      ],
+      "published": "2026-03-23T12:13:57+00:00",
+      "link": "https://arxiv.org/pdf/2603.21886v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "diffusion-augmented interactive text-to-image retrieval",
+      "llm_evidence_cn": "扩散增强的交互式文本到图像检索",
+      "llm_evidence": "扩散增强的交互式文本到图像检索",
+      "canonical_evidence": "扩散增强的交互式文本到图像检索",
+      "llm_tldr_en": "Proposes ADaFuSE to adaptively fuse diffusion-generated views for improved interactive image retrieval.",
+      "llm_tldr_cn": "提出ADaFuSE模型，通过自适应融合扩散生成的视图来优化交互式图像检索。",
+      "llm_tldr": "提出ADaFuSE模型，通过自适应融合扩散生成的视图来优化交互式图像检索。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "Multi-modal RAG",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.21692v1",
+      "source": "arxiv",
+      "title": "Reasoning Provenance for Autonomous AI Agents: Structured Behavioral Analytics Beyond State Checkpoints and Execution Traces",
+      "abstract": "As AI agents transition from human-supervised copilots to autonomous platform infrastructure, the ability to analyze their reasoning behavior across populations of investigations becomes a pressing infrastructure requirement. Existing operational tooling addresses adjacent needs effectively: state checkpoint systems enable fault tolerance; observability platforms provide execution traces for debugging; telemetry standards ensure interoperability. What current systems do not natively provide as a first-class, schema-level primitive is structured reasoning provenance -- normalized, queryable records of why the agent chose each action, what it concluded from each observation, how each conclusion shaped its strategy, and which evidence supports its final verdict. This paper introduces the Agent Execution Record (AER), a structured reasoning provenance primitive that captures intent, observation, and inference as first-class queryable fields on every step, alongside versioned plans with revision rationale, evidence chains, structured verdicts with confidence scores, and delegation authority chains. We formalize the distinction between computational state persistence and reasoning provenance, argue that the latter cannot in general be faithfully reconstructed from the former, and show how AERs enable population-level behavioral analytics: reasoning pattern mining, confidence calibration, cross-agent comparison, and counterfactual regression testing via mock replay. We present a domain-agnostic model with extensible domain profiles, a reference implementation and SDK, and outline an evaluation methodology informed by preliminary deployment on a production platformized root cause analysis agent.",
+      "authors": [
+        "Neelmani Vispute"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.DC",
+        "cs.SE"
+      ],
+      "published": "2026-03-23T08:27:54+00:00",
+      "link": "https://arxiv.org/pdf/2603.21692v1",
+      "tags": [
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Reasoning provenance for autonomous AI agents",
+      "llm_evidence_cn": "自主 AI 智能体的推理溯源",
+      "llm_evidence": "自主 AI 智能体的推理溯源",
+      "canonical_evidence": "自主 AI 智能体的推理溯源",
+      "llm_tldr_en": "Provides structured reasoning provenance for analyzing autonomous agent behavior beyond execution traces.",
+      "llm_tldr_cn": "为分析自主智能体行为提供结构化推理溯源，超越了简单的执行追踪。",
+      "llm_tldr": "为分析自主智能体行为提供结构化推理溯源，超越了简单的执行追踪。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "multimodal memory architectures for autonomous agents",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.17176v1",
+      "title": "Towards Unsupervised Adversarial Document Detection in Retrieval Augmented Generation Systems",
+      "abstract": "Retrieval augmented generation systems have become an integral part of everyday life. Whether in internet search engines, email systems, or service chatbots, these systems are based on context retrieval and answer generation with large language models. With their spread, also the security vulnerabilities increase. Attackers become increasingly focused on these systems and various hacking approaches are developed. Manipulating the context documents is a way to persist attacks and make them affect all users. Therefore, detecting compromised, adversarial context documents early is crucial for security. While supervised approaches require a large amount of labeled adversarial contexts, we propose an unsupervised approach, being able to detect also zero day attacks. We conduct a preliminary study to show appropriate indicators for adversarial contexts. For that purpose generator activations, output embeddings, and an entropy-based uncertainty measure turn out as suitable, complementary quantities. With an elementary statistical outlier detection, we propose and compare their detection abilities. Furthermore, we show that the target prompt, which the attacker wants to manipulate, is not required for a successful detection. Moreover, our results indicate that a simple context summary generation might even be superior in finding manipulated contexts.",
+      "authors": [
+        "Patrick Levi"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR",
+        "cs.AI"
+      ],
+      "published": "2026-03-17T22:09:37+00:00",
+      "link": "https://arxiv.org/pdf/2603.17176v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "adversarial document detection in Retrieval Augmented Generation systems",
+      "llm_evidence_cn": "检索增强生成系统中的对抗性文档检测",
+      "llm_evidence": "检索增强生成系统中的对抗性文档检测",
+      "canonical_evidence": "检索增强生成系统中的对抗性文档检测",
+      "llm_tldr_en": "Proposes an unsupervised approach to detect adversarial context documents in RAG systems to improve security.",
+      "llm_tldr_cn": "提出一种无监督方法来检测RAG系统中的对抗性上下文文档，以提高安全性。",
+      "llm_tldr": "提出一种无监督方法来检测RAG系统中的对抗性上下文文档，以提高安全性。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "I hope you retrieve articles related to the task of document RAG.",
+      "matched_requirement_id": "req-7",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.17176v1",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.22367v1",
+      "source": "arxiv",
+      "title": "Reasoner-Executor-Synthesizer: Scalable Agentic Architecture with Static O(1) Context Window",
+      "abstract": "Large Language Models (LLMs) deployed as autonomous agents commonly use Retrieval-Augmented Generation (RAG), feeding retrieved documents into the context window, which creates two problems: the risk of hallucination grows with context length, and token cost scales linearly with dataset size. We propose the Reasoner-Executor-Synthesizer (RES) architecture, a three-layer design that strictly separates intent parsing (Reasoner), deterministic data retrieval and aggregation (Executor), and narrative generation (Synthesizer). The Executor uses zero LLM tokens and passes only fixed-size statistical summaries to the Synthesizer. We formally prove that RES achieves O(1) token complexity with respect to dataset size, and validate this on ScholarSearch, a scholarly research assistant backed by the Crossref API (130M+ articles). Across 100 benchmark runs, RES achieves a mean token cost of 1,574 tokens regardless of whether the dataset contains 42,000 or 16.3 million articles. The architecture eliminates data hallucination by construction: the LLM never sees raw records. KEYWORDS LLM agents; agentic architecture; hallucination elimination; token optimization; context window; retrieval-augmented generation; deterministic execution; scholarly metadata; Crossref API; O(1) complexity.",
+      "authors": [
+        "Ivan Dobrovolskyi"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-23T05:16:55+00:00",
+      "link": "https://arxiv.org/pdf/2603.22367v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:mmrag",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "autonomous agents using Retrieval-Augmented Generation (RAG) with documents",
+      "llm_evidence_cn": "自主智能体使用文档检索增强生成 (RAG)",
+      "llm_evidence": "自主智能体使用文档检索增强生成 (RAG)",
+      "canonical_evidence": "自主智能体使用文档检索增强生成 (RAG)",
+      "llm_tldr_en": "Proposes a scalable agent architecture that separates retrieval from generation to optimize context window usage.",
+      "llm_tldr_cn": "提出一种可扩展的智能体架构，通过分离检索与生成来优化上下文窗口使用。",
+      "llm_tldr": "提出一种可扩展的智能体架构，通过分离检索与生成来优化上下文窗口使用。",
+      "llm_tags": [
+        "query:mmrag"
+      ],
+      "matched_query_tag": "query:mmrag",
+      "matched_query_text": "I hope you retrieve articles related to the task of document RAG.",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.21708v1",
+      "source": "arxiv",
+      "title": "Compensating Visual Insufficiency with Stratified Language Guidance for Long-Tail Class Incremental Learning",
+      "abstract": "Long-tail class incremental learning (LT CIL) remains highly challenging because the scarcity of samples in tail classes not only hampers their learning but also exacerbates catastrophic forgetting under continuously evolving and imbalanced data distributions. To tackle these issues, we exploit the informativeness and scalability of language knowledge. Specifically, we analyze the LT CIL data distribution to guide large language models (LLMs) in generating a stratified language tree that hierarchically organizes semantic information from coarse to fine grained granularity. Building upon this structure, we introduce stratified adaptive language guidance, which leverages learnable weights to merge multi-scale semantic representations, thereby enabling dynamic supervisory adjustment for tail classes and alleviating the impact of data imbalance. Furthermore, we introduce stratified alignment language guidance, which exploits the structural stability of the language tree to constrain optimization and reinforce semantic visual alignment, thereby alleviating catastrophic forgetting. Extensive experiments on multiple benchmarks demonstrate that our method achieves state of the art performance.",
+      "authors": [
+        "Xi Wang",
+        "Xu Yang",
+        "Donghao Sun",
+        "Cheng Deng"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-03-23T08:50:00+00:00",
+      "link": "https://arxiv.org/pdf/2603.21708v1",
+      "tags": [
+        "keyword:mmrag",
+        "keyword:multi-modal memory",
+        "query:multi-modal memory"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Language guidance from LLMs to compensate for visual insufficiency",
+      "llm_evidence_cn": "利用大语言模型的语言引导来补偿视觉不足",
+      "llm_evidence": "利用大语言模型的语言引导来补偿视觉不足",
+      "canonical_evidence": "利用大语言模型的语言引导来补偿视觉不足",
+      "llm_tldr_en": "Uses stratified language guidance from LLMs to address long-tail class incremental learning in vision.",
+      "llm_tldr_cn": "利用大语言模型生成的层级语言引导，解决视觉增量学习中的长尾分布问题。",
+      "llm_tldr": "利用大语言模型生成的层级语言引导，解决视觉增量学习中的长尾分布问题。",
+      "llm_tags": [
+        "query:multi-modal-memory"
+      ],
+      "matched_query_tag": "query:multi-modal-memory",
+      "matched_query_text": "memory augmented multimodal large language models",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

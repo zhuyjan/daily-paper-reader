@@ -1,0 +1,142 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-001.webp",
+      "caption": "Table 1: Overall task performance on VehicleMemBench under different memory construction paradigms. The best results are highlighted in bold, and the second-best results are underlined.",
+      "page": 6,
+      "index": 1,
+      "width": 822,
+      "height": 317
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-002.webp",
+      "caption": "Figure 2: Model performance and memory efficiency on VehicleMemBench. (Left) Exact State Match across different backbone models under Gold Memory and Recursive Summarization settings. (Right) Trade-off between Memory Score and retrieval cost (memory tokens per retrieval) for different memory systems with Gemini-3-Pro and Qwen3-Max backbones.",
+      "page": 6,
+      "index": 2,
+      "width": 794,
+      "height": 260
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-003.webp",
+      "caption": "Table 7: Models and hyperparameters used in each stage of the data generation pipeline.",
+      "page": 15,
+      "index": 3,
+      "width": 818,
+      "height": 213
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-004.webp",
+      "caption": "Table 6: Performance without memory. All models achieve very low Exact ESM, typically below 20, indicating that the task cannot be solved from the query alone and requires long-term memory.",
+      "page": 15,
+      "index": 4,
+      "width": 818,
+      "height": 328
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-005.webp",
+      "caption": "Figure 8: Shortened prompt for key-value memory construction.",
+      "page": 21,
+      "index": 5,
+      "width": 829,
+      "height": 458
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-006.webp",
+      "caption": "Figure 6: Shortened prompt for dialogue generation from structured events.",
+      "page": 21,
+      "index": 6,
+      "width": 829,
+      "height": 336
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-007.webp",
+      "caption": "Figure 7: Shortened prompt for recursive summary memory construction.",
+      "page": 21,
+      "index": 7,
+      "width": 829,
+      "height": 334
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-008.webp",
+      "caption": "Table 2: ESM and Mem Token of different memory systems on VehicleMemBench.",
+      "page": 7,
+      "index": 8,
+      "width": 822,
+      "height": 347
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-009.webp",
+      "caption": "Figure 9: Shortened prompt for memory-augmented online tool-use evaluation.",
+      "page": 22,
+      "index": 9,
+      "width": 829,
+      "height": 383
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-010.webp",
+      "caption": "Table 4: Distribution of executable queries by reasoning type and target module in the released benchmark. The target-module statistics are computed from the verified reference tool sequences.",
+      "page": 14,
+      "index": 10,
+      "width": 668,
+      "height": 192
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-011.webp",
+      "caption": "Table 5: Complete catalog of vehicle modules and executable APIs in VehicleMemBench. APIs follow the naming convention carcontrol_{module}_{action}.",
+      "page": 14,
+      "index": 11,
+      "width": 822,
+      "height": 460
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-012.webp",
+      "caption": "Figure 1: Overview of the VehicleMemBench pipeline. The framework constructs multi-user long-term memory scenarios through persona generation, event chain construction, and temporal interleaving, followed by dialogue and QA generation. These are integrated into an executable in-vehicle simulation environment with tool-based interactions, enabling state-based evaluation of agent memory and tool use capabilities.",
+      "page": 3,
+      "index": 12,
+      "width": 822,
+      "height": 431
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-013.webp",
+      "caption": "Figure 4: Fine-grained error composition by reasoning type and memory system.",
+      "page": 13,
+      "index": 13,
+      "width": 762,
+      "height": 246
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-014.webp",
+      "caption": "Figure 3: Failure mode distribution across memory systems. (Left) Total number of error cases for each memory system, categorized into four error types. (Right) error composition under the Conditional Constraint setting, reported as percentages within each system.",
+      "page": 8,
+      "index": 14,
+      "width": 797,
+      "height": 268
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-015.webp",
+      "caption": "Table 9: Memory systems evaluated on VehicleMemBench.",
+      "page": 17,
+      "index": 15,
+      "width": 802,
+      "height": 389
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-016.webp",
+      "caption": "Figure 5: Shortened prompt for structured event-chain generation.",
+      "page": 20,
+      "index": 16,
+      "width": 829,
+      "height": 269
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23840v1/fig-017.webp",
+      "caption": "Table 8: Models evaluated on VehicleMemBench.",
+      "page": 16,
+      "index": 17,
+      "width": 468,
+      "height": 340
+    }
+  ]
+}
