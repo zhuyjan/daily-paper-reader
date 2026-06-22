@@ -1,0 +1,618 @@
+Title: Retrieval, Reward, and Training Protocols: What Matters in Training Search Agents?
+
+URL Source: https://arxiv.org/pdf/2605.27881v1
+
+Published Time: Thu, 28 May 2026 00:39:38 GMT
+
+Number of Pages: 18
+
+Markdown Content:
+# Retrieval, Reward, and Training Protocols: What Matters in Training Search Agents? 
+
+Yibo Zhao 1,2 Zichen Ding 1 Jiayi Wu 1
+
+Zun Wang 2 Xiang Li 1*
+
+> 1
+
+School of Data Science and Engineering, East China Normal University 
+
+> 2
+
+Shanghai AI Laboratory 
+
+Abstract 
+
+Search agents powered by large language mod-els can autonomously decompose queries, re-trieve information, and synthesize answers through multi-step reasoning. However, the rapid growth of training methods has outpaced controlled comparison: existing works differ in retrieval corpora, reward designs, and train-ing protocols, making it unclear what actu-ally drives improvements. We present a con-trolled empirical study that isolates three under-explored dimensions of search agent training. First, we identify a critical data-coverage is-sue in the widely used Wikipedia 2018 cor-pus and show that correcting it alone yields larger gains than the differences between train-ing algorithms. Second, we systematically compare outcome-based and process-based re-ward methods across three base models, find-ing that the simplest outcome-based approach achieves competitive or superior performance in most settings, and that process-level credit assignment can over-correct agent behavior. Third, we analyze training data diversity, off-policy data utilization, and search budget scal-ing, distilling practical guidelines for training effective search agents. Our code is avail-able at https://github.com/YiboZhao624/ SearchAgentReview .
+
+1 Introduction 
+
+Large language models (LLMs) have advanced rapidly in recent years (Dao, 2024; Kwon et al., 2023; Yang et al., 2025), demonstrating remark-able capabilities in machine translation (Feng et al., 2025b; Xu et al., 2024; Zheng et al., 2025a), rea-soning (Shao et al., 2025b, 2024; Wei et al., 2022), and creative writing (Chung et al., 2025; Qin et al., 2024; Wei et al., 2025b). More recently, LLMs have evolved beyond standalone models into au-tonomous agents (Ferrag et al., 2026) capable of interacting with external environments, giving rise  
+
+> *Corresponding Author: xiangli@dase.ecnu.edu.cn
+
+to computer-using agents (OpenAI, 2025; Liu et al., 2026; Yang et al., 2026), coding agents (Ma et al., 2026; Team et al., 2026; Zhang et al., 2026), and search agents (Shao et al., 2025a; Xu et al., 2026). As LLM-based agents grow increasingly capa-ble, rigorous evaluation and comparison of differ-ent training approaches becomes essential to guide future research. For computer-using and coding agents, execution is grounded in a shared sand-box (e.g., Docker containers) that normalizes the action-execution interface, leaving limited room for variation and enabling convergence on stan-dardized evaluation protocols (Jimenez et al., 2024; Xie et al., 2024). As a result, the community has largely converged on standardized evaluation proto-cols (Jimenez et al., 2024; Xie et al., 2024). Search agents, however, face a far less constrained design space: the retrieval source, tool interface, action space, and granularity of retrieval vary freely, with no community standard in sight. Although compre-hensive benchmarks such as GAIA (Mialon et al., 2023) and BrowseComp (Wei et al., 2025a) ex-ist, they standardize only the evaluation questions without providing a shared training environment for comparing training methods. In practice, re-searchers always fall back on conventional multi-hop QA benchmarks (Ho et al., 2020; Trivedi et al., 2022; Yang et al., 2018) with local retrieval, where differences in tool design, reward formulation, and hyperparameter choices across studies make reli-able cross-method comparison difficult. As a result, despite the rapid growth of re-search on search agents, the community has not yet reached consensus on fundamental questions such as what drives improvements. In this work, rather than proposing a new algorithm, we aim to pro-vide such answers through a controlled empirical study. Specifically, while recent works have exten-sively studied algorithmic aspects of reinforcement learning (RL) training for search agents, such as dynamic filtering, importance sampling clipping, 1
+
+> arXiv:2605.27881v1 [cs.CL] 27 May 2026
+
+and entropy control for stabilizing policy optimiza-tion (Deng et al., 2026; Wang et al., 2026b,c), these analyses primarily address how to optimize reli-ably . In contrast, equally fundamental questions about what the agent learns from , including reward design, credit assignment, and training data compo-sition, remain largely underexplored, and existing works have made divergent decisions along these dimensions without understanding their effects. We present a controlled empirical study of RL training for search agents. Our contributions are: • Retrieval Environment. We identify a critical yet previously overlooked issue in the widely adopted Wikipedia 2018 corpus (Karpukhin et al., 2020): a significant portion of relevant passages are missing, causing retrieval failures and spuri-ous training signals. We construct a more com-plete retrieval corpus and show that this correc-tion alone yields larger performance gains than the differences between training algorithms, un-derscoring that retrieval environment quality is a prerequisite for reliable comparison. • Reward Design and Credit Assignment. We systematically benchmark three process reward methods and one outcome reward method across three base models. Our results reveal that the simplest outcome-based approach achieves com-petitive or superior performance in most settings, questioning whether complex process reward de-signs consistently justify their added complexity. Further analysis of intermediate search behav-ior shows that process-level credit assignment can over-correct agent strategies, improving one aspect of search quality at the cost of another. • Data, Off-Policy Degree, and Search Budget. 
+
+We conduct a detailed analysis of training data diversity, the degree of off-policy data usage, and search budget scaling during both training and inference, distilling practical guidelines for opti-mizing search agent performance. Together, these contributions provide the com-munity with controlled empirical insights and prac-tical guidelines for training search agents under a unified and fair experimental setup. 
+
+2 Related Work 
+
+2.1 Reward Design for Search Agent 
+
+Existing reward designs for search agents range from trajectory-level outcome rewards to step-level process rewards that aim for finer-grained credit assignment. Search-R1 (Jin et al., 2025), and R1-Searcher (Song et al., 2025) represent the outcome-reward paradigm: a rule-based verifier scores the model’s final answer against the ground truth us-ing metrics such as exact match or token-level F1. However, such trajectory-level signals provide no supervision for individual retrieval steps. To alleviate the sparsity of trajectory-level re-wards, recent work estimates step-level credit through three broad paradigms, distinguished by how they construct the training signal. 
+
+Structural comparison methods build explicit branching structures and derive preference pairs from sibling nodes. ReasonRAG (Zhang et al., 2025) rolls out multiple trajectories from a stronger model to construct off-policy DPO preference data with an analogous tree-like structure. Tree-GRPO (Ji et al., 2025) expands on-policy search trajectories step by step into a tree structure, using sibling outcomes as natural contrastive pairs while reducing the budgets of tool calls. 
+
+Cross-trajectory aggregation compares steps across independent rollouts without explicit struc-ture. GiGPO (Feng et al., 2025a) groups steps from different trajectories by matching intermediate states via text similarity, then computes subgroup stepwise advantages from this post-hoc grouping. 
+
+Information-theoretic methods model search as progressively gathering information toward the ground truth, and score each step by a proxy of its information gain. StepSearch (Zheng et al., 2025b) uses a stronger model to generate sub-queries, then uses their retrieval results as a reference signal to approximate the information gain of each step. IGPO (Wang et al., 2026a) measures the change in the model’s likelihood of producing the correct answer before and after a retrieval step. However, each method reports results under its own corpus and configuration. Without a controlled setup that isolates reward design from these vari-ables, it is unclear whether gains reflect better credit assignment or favorable evaluation conditions. 
+
+2.2 Understanding Training Instability in RL for Search Agents 
+
+A complementary line of research has focused on diagnosing why RL training of search agents is prone to instability. LLDS (Deng et al., 2026) iden-tifies that high overlap between positive and neg-ative trajectories in tool-use actions causes gradi-ent updates to inadvertently suppress correct be-2haviors, leading to training collapse. RAGEN-2 (Wang et al., 2026c) attributes collapse to model outputs degenerating into a fixed, question-agnostic template that overwhelms the gradient signal with noise. ARL-Arena (Wang et al., 2026b) studies the effects of importance sampling, loss aggregation, and advantage computation on training stability. Calibadv (Wu et al., 2026) attributes training insta-bility to imbalanced positive and negative advan-tages under coarse-grained credit assignment. While these works focus on why training fails at the optimization level, the effects of retrieval environment, reward design, and training data com-position have not been compared under a unified setup that controls for confounding factors. Our work provides this controlled comparison. 
+
+3 Experiments Setup 
+
+3.1 Training Algorithms 
+
+Following the taxonomy in Sec. 2.1, we select four methods spanning four credit assignment strate-gies: Search-R1 (Jin et al., 2025), the most widely adopted outcome-reward baseline without heuristic credit assignment; GiGPO (Feng et al., 2025a), for cross-trajectory aggregation; and Tree-GRPO (Ji et al., 2025) and IGPO (Wang et al., 2026a), for structural comparison and information-theoretic scoring, respectively, both free of dependence on strong models. All four are re-implemented within a shared GRPO (Shao et al., 2024) objective to isolate the effect of credit assignment. Given a query q, GRPO samples a group of G
+
+trajectories {τ (1) , . . . , τ (G)} from the current pol-icy πθ. Each trajectory receives a final reward r(i).The advantage ˆA(i) of each trajectory is computed by normalizing rewards within the group. The pol-icy is then updated by maximizing the asymmetric clipped surrogate objective (Yu et al., 2025): 
+
+J (θ) = E
+
+"
+
+1
+
+PGi=1 |τ (i)|
+
+> G
+
+X 
+
+> i=1
+> |τ(i)|
+
+X
+
+> t=1
+
+min 
+
+
+
+ρ(i) 
+
+> t
+
+ˆA(i),
+
+clip  ρ(i) 
+
+> t
+
+, 1 − ϵlow , 1 + ϵhigh 
+
+ ˆA(i)#
+
+, (1) where ρ(i) 
+
+> t
+
+is the importance ratio, defined as 
+
+πθ(a(i) 
+
+> t
+
+| h(i) 
+
+> t
+
+)/π θold (a(i) 
+
+> t
+
+| h(i) 
+
+> t
+
+). Due to page limi-tations, we defer full algorithmic details to App. A and briefly describe each method’s core heuristic here: • Search-R1 uses outcome reward (EM) with no step-level credit: all tokens share a single trajectory-level advantage. • GiGPO groups steps across trajectories by state similarity, enabling step-level advantage by com-paring actions from matched states. • IGPO uses per-turn change in log-probability of the ground truth as a heuristic step-level reward. • Tree-GRPO expands intermediate nodes to pro-duce prefix-sharing trajectory pairs, creating nat-ural step-level comparisons at branch points. 
+
+3.2 Experiment Settings 
+
+To ensure a fair comparison, we randomly sample a combined total of 9,000 training instances from HotpotQA (Yang et al., 2018), MuSiQue (Trivedi et al., 2022), and 2WikiMultihopQA (Ho et al., 2020) as the unified training set. All approaches are implemented in the same Verl (Sheng et al., 2024) codebase to control for infrastructure dif-ferences. For evaluation, we sample up to 1,000 test instances from each of HotpotQA, 2WikiMulti-hopQA, MuSiQue, Bamboogle (Press et al., 2023), and PopQA (Mallen et al., 2023), resulting in 4,125 test instances in total. Unless otherwise speci-fied, the base model is Qwen3-8B (Yang et al., 2025) with the Hermes-format tool-calling inter-face (Teknium et al., 2024). Other defaults are: a maximum of 4 tool-call turns, a batch size of 32, a mini-batch size of 16, a maximum response length of 4096, and one training epoch. Subsequent exper-iments vary one factor at a time from this default. We use a decoding temperature of 0.6 and report the mean@4 Exact Match (EM) performance to reduce evaluation variance. A complete list of hy-perparameters is in App. B. 
+
+4 Analysis 
+
+We investigate five factors that affect search agent training, organized into three groups: the retrieval corpus (Sec. 4.1), the reward design (Sec. 4.2), and the training protocol (Sec. 4.3). Due to space limitations, most experimental re-sults are presented as figures. Detailed nu-merical results and per-dataset results are pro-vided in App. D, and all the trained models are released at https://hf.co/collections/ ybyby624/search-agent-review .3Wiki-fixed Wiki-18            
+
+> Wiki-fixed
+> Wiki-18
+> Train Corpus  49.5 39.9
+> 43.7 36.1
+> Search-R1
+> Wiki-fixed Wiki-18
+> Wiki-fixed
+> Wiki-18
+> 47.2 37.8
+> 44.1 36.9
+> GiGPO
+> Wiki-fixed Wiki-18
+> Eval Corpus
+> Wiki-fixed
+> Wiki-18
+> Train Corpus  49.1 40.5
+> 43.7 36.4
+> IGPO
+> Wiki-fixed Wiki-18
+> Eval Corpus
+> Wiki-fixed
+> Wiki-18
+> 44.6 35.6
+> 42.6 35.8
+> Tree-GRPO
+> 36
+> 38
+> 40
+> 42
+> 44
+> 46
+> 48
+> 50
+> Avg-EM
+
+Figure 1: Effect of search environment on average EM across five benchmarks. Each cell shows the Avg. EM for a given train/test environment combination. 
+
+4.1 Retrieval Corpus 
+
+The widely used Wiki-18 corpus (Karpukhin et al., 2020) lacks many documents required for multi-hop reasoning. We compared all annotated sup-porting documents from the training and valida-tion splits of HotpotQA, 2WikiMultihopQA, and MuSiQue against Wiki-18 and found that 295,331 supporting documents are absent . Among our 9,000 training instances, 3,321 correspond to ques-tions whose gold evidence simply cannot be re-trieved, making them inherently unanswerable un-der this retrieval corpus. At first glance, these missing-document ques-tions might seem harmless: if the model cannot retrieve the gold documents, all rollouts within a group would receive zero reward, producing no gradient signal. However, inspection of the train-ing rollouts tells a different story. For Search-R1, the model answered 1,697 of the 3,321 unanswer-able questions correctly at least once, and for 831, every rollout in the group produced the correct an-swer. This means 866 training instances, roughly 
+
+10% of the full training set , generate gradient sig-nals that may largely reflect correct guesses from parametric memory rather than successful retrieval, potentially introducing noise into the optimization of the search policy. Similarly, GiGPO, IGPO, and Tree-GRPO exhibit 890, 698, and 859 such noise-prone groups, respectively, confirming that this is-sue is systematic across different methods and not an artifact of any particular training algorithm. To remove this confound, we augment Wiki-18 by adding all missing supporting documents, con-Method Train Env. Wiki-18 Wiki-fixed ∆            
+
+> Search-R1 45.81 46.09 0.28 GiGPO 46.03 45.81 0.22 IGPO 46.84 47.87 1.03 Tree-GRPO 44.89 44.00 0.89
+
+Table 1: The average EM across five benchmarks tested with the Wiki-fixed corpus. ∆ reports the absolute dif-ference between Wiki-18 and Wiki-fixed when training on entries answerable under both corpora. 
+
+structing a revised corpus we call Wiki-fixed .We retrain all four methods on both the original and revised corpora. As shown in Fig. 1, training on Wiki-18 yields 2–6 EM points lower perfor-mance than training on Wiki-fixed under identical evaluation. This gap even exceeds the perfor-mance differences among different training al-gorithms , indicating that corpus completeness is a more decisive factor than reward design in this set-ting. The incomplete corpus also obscures algorith-mic comparison in two aspects: (1) methods that are clearly separable under Wiki-fixed converge to near-identical performance when trained and eval-uated on Wiki-18, and (2) method rankings shift, Search-R1 drops from first place under Wiki-fixed to third under Wiki-18, suggesting that evaluations under an incomplete corpus may obscure the true performance differences between methods. To further isolate the cause, we exclude all missing-document questions from the training data and retrain on both corpora. As shown in Tab. 1, when every training instance is answerable, the gap between Wiki-18 and Wiki-fixed becomes negli-gible, confirming that the missing documents, not other differences, are the root cause. The retrieval environment matters more than the training algorithm choice. Ensuring that all training questions are answerable under the given corpus is a prerequisite for reliable comparison of training methods. 
+
+4.2 Reward Design 
+
+We evaluate reward design from two angles: out-come evaluation, which measures final answer ac-curacy, and process evaluation, which examines the quality of intermediate search behavior. 4Model Format Method 2Wiki Bamboogle HotpotQA Musique PopQA Avg. EM Avg. Turns Qwen3-8B Hermes Search-R1 70.55 47.00 57.92 27.02 42.80 49.49 1.72 GiGPO 67.95 52.00 53.37 24.37 42.65 47.23 1.62 IGPO 70.32 47.40 56.72 25.05 44.62 49.12 2.99 Tree-GRPO 65.27 43.80 51.15 21.87 40.32 44.63 2.07 Qwen2.5-7B-Instruct Hermes Search-R1 66.02 45.80 52.80 21.55 40.35 45.20 2.09 GiGPO 67.60 41.60 50.00 20.32 40.80 44.58 1.58 IGPO 44.80 33.80 44.37 9.85 36.07 33.77 2.72 Tree-GRPO 57.17 38.60 48.85 19.80 41.85 41.81 2.01 Qwen3-8B Search-R1 Search-R1 59.90 49.40 51.45 19.90 37.50 42.40 2.13 GiGPO 58.60 52.45 51.74 25.00 45.56 45.44 1.61 IGPO 58.87 48.40 52.05 19.80 40.10 42.87 1.92 Tree-GRPO 63.65 47.80 52.07 22.80 40.62 44.87 2.08 Qwen2.5-7B-Instruct Search-R1 Search-R1 57.32 40.80 47.67 18.22 35.02 39.60 2.11 GiGPO 53.17 38.80 48.17 21.50 42.30 41.21 1.67 IGPO 47.35 39.60 48.25 18.32 38.45 38.13 2.01 Tree-GRPO 59.75 39.00 48.60 17.70 39.30 41.26 1.88 Qwen2.5-7B-Base Search-R1 Search-R1 63.42 42.60 52.57 25.20 41.25 45.52 1.99 GiGPO 58.95 44.00 49.22 22.82 43.12 43.54 1.61 IGPO 34.95 23.20 34.50 6.90 43.27 29.70 1.00 Tree-GRPO 57.50 40.40 46.42 17.52 40.72 40.53 1.74 
+
+Table 2: Performance comparison across five datasets, three base models, and two tool call formats. The best results 
+
+within a comparing group are bold. Avg. Turns means the average search turns called by the agent. 
+
+4.2.1 Outcome Evaluation 
+
+We test the four algorithms across three differ-ent models, including Qwen3-8B 1, Qwen2.5-7B-Instruct 2, and Qwen2.5-7B-Base 3; and two differ-ent tool-call formats, including Hermes and Search-R1 format (XML style). Detailed prompt templates are provided in App. C. As illustrated in Tab. 2, under controlled compar-ison, the simplest outcome-based method achieves the highest average EM in three of five settings, demonstrating that simple outcome-based reward remains a strong baseline. GiGPO performs con-sistently well across settings and achieves the best result in one setting (Qwen3-8B with Search-R1 format), suggesting that sub-group advantage is a reliable approach to process-level credit assign-ment. Tree-GRPO achieves above 40 average EM in all five settings, exhibiting the most stable per-formance among the four methods. However, its ceiling remains low: it never exceeds 45 points, and it achieves the best average only in one set-ting (Qwen2.5-7B-Instruct with Search-R1 format), where the other methods also cluster near this range. This stability-without-peak pattern suggests that tree-expansion comparison provides a conserva-tive learning signal that avoids catastrophic failures 
+
+> 1https://huggingface.co/Qwen/Qwen3-8B
+> 2https://huggingface.co/Qwen/Qwen2.5-7B-Instruct
+> 3https://huggingface.co/Qwen/Qwen2.5-7B
+
+but lacks the capacity to push performance further. In contrast, IGPO shows the largest gap between its upper and lower performance bounds across settings. Under Qwen3-8B with Hermes format, IGPO achieves an average EM of 49.12, whereas on Qwen2.5-7B-Base it reaches only 29.70. We attribute this to the fact that, on the base model, the model’s in-context learning and instruction-following abilities are comparatively weak, making the heuristic based on the log probability of gener-ating the correct answer ineffective. Instead of pro-viding useful guidance, it may introduce substantial noise, preventing the model from learning mean-ingful signals. By contrast, on the stronger Qwen3-8B model, the log probability can more accurately reflect the incremental information brought by re-trieval, leading to much better performance. Heuristic process credit assignment does not consistently outperform outcome-level supervision under controlled comparison. From the experimental results, we further derive that the tool call format is highly important. Train-ing Qwen3-8B or Qwen2.5-7B-Instruct with the Hermes format, consistent with their post-training setup, leads to better performance than using an XML-based format, such as the Search-R1 style defined through a system prompt. At the same time, applying reinforcement learning directly to the base 5Method Search-R1 GiGPO IGPO Tree-GRPO Avg. EM 63.98 63.50 66.08 59.50 Avg. Turns 2.00 1.67 3.00 2.05 R trained ↑ 37.23 49.58 43.09 39.76 R untrained ↑ 41.73 40.00 43.62 42.55             
+
+> Otrained ↓4.20 10.48 40.15 26.51 Ountrained ↓7.87 7.64 36.02 8.66
+> Table 3: Process evaluation results. R stands for recall rate, and O stands for overlap rate. The better result between the trained and untrained counterparts is bold.
+
+model yields higher performance than instruction-tuned counterparts (Qwen2.5-7B-Instruct and even Qwen3-8B), provided the tool-call format is kept simple enough for the base model to learn from scratch. We also experimented with three differ-ent methods for applying the Hermes-format tool call to Qwen2.5-7B-Base. However, because the base model was unable to reliably generate JSON-formatted text, the training completely failed. Future work should keep the tool call format consistent when comparing against baselines to attribute gains to the algorithm. 
+
+4.2.2 Process Evaluation 
+
+The findings above reveal how credit assignment affects final performance, but do not explain the intermediate search behavior. As shown in the Avg. Turns column of Tab. 2, search depth varies substan-tially across methods: under the Hermes format on Qwen3-8B, IGPO averages nearly twice as many turns as GiGPO. This gap motivates a closer look at intermediate search behavior: whether different credit assignment strategies shape distinct search patterns, and whether training actually improves search capability over the untrained counterpart. To answer these questions, we sample 2,000 un-used examples from our training set, each with annotated supporting documents, and roll out the three Hermes-format Qwen3-8B models. After we obtain the trajectories, we decompose them into individual search steps. At each step, we feed the accumulated search history to the untrained model and explicitly prompt it to generate the next search query based on the question and the information collected so far. We then compare the two sets of retrieved documents on two metrics: recall of supporting documents and overlap with documents retrieved in earlier steps. The experimental results are summarized in Tab. 3. We find that models trained with four al-gorithms exhibit clearly different preferences. In terms of the number of search turns, IGPO tends to encourage more extensive searching, GiGPO tends to encourage fewer searches, and Search-R1 and Tree-GRPO lie in between. In terms of query recall, comparing the trained models with their un-trained counterparts reveals that 3 of 4 methods 
+
+decrease recall, suggesting that search agents are not necessarily better query writers. Search-R1 and Tree-GRPO drop by 4.50 and 2.79 points, respec-tively, while IGPO shows only a slight decrease (−0.53 ). In contrast, GiGPO improves by nearly 10 points. The overlap rate offers another perspec-tive: Search-R1 learns to retrieve documents dif-ferent from previously seen ones, while the other three methods increase redundancy. Beyond the trained-vs-untrained comparison, a consistent trade-off emerges across the four meth-ods: models that cannot produce high-quality or di-verse queries compensate by searching more turns, while those with stronger per-step retrieval are less inclined to continue. GiGPO sits at one extreme with high recall but fewest turns; IGPO sits on the other side with extensive but redundant searching. Search-R1 and Tree-GRPO fall in between. Taken together, these results provide a more com-plete picture of the three methods. Search-R1 trains the model to explore in more diverse directions: although the recall at each step is not high, the overlap rate is relatively low. GiGPO improves the model’s ability to generate high-quality queries, but at the same time suppresses further exploration, as reflected in its higher recall rate but fewer search turns. By contrast, IGPO encourages very thor-ough searching, even if part of it may be redun-dant. Tree-GRPO exhibits intermediate behavior across most metrics, without strongly favoring ei-ther query quality or search depth. We attribute these phenomena to the different credit assignment strategies. GiGPO computes the reward for each step using discounted return, such that actions closer to the end of the trajectory re-ceive higher discounted rewards. This encourages the model to reduce the number of search steps, making each action closer to the trajectory end. In contrast, IGPO assigns an information gain reward to every step. When the final answer is incorrect or the outcome reward is close to zero, the infor-mation gain reward dominates the update direction of the entire trajectory, pushing the model toward 60 100 200 300 400 500 600 700                
+
+> Training Step
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> Normalized Critic Score
+> IGPO: step 300 (EM=14.6)
+> SearchR1: step 140 (EM=46.3)
+> GiGPO: step 80 (EM=43.4)
+> TreeGRPO: step 120 (EM=41.0)
+> 9k×5epoch
+> SearchR1
+> GiGPO
+> IGPO
+> TreeGRPO
+> 0100 200 300 400 500 600 700
+> Training Step
+> SearchR1: step 400 (EM=45.2)
+> GiGPO: step 380 (EM=42.3)
+> IGPO: step 20 (EM=39.6)
+> TreeGRPO: step 60 (EM=35.6)
+> 15k×3epoch
+> SearchR1
+> GiGPO
+> IGPO
+> TreeGRPO
+> 0100 200 300 400 500 600 700
+> Training Step
+> SearchR1: step 140 (EM=43.3)
+> GiGPO: step 380 (EM=44.1)
+> IGPO: step 180 (EM=38.6)
+> TreeGRPO: step 100 (EM=43.6)
+> 45k×1epoch
+> SearchR1
+> GiGPO
+> IGPO
+> TreeGRPO
+> Training Curves Best Checkpoint per Method & Setting
+> (10-step rolling avg; IGPO negative scores clipped to 0; star = best ckpt by Avg-EM)
+
+Figure 2: Training curves of four methods across three data settings. Stars indicate the best checkpoint selected based on the average exact match on the validation set. 
+
+over-searching behavior. Tree-GRPO compares steps across different rollout branches rather than applying a per-step scalar reward. This relative sig-nal neither penalizes additional turns as strongly as discounted return nor incentivizes every step indi-vidually, resulting in intermediate behavior without a dominant bias toward either direction. Search-R1, by contrast, introduces no such heuristics and relies solely on the final outcome to determine the optimization direction, leaving the search strategy to emerge freely from the training signal. Applying credit assignment to the process does not necessarily improve the intermedi-ate trajectory itself. The stronger the heuris-tic signal, the more it biases the model to-ward a specific search pattern — sometimes at the cost of overall quality. 
+
+4.3 Training Protocol 
+
+Having examined the retrieval corpus and re-ward design, we turn to three training protocol choices: data diversity (Sec. 4.3.1), off-policy de-gree (Sec. 4.3.2), and search budget, i.e., the max-imum number of tool-call turns allowed during training and evaluation (Sec. 4.3.3). 
+
+4.3.1 Data 
+
+Previous work varies widely in the data regime: some methods train for a single epoch on large datasets (Jin et al., 2025), while others repeat smaller datasets over multiple epochs (Shao et al., 2025a). The key difference is data diversity — whether the model sees more unique examples or revisits fewer ones. To isolate this factor, we train Qwen2.5-7B-Instruct with the Search-R1 format and fix total training compute at approximately 700 steps (batch size 64) and vary the diversity: 9,000 examples for 5 epochs, 15,000 for 3 epochs, and 32 64 128 256 512 
+
+> Batch Size
+> 40
+> 42
+> 44
+> 46
+> 48
+> Avg-EM
+
+Qwen3-8B     
+
+> Search-R1
+> GiGPO
+> IGPO
+> Tree-GRPO
+> 32 64 128 256 512
+> Batch Size
+> 38
+> 40
+> 42
+> 44
+> Avg-EM
+
+Qwen2.5-7B-Instruct 
+
+> Search-R1
+> GiGPO
+> IGPO
+> Tree-GRPO
+
+Figure 3: Effect of train batch size on average exact match for four methods. 
+
+45,000 for 1 epoch. Training curves and selected checkpoints are shown in Fig. 2. Across all three data scales, the best-selected checkpoints achieve comparable final performance, indicating that greater diversity alone does not im-prove outcomes. However, training dynamics dif-fer markedly: with 9,000 or 15,000 instances, at least one method collapses in the latter half of training, whereas the 45,000-instance setting yields smoother curves for GiGPO and Search-R1 without spurious spikes. This suggests that data diversity primarily benefits training stability rather than fi-nal performance. Examining checkpoint selection more closely, the best checkpoints for both Search-R1 and GiGPO often emerge well before training concludes, yet achieve comparable final EM across settings. In most cases, performance peaks within the first half of training and degrades thereafter, indicating that prolonged training does not yield further gains and that proper checkpoint selection is essential regardless of data scale. 
+
+4.3.2 Off-policy 
+
+In GRPO, the model collects a train batch of roll-outs and then performs multiple mini-batch updates from it. As the train batch grows larger relative to the mini-batch, later updates operate on trajectories generated by an increasingly outdated policy. To 74 8 16 32          
+
+> Evaluate Max Turn
+> 4
+> 8
+> 16
+> 32
+> Train Max Turn
+> SearchR1
+> 4816 32
+> Evaluate Max Turn
+> 4
+> 8
+> 16
+> 32
+> GiGPO
+> 4816 32
+> Evaluate Max Turn
+> 4
+> 8
+> 16
+> 32
+> IGPO
+> 4816 32
+> Evaluate Max Turn
+> 4
+> 8
+> 16
+> 32
+> Tree-GRPO
+> 20
+> 25
+> 30
+> 35
+> 40
+> 45
+> 50
+> Avg-EM
+> 42
+> 44
+> 46
+> 48
+> Avg-EM
+> 37.5
+> 40.0
+> 42.5
+> 45.0
+> 47.5
+> 50.0
+> Avg-EM
+> 41
+> 42
+> 43
+> 44
+> 45
+> 46
+> 47
+> Avg-EM
+
+Figure 4: Average EM across five datasets for four methods under varying training (rows) and evaluation (columns) search budgets. All experiments use Qwen3-8B with Hermes format. 
+
+measure this effect, we fix the mini-batch size at 16 and increase the train batch size exponentially from 32 to 512, training all four methods on Qwen3-8B with the Hermes format, and Qwen2.5-7B-Instruct with the Search-R1 format. As illustrated in Fig. 3, the two models ex-hibit distinct trends: for Qwen3-8B, performance generally degrades as batch size increases, with Search-R1 and IGPO showing the steepest drops. Qwen2.5-7B-Instruct, by contrast, remains rela-tively stable across batch sizes, with no consistent degradation pattern. This indicates that Qwen3-8B is more sensitive to off-policy drift, while Qwen2.5-7B-Instruct tolerates larger batches without system-atic performance loss. The data and off-policy ex-periments point to a shared underlying factor: both control how fresh the training signal is relative to the current policy. Increasing data diversity reduces the chance of learning from repeated, stale exam-ples, while keeping the train batch small ensures that rollouts remain close to the current policy. 
+
+4.3.3 Max Turns 
+
+The maximum number of tool-calling turns (i.e., the search budget) is another critical factor affect-ing model performance. We conduct experiments on Qwen3-8B (Hermes format) with three algo-rithms under varying training and evaluation search budgets. As shown in Fig. 4, none of the four methods achieves more than a 0.3-point gain when the evaluation budget exceeds the training budget. Moreover, as the training search budget increases, three methods exhibit performance degradation. Comparing the 4-turn train / 4-turn eval setting with the 32-turn train / 32-turn eval setting, Search-R1, GiGPO, and IGPO all score approximately 5% higher under the 4-turn setting, while Tree-GRPO plateaus around 44% regardless of budget. This indicates persistent training instability in long-horizon agent scenarios. The four methods exhibit distinct patterns un-der budget mismatch. Search-R1 and IGPO de-grade noticeably when the evaluation budget falls below 8 turns and is smaller than the training bud-get, whereas GiGPO and Tree-GRPO remain rel-atively stable. This aligns with their actual search behavior: under a 32-turn budget, Search-R1 and IGPO average approximately 8 search turns, while GiGPO and Tree-GRPO average only 4. The for-mer two methods effectively train models to search deeper, but this also makes them more dependent on the available budget. In contrast, GiGPO and Tree-GRPO struggle to encourage deeper search behavior, resulting in trajectories that rarely ap-proach the budget limit and thus remain insensitive to evaluation budget changes. However, this dis-tinction is also bounded by dataset difficulty: con-ventional multi-hop datasets can almost always be resolved within 8 searches, leaving limited room to observe the benefits of a deeper search, sug-gesting that current multi-hop benchmarks offer insufficient complexity to differentiate methods at higher budgets, underscoring the demand for more challenging, long-horizon training data. Search budget scaling reveals a ceiling ef-fect: increasing the training and evaluation budget does not yield proportional gains. 
+
+5 Summary 
+
+In this paper, we conducted a systematic empiri-cal study of the key factors affecting search agent training: retrieval environment, credit assignment algorithm, and training protocol. Our findings re-veal that the retrieval environment exerts the largest influence on final performance. Specifically, when the corpus lacks key supporting documents for training questions, the model may earn a reward by guessing from parametric memory rather than 8through successful retrieval, introducing noise into policy optimization. We further provide practi-cal guidance on training hyperparameters such as batch size and search budget. We hope our pro-posed Wiki-fixed corpus and the accompanying insights establish a stable experimental foundation and reduce the burden of choosing hyperparame-ters, enabling cleaner methodological comparisons and allowing future work to isolate genuine algo-rithmic advances more clearly. 
+
+Limitations 
+
+Due to resource constraints, we cannot cover all ex-isting credit assignment algorithms.Additionally, the high cost of web search APIs prevents us from conducting our full experiment suite (approx-imately 100 runs) under web retrieval settings; our conclusions are therefore limited to local corpus-based search environments. 
+
+Ethics Statement 
+
+This work was conducted in strict compliance with the ACL Ethics Policy. All datasets and models used for the experiment are publicly available, and our usage aligns with their expectations. For the datasets we used, 2WikiMultihopQA, HotpotQA, and Musique adopt Apache License 2.0, Bam-boogle and PopQA adopt MIT License. For the corpus, Wiki-18 adopts the GNU License. Further-more, our work conducted an empirical study of the key factors affecting search agent training. We do not foresee any negative ethical impacts arising from our work. 
+
+References 
+
+John Joon Young Chung, Vishakh Padmakumar, Melissa Roemmele, Yuqian Sun, and Max Kreminski. 2025. Modifying large language model post-training for diverse creative writing. In Second Conference on Language Modeling .Tri Dao. 2024. Flashattention-2: Faster attention with better parallelism and work partitioning. In The Twelfth International Conference on Learning Repre-sentations .Wenlong Deng, Yushu Li, Boying Gong, Yi Ren, Chris-tos Thrampoulidis, and Xiaoxiao Li. 2026. On group relative policy optimization collapse in agent search: The lazy likelihood-displacement. Preprint ,arXiv:2512.04220. Lang Feng, Zhenghai Xue, Tingcong Liu, and Bo An. 2025a. Group-in-group policy optimization for LLM agent training. In The Thirty-ninth Annual Confer-ence on Neural Information Processing Systems .Zhaopeng Feng, Shaosheng Cao, Jiahan Ren, Jiayuan Su, Ruizhe Chen, Yan Zhang, Jian Wu, and Zuozhu Liu. 2025b. MT-r1-zero: Advancing LLM-based machine translation via r1-zero-like reinforcement learning. In Findings of the Association for Compu-tational Linguistics: EMNLP 2025 , pages 18685– 18702, Suzhou, China. Association for Computa-tional Linguistics. Mohamed Amine Ferrag, Norbert Tihanyi, and Mer-ouane Debbah. 2026. From llm reasoning to autonomous ai agents: A comprehensive review. 
+
+Preprint , arXiv:2504.19678. Xanh Ho, Anh-Khoa Duong Nguyen, Saku Sugawara, and Akiko Aizawa. 2020. Constructing a multi-hop QA dataset for comprehensive evaluation of reasoning steps. In Proceedings of the 28th Inter-national Conference on Computational Linguistics ,pages 6609–6625, Barcelona, Spain (Online). Inter-national Committee on Computational Linguistics. Yuxiang Ji, Ziyu Ma, Yong Wang, Guanhua Chen, Xi-angxiang Chu, and Liaoni Wu. 2025. Tree search for llm agent reinforcement learning. arXiv preprint arXiv:2509.21240 .Carlos E Jimenez, John Yang, Alexander Wettig, Shunyu Yao, Kexin Pei, Ofir Press, and Karthik R Narasimhan. 2024. SWE-bench: Can language mod-els resolve real-world github issues? In The Twelfth International Conference on Learning Representa-tions .Bowen Jin, Hansi Zeng, Zhenrui Yue, Jinsung Yoon, Ser-can O Arik, Dong Wang, Hamed Zamani, and Jiawei Han. 2025. Search-r1: Training LLMs to reason and leverage search engines with reinforcement learning. In Second Conference on Language Modeling .Vladimir Karpukhin, Barlas Oguz, Sewon Min, Patrick Lewis, Ledell Wu, Sergey Edunov, Danqi Chen, and Wen-tau Yih. 2020. Dense passage retrieval for open-domain question answering. In Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP) , pages 6769–6781, Online. Association for Computational Linguistics. Woosuk Kwon, Zhuohan Li, Siyuan Zhuang, Ying Sheng, Lianmin Zheng, Cody Hao Yu, Joseph Gon-zalez, Hao Zhang, and Ion Stoica. 2023. Efficient memory management for large language model serv-ing with pagedattention. In Proceedings of the 29th Symposium on Operating Systems Principles , SOSP ’23, page 611–626, New York, NY, USA. Association for Computing Machinery. Zeyi Lin, Shaohong Chen, Kang Li, Qiushan Jiang, Zirui Cai, Kaifang Ji, and The SwanLab team. 2023. SwanLab. Zhaoyang Liu, JingJing Xie, Zichen Ding, Zehao Li, Bowen Yang, Zhenyu Wu, Xuehui Wang, Qiushi Sun, 
+
+9Shi Liu, Weiyun Wang, Shenglong Ye, Qingyun Li, Zeyue Tian, Gen Luo, Xiangyu Yue, Biqing Qi, Kai Chen, Bowen Zhou, Yu Qiao, and 2 others. 2026. ScaleCUA: Scaling open-source computer use agents with cross-platform data. In The Fourteenth Interna-tional Conference on Learning Representations .Yingwei Ma, Yue Liu, Xinlong Yang, Yanhao Li, Ke-lin Fu, Yibo Miao, Yuchong Xie, Zhexu Wang, and Shing-Chi Cheung. 2026. Scaling coding agents via atomic skills. Preprint , arXiv:2604.05013. Alex Mallen, Akari Asai, Victor Zhong, Rajarshi Das, Daniel Khashabi, and Hannaneh Hajishirzi. 2023. When not to trust language models: Investigating effectiveness of parametric and non-parametric mem-ories. In Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Vol-ume 1: Long Papers) , pages 9802–9822, Toronto, Canada. Association for Computational Linguistics. Grégoire Mialon, Clémentine Fourrier, Craig Swift, Thomas Wolf, Yann LeCun, and Thomas Scialom. 2023. Gaia: a benchmark for general ai assistants. 
+
+Preprint , arXiv:2311.12983. OpenAI. 2025. Computer-using agent: Introducing a universal interface for ai to interact with the digital world. Ofir Press, Muru Zhang, Sewon Min, Ludwig Schmidt, Noah Smith, and Mike Lewis. 2023. Measuring and narrowing the compositionality gap in language mod-els. In Findings of the Association for Computational Linguistics: EMNLP 2023 , pages 5687–5711, Singa-pore. Association for Computational Linguistics. Hua Xuan Qin, Shan Jin, Ze Gao, Mingming Fan, and Pan Hui. 2024. Charactermeet: Supporting cre-ative writers’ entire story character construction pro-cesses through conversation with llm-powered chat-bot avatars. In Proceedings of the 2024 CHI Confer-ence on Human Factors in Computing Systems , CHI ’24, New York, NY, USA. Association for Computing Machinery. Rulin Shao, Akari Asai, Shannon Zejiang Shen, Hamish Ivison, Varsha Kishore, Jingming Zhuo, Xinran Zhao, Molly Park, Samuel G. Finlayson, David Sontag, Tyler Murray, Sewon Min, Pradeep Dasigi, Luca Soldaini, Faeze Brahman, Wen tau Yih, Tong-shuang Wu, Luke Zettlemoyer, Yoon Kim, and 2 others. 2025a. Dr tulu: Reinforcement learning with evolving rubrics for deep research. Preprint ,arXiv:2511.19399. Zhihong Shao, Yuxiang Luo, Chengda Lu, Z. Z. Ren, Jiewen Hu, Tian Ye, Zhibin Gou, Shirong Ma, and Xi-aokang Zhang. 2025b. Deepseekmath-v2: Towards self-verifiable mathematical reasoning. Preprint ,arXiv:2511.22570. Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei Zhang, Mingchuan Zhang, Y. K. Li, Y. Wu, and Daya Guo. 2024. Deepseekmath: Pushing the limits of mathemati-cal reasoning in open language models. Preprint ,arXiv:2402.03300. Guangming Sheng, Chi Zhang, Zilingfeng Ye, Xibin Wu, Wang Zhang, Ru Zhang, Yanghua Peng, Haibin Lin, and Chuan Wu. 2024. Hybridflow: A flexible and efficient rlhf framework. arXiv preprint arXiv: 2409.19256 .Huatong Song, Jinhao Jiang, Yingqian Min, Jie Chen, Zhipeng Chen, Wayne Xin Zhao, Lei Fang, and Ji-Rong Wen. 2025. R1-searcher: Incentivizing the search capability in llms via reinforcement learning. 
+
+Preprint , arXiv:2503.05592. Kimi Team, Tongtong Bai, Yifan Bai, Yiping Bao, SH Cai, Yuan Cao, Y Charles, HS Che, Cheng Chen, Guanduo Chen, and 1 others. 2026. Kimi k2. 5: Visual agentic intelligence. arXiv preprint arXiv:2602.02276 .Ryan Teknium, Jeffrey Quesnelle, and Chen Guang. 2024. Hermes 3 technical report. Preprint ,arXiv:2408.11857. Harsh Trivedi, Niranjan Balasubramanian, Tushar Khot, and Ashish Sabharwal. 2022. MuSiQue: Multi-hop questions via single-hop question composition. 
+
+Transactions of the Association for Computational Linguistics , 10:539–554. Guoqing Wang, Sunhao Dai, Guangze Ye, Zeyu Gan, Wei Yao, Yong Deng, Xiaofeng Wu, and Zhenzhe Ying. 2026a. Information gain-based policy opti-mization: A simple and effective approach for multi-turn search agents. In The Fourteenth International Conference on Learning Representations .Xiaoxuan Wang, Han Zhang, Haixin Wang, Yidan Shi, Ruoyan Li, Kaiqiao Han, Chenyi Tong, Haoran Deng, Renliang Sun, Alexander Taylor, Yanqiao Zhu, Jason Cong, Yizhou Sun, and Wei Wang. 2026b. Arlarena: A unified framework for stable agentic reinforcement learning. Preprint , arXiv:2602.21534. Zihan Wang, Chi Gui, Xing Jin, Qineng Wang, Licheng Liu, Kangrui Wang, Shiqi Chen, Linjie Li, Zhengyuan Yang, Pingyue Zhang, Yiping Lu, Jia-jun Wu, Li Fei-Fei, Lijuan Wang, Yejin Choi, and Manling Li. 2026c. Ragen-2: Reasoning collapse in agentic rl. Preprint , arXiv:2604.06268. Jason Wei, Zhiqing Sun, Spencer Papay, Scott McK-inney, Jeffrey Han, Isa Fulford, Hyung Won Chung, Alex Tachard Passos, William Fedus, and Amelia Glaese. 2025a. Browsecomp: A simple yet chal-lenging benchmark for browsing agents. Preprint ,arXiv:2504.12516. Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, brian ichter, Fei Xia, Ed H. Chi, Quoc V Le, and Denny Zhou. 2022. Chain of thought prompt-ing elicits reasoning in large language models. In 
+
+Advances in Neural Information Processing Systems .
+
+10 Xiaolong Wei, Bo Lu, Xingyu Zhang, Zhejun Zhao, Dongdong Shen, Long Xia, and Dawei Yin. 2025b. Igniting creative writing in small language models: LLM-as-a-judge versus multi-agent refined rewards. In Proceedings of the 2025 Conference on Empiri-cal Methods in Natural Language Processing , pages 17160–17186, Suzhou, China. Association for Com-putational Linguistics. Jiayi Wu, Ruobing Xie, Zeqian Huang, Lei Jiang, Can Xu, Kangyang Luo, Ming Gao, and Xiang Li. 2026. Negative advantage is a double-edged sword: Cali-brating advantage in grpo for deep search. Preprint ,arXiv:2604.18235. Tianbao Xie, Danyang Zhang, Jixuan Chen, Xiaochuan Li, Siheng Zhao, Ruisheng Cao, Toh Jing Hua, Zhou-jun Cheng, Dongchan Shin, Fangyu Lei, Yitao Liu, Yiheng Xu, Shuyan Zhou, Silvio Savarese, Caiming Xiong, Victor Zhong, and Tao Yu. 2024. OSWorld: Benchmarking multimodal agents for open-ended tasks in real computer environments. In The Thirty-eight Conference on Neural Information Processing Systems Datasets and Benchmarks Track .Can Xu, Lingyong Yan, Jiayi Wu, Haosen Wang, Yuchen Li, Jizhou Huang, Dawei Yin, and Xiang Li. 2026. Adversarial yet cooperative: Multi-perspective reasoning in retrieved-augmented language models. In Findings of the Association for Computational Lin-guistics: ACL 2026 , San Diego, USA. Association for Computational Linguistics. Haoran Xu, Amr Sharaf, Yunmo Chen, Weiting Tan, Lingfeng Shen, Benjamin Van Durme, Kenton Mur-ray, and Young Jin Kim. 2024. Contrastive prefer-ence optimization: pushing the boundaries of llm per-formance in machine translation. In Proceedings of the 41st International Conference on Machine Learn-ing , ICML’24. JMLR.org. An Yang, Anfeng Li, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Yu, Chang Gao, Chengen Huang, Chenxu Lv, Chujie Zheng, Day-iheng Liu, Fan Zhou, Fei Huang, Feng Hu, Hao Ge, Haoran Wei, Huan Lin, Jialong Tang, and 41 others. 2025. Qwen3 technical report. Preprint ,arXiv:2505.09388. Bowen Yang, Kaiming Jin, Zhenyu Wu, Zhaoyang Liu, Qiushi Sun, Zehao Li, JingJing Xie, Zhoumi-anze Liu, Fangzhi Xu, Kanzhi Cheng, and 1 others. 2026. Os-symphony: A holistic framework for robust and generalist computer-using agent. arXiv preprint arXiv:2601.07779 .Zhilin Yang, Peng Qi, Saizheng Zhang, Yoshua Bengio, William Cohen, Ruslan Salakhutdinov, and Christo-pher D. Manning. 2018. HotpotQA: A dataset for diverse, explainable multi-hop question answering. In Proceedings of the 2018 Conference on Empiri-cal Methods in Natural Language Processing , pages 2369–2380, Brussels, Belgium. Association for Com-putational Linguistics. Qiying Yu, Zheng Zhang, Ruofei Zhu, Yufeng Yuan, Xiaochen Zuo, Yu Yue, Weinan Dai, Tiantian Fan, Gaohong Liu, Lingjun Liu, Xin Liu, Haibin Lin, Zhiqi Lin, Bole Ma, Guangming Sheng, Yuxuan Tong, Chi Zhang, Mofan Zhang, Wang Zhang, and 16 others. 2025. Dapo: An open-source llm re-inforcement learning system at scale. Preprint ,arXiv:2503.14476. Ruixiang Zhang, Richard He Bai, Huangjie Zheng, Navdeep Jaitly, Ronan Collobert, and Yizhe Zhang. 2026. Embarrassingly simple self-distillation im-proves code generation. Preprint , arXiv:2604.01193. Wenlin Zhang, Xiangyang Li, Kuicai Dong, Yichao Wang, Pengyue Jia, Xiaopeng Li, Yingyi Zhang, Derong Xu, Zhaocheng Du, Huifeng Guo, Ruiming Tang, and Xiangyu Zhao. 2025. Process vs. outcome reward: Which is better for agentic RAG reinforce-ment learning. In The Thirty-ninth Annual Confer-ence on Neural Information Processing Systems .Tong Zheng, Yan Wen, Huiwen Bao, Junfeng Guo, and Heng Huang. 2025a. Asymmetric conflict and syn-ergy in post-training for llm-based multilingual ma-chine translation. In Findings of the Association for Computational Linguistics: ACL 2025 , pages 18362– 18383. Xuhui Zheng, Kang An, Ziliang Wang, Yuhang Wang, and Yichao Wu. 2025b. StepSearch: Igniting LLMs search ability via step-wise proximal policy optimiza-tion. In Proceedings of the 2025 Conference on Em-pirical Methods in Natural Language Processing ,pages 21805–21830, Suzhou, China. Association for Computational Linguistics. 
+
+11 Appendix A Detailed Algorithms 
+
+A.1 Preliminaries 
+
+We model the search agent as a Partially Observ-able Markov Decision Process (POMDP), defined by the tuple (S, A, O, T , R).
+
+State space S. The environment state is a fixed retrieval corpus D = {d1, d 2, · · · , d N }, which the agent can only access through retrieval actions. 
+
+Action space A. At each step t, the agent pro-duces an action at = ( think t, query t): a thinking 
+
+step in which the agent reasons about what infor-mation is still needed, followed by a tool call that issues a search query to the retrieval environment. 
+
+Observation space O. After executing action at,the agent receives an observation ot, the set of pas-sages returned by the retrieval system in response to query t. These observations accumulate into the interaction history: ht = ( a1, o 1, . . . , a t−1, o t−1).
+
+Transition T . Since the corpus D is static, the environment transition is fully governed by the retrieval function: ot = Retrieve (query t; D).
+
+Reward R. A reward function r(hT , a T ) as-signs a scalar score at the end of the trajectory. The design of this reward, outcome-based versus process-based, is a central variable we investigate. The agent’s policy πθ(at | ht) is parameterized by an LLM with parameters θ, conditioned on the interaction history h defined above. We denote the ground-truth answer to the input question as gt. 
+
+A.2 Training Algorithms Search-R1. Search-R1 uses a simple outcome-based reward with exact match (EM) verification. The reward function assigns r = 1 if the extracted answer is correct and properly formatted, r = 0 .25 
+
+if the answer is correct but the output contains an excessive number of answer tags, and r = 0 other-wise. The advantage is computed at the trajectory level and assigned uniformly to all tokens: 
+
+ˆA(i) = ri − mean (r(j))Gj=1 
+
+std (r(j))Gj=1 
+
+. (2) 
+
+GiGPO. GiGPO (Feng et al., 2025a) constructs a two-level advantage: episode-level and step-level. The episode-level advantage follows Eq. 2. For step-level credit assignment, GiGPO groups ac-tions by anchor states: environment states matched via textual similarity rather than step index. Ac-tions sharing the same anchor state are grouped regardless of which trajectory they belong to, and advantages are normalized within each group. The final advantage is: ˆA(i) = ˆA(i)E + ω ˆA(i)S, where 
+
+ω controls the relative weight of step-level credit, and ˆA(i)S is defined as:                   
+
+> ˆA(i)S
+> a(i)
+> t
+> 
+> =r(i)
+> t−mean   rt|(at, r t)∈GS(˜ s)
+> std ({rt|(at, r t)∈GS(˜ s)}).
+> (3)
+
+Here, GS (˜ s) denotes the set of action-reward pairs grouped under the same anchor state ˜s.
+
+IGPO. IGPO (Wang et al., 2026a) models the multi-turn agent-environment interaction as an in-cremental process of acquiring information toward the ground truth. It introduces an intrinsic reward based on information gain: at each turn, the model computes the probability of generating the ground truth, and the turn-level reward is defined as the log-probability difference between consecutive turns. Formally, the turn-level reward is: 
+
+rt = log πθ(gt | ht, a t) − log πθ(gt | ht−1, a t−1).
+
+(4) The outcome reward at the final turn uses F1 over-lap when the output format is valid and a fixed penalty λFormat otherwise: 
+
+rT =
+
+(
+
+F1 (aT , gt ), if the output format is valid ,λFormat , otherwise .
+
+(5) Then, IGPO normalizes intermediate and outcome rewards separately via group statistics: 
+
+˜r(i) 
+
+> t
+
+=
+
+
+
+r(i) 
+
+> t
+
+− μ1: T −1
+
+σ1: T −1
+
+, 1 ≤ t ≤ T − 1,r(i) 
+
+> t
+
+− μT
+
+σT
+
+, t = T, 
+
+(6) where μ1: T −1 = mean  {r(j) 
+
+> t′
+
+}G, T −1
+
+> j=1 ,t ′=1
+
+, σ 1: T −1 =std  {r(j) 
+
+> t′
+
+}G, T −1
+
+> j=1 ,t ′=1
+
+. The final advantage is defined as a discounted sum: 
+
+ˆA(i) 
+
+> t
+
+=
+
+> T
+
+X
+
+> k=t
+
+γk−t ˜r(i) 
+
+> k
+
+. (7) 
+
+Tree-GRPO. Tree-GRPO adopts a sample-then-expand paradigm: at each iteration, it randomly selects intermediate nodes from existing trajecto-ries and rolls out new branches from these states. After several expansion iterations, this yields a set of trees whose branches share common prefixes. The outcome reward is then computed for each complete branch and assigned to its constituent 12 Parameter Training Inference rollout_n 8 4clip_low 0.2 N/A clip_high 0.28 N/A clip_ratio_c 3 N/A learning_rate 5e − 6⋆ N/A training_epochs 1 N/A warmup_steps 0 N/A max_response_length 4096 4096 train_prompt_batchsize 32 N/A train_prompt_mini_batchsize 16 N/A temperature 1.0 0.6 top_p 1.0 1.0 
+
+Table 4: Main hyperparameters for our experiments. ⋆
+
+means this value varies among different training algo-rithms to avoid training collapse. 
+
+steps. Specifically, Tree-GRPO estimates grouped advantages at two levels. The intra-tree advantage normalizes rewards among trajectories within the same tree Ti:
+
+ˆA(i) 
+
+> intra
+
+= r(i) − mean  {r(j)}j∈T i
+
+
+
+std  {r(j)}j∈T i
+
+ . (8) Since the limited number of branches within each tree may lead to unreliable baseline estimation, Tree-GRPO also computes an inter-tree advantage across all trajectories in the group: 
+
+ˆA(i) 
+
+> inter
+
+= r(i) − mean ({r(j)}Gj=1 )
+
+std ({r(j)}Gj=1 ) . (9) The final advantage combines both levels: 
+
+ˆA(i) = ˆA(i) 
+
+> intra
+
++ ˆA(i)
+
+> inter
+
+. (10) 
+
+B Detailed Hyper-parameters 
+
+We provide a detailed table including the training and evaluating parameters in Tab. 4. We conducted all the experiments with VeRL 0.8.0.dev0 version. We will also open-source all the training curves on the Swanlab (Lin et al., 2023), which provides every hyperparameter in the corresponding training cards. For our computational resource, we leverage 8× NVIDIA H200 GPUs to serve the retrieval cor-pus, and another 8 × NVIDIA H200 GPUs to train the policy model for each experiment. For each experiment, it takes 3-50 hours, depending on the training setting. 
+
+C Prompt Template 
+
+For our training and inference, we adopt the same zero-shot prompt as shown in Tab. 5, Tab. 6, for hermes format and Search-R1 format, respectively. 
+
+D Detailed Results 
+
+Following the structure in the main text, we report the detailed metrics for each dataset here. Corresponding to Fig. 1, we report the detailed results in Tab. 7. Corresponding to Tab. 1, we report the detailed results in Tab. 8. Corresponding to Fig. 2, we report the detailed results in Tab. 9. Corresponding to Fig. 3, we report the detailed results in Tab. 10 and Tab. 11 for Qwen3-8B with Hermes format and Qwen2.5-7B-Instruct with Search-R1 format, respectively. Corresponding to Fig. 4, we report the detailed results in Tab. 12, Tab 13, Tab. 14, and Tab. 15 for Search-R1, GiGPO, IGPO, and Tree-GRPO, respectively. 
+
+E The Use of LLMs 
+
+This paper employed LLMs solely for grammat-ical correction and stylistic refinement, with the purpose of more effectively communicating our results and conclusions. 13 Our Prompt 
+
+system You are a helpful assistant specialized in information retrieval. You will be given a user query and you are required to answer the question based on the information re-trieved. # Rules - You may call functions multiple times across turns to complete the task. Each turn, you MUST output exactly ONE function call before waiting for the re-sult. - Base your answer strictly on the information re-trieved from the function calls. - After gathering all necessary information, provide your final answer within <answer></answer> XML tags. # Response Format 1. If you need to call a function, output the function call in the specified XML format. 2. When you have enough information to answer, provide your final response as: <answer> [Your concise answer here] </answer> # Important - Do NOT make up information that is not present in the retrieved documents. - Be concise but complete in your final answer. # Tools You may call one or more functions to assist with the user query. You are provided with function signatures within <tools></tools> XML tags: <tools> {"type": "function", "function": {"name": "lo-cal_search", "description": "Search a local cor-pus via embedding service and return top-k doc-uments.", "parameters": {"type": "object", "prop-erties": {"query_list": {"type": "array", "descrip-tion": "A list of fully-formed semantic queries. The tool will return search results for each query."}, "k": {"type": "integer", "description": "Top-k documents to return; int or list[int] aligned to query_list. If k is an integer, the tool will return the top-k documents for all queries."}}, "required": ["query_list"]}}} </tools> For each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags: <tool_call> "name": <function-name>, "arguments": <args-json-object> </tool_call> user Answer the question. If you need more context, call the function ‘local_search‘ to search the local Hot-potQA corpus. Wrap the final answer inside <an-swer>...</answer>. Question: {QUESTION} assistant 
+
+Table 5: Prompt template, Hermes Format. 
+
+Our Prompt 
+
+system You are a helpful assistant specialized in information retrieval. You will be given a user query, and you are required to answer the question based on the information re-trieved. # Tools You have access to a search engine. To search, wrap your query in <search> and </search> tags, like this: <search>your search query</search> The search results will be returned inside <informa-tion>...</information> tags. # Rules - You may search multiple times to gather information. Each turn, output exactly ONE <search>...</search> tag before waiting for results. - Base your answer strictly on the information re-trieved from searches. - After gathering all necessary information, provide your final answer within <answer></answer> XML tags. # Response Format 1. If you need to search, output: <search>your query here</search> 2. When you have enough information, provide your final response as: <answer> [Your concise answer here] </answer> # Important - Do NOT make up information that is not present in the retrieved documents. - Be concise but complete in your final answer. user Answer the question based on the search results. Use <search>query</search> to search for information. Wrap the final answer inside <answer>...</answer>. Question: {QUESTION} assistant 
+
+Table 6: Prompt template, Search-R1 Format. 
+
+14 Method Train Env. Test Env. 2Wiki Bamboogle HotpotQA Musique PopQA Avg. EM Avg. Turns Search-R1 fixed fixed 70.55 47.00 57.92 27.02 42.80 49.49 1.72 fixed 18 45.95 49.00 50.77 21.47 40.25 39.89 1.74 18 fixed 60.77 45.20 51.12 20.07 42.60 43.69 2.23 18 18 43.82 46.60 44.62 15.77 39.10 36.15 2.31 GiGPO fixed fixed 67.95 52.00 53.37 24.37 42.65 47.23 1.62 fixed 18 43.00 50.20 46.27 20.40 39.82 37.76 1.67 18 fixed 63.37 47.80 50.02 20.02 42.57 44.11 1.38 18 18 44.72 49.40 45.12 16.25 39.77 36.86 1.38 IGPO fixed fixed 70.32 47.40 56.72 25.05 44.62 49.12 2.99 fixed 18 49.45 46.80 48.90 21.27 41.77 40.54 3.00 18 fixed 62.12 45.60 50.62 19.82 42.00 43.70 1.67 18 18 43.62 46.60 44.62 16.65 39.60 36.44 1.71 Tree-GRPO fixed fixed 65.27 43.80 51.15 21.87 40.32 44.63 2.07 fixed 18 45.22 45.40 42.12 16.70 37.15 35.60 2.08 18 fixed 58.35 39.80 49.15 20.20 42.95 42.57 1.79 18 18 43.42 39.60 42.20 16.87 40.07 35.76 1.77 
+
+Table 7: Performance comparison across five datasets on different train/test environments. The best results within a comparing group are bold. Avg. Turns means the average search turns called by the agent. Fixed and 18 refer to the Wiki-fixed and Wiki-18, respectively. 
+
+Method Train Env. 2Wiki Bamboogle HotpotQA Musique PopQA Avg. EM Avg. Turns Search-R1 fixed 63.30 51.00 52.90 22.95 43.45 45.81 2.11 18 64.90 44.40 54.37 21.95 43.37 46.09 1.72 GiGPO fixed 66.20 51.20 52.30 22.37 42.60 46.03 1.64 18 67.47 51.00 50.92 21.45 42.77 45.81 1.46 IGPO fixed 67.52 49.60 54.20 22.07 43.22 46.84 2.20 18 67.15 52.60 56.27 25.35 42.02 47.87 1.63 Tree-GRPO fixed 63.47 42.60 49.50 20.15 43.07 44.00 1.86 18 65.42 45.80 50.47 20.40 43.15 44.89 1.75 
+
+Table 8: Performance comparison across five datasets on different train environments. All the methods are tested on the Wiki-Fixed environment. The best results within a comparing group are bold. Avg. Turns means the average search turns called by the agent. Fixed and 18 refer to the Wiki-fixed and Wiki-18, respectively. 
+
+Method Train Data 2Wiki Bamboogle HotpotQA Musique PopQA Avg. EM Avg. Turns Search-R1 9,000 63.50 44.80 52.57 25.40 43.82 46.27 2.97 15,000 64.15 43.60 51.97 23.05 41.90 45.21 3.00 45,000 60.10 35.60 50.72 23.02 40.50 43.34 2.09 GiGPO 9,000 58.47 44.40 50.58 19.57 44.70 43.36 1.47 15,000 53.20 41.80 50.10 23.97 41.85 42.26 1.62 45,000 58.05 40.80 51.70 23.35 43.70 44.09 1.59 IGPO 9,000 32.25 9.20 15.90 5.18 5.70 14.58 3.00 15,000 50.75 34.80 48.45 18.77 41.12 39.62 2.16 45,000 48.60 33.40 46.10 18.42 42.07 38.63 2.00 Tree-GRPO 9,000 57.20 37.60 44.80 21.90 40.57 41.01 3.00 15,000 52.32 34.40 41.20 18.07 31.05 35.62 2.39 45,000 62.60 38.60 48.82 22.20 41.27 43.57 2.96 
+
+Table 9: Performance comparison across five datasets on different training data. The best results within a comparing group are bold. Avg. Turns means the average search turns called by the agent. 
+
+15 Method batchsize 2Wiki Bamboogle HotpotQA Musique PopQA Avg. EM Avg. Turns Search-R1 32 70.55 47.00 57.92 27.02 42.80 49.49 1.72 64 69.25 47.60 55.05 23.07 43.22 47.64 2.05 128 68.57 50.60 55.65 26.72 43.77 48.73 1.85 256 63.92 46.80 50.65 21.42 43.92 45.03 1.63 512 63.08 40.20 48.81 18.27 42.47 43.07 1.79 GiGPO 32 67.95 52.00 53.37 24.37 42.65 47.23 1.62 64 66.17 49.20 52.87 20.60 44.25 46.07 1.44 128 63.42 44.00 48.32 18.00 40.60 42.63 1.51 256 59.67 44.60 47.67 18.45 41.17 41.83 1.31 512 58.05 40.00 44.77 14.00 37.95 38.73 1.38 IGPO 32 70.32 47.40 56.72 25.05 44.62 49.12 2.99 64 65.35 48.20 49.90 18.00 42.70 44.11 1.47 128 64.12 46.20 50.02 20.20 41.52 44.03 1.56 256 63.42 40.40 49.17 19.57 41.07 43.22 1.54 512 59.97 43.60 44.92 14.87 38.52 39.69 1.53 Tree-GRPO 32 65.27 43.80 51.15 21.87 40.32 44.63 2.07 64 63.02 43.00 50.17 19.15 42.35 43.65 2.06 128 66.67 44.60 49.12 19.92 41.80 44.38 1.95 256 62.95 42.40 49.97 18.62 41.82 43.31 1.81 512 63.27 42.80 47.87 18.40 41.42 42.74 1.59   
+
+> Table 10: Performance comparison across five datasets on different training batch sizes, with the Qwen3-8B as the base model and Hermes format tool call. The best results within a comparing group are bold. Avg. Turns means the average search turns called by the agent.
+
+Method batchsize 2Wiki Bamboogle HotpotQA Musique PopQA Avg. EM Avg. Turns Search-R1 32 57.32 40.80 47.67 18.22 35.02 39.60 2.11 64 62.25 41.80 52.15 23.55 42.17 44.93 2.98 128 63.77 43.00 51.8 23.28 40.86 44.87 2.02 256 51.4 40.60 48.87 20.25 41.47 40.50 2.88 512 57.47 36.00 47.73 15.62 37.62 39.50 2.99 GiGPO 32 53.17 38.80 48.17 21.50 42.30 41.21 1.67 64 61.25 40.60 49.52 21.45 41.15 43.26 1.62 128 51.47 43.40 48.32 21.47 39.65 40.32 1.75 256 53.72 42.20 49.30 21.15 42.32 41.64 1.78 512 57.5 40.40 49.00 16.3 35.72 39.65 2.14 IGPO 32 47.35 39.60 48.25 18.32 38.45 38.13 2.01 64 58.1 42.2 49.72 19.97 42.5 42.56 1.70 128 51.25 38 48.075 18.475 41.2 39.6969 2.82 256 48.32 32.6 47.07 13.57 42.2 37.63 2.13 512 52.72 36.2 44.32 15.1 37.75 37.43 2.00 Tree-GRPO 32 59.75 39.00 48.60 17.70 39.30 41.26 1.88 64 55.32 32.60 45.27 17.57 35.55 38.25 2.20 128 55.66 40.25 48.46 19.60 38.49 40.54 2.57 256 55.95 40.40 48.72 16.90 38.37 40.00 2.87 512 55.77 41.00 48.45 17.20 37.05 39.66 2.29   
+
+> Table 11: Performance comparison across five datasets on different training batch sizes, with the Qwen3-8B as the base model and Hermes format tool call. The best results within a comparing group are bold. Avg. Turns means the average search turns called by the agent.
+
+16 Train Budget Test Budget 2Wiki Bamboogle HotpotQA Musique PopQA Avg. EM Avg. Turns 44 70.55 47.00 57.92 27.02 42.80 49.49 1.72 8 70.45 47.80 57.90 28.17 42.27 49.64 1.83 16 69.87 47.00 57.07 27.97 42.60 49.30 1.73 32 70.3 48.60 57.32 27.92 42.55 49.49 1.73 84 33.80 25.60 25.35 9.15 15.02 20.97 2.96 8 65.32 45.60 50.85 21.25 39.60 44.29 4.00 16 65.87 47.80 51.15 21.25 40.47 44.78 4.02 32 65.72 46.40 51.60 21.15 40.55 44.80 4.01 16 4 48.10 39.00 47.10 16.00 32.27 35.96 2.35 8 56.77 37.20 46.95 15.97 32.32 37.98 2.52 16 56.32 39.00 46.62 16.27 32.15 37.87 2.51 32 57.10 40.60 46.27 16.15 31.62 37.87 2.52 32 4 27.97 23.00 29.05 9.50 21.87 22.12 2.74 8 56.27 42.00 45.10 18.72 36.00 39.11 4.72 16 60.20 44.00 49.22 22.52 39.27 42.84 5.40 32 61.05 46.00 49.35 22.95 39.33 43.25 5.40 
+
+Table 12: Search-R1 performance comparison across five datasets on different training/test search budgets, with the Qwen3-8B as the base model and Hermes format tool call. The best results within a comparing group are bold. Avg. Turns means the average search turns called by the agent. 
+
+Train Budget Test Budget 2Wiki Bamboogle HotpotQA Musique PopQA Avg. EM Avg. Turns 44 67.95 52.00 53.37 24.37 42.65 47.23 1.62 8 67.87 50.20 53.32 25.17 42.87 47.40 1.62 16 68.25 52.00 53.55 25.20 42.42 47.49 1.61 32 67.82 52.80 52.70 25.25 42.60 47.26 1.61 84 61.45 46.60 49.60 18.20 43.75 43.35 1.42 8 62.22 48.20 49.35 18.05 43.35 43.39 1.42 16 61.95 46.40 48.95 18.15 44.07 43.37 1.42 32 61.77 47.20 48.47 18.20 44.35 43.32 1.42 16 4 65.82 50.20 49.35 21.20 43.05 45.01 1.59 8 65.62 50.20 49.62 21.27 43.10 45.06 1.55 16 66.05 49.80 49.37 20.85 43.00 44.96 1.55 32 65.42 49.60 49.32 21.17 43.25 44.93 1.55 32 4 61.05 46.80 49.02 19.42 41.77 42.93 1.44 8 58.62 46.20 48.22 18.50 41.20 41.77 1.53 16 60.15 43.80 49.15 19.02 41.17 42.41 1.41 32 60.45 47.20 47.95 19.02 41.15 42.29 1.41 
+
+Table 13: GiGPO performance comparison across five datasets on different training/test search budgets, with the Qwen3-8B as the base model and Hermes format tool call. The best results within a comparing group are bold. Avg. Turns means the average search turns called by the agent. 
+
+17 Train Budget Test Budget 2Wiki Bamboogle HotpotQA Musique PopQA Avg. EM Avg. Turns 44 70.32 47.40 56.72 25.05 44.62 49.12 3.00 8 69.52 50.00 56.32 24.77 44.10 48.72 3.00 16 69.37 47.20 56.90 24.90 44.25 48.80 3.00 32 69.40 47.60 56.57 25.20 44.57 48.89 3.00 84 60.10 41.40 47.95 17.10 40.55 41.42 2.49 8 66.60 45.80 51.80 19.80 42.47 45.18 2.70 16 66.57 49.40 51.40 20.25 43.00 45.43 2.70 32 66.07 47.40 52.17 19.35 42.85 45.18 2.70 16 4 50.22 40.20 45.42 16.32 34.77 36.79 2.68 8 60.40 43.80 50.10 19.75 38.32 42.19 2.97 16 60.47 46.40 49.75 19.50 38.60 42.21 2.96 32 60.70 42.60 49.85 20.30 38.62 42.37 2.95 32 4 48.27 46.80 50.12 18.85 40.40 39.63 2.03 8 66.70 47.40 51.65 20.95 40.57 45.04 2.16 16 66.20 46.40 51.27 20.22 40.55 44.61 2.16 32 66.92 47.60 51.20 20.67 40.42 44.89 2.16 
+
+Table 14: IGPO performance comparison across five datasets on different training/test search budgets, with the Qwen3-8B as the base model and Hermes format tool call. The best results within a comparing group are bold. Avg. Turns means the average search turns called by the agent. 
+
+Train Budget Test Budget 2Wiki Bamboogle HotpotQA Musique PopQA Avg. EM Avg. Turns 44 65.27 43.80 51.15 21.87 40.32 44.63 2.07 8 65.12 45.20 51.10 21.65 40.25 44.55 2.08 16 65.35 44.80 50.97 21.70 40.27 44.58 2.08 32 65.02 44.00 50.55 22.42 40.72 44.66 2.07 84 63.77 45.60 49.95 20.32 38.90 43.30 1.84 8 64.25 48.40 51.92 21.10 41.25 44.74 2.01 16 64.47 46.80 52.05 21.47 40.47 44.68 2.04 32 65.02 48.40 51.50 21.62 41.32 44.97 2.04 16 4 67.12 53.20 52.07 19.92 43.15 45.80 1.90 8 64.22 47.40 49.00 18.17 40.70 43.15 1.70 16 63.72 47.80 48.72 17.87 39.80 42.69 1.69 32 63.80 46.20 48.25 17.92 40.00 42.60 1.73 32 4 63.50 45.40 48.45 18.20 38.95 42.36 2.33 8 64.47 46.40 50.15 20.32 40.97 44.05 2.55 16 65.20 47.20 50.22 19.62 40.87 44.07 2.55 32 64.95 44.80 50.20 20.42 41.53 44.29 2.54 
+
+Table 15: Tree-GRPO performance comparison across five datasets on different training/test search budgets, with the Qwen3-8B as the base model and Hermes format tool call. The best results within a comparing group are bold. Avg. Turns means the average search turns called by the agent. 
+
+18
