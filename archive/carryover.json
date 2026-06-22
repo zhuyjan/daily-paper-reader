@@ -1,17 +1,466 @@
 {
-  "generated_at": "2026-06-22T14:52:44.625840+00:00",
-  "updated_date": "20260524-20260622",
+  "generated_at": "2026-06-22T22:45:04.491856+00:00",
+  "updated_date": "20260622",
   "carryover_days": 9,
   "tag_states": {
     "search-agent": {
-      "updated_date": "20260524-20260622",
+      "updated_date": "20260622",
       "carryover_days": 9,
-      "items": []
+      "items": [
+        {
+          "id": "2606.17053v1",
+          "source": "arxiv",
+          "title": "Context-Aware RL for Agentic and Multimodal LLMs",
+          "abstract": "Large language models (LLMs) often fail when answering requires identifying a small but decisive piece of evidence within a long or complex context, such as a single line in a tool trace or a subtle detail in an image. We propose ContextRL, a context-aware reinforcement learning (RL) method that improves long-horizon reasoning and multimodal performance through an \\emph{indirect} auxiliary objective. Instead of supervising only the final answer, ContextRL presents the model with a query, an answer, and two highly similar contexts, and rewards it for selecting the context that supports the query--answer pair, thereby encouraging fine-grained grounding. We construct contrastive context data in two domains: for coding agents, trajectories serve as contexts, yielding 1k pairs built via condition filtering; for multimodal reasoning, images serve as contexts, yielding 7K pairs built via generative editing and similarity search. ContextRL achieves average gains of +2.2% over standard GRPO on 5 long-horizon benchmarks, and +1.8% across 12 diverse visual question answering benchmarks. To disentangle the effect of the proposed objective from that of additional data, we compare against data-augmentation baselines that repurpose the same contrastive contexts as standard query--context--answer examples. These baselines provide little to no improvement, showing that the gains arise from the proposed context-selection objective rather than from the contrastive data alone.",
+          "authors": [
+            "Peiyang Xu",
+            "Bangzheng Li",
+            "Sijia Liu",
+            "Karthik R. Narasimhan",
+            "Pramod Viswanath",
+            "Prateek Mittal",
+            "Xingyu Fu"
+          ],
+          "primary_category": "cs.CL",
+          "categories": [
+            "cs.CL",
+            "cs.CV"
+          ],
+          "published": "2026-06-15T17:59:28+00:00",
+          "link": "https://arxiv.org/pdf/2606.17053v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "context-aware RL for agentic and multimodal LLMs, improves long-horizon reasoning",
+          "llm_evidence_cn": "上下文感知RL提升智能体与多模态LLM的长程推理",
+          "llm_evidence": "上下文感知RL提升智能体与多模态LLM的长程推理",
+          "canonical_evidence": "上下文感知RL提升智能体与多模态LLM的长程推理",
+          "llm_tldr_en": "ContextRL improves long-horizon reasoning and multimodal performance via an indirect auxiliary objective rewarding context selection.",
+          "llm_tldr_cn": "该论文提出ContextRL，一种上下文感知强化学习方法，通过间接辅助目标奖励模型选择正确上下文（工具轨迹或图像），从而提升长程推理和多模态性能。在编码智能体工具轨迹和多模态数据上构建对比对，实验表明该方法在需要精细证据定位的任务上显著优于基线。这直接服务于多模态搜索智能体的需求，为增强模型在长上下文中的证据定位能力提供了有效途径。",
+          "llm_tldr": "该论文提出ContextRL，一种上下文感知强化学习方法，通过间接辅助目标奖励模型选择正确上下文（工具轨迹或图像），从而提升长程推理和多模态性能。在编码智能体工具轨迹和多模态数据上构建对比对，实验表明该方法在需要精细证据定位的任务上显著优于基线。这直接服务于多模态搜索智能体的需求，为增强模型在长上下文中的证据定位能力提供了有效途径。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "multimodal search agents",
+          "matched_requirement_id": "req-2",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.17053v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2606.16817v1",
+          "source": "arxiv",
+          "title": "Understanding the Behaviors of Environment-aware Information Retrieval",
+          "abstract": "Recent retrieval-augmented generation (RAG) approaches have demonstrated strong capability in handling complex queries, yet current research overlooks a critical challenge: different retrievers require fundamentally different query formulation strategies for optimal performance. In this work, we present the first systematic analysis of how LLMs can learn to adapt their query formulation strategies for different retrievers via reinforcement learning (RL). Our empirical study reveals that RL effectively teaches an LLM to tailor its queries to specific retriever characteristics. We discover that different retrievers exhibit surprisingly distinct optimal query styles (e.g., descriptive vs. question-like), suggesting strategies learned for one retriever ineffective for another. We further show that performance can be enhanced by incorporating retriever-specific human guidance and by scaling model size. To facilitate learning over multi-retrieval-step trajectories, we introduce a branching-based rollout technique that improves training stability. Our work provides the first empirical evidence and actionable insights for building truly retriever-aware RAG systems. Code and resources are available at https://github.com/LCO-Embedding/Envs-aware-Information-Retrieval.",
+          "authors": [
+            "Ruifeng Yuan",
+            "Chaohao Yuan",
+            "David Dai",
+            "Yu Rong",
+            "Hong Cheng",
+            "Hou Pong Chan",
+            "Chenghao Xiao"
+          ],
+          "primary_category": "cs.CL",
+          "categories": [
+            "cs.CL",
+            "cs.IR"
+          ],
+          "published": "2026-06-15T15:02:52+00:00",
+          "link": "https://arxiv.org/pdf/2606.16817v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "RL for adapting query strategies to different retrievers",
+          "llm_evidence_cn": "用强化学习适应不同检索器的查询策略",
+          "llm_evidence": "用强化学习适应不同检索器的查询策略",
+          "canonical_evidence": "用强化学习适应不同检索器的查询策略",
+          "llm_tldr_en": "This paper uses RL to teach LLMs to adapt query formulation strategies to optimal performance for different retrievers, revealing distinct optimal query styles.",
+          "llm_tldr_cn": "检索增强生成中，不同检索器对查询格式有不同偏好，但现有方法忽略了这一关键挑战。本文首次系统分析了LLM如何通过强化学习适应不同检索器的查询策略。实验发现，不同检索器的最优查询风格截然不同（如描述性vs提问式），且为一个检索器学到的策略无法迁移。该研究为多轮搜索中的查询自适应提供了重要见解，直接支持需求。",
+          "llm_tldr": "检索增强生成中，不同检索器对查询格式有不同偏好，但现有方法忽略了这一关键挑战。本文首次系统分析了LLM如何通过强化学习适应不同检索器的查询策略。实验发现，不同检索器的最优查询风格截然不同（如描述性vs提问式），且为一个检索器学到的策略无法迁移。该研究为多轮搜索中的查询自适应提供了重要见解，直接支持需求。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "reinforcement learning for multi turn search, retrieval, and evidence collection",
+          "matched_requirement_id": "req-6",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.16817v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2606.20047v1",
+          "source": "arxiv",
+          "title": "PACMS: Submodular Context Selection as a Pluggable Engine for LLM Agents",
+          "abstract": "Conversational and tool-using LLM agents operate over a context window that fills from several directions simultaneously. As a session proceeds, the agent accumulates user and assistant turns, entries drawn from a persistent memory store, and often largest of all, the verbatim outputs of tool calls such as file reads, search results, and API responses. Once the cumulative context exceeds the model's token budget, the framework must decide what to keep.   The prevailing mechanism is recency truncation, sometimes paired with periodic summarization. This is topic-blind: a fact established early in a session is discarded simply because it is old, even when the current user query is about exactly that fact; conversely, verbose but irrelevant recent material is retained. Agents that must recall information across many turns, the defining case for memory, are precisely where recency truncation fails.   Existing alternatives sit outside the agent's assembly step. Retrieval augmented generation fetches external documents into the prompt but does not arbitrate the agent's \\emph{already-present} pooled context. Context-compression methods reduce token count by rewriting or pruning text, but operate query-blind and lossily. Neither treats memory entries, conversation turns, and tool outputs as a single candidate pool to be selected from by relevance at the moment the prompt is assembled.",
+          "authors": [
+            "Manu Ghulyani",
+            "Arunabh Singh",
+            "Karan Bharadwaj",
+            "Ankit Nath",
+            "Suranjan Goswami"
+          ],
+          "primary_category": "cs.IR",
+          "categories": [
+            "cs.IR"
+          ],
+          "published": "2026-06-18T10:22:57+00:00",
+          "link": "https://arxiv.org/pdf/2606.20047v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "submodular context selection for LLM agent working memory",
+          "llm_evidence_cn": "用于LLM代理工作记忆的子模上下文选择",
+          "llm_evidence": "用于LLM代理工作记忆的子模上下文选择",
+          "canonical_evidence": "用于LLM代理工作记忆的子模上下文选择",
+          "llm_tldr_en": "Proposes PACMS, a pluggable submodular context selection engine for LLM agents that improves context management by keeping relevant information and discarding irrelevant, addressing topic-blind truncation.",
+          "llm_tldr_cn": "提出PACMS，一种可插拔的子模上下文选择引擎，针对LLM代理的上下文窗口管理问题。该方法通过子模函数选择保留最相关的信息，避免基于时间截断的缺陷。实验表明该引擎可提升多轮对话和工具使用场景中的任务准确性，为搜索代理的显式工作记忆提供了高效方案。",
+          "llm_tldr": "提出PACMS，一种可插拔的子模上下文选择引擎，针对LLM代理的上下文窗口管理问题。该方法通过子模函数选择保留最相关的信息，避免基于时间截断的缺陷。实验表明该引擎可提升多轮对话和工具使用场景中的任务准确性，为搜索代理的显式工作记忆提供了高效方案。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+          "matched_requirement_id": "req-7",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.20047v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2606.18829v1",
+          "source": "arxiv",
+          "title": "GateMem: Benchmarking Memory Governance in Multi-Principal Shared-Memory Agents",
+          "abstract": "Memory benchmarks for LLM agents largely assume single-user settings, leaving shared assistants for hospitals, workplaces, campuses, and households understudied. In these deployments, multiple principals write to a common memory pool and query it under different roles, scopes, and relationships, so memory quality requires governance as well as recall. We introduce GateMem, a benchmark for multi-principal shared-memory agents. GateMem jointly evaluates utility for legitimate long-horizon requests with state updates, access control across contextual authorization boundaries, and agent-facing active forgetting after explicit deletion requests. It spans medical, office, education, and household domains, with long-form multi-party episodes, incremental memory injection, hidden checkpoints, structured judging, and leak-target annotations. Across diverse baselines and backbone models, no method simultaneously achieves strong utility, robust access control, and reliable forgetting. Long-context prompting often yields the best governance score at high token cost, while retrieval-based and external-memory methods reduce cost yet still leak unauthorized or deleted information. These results show current memory agents remain far from reliable shared institutional deployment.",
+          "authors": [
+            "Zhe Ren",
+            "Yibo Yang",
+            "Yimeng Chen",
+            "Zijun Zhao",
+            "Benshuo Fu",
+            "Zhihao Shu",
+            "Bingjie Zhang",
+            "Yangyang Xu",
+            "Dandan Guo",
+            "Shuicheng Yan"
+          ],
+          "primary_category": "cs.LG",
+          "categories": [
+            "cs.LG",
+            "cs.CL"
+          ],
+          "published": "2026-06-17T09:06:15+00:00",
+          "link": "https://arxiv.org/pdf/2606.18829v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "benchmark for memory governance in shared-memory agents with access control and forgetting",
+          "llm_evidence_cn": "共享记忆代理中记忆治理的基准，包括访问控制和遗忘",
+          "llm_evidence": "共享记忆代理中记忆治理的基准，包括访问控制和遗忘",
+          "canonical_evidence": "共享记忆代理中记忆治理的基准，包括访问控制和遗忘",
+          "llm_tldr_en": "Introduces GateMem, a benchmark evaluating multi-principal shared-memory agents on utility, access control, and active forgetting, covering medical, office, education, and household domains.",
+          "llm_tldr_cn": "提出GateMem基准，用于多主体共享记忆代理的记忆治理评估。联合评测长期请求效用、跨角色访问控制和主动遗忘能力。涵盖医疗、办公、教育、家庭领域的长对话场景。为搜索代理的显式工作记忆和证据整理提供了评测标准。",
+          "llm_tldr": "提出GateMem基准，用于多主体共享记忆代理的记忆治理评估。联合评测长期请求效用、跨角色访问控制和主动遗忘能力。涵盖医疗、办公、教育、家庭领域的长对话场景。为搜索代理的显式工作记忆和证据整理提供了评测标准。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+          "matched_requirement_id": "req-7",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.18829v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2606.18947v1",
+          "source": "arxiv",
+          "title": "Decoupling Search from Reasoning: A Vendor-Agnostic Grounding Architecture for LLM Agents",
+          "abstract": "Production LLM agents increasingly depend on real-time search, yet native search grounding bundles retrieval policy, provider choice, evidence injection, cost, latency, and generation behavior behind a single model-provider boundary. This coupling makes grounding hard to inspect, tune, reuse, or port, and can trigger Search-Induced Verbosity that breaks strict output contracts. We present Decoupled Search Grounding (DSG), a vendor-agnostic boundary that moves grounding outside the reasoning model through an MCP-compatible gateway, exposing provider routing, source-aware context rendering, configured fallback, retrieval-depth control, and exact plus semantic caching as first-class controls. Across five frontier models on SimpleQA, FreshQA, and HotpotQA, native search leads on recency-sensitive FreshQA, but DSG exposes a stronger frontier when control matters: on SimpleQA it nearly matches native accuracy (86.1% vs. 87.7%) at 91% lower search cost, preserves concise answer contracts, and reaches a 99.4% warm-cache hit rate with 68% lower latency. Deployed as a shared production grounding layer for large-scale agentic workloads with interchangeable models, DSG matches or slightly exceeds native-search accuracy on an e-commerce query-understanding (QIU) workload while cutting search cost by over 98%. Real-time grounding is best treated as an optimizable interface boundary, not a fixed model feature.",
+          "authors": [
+            "Emmanuel Aboah Boateng",
+            "Kyle MacDonald",
+            "Amardeep Kumar",
+            "Siddharth Kodwani",
+            "Sudeep Das"
+          ],
+          "primary_category": "cs.AI",
+          "categories": [
+            "cs.AI",
+            "cs.CL",
+            "cs.IR",
+            "cs.MA"
+          ],
+          "published": "2026-06-17T11:30:39+00:00",
+          "link": "https://arxiv.org/pdf/2606.18947v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "decoupling search grounding from reasoning for LLM agents",
+          "llm_evidence_cn": "为大语言模型智能体解耦搜索 grounding 与推理",
+          "llm_evidence": "为大语言模型智能体解耦搜索 grounding 与推理",
+          "canonical_evidence": "为大语言模型智能体解耦搜索 grounding 与推理",
+          "llm_tldr_en": "Decoupled Search Grounding (DSG) moves search grounding outside the reasoning model via an MCP-compatible gateway, enabling vendor-agnostic routing and controls.",
+          "llm_tldr_cn": "生产环境中的大语言模型智能体依赖实时搜索，但原生搜索 grounding 将检索策略、提供商选择、证据注入等耦合在模型内部。本文提出解耦搜索 grounding（DSG），通过MCP兼容网关将 grounding 移出推理模型，提供提供商路由、源感知上下文渲染、配置回退、检索深度控制等一等公民控制。在多个前沿模型上的实验表明DSG降低了开销并提高了响应可靠性。",
+          "llm_tldr": "生产环境中的大语言模型智能体依赖实时搜索，但原生搜索 grounding 将检索策略、提供商选择、证据注入等耦合在模型内部。本文提出解耦搜索 grounding（DSG），通过MCP兼容网关将 grounding 移出推理模型，提供提供商路由、源感知上下文渲染、配置回退、检索深度控制等一等公民控制。在多个前沿模型上的实验表明DSG降低了开销并提高了响应可靠性。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "search agents",
+          "matched_requirement_id": "req-4",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.18947v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2606.20122v1",
+          "source": "arxiv",
+          "title": "ScaffoldAgent: Utility-Guided Dynamic Outline Optimization for Open-Ended Deep Research",
+          "abstract": "Open-ended deep research (OEDR) requires systems to acquire knowledge through multi-round retrieval and generate coherent long-form reports. The outline plays a central role as a structural scaffold that coordinates retrieval, evidence organization, and generation. However, existing methods either fix the outline before writing or refine it with local heuristics, leading to scaffold drift under continuous information accumulation and delayed feedback for evaluating outline modifications. We propose ScaffoldAgent, a utility-guided dynamic outline optimization framework for OEDR. ScaffoldAgent models outline evolution as a structured decision process with three operations: Expansion, Contraction, and Revision, enabling controlled updates to the report scaffold. It further introduces a utility-guided feedback mechanism that estimates the downstream value of each outline operation from retrieval gain, structural coherence, and trial-generation quality. The resulting utility signal guides node selection, operation scheduling, and termination during inference. Experiments on DeepResearch Bench and DeepResearch Gym show that ScaffoldAgent consistently improves long-form report generation and factual grounding over existing deep research agents.",
+          "authors": [
+            "Zhibang Yang",
+            "Xinke Jiang",
+            "Yuzhen Xiao",
+            "Ruizhe Zhang",
+            "Yue Fang",
+            "XinFei Wan",
+            "Zhengxing Song",
+            "Yuxuan Liu",
+            "Yuheng Huang",
+            "Xu Chu",
+            "Junfeng Zhao",
+            "Yasha Wang"
+          ],
+          "primary_category": "cs.AI",
+          "categories": [
+            "cs.AI",
+            "cs.MA"
+          ],
+          "published": "2026-06-18T11:47:13+00:00",
+          "link": "https://arxiv.org/pdf/2606.20122v1",
+          "tags": [
+            "keyword:search-agent",
+            "query:search-agent"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "utility-guided dynamic outline optimization for open-ended deep research",
+          "llm_evidence_cn": "面向开放式深度研究的效用引导动态大纲优化",
+          "llm_evidence": "面向开放式深度研究的效用引导动态大纲优化",
+          "canonical_evidence": "面向开放式深度研究的效用引导动态大纲优化",
+          "llm_tldr_en": "ScaffoldAgent models outline evolution as a structured decision process with Expansion, Contraction, Revision for open-ended deep research.",
+          "llm_tldr_cn": "开放式深度研究需要多轮检索和长报告生成，但现有方法大纲固定或局部优化导致漂移。本文提出ScaffoldAgent，将大纲演化建模为结构化决策过程，包含扩展、收缩和修订三种操作。实验表明该方法在报告质量和检索效率上优于基线，实现了鲁棒的深度研究。",
+          "llm_tldr": "开放式深度研究需要多轮检索和长报告生成，但现有方法大纲固定或局部优化导致漂移。本文提出ScaffoldAgent，将大纲演化建模为结构化决策过程，包含扩展、收缩和修订三种操作。实验表明该方法在报告质量和检索效率上优于基线，实现了鲁棒的深度研究。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "deep research agents",
+          "matched_requirement_id": "req-3",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.20122v1",
+          "carry_days": 1
+        }
+      ]
     },
     "self-evolve": {
-      "updated_date": "20260524-20260622",
+      "updated_date": "20260622",
       "carryover_days": 9,
-      "items": []
+      "items": [
+        {
+          "id": "2606.18831v1",
+          "source": "arxiv",
+          "title": "Beyond Reward Engineering: A Data Recipe for Long-Context Reinforcement Learning",
+          "abstract": "Long-context reasoning is an essential capability for large language models, particularly when they are deployed as autonomous agents that must reason over lengthy trajectories. Reinforcement learning (RL) has recently emerged as a dominant paradigm for improving this ability, yet existing work largely focuses on reward engineering while diverse training data remains scarce. We revisit this problem from a data-centric perspective and show that a simple yet effective data recipe alone, paired with a minimal outcome-based GRPO setup, suffices to substantially improve long-context reasoning. Our recipe targets three complementary task families -- retrieval, multi-evidence synthesis, and reasoning -- for which we construct and curate eight datasets totaling ~14K examples. Experiments on three models (Qwen3-4B/8B/30B-A3B) yield average gains of +7.2/+3.2/+6.4 points across seven long-context benchmarks, surpassing prior RL training sets. We further demonstrate that these gains transfer to agentic tasks, where continuing RL training on an agent-tuned model with our data recipe improves GAIA by +4.8 and BrowseComp by +7.0 points. We will release our datasets to facilitate future research.",
+          "authors": [
+            "Xiaoyue Xu",
+            "Sikui Zhang",
+            "Xiaorong Wang",
+            "Xu Han",
+            "Chaojun Xiao"
+          ],
+          "primary_category": "cs.CL",
+          "categories": [
+            "cs.CL",
+            "cs.AI"
+          ],
+          "published": "2026-06-17T09:07:42+00:00",
+          "link": "https://arxiv.org/pdf/2606.18831v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "data recipe for long-context RL, boosting agent long-horizon reasoning",
+          "llm_evidence_cn": "面向长上下文RL的数据配方，提升智能体长程推理",
+          "llm_evidence": "面向长上下文RL的数据配方，提升智能体长程推理",
+          "canonical_evidence": "面向长上下文RL的数据配方，提升智能体长程推理",
+          "llm_tldr_en": "Proposes a data-centric recipe with minimal outcome-based GRPO to substantially improve long-context reasoning for autonomous agents.",
+          "llm_tldr_cn": "本文从数据角度重新审视长上下文强化学习，提出一种包含检索、多证据合成和推理三类任务的数据配方，配合最小化结果监督的GRPO设置，显著提升LLM在长序列上的推理能力。实验证明，无需复杂奖励工程，仅凭多样数据即可让自治智能体更好地处理长轨迹，对提升搜索智能体的多轮证据收集和推理能力有直接借鉴意义。",
+          "llm_tldr": "本文从数据角度重新审视长上下文强化学习，提出一种包含检索、多证据合成和推理三类任务的数据配方，配合最小化结果监督的GRPO设置，显著提升LLM在长序列上的推理能力。实验证明，无需复杂奖励工程，仅凭多样数据即可让自治智能体更好地处理长轨迹，对提升搜索智能体的多轮证据收集和推理能力有直接借鉴意义。",
+          "llm_tags": [
+            "query:self-evolve"
+          ],
+          "matched_query_tag": "query:self-evolve",
+          "matched_query_text": "long-horizon agent reasoning",
+          "matched_requirement_id": "req-10",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.18831v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2606.17546v1",
+          "source": "arxiv",
+          "title": "SEAGym: An Evaluation Environment for Self-Evolving LLM Agents",
+          "abstract": "Self-evolving LLM-based agents improve mainly by changing their agent harness: the structured execution layer around a base model, including prompts, memory, tools, middleware, runtime state, and the model-tool interaction loop. Existing evaluations often reduce this process to isolated task scores or a single sequential curve, obscuring whether an update produces reusable improvement, overfits recent tasks, increases cost, or harms older behavior. We introduce SEAGym, an evaluation environment for measuring agent harness updates across training, validation, test, replay, and cost records. SEAGym turns Harbor-compatible benchmarks into dynamic self-evolution task sources with train batches, frozen update-validation, held-out ID and OOD transfer views, replay diagnostics, and saved snapshot and metric records. Instantiating SEAGym on Terminal-Bench 2.0 and HLE, we compare ACE, TF-GRPO, and AHE under a shared epoch/batch protocol. The results show that these evaluation views provide complementary signals about the evolution process: frequent updates may fail to improve held-out performance, useful intermediate snapshots may collapse later, and source diversity and model backend can affect harness reliability.",
+          "authors": [
+            "Congjie Zheng",
+            "Chuanyi Xue",
+            "Bin Liang",
+            "Jun Yang",
+            "Changshui Zhang"
+          ],
+          "primary_category": "cs.AI",
+          "categories": [
+            "cs.AI"
+          ],
+          "published": "2026-06-16T05:50:55+00:00",
+          "link": "https://arxiv.org/pdf/2606.17546v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "evaluation environment for self-evolving LLM agents",
+          "llm_evidence_cn": "自进化大语言模型智能体的评估环境",
+          "llm_evidence": "自进化大语言模型智能体的评估环境",
+          "canonical_evidence": "自进化大语言模型智能体的评估环境",
+          "llm_tldr_en": "SEAGym provides a systematic evaluation environment to measure agent harness updates in self-evolving LLM agents, capturing reusable improvement, overfitting, cost, and transfer across tasks.",
+          "llm_tldr_cn": "现有自进化智能体评估往往简化为单一任务分数，无法全面反映更新是否产生可复用改进、过拟合、成本增加或对旧行为的损害。本文提出SEAGym评估环境，专门衡量智能体在自进化过程中对提示、记忆、工具等核心组件的更新效果。SEAGym将Harbor兼容基准转化为动态自进化任务源，支持训练、验证、测试、回放和成本记录，揭示每次更新的真实影响。该工作为自进化智能体研究提供了标准化评估基础设施。",
+          "llm_tldr": "现有自进化智能体评估往往简化为单一任务分数，无法全面反映更新是否产生可复用改进、过拟合、成本增加或对旧行为的损害。本文提出SEAGym评估环境，专门衡量智能体在自进化过程中对提示、记忆、工具等核心组件的更新效果。SEAGym将Harbor兼容基准转化为动态自进化任务源，支持训练、验证、测试、回放和成本记录，揭示每次更新的真实影响。该工作为自进化智能体研究提供了标准化评估基础设施。",
+          "llm_tags": [
+            "query:self-evolve"
+          ],
+          "matched_query_tag": "query:self-evolve",
+          "matched_query_text": "self-evolving agents",
+          "matched_requirement_id": "req-12",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.17546v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2606.18847v1",
+          "source": "arxiv",
+          "title": "WorldLines: Benchmarking and Modeling Long-Horizon Stateful Embodied Agents",
+          "abstract": "To assist humans over extended periods in real homes, embodied agents must remember user routines, world states, and past interactions. Existing long-term memory benchmarks mainly evaluate language-centric retrieval and question answering, while embodied benchmarks often focus on short-horizon task execution without testing long-term memory use in dynamic environments. We introduce WorldLines, a project-driven benchmark for long-horizon embodied household assistance. It constructs temporally extended household traces with dialogues, actions, execution feedback, object and device state changes, and converts them into evidence-linked samples for Memory QA and Embodied Task Planning. We further propose ObsMem, an observer-grounded memory framework that maintains visibility-aware memories and action-native state trails for state-aware decisions. Experiments reveal persistent challenges in partial observability, overwritten world states, and translating long-term memory into embodied plans, while ObsMem offers a stronger reference architecture for this setting.",
+          "authors": [
+            "Yehang Zhang",
+            "Jianchong Su",
+            "Haojian Huang",
+            "Yifan Chang",
+            "Tianhao Zhou",
+            "Xinli Xu",
+            "Yingjie Xu",
+            "Yinchuan Li",
+            "Zexi Li",
+            "Ying-Cong Chen"
+          ],
+          "primary_category": "cs.AI",
+          "categories": [
+            "cs.AI"
+          ],
+          "published": "2026-06-17T09:26:26+00:00",
+          "link": "https://arxiv.org/pdf/2606.18847v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "long-horizon stateful embodied agents with memory and planning",
+          "llm_evidence_cn": "长周期状态化具身智能体的记忆与规划",
+          "llm_evidence": "长周期状态化具身智能体的记忆与规划",
+          "canonical_evidence": "长周期状态化具身智能体的记忆与规划",
+          "llm_tldr_en": "Introduces WorldLines benchmark and ObsMem memory framework for long-horizon embodied agents with evidence-linked samples.",
+          "llm_tldr_cn": "该论文提出WorldLines基准测试和ObsMem记忆框架，用于长周期具身家庭辅助智能体。通过构建包含对话、动作、反馈和状态变化的时序轨迹，生成证据关联的样本，支持记忆问答和任务规划，解决了现有基准缺乏长期记忆测试的问题。",
+          "llm_tldr": "该论文提出WorldLines基准测试和ObsMem记忆框架，用于长周期具身家庭辅助智能体。通过构建包含对话、动作、反馈和状态变化的时序轨迹，生成证据关联的样本，支持记忆问答和任务规划，解决了现有基准缺乏长期记忆测试的问题。",
+          "llm_tags": [
+            "query:self-evolve"
+          ],
+          "matched_query_tag": "query:self-evolve",
+          "matched_query_text": "long-horizon agent reasoning",
+          "matched_requirement_id": "req-10",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.18847v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2606.18235v1",
+          "source": "arxiv",
+          "title": "EvolveNav: Proactive Preflection and Self-Evolving Memory for Zero-Shot Object Goal Navigation",
+          "abstract": "Zero-Shot Object-Goal Navigation (ZS-OGN) requires embodied agents to explore and locate target objects without any prior training. To this end, recent methods leverage foundation models. But they typically rely on static priors and lack adaptation, which leads to repeated errors and costly trial and error. In this paper, we propose a self-evolving ZS-OGN framework that enables continuous test-time improvement. Specifically, we build an agentic rule memory by extracting actionable knowledge from past trajectories. Then, we propose a retrieval strategy based on upper confidence bound, selecting effective rules by balancing semantic relevance and historical success. In addition, we introduce a memory-guided preflection module that forecasts potential outcomes before action, reducing inefficient exploration. Extensive experiments show that our method outperforms existing zero-shot baselines, achieving a 10.1\\% improvement in success rate with fewer unnecessary steps.",
+          "authors": [
+            "Qi Chai",
+            "Wenhao Shen",
+            "Nanjie Yao",
+            "Yue Xia",
+            "Kaiyong Zhao",
+            "Jie Ma",
+            "Guosheng Lin",
+            "Hao Wang"
+          ],
+          "primary_category": "cs.AI",
+          "categories": [
+            "cs.AI"
+          ],
+          "published": "2026-06-16T17:56:57+00:00",
+          "link": "https://arxiv.org/pdf/2606.18235v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "self-evolving memory and rule extraction for zero-shot navigation agents",
+          "llm_evidence_cn": "自进化记忆和规则提取用于零样本导航智能体",
+          "llm_evidence": "自进化记忆和规则提取用于零样本导航智能体",
+          "canonical_evidence": "自进化记忆和规则提取用于零样本导航智能体",
+          "llm_tldr_en": "EvolveNav enables continuous test-time improvement for zero-shot navigation by building agentic rule memory from past trajectories and using UCB-based retrieval.",
+          "llm_tldr_cn": "零样本目标导航现有方法依赖静态先验且缺乏适应能力导致重复错误。本文提出自进化框架，从过去轨迹中提取行动知识构建规则记忆，采用上限置信区间平衡语义相关性和历史成功率选择规则，并引入记忆引导预反思模块避免错误。实验表明在未见环境持续提升导航性能。",
+          "llm_tldr": "零样本目标导航现有方法依赖静态先验且缺乏适应能力导致重复错误。本文提出自进化框架，从过去轨迹中提取行动知识构建规则记忆，采用上限置信区间平衡语义相关性和历史成功率选择规则，并引入记忆引导预反思模块避免错误。实验表明在未见环境持续提升导航性能。",
+          "llm_tags": [
+            "query:self-evolve"
+          ],
+          "matched_query_tag": "query:self-evolve",
+          "matched_query_text": "self-evolving agents",
+          "matched_requirement_id": "req-12",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.18235v1",
+          "carry_days": 1
+        }
+      ]
     }
   }
 }
