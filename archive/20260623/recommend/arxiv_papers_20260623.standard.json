@@ -1,0 +1,895 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-23T21:22:58.729638+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 23,
+    "deep_cap": 7,
+    "deep_selected": 9,
+    "quick_candidates": 27,
+    "quick_skim_target": 12,
+    "quick_selected": 12
+  },
+  "deep_dive": [
+    {
+      "id": "2606.17546v1",
+      "source": "arxiv",
+      "title": "SEAGym: An Evaluation Environment for Self-Evolving LLM Agents",
+      "abstract": "Self-evolving LLM-based agents improve mainly by changing their agent harness: the structured execution layer around a base model, including prompts, memory, tools, middleware, runtime state, and the model-tool interaction loop. Existing evaluations often reduce this process to isolated task scores or a single sequential curve, obscuring whether an update produces reusable improvement, overfits recent tasks, increases cost, or harms older behavior. We introduce SEAGym, an evaluation environment for measuring agent harness updates across training, validation, test, replay, and cost records. SEAGym turns Harbor-compatible benchmarks into dynamic self-evolution task sources with train batches, frozen update-validation, held-out ID and OOD transfer views, replay diagnostics, and saved snapshot and metric records. Instantiating SEAGym on Terminal-Bench 2.0 and HLE, we compare ACE, TF-GRPO, and AHE under a shared epoch/batch protocol. The results show that these evaluation views provide complementary signals about the evolution process: frequent updates may fail to improve held-out performance, useful intermediate snapshots may collapse later, and source diversity and model backend can affect harness reliability.",
+      "authors": [
+        "Congjie Zheng",
+        "Chuanyi Xue",
+        "Bin Liang",
+        "Jun Yang",
+        "Changshui Zhang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-16T05:50:55+00:00",
+      "link": "https://arxiv.org/pdf/2606.17546v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "directly addresses self-evolving agents evaluation",
+      "llm_evidence_cn": "直接针对自进化智能体的评估",
+      "llm_evidence": "直接针对自进化智能体的评估",
+      "canonical_evidence": "直接针对自进化智能体的评估",
+      "llm_tldr_en": "SEAGym provides a comprehensive evaluation environment for self-evolving LLM agents, measuring harness updates across training, validation, test, replay, and cost.",
+      "llm_tldr_cn": "自进化LLM智能体通过改变智能体框架（包括提示、记忆、工具等）来改进，但现有评估常简化为孤立任务分数。SEAGym提出一个动态评估环境，支持训练、验证、测试、重放和成本记录，将Harbor兼容基准转换为动态自进化任务源，提供多维度性能评估。",
+      "llm_tldr": "自进化LLM智能体通过改变智能体框架（包括提示、记忆、工具等）来改进，但现有评估常简化为孤立任务分数。SEAGym提出一个动态评估环境，支持训练、验证、测试、重放和成本记录，将Harbor兼容基准转换为动态自进化任务源，提供多维度性能评估。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.18947v1",
+      "source": "arxiv",
+      "title": "Decoupling Search from Reasoning: A Vendor-Agnostic Grounding Architecture for LLM Agents",
+      "abstract": "Production LLM agents increasingly depend on real-time search, yet native search grounding bundles retrieval policy, provider choice, evidence injection, cost, latency, and generation behavior behind a single model-provider boundary. This coupling makes grounding hard to inspect, tune, reuse, or port, and can trigger Search-Induced Verbosity that breaks strict output contracts. We present Decoupled Search Grounding (DSG), a vendor-agnostic boundary that moves grounding outside the reasoning model through an MCP-compatible gateway, exposing provider routing, source-aware context rendering, configured fallback, retrieval-depth control, and exact plus semantic caching as first-class controls. Across five frontier models on SimpleQA, FreshQA, and HotpotQA, native search leads on recency-sensitive FreshQA, but DSG exposes a stronger frontier when control matters: on SimpleQA it nearly matches native accuracy (86.1% vs. 87.7%) at 91% lower search cost, preserves concise answer contracts, and reaches a 99.4% warm-cache hit rate with 68% lower latency. Deployed as a shared production grounding layer for large-scale agentic workloads with interchangeable models, DSG matches or slightly exceeds native-search accuracy on an e-commerce query-understanding (QIU) workload while cutting search cost by over 98%. Real-time grounding is best treated as an optimizable interface boundary, not a fixed model feature.",
+      "authors": [
+        "Emmanuel Aboah Boateng",
+        "Kyle MacDonald",
+        "Amardeep Kumar",
+        "Siddharth Kodwani",
+        "Sudeep Das"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.IR",
+        "cs.MA"
+      ],
+      "published": "2026-06-17T11:30:39+00:00",
+      "link": "https://arxiv.org/pdf/2606.18947v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Decoupled search grounding architecture for LLM agents, enabling vendor-agnostic retrieval and evidence control",
+      "llm_evidence_cn": "为LLM智能体提供解耦的搜索接地架构，支持厂商无关的检索和证据控制",
+      "llm_evidence": "为LLM智能体提供解耦的搜索接地架构，支持厂商无关的检索和证据控制",
+      "canonical_evidence": "为LLM智能体提供解耦的搜索接地架构，支持厂商无关的检索和证据控制",
+      "llm_tldr_en": "DSG decouples search grounding from reasoning via an MCP gateway, providing control over retrieval depth, caching, and fallback.",
+      "llm_tldr_cn": "生产环境中的LLM智能体依赖实时搜索，但原生搜索接地将检索策略、提供商选择等捆绑在一起，难以调优和复用。本文提出解耦搜索接地DSG，通过MCP兼容网关将接地外置，提供提供商路由、源感知上下文渲染、缓存等控制。在多个前沿模型上验证，有效改善搜索性能和输出质量。",
+      "llm_tldr": "生产环境中的LLM智能体依赖实时搜索，但原生搜索接地将检索策略、提供商选择等捆绑在一起，难以调优和复用。本文提出解耦搜索接地DSG，通过MCP兼容网关将接地外置，提供提供商路由、源感知上下文渲染、缓存等控制。在多个前沿模型上验证，有效改善搜索性能和输出质量。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.19419v1",
+      "source": "arxiv",
+      "title": "Playful Agentic Robot Learning",
+      "abstract": "Current agentic robot systems can write executable Code-as-Policy programs, observe feedback, and revise behavior across multiple attempts, but they remain largely task-driven: reusable skills are acquired only after explicit instructions. We study Playful Agentic Robot Learning, where an embodied coding agent uses self-directed play as a continual skill-learning stage before downstream tasks arrive. We introduce RATs, Robotics Agent Teams designed for play-time skill acquisition. During play, RATs proposes novel yet learnable exploratory tasks, plans and executes robot-code policies, verifies intermediate progress, diagnoses failures, retries with dense, step-level feedback, and distills successful executions into a persistent code skill library. At test time, the agent reuses relevant skills from this frozen library to help solve new tasks. Experiments in LIBERO-PRO and MolmoSpaces show that play-learned skills improve held-out downstream tasks over no-play and random-play baselines, with 20.6 and 17.0 percentage-point gains over CaP-Agent0 on LIBERO-PRO and MolmoSpaces, respectively. Moreover, the learned skills can be plugged into other inference-time Code-as-Policy agents by simply retrieving them into the context, improving RoboSuite and real-world transfer by 8.9 and 8.8 points, respectively, without finetuning the underlying model.",
+      "authors": [
+        "Junyi Zhang",
+        "Jiaxin Ge",
+        "Hanjun Yoo",
+        "Letian Fu",
+        "Zihan Yang",
+        "Yaowei Liu",
+        "Raj Saravanan",
+        "Shaofeng Yin",
+        "Justin Yu",
+        "Dantong Niu",
+        "Zirui Wang",
+        "Roei Herzig",
+        "Ken Goldberg",
+        "Yutong Bai",
+        "David M. Chan",
+        "Ion Stoica",
+        "Angjoo Kanazawa",
+        "Jiahui Lei",
+        "Haiwen Feng",
+        "Trevor Darrell"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-17T17:55:23+00:00",
+      "link": "https://arxiv.org/pdf/2606.19419v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-directed play for skill acquisition with verification and distillation",
+      "llm_evidence_cn": "通过自我指导的游戏进行技能获取，包含验证和蒸馏",
+      "llm_evidence": "通过自我指导的游戏进行技能获取，包含验证和蒸馏",
+      "canonical_evidence": "通过自我指导的游戏进行技能获取，包含验证和蒸馏",
+      "llm_tldr_en": "RATs enables coding agents to acquire reusable skills through self-directed play by proposing exploratory tasks, planning, executing, verifying failures, retrying, and distilling successful code into a persistent library.",
+      "llm_tldr_cn": "针对当前机器人智能体仅在收到明确指令后才获得可复用技能的问题，提出Playful Agentic Robot Learning范式。RATs系统让具身编码智能体通过自我指导的游戏阶段持续学习：自主提出可学探索任务，编写并执行机器人代码策略，验证中间进展，诊断失败并基于步骤级反馈重试，最终将成功执行提炼到持久代码技能库。在下游任务中，智能体可从库中复用相关技能，实现更高效的行为习得。",
+      "llm_tldr": "针对当前机器人智能体仅在收到明确指令后才获得可复用技能的问题，提出Playful Agentic Robot Learning范式。RATs系统让具身编码智能体通过自我指导的游戏阶段持续学习：自主提出可学探索任务，编写并执行机器人代码策略，验证中间进展，诊断失败并基于步骤级反馈重试，最终将成功执行提炼到持久代码技能库。在下游任务中，智能体可从库中复用相关技能，实现更高效的行为习得。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "synthetic trajectory construction, verification, and curriculum shaping for autonomous agents",
+      "matched_requirement_id": "req-13",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.21649v1",
+      "source": "arxiv",
+      "title": "EvoEmbedding: Evolvable Representations for Long-Context Retrieval and Agentic Memory",
+      "abstract": "Existing embedding models are inherently static: they encode text segments in isolation, ignoring their surrounding context and temporal order. This paper introduces EvoEmbedding, a novel embedding model that generates evolvable representations for retrieval. It is tailored for long-context scenarios, where information is dynamic, sequential, and requires continuous state tracking. Our design is simple: EvoEmbedding maintains a continuously updated latent memory as it sequentially processes inputs, and uses it alongside the raw content to jointly generate evolvable embeddings. Consequently, for the same query, our model adapts its representation to retrieve distinct targets based on the evolving context, going beyond static semantic search. To equip the model with this capability, we construct EvoTrain-180K, a diverse dataset for the joint optimization of latent memory and retrieval. Furthermore, we introduce a memory queue to prevent representation collapse during recurrent encoding, alongside segment-batching techniques that tackle significant length variance and accelerate training by 3.8$\\times$. Extensive experiments show that our model not only outperforms larger-scale specialists (e.g., Qwen3-Embedding-8B and KaLM-Embedding-Gemma3-12B) across a range of long-context retrieval benchmarks, but also generalizes well to downstream tasks (e.g., personalization) with contexts 10$\\times$ longer than its training window. Notably, EvoEmbedding seamlessly integrates into agentic workflows to boost performance. For instance, a naive RAG pipeline equipped with our model surpasses dedicated agentic memory systems. Project Page: https://clare-nie.github.io/EvoEmbedding.",
+      "authors": [
+        "Chang Nie",
+        "Chaoyou Fu",
+        "Junlan Feng",
+        "Caifeng Shan"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-06-19T17:59:58+00:00",
+      "link": "https://arxiv.org/pdf/2606.21649v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "evolvable embeddings for retrieval and agentic memory",
+      "llm_evidence_cn": "可演化嵌入用于检索和智能体记忆",
+      "llm_evidence": "可演化嵌入用于检索和智能体记忆",
+      "canonical_evidence": "可演化嵌入用于检索和智能体记忆",
+      "llm_tldr_en": "EvoEmbedding introduces evolvable representations for long-context retrieval by maintaining a latent memory that updates as inputs sequentially processed, enabling context-aware retrieval that can adapt to evolving information needs, directly applicable to search agents with working memory.",
+      "llm_tldr_cn": "现有嵌入模型静态编码文本，忽略上下文动态变化。EvoEmbedding通过维护持续更新的潜在记忆，在顺序处理输入时生成可演化表示，使同一查询在不同语境下检索到不同目标。该方法完美匹配搜索智能体对工作记忆和证据溯源的需求，能根据历史交互调整检索策略，提升信息收集的准确性。",
+      "llm_tldr": "现有嵌入模型静态编码文本，忽略上下文动态变化。EvoEmbedding通过维护持续更新的潜在记忆，在顺序处理输入时生成可演化表示，使同一查询在不同语境下检索到不同目标。该方法完美匹配搜索智能体对工作记忆和证据溯源的需求，能根据历史交互调整检索策略，提升信息收集的准确性。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.21777v1",
+      "source": "arxiv",
+      "title": "CalVerT: Augmenting Agents with Calibrated Verifier Telemetry Improves Action and Learning in Knowledge-Intensive Tasks",
+      "abstract": "LLM agents in knowledge intensive question answering take retrieval and reasoning actions with incomplete knowledge about whether their current answer is uncertain, unsupported, or already complete. This produces two failure modes: committing to confident but unsupported answers, which hurts accuracy, and over-retrieving when the evidence in hand already suffices, resulting in wasted compute. To give agents a more complete picture of the state space they are operating in, we introduce calibrated verifier telemetry (CalVerT), which augments the agent's state with additional telemetry: a calibrated self-confidence score and a grounding verifier score. We show that CalVerT can improve agents in both training-free and training-based settings. On four QA benchmarks, we find that CalVerT raises F1 by triggering retrieval in cases where agents over-rely on parametric knowledge, while cutting redundant retrieval in cases where agents have sufficient context to answer. We show that CalVerT can augment existing QA frameworks without training. Moreover, CalVerT also improves trained systems: by simply augmenting an agent's state with telemetry, we observe improvements after reinforcement learning, as compared to an agent with identical training but no CalVerT telemetry.",
+      "authors": [
+        "Ashwin Vinod",
+        "Ying Ding",
+        "Elias Stengel-Eskin"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-06-19T21:50:35+00:00",
+      "link": "https://arxiv.org/pdf/2606.21777v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "calibrated verifier telemetry for evidence curation and claim verification",
+      "llm_evidence_cn": "校准验证遥测用于证据整理和声明验证",
+      "llm_evidence": "校准验证遥测用于证据整理和声明验证",
+      "canonical_evidence": "校准验证遥测用于证据整理和声明验证",
+      "llm_tldr_en": "Augments agents with calibrated self-confidence and grounding verifier scores to reduce unsupported answers and over-retrieval in knowledge-intensive tasks.",
+      "llm_tldr_cn": "针对知识密集型问答中智能体易产生无依据答案或过度检索的问题，本文提出CalVerT，通过向智能体状态注入校准的自信心分数和基础验证器分数，使其更完整地感知状态空间。实验表明CalVerT在训练和推理阶段均能提升行动质量，同时减少计算浪费。",
+      "llm_tldr": "针对知识密集型问答中智能体易产生无依据答案或过度检索的问题，本文提出CalVerT，通过向智能体状态注入校准的自信心分数和基础验证器分数，使其更完整地感知状态空间。实验表明CalVerT在训练和推理阶段均能提升行动质量，同时减少计算浪费。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.21994v1",
+      "source": "arxiv",
+      "title": "Prefix-Guided On-Policy Distillation: Mining Golden Trajectories from Rollouts",
+      "abstract": "On-policy distillation (OPD) improves reasoning models by applying dense teacher supervision on student-sampled trajectories. However, scaling OPD to long-horizon mathematical reasoning exposes a reliability and efficiency problem: standard OPD assigns every sampled candidate the same long rollout budget, even though some trajectories may quickly become weakly aligned with the teacher and provide less useful supervision. Prior analyses suggest that successful OPD depends on local teacher-student compatibility, which can be measured by top-k overlap on student-visited prefixes. When this overlap is low, continuing to generate or train on long suffixes may waste computation and introduce noisy learning signal. To address this, we introduce Prefix-Guided On-Policy Distillation (PG-OPD), a simple rollout-allocation framework that uses fixed-length prefixes to estimate trajectory value before expensive long-horizon generation. PG-OPD first decodes every sampled candidate to the same prefix length, computes teacher-student top-k overlap within an early probe window of that prefix, and selectively continues high-overlap candidates to a fixed long length. Low-overlap candidates stop at the fixed prefix, avoiding unnecessary suffix generation. Across diverse teacher-student combinations on AMC, AIME, and HMMT benchmarks, PG-OPD improves average accuracy by up to 4.80 points while reducing training time by up to 2.46x. These results suggest that prefix-level compatibility provides a practical signal for directing OPD computation toward trajectories that remain learnable from the teacher.",
+      "authors": [
+        "Qingfei Zhao",
+        "Huan Song",
+        "Shuyu Tian",
+        "Jiawei Shao",
+        "Xuelong Li"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-06-20T11:18:34+00:00",
+      "link": "https://arxiv.org/pdf/2606.21994v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "prefix-guided on-policy distillation for long-horizon reasoning",
+      "llm_evidence_cn": "前缀引导的在线策略蒸馏用于长时域推理",
+      "llm_evidence": "前缀引导的在线策略蒸馏用于长时域推理",
+      "canonical_evidence": "前缀引导的在线策略蒸馏用于长时域推理",
+      "llm_tldr_en": "Introduces Prefix-Guided OPD to improve efficiency by mining golden trajectories based on teacher-student prefix overlap in long-horizon reasoning.",
+      "llm_tldr_cn": "标准在线策略蒸馏对所有采样轨迹分配相同长rollout预算，效率低且引入噪声。本文通过测量教师-学生前缀重叠来提前终止弱对齐轨迹，仅对高重叠前缀继续生成和训练。实验表明该方法在长时域数学推理上提升了效率和可靠性，可扩展在线策略蒸馏的应用。",
+      "llm_tldr": "标准在线策略蒸馏对所有采样轨迹分配相同长rollout预算，效率低且引入噪声。本文通过测量教师-学生前缀重叠来提前终止弱对齐轨迹，仅对高重叠前缀继续生成和训练。实验表明该方法在长时域数学推理上提升了效率和可靠性，可扩展在线策略蒸馏的应用。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on-policy distillation",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.22600v1",
+      "source": "arxiv",
+      "title": "On the Position Bias of On-Policy Distillation",
+      "abstract": "On-Policy Distillation (OPD) improves the learning efficiency of standard reinforcement learning through dense, token-level supervision from teachers. In the standard KL objective of OPD, token-level losses are uniformly averaged, implying equal weights for all tokens. However, we discover that not all tokens are created equal: as student rollouts grow longer, they deviate further from the teacher's distribution, leading to degraded supervision quality at later positions. As a result, OPD using only the first 30% of tokens can perform comparably to using all tokens, whereas OPD using only the last 30% of tokens barely learns anything. In this work, we provide a principled understanding of this issue through the lens of constrained optimization. Based on these insights, we derive Importance-Weighted On-Policy Distillation (IW-OPD), in which the weight assigned to each token depends on the accumulated discrepancy between the student's and teacher's distributions, naturally upweighting earlier tokens and downweighting later ones with larger deviations. We show that IW-OPD converges significantly faster than OPD, with better learning efficiency, and achieves better final performance than standard OPD in both same-size and cross-scale settings, improving performance up to 6.9 points on AIME-2025.",
+      "authors": [
+        "Yan Xie",
+        "Sijie Zhu",
+        "Tiansheng Wen",
+        "Bo Chen",
+        "Yifei Wang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-06-21T17:20:21+00:00",
+      "link": "https://arxiv.org/pdf/2606.22600v1",
+      "tags": [
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "on-policy distillation with position bias analysis",
+      "llm_evidence_cn": "在线策略蒸馏及其位置偏差分析",
+      "llm_evidence": "在线策略蒸馏及其位置偏差分析",
+      "canonical_evidence": "在线策略蒸馏及其位置偏差分析",
+      "llm_tldr_en": "Discovers position bias in on-policy distillation: later tokens degrade supervision quality; proposes a weighted objective to address it.",
+      "llm_tldr_cn": "该论文发现在线策略蒸馏（OPD）中存在位置偏差：学生轨迹越长，后期token的监督质量越差。通过约束优化理论解释了这一现象，并推导出加权KL目标来缓解偏差。实验表明使用前30% token即可达到全量性能，而加权目标进一步提升效率。",
+      "llm_tldr": "该论文发现在线策略蒸馏（OPD）中存在位置偏差：学生轨迹越长，后期token的监督质量越差。通过约束优化理论解释了这一现象，并推导出加权KL目标来缓解偏差。实验表明使用前30% token即可达到全量性能，而加权目标进一步提升效率。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on-policy distillation",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.22783v1",
+      "source": "arxiv",
+      "title": "Breaking the Evaluation Paradox: Evaluating High-Entropy Search with Computationally Irreducible Constraints",
+      "abstract": "Evaluating the exhaustive search capabilities of large language models (LLMs) is plagued by a fundamental paradox: verifying completeness requires complete ground truth, yet high-entropy enumeration tasks make such ground truth impossible for humans to create. This causes benchmarks to systematically penalize models for outperforming their human annotators. Despite rapid progress in web-search and deep research agents -- which now issue hundreds of queries, traverse diverse sites, and synthesize long reports -- evaluation still largely relies on partially annotated answer sets, LLM-based judges, or single-answer questions that avoid genuinely exhaustive search scenarios. We break this paradox by shifting the evaluation paradigm from simulating a messy reality to constructing computationally pure challenges. We introduce VERITAS (Verifiable Traversal Assessment for Search), a framework built on the principle of computationally irreducible constraints. By introducing novel, non-optimizable constraints, we create verifiable, sparse-answer search tasks that are computationally equivalent to exhaustive enumeration. These constraints are easy to verify but impossible for LLMs or search engines to optimize, forcing agents to genuinely traverse the entire search space. VERITAS can automatically generate a virtually infinite number of test cases with perfect ground truth and precise difficulty control, with marginal instance cost dominated by hash computations. This provides not only a robust benchmark for evaluating systematic exploration under uncertainty but also a scalable method for generating training data to improve these crucial, yet underdeveloped, capabilities.",
+      "authors": [
+        "Juntao Wu",
+        "Wei Wen",
+        "Xianting Huang",
+        "Shuai Pang",
+        "Ruizhi Qiao",
+        "Xing Sun",
+        "Ke Wang"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-06-22T02:45:01+00:00",
+      "link": "https://arxiv.org/pdf/2606.22783v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "evaluating deep research agents and web-search agents",
+      "llm_evidence_cn": "评估深度研究和网络搜索智能体",
+      "llm_evidence": "评估深度研究和网络搜索智能体",
+      "canonical_evidence": "评估深度研究和网络搜索智能体",
+      "llm_tldr_en": "This paper addresses the evaluation paradox for high-entropy search by using computationally irreducible constraints to avoid ground truth completeness, enabling better assessment of exhaustive search capabilities.",
+      "llm_tldr_cn": "针对评估大模型穷尽搜索能力时面临的基本悖论——验证完备性需要完整地面真值，但高熵枚举任务令人类无法创建完整答案集——提出利用计算不可归约约束来打破该悖论。该方法允许在不依赖完全标注的情况下评估模型在搜索任务中的表现，特别适用于已能发出数百次查询、遍历不同网站并合成报告的深度研究智能体，为搜索评估提供了新范式。",
+      "llm_tldr": "针对评估大模型穷尽搜索能力时面临的基本悖论——验证完备性需要完整地面真值，但高熵枚举任务令人类无法创建完整答案集——提出利用计算不可归约约束来打破该悖论。该方法允许在不依赖完全标注的情况下评估模型在搜索任务中的表现，特别适用于已能发出数百次查询、遍历不同网站并合成报告的深度研究智能体，为搜索评估提供了新范式。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "deep research agents",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.23112v1",
+      "source": "arxiv",
+      "title": "Self-Evolution for Multi-Turn Tool-Calling Agents via Divergence-Point Preference Learning",
+      "abstract": "Multi-turn tool-using agents must coordinate long-horizon tool sequences while tracking dialogue state and policy constraints. Existing approaches often separate inference-time orchestration from parameter-level learning, leaving tool selection weakly structured and preference updates vulnerable to train--deployment prompt mismatch. For within-benchmark self-improvement, ToolGraph combines schema-derived topology, transition weights estimated from successful rollouts, and history-aware controls for write prerequisites and repeated-search loops. We then construct 161 preference pairs by locating divergence points via state-based matching and prefix-based alignment, filtered through action-correctness annotations, and train DPO under the same ToolGraph context used at inference. Across 375 tau2-bench tasks, ToolGraph raises the weighted average reward from 0.304 to 0.338 (+11.2% relative), while ToolGraph+DPO reaches 0.355 (+16.8% over the baseline), with the DPO gain concentrated in airline and retail. Fine-grained diagnostics further show that roughly half of telecom trajectories exhaust the step budget before action execution and that chosen reward positivity is the most useful checkpoint signal across our 16 evaluated DPO configurations.",
+      "authors": [
+        "Jiaqiang Tang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-06-22T09:56:44+00:00",
+      "link": "https://arxiv.org/pdf/2606.23112v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-evolution for multi-turn tool-calling agents via divergence-point preference learning",
+      "llm_evidence_cn": "通过分歧点偏好学习的多轮工具调用智能体自进化",
+      "llm_evidence": "通过分歧点偏好学习的多轮工具调用智能体自进化",
+      "canonical_evidence": "通过分歧点偏好学习的多轮工具调用智能体自进化",
+      "llm_tldr_en": "This paper introduces a self-evolution method for multi-turn tool-calling agents that constructs preference pairs from divergence points and trains DPO for within-benchmark improvement.",
+      "llm_tldr_cn": "多轮工具调用智能体需协调长程工具序列，现有方法分离推理时编排与参数学习，导致工具选择结构化弱。本文提出自进化方法：利用工具图（ToolGraph）融合模式拓扑和转移权重，通过状态匹配和前缀对齐定位分歧点，构建偏好对，并使用DPO训练。在基准内实现了有效自改进，展示了自演化智能体在工具使用场景中的潜力。",
+      "llm_tldr": "多轮工具调用智能体需协调长程工具序列，现有方法分离推理时编排与参数学习，导致工具选择结构化弱。本文提出自进化方法：利用工具图（ToolGraph）融合模式拓扑和转移权重，通过状态匹配和前缀对齐定位分歧点，构建偏好对，并使用DPO训练。在基准内实现了有效自改进，展示了自演化智能体在工具使用场景中的潜力。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.16774v1",
+      "source": "arxiv",
+      "title": "OpenClaw-Skill: Collective Skill Tree Search for Agentic Large Language Models",
+      "abstract": "Equipping Large Language Model (LLM) agents with effective skills is crucial for solving complex tasks in real-world systems like OpenClaw. In this work, we aim to develop a framework that automatically constructs such reusable skills to enhance LLMs in tool use, multi-step reasoning, and dynamic environment interaction. To this end, we propose Collective Skill Tree Search (CSTS), a novel tree-search-based skill construction framework that constructs structured, diverse and generalizable tree of skills. The core idea of CSTS is to leverage collective intelligence to jointly search, identify and compose effective skills via two iterative phases: Collective Skill Node Generation (CSN-Gen) and Collective Skill Node Assessment (CSN-Assess). CSN-Gen exploits collective knowledge from multiple models to explore diverse candidate skills for each subtask, enabling comprehensive skill exploration. CSN-Assess employs multiple models as judges to evaluate and select skill nodes with two scoring mechanisms: (1) collective quality scoring that aggregates independent evaluations to produce a robust estimate of skill effectiveness, and (2) collective transferability scoring that explicitly verifies whether a skill generalizes well across different models. With CSTS, we construct a set of comprehensive tree of skills along with skill-augmented training data, enabling models to effectively learn and utilize skills. Besides, we introduce Collective Skill Reinforcement Learning, which actively selects multiple relevant skills from the tree to broaden solution-space exploration, avoid being trapped by a single skill and its resulting homogeneous or suboptimal solutions. As a result, our trained model, OpenClaw-Skill, exhibits outstanding agentic capabilities in long-horizon planning, tool use and generalization over challenging benchmarks.",
+      "authors": [
+        "Tianyi Lin",
+        "Chuanyu Sun",
+        "Jingyi Zhang",
+        "Changxu Wei",
+        "Huanjin Yao",
+        "Shunyu Liu",
+        "Xikun Zhang",
+        "Liu Liu",
+        "Jiaxing Huang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-06-15T14:20:50+00:00",
+      "link": "https://arxiv.org/pdf/2606.16774v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "collective skill tree search for self-evolving agent skill construction",
+      "llm_evidence_cn": "集体技能树搜索用于自进化代理的技能构建",
+      "llm_evidence": "集体技能树搜索用于自进化代理的技能构建",
+      "canonical_evidence": "集体技能树搜索用于自进化代理的技能构建",
+      "llm_tldr_en": "OpenClaw-Skill proposes Collective Skill Tree Search (CSTS) to automatically construct reusable skills for LLM agents via collaborative node generation and assessment.",
+      "llm_tldr_cn": "OpenClaw-Skill针对LLM代理缺乏可复用技能的问题，提出集体技能树搜索框架，通过集体技能节点生成与评估两个迭代阶段，自动构建结构化、多样且可泛化的技能树。实验表明该方法能有效提升代理在复杂任务中的工具使用和多步推理能力。",
+      "llm_tldr": "OpenClaw-Skill针对LLM代理缺乏可复用技能的问题，提出集体技能树搜索框架，通过集体技能节点生成与评估两个迭代阶段，自动构建结构化、多样且可泛化的技能树。实验表明该方法能有效提升代理在复杂任务中的工具使用和多步推理能力。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2606.16591v1",
+      "source": "arxiv",
+      "title": "SING: Synthetic Intention Graph for Scalable Active Tool Discovery in LLM Agents",
+      "abstract": "Large language model (LLM) agents increasingly rely on agent harnesses that manage context, tools, and multi-turn execution, making tools a central interface for acting in realistic digital environments. As harness-connected tool ecosystems expand to hundreds or thousands of APIs, services, and task-specific skills, exhaustive tool schema injection becomes costly and imposes a closed-world assumption that limits agents to a predefined static inventory. Retrieval-augmented tool selection offers a natural alternative, but existing one-shot retrieval methods often fail to align isolated tool descriptions with the agent's true task intention, especially in long-horizon tasks where required capabilities emerge through decomposition, observations, and newly induced subgoals. We propose SING, an intention-aware active tool discovery framework that builds an intention-tool graph linking user intentions, tool capabilities, and tool collaboration patterns, and dynamically retrieves tools according to evolving task states. Using a unified corpus of 7,471 tools, we evaluate SING on three real-world tool-use benchmarks. SING improves Global Recall@5 by up to 59.8% and downstream success rate by up to 28.9% over baselines, while reducing full-corpus tool-schema exposure by 99.8%, demonstrating that intention-aware graph structure enables more accurate and context-efficient tool discovery in large-scale agentic ecosystems.",
+      "authors": [
+        "Qiao Xiao",
+        "Haochen Shi",
+        "Yisen Gao",
+        "Wenbin Hu",
+        "Huihao Jing",
+        "Tianshi Zheng",
+        "Baixuan Xu",
+        "Ziheng Zhang",
+        "Weiqi Wang",
+        "Haoran Li",
+        "Jiaxin Bai",
+        "Yangqiu Song"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-06-15T11:37:37+00:00",
+      "link": "https://arxiv.org/pdf/2606.16591v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "synthetic intention graph for tool discovery in LLM agents",
+      "llm_evidence_cn": "合成意图图用于LLM智能体工具发现",
+      "llm_evidence": "合成意图图用于LLM智能体工具发现",
+      "canonical_evidence": "合成意图图用于LLM智能体工具发现",
+      "llm_tldr_en": "SING constructs synthetic intention graphs to align isolated tool descriptions with agent task intentions, enabling scalable active tool discovery for long-horizon tasks, directly supporting synthetic trajectory construction and verification for autonomous agents.",
+      "llm_tldr_cn": "LLM智能体在长视界任务中需要动态选择工具，但现有方法无法将工具描述与真实意图对齐。SING通过构建合成意图图，模拟任务分解和工具需求，实现主动工具发现，无需预定义工具库。该方法为自进化智能体的合成轨迹构建和验证提供了关键技术，使智能体能在探索中持续扩展工具集。",
+      "llm_tldr": "LLM智能体在长视界任务中需要动态选择工具，但现有方法无法将工具描述与真实意图对齐。SING通过构建合成意图图，模拟任务分解和工具需求，实现主动工具发现，无需预定义工具库。该方法为自进化智能体的合成轨迹构建和验证提供了关键技术，使智能体能在探索中持续扩展工具集。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "synthetic trajectory construction, verification, and curriculum shaping for autonomous agents",
+      "matched_requirement_id": "req-13",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.19812v1",
+      "source": "arxiv",
+      "title": "Human-on-the-Loop Orchestration for AI-Assisted Legal Discovery",
+      "abstract": "Autonomous Large Language Model (LLM) agents are increasingly deployed in electronic discovery (e-discovery), where compounding errors across multi-step reasoning chains can constitute legal malpractice. Unlike single-turn retrieval, agentic workflows operating over privileged document corpora exhibit a class of failure we term \"trajectory collapse\": an early misclassification silently propagates, rendering an entire privilege review invalid. This paper makes three contributions. First, we propose a structured taxonomy of agentic failures in legal information retrieval, organized by functional stage. Second, we introduce a four-layer verification architecture -- spanning planning, reasoning, execution, and uncertainty quantification -- designed to intercept these failures before they compound. Third, we present a preliminary simulation study on a synthetic e-discovery corpus that demonstrates how mandatory Human-on-the-Loop (HOTL) escalation thresholds reduce privilege-waiver risk relative to fully autonomous baselines. Our results suggest that calibrated uncertainty thresholds can reduce privilege-waiver risk by up to 61% versus fully autonomous deployment, while routing fewer than one quarter of documents to attorney review.",
+      "authors": [
+        "Anushree Sinha",
+        "Srivaths Ranganathan",
+        "Abhishek Dharmaratnakar",
+        "Debanshu Das"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-06-18T05:37:52+00:00",
+      "link": "https://arxiv.org/pdf/2606.19812v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "four-layer verification architecture for multi-step agentic workflows",
+      "llm_evidence_cn": "针对多步智能体工作流的四层验证架构",
+      "llm_evidence": "针对多步智能体工作流的四层验证架构",
+      "canonical_evidence": "针对多步智能体工作流的四层验证架构",
+      "llm_tldr_en": "Proposes a taxonomy of agentic failures in legal e-discovery and a four-layer verification architecture to intercept trajectory collapse.",
+      "llm_tldr_cn": "本文聚焦法律电子发现中大型语言模型智能体的轨迹崩溃问题，提出了一种分阶段的失败分类法，并设计了一个涵盖规划、推理、执行和不确定性量化的四层验证架构。实验表明该架构能有效拦截早期错误传播，提升特权审查的可靠性。",
+      "llm_tldr": "本文聚焦法律电子发现中大型语言模型智能体的轨迹崩溃问题，提出了一种分阶段的失败分类法，并设计了一个涵盖规划、推理、执行和不确定性量化的四层验证架构。实验表明该架构能有效拦截早期错误传播，提升特权审查的可靠性。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.16817v1",
+      "source": "arxiv",
+      "title": "Understanding the Behaviors of Environment-aware Information Retrieval",
+      "abstract": "Recent retrieval-augmented generation (RAG) approaches have demonstrated strong capability in handling complex queries, yet current research overlooks a critical challenge: different retrievers require fundamentally different query formulation strategies for optimal performance. In this work, we present the first systematic analysis of how LLMs can learn to adapt their query formulation strategies for different retrievers via reinforcement learning (RL). Our empirical study reveals that RL effectively teaches an LLM to tailor its queries to specific retriever characteristics. We discover that different retrievers exhibit surprisingly distinct optimal query styles (e.g., descriptive vs. question-like), suggesting strategies learned for one retriever ineffective for another. We further show that performance can be enhanced by incorporating retriever-specific human guidance and by scaling model size. To facilitate learning over multi-retrieval-step trajectories, we introduce a branching-based rollout technique that improves training stability. Our work provides the first empirical evidence and actionable insights for building truly retriever-aware RAG systems. Code and resources are available at https://github.com/LCO-Embedding/Envs-aware-Information-Retrieval.",
+      "authors": [
+        "Ruifeng Yuan",
+        "Chaohao Yuan",
+        "David Dai",
+        "Yu Rong",
+        "Hong Cheng",
+        "Hou Pong Chan",
+        "Chenghao Xiao"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.IR"
+      ],
+      "published": "2026-06-15T15:02:52+00:00",
+      "link": "https://arxiv.org/pdf/2606.16817v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Reinforcement learning for query formulation adaptation across different retrievers, multi-turn search optimization",
+      "llm_evidence_cn": "强化学习用于跨不同检索器的查询公式化自适应，优化多轮搜索",
+      "llm_evidence": "强化学习用于跨不同检索器的查询公式化自适应，优化多轮搜索",
+      "canonical_evidence": "强化学习用于跨不同检索器的查询公式化自适应，优化多轮搜索",
+      "llm_tldr_en": "This paper analyzes how LLMs learn to adapt query strategies for different retrievers via RL, revealing distinct optimal styles per retriever.",
+      "llm_tldr_cn": "现有RAG方法忽略了不同检索器需要不同查询公式化策略的问题。本文首次系统分析LLM如何通过强化学习为不同检索器学习最优查询风格，发现不同检索器偏好截然不同的查询形式（如描述型vs问题型）。该研究为多轮搜索和检索中检索策略自适应提供了理论基础。",
+      "llm_tldr": "现有RAG方法忽略了不同检索器需要不同查询公式化策略的问题。本文首次系统分析LLM如何通过强化学习为不同检索器学习最优查询风格，发现不同检索器偏好截然不同的查询形式（如描述型vs问题型）。该研究为多轮搜索和检索中检索策略自适应提供了理论基础。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "reinforcement learning for multi turn search, retrieval, and evidence collection",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2606.16707v1",
+      "source": "arxiv",
+      "title": "User as Code: Executable Memory for Personalized Agents",
+      "abstract": "A personalized AI agent needs a user memory: a persistent model of who the user is, built across many conversations and consulted on each new one. Today this memory is almost always stored as unstructured text, a knowledge graph, or a flat store of facts, and consulted by retrieval -- fetching the entries most similar to the current request. Such \"bag-of-facts\" memory recalls individual facts well, but because storing a fact and acting on it are separate steps, it struggles to resolve contradictions, aggregate over many records, or enforce rules. We argue that user memory should instead be executable. We introduce User as Code (UaC), a paradigm in which an agent's model of a user is a living software project: typed Python objects hold the user's state and ordinary Python functions encode the rules that govern it, so representing and reasoning about the user happen in one medium an interpreter can run. The enabling mechanism is a two-phase pipeline: an append-only log that never discards a fact, periodically checkpointed into typed code.   This changes what memory can do. On standard long-term conversation benchmarks, UaC matches both a full-context upper bound and the strongest prior memory systems on recall (78.8% on LOCOMO). Its advantage emerges where representation matters most. On aggregate questions over a user's history -- \"how many international trips did I take last year?\" -- retrieval-based memory collapses (6-43%) while UaC stays near-perfect (99%), because the answer is a one-line computation over typed state rather than a search over text. And because its rules execute deterministically whenever the state changes, UaC can surface unsolicited, safety-critical alerts -- such as a newly prescribed drug that conflicts with an allergy recorded months earlier -- a capability query-driven memory cannot provide.",
+      "authors": [
+        "Bojie Li"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-15T13:39:41+00:00",
+      "link": "https://arxiv.org/pdf/2606.16707v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Executable user memory as code for personalized agents, enabling rule enforcement and aggregation",
+      "llm_evidence_cn": "可执行用户记忆作为代码，支持规则执行和聚合，替代传统词袋式记忆",
+      "llm_evidence": "可执行用户记忆作为代码，支持规则执行和聚合，替代传统词袋式记忆",
+      "canonical_evidence": "可执行用户记忆作为代码，支持规则执行和聚合，替代传统词袋式记忆",
+      "llm_tldr_en": "User as Code replaces static fact memories with executable Python objects, enabling contradiction resolution and rule enforcement.",
+      "llm_tldr_cn": "个性化AI智能体的用户记忆常采用非结构化文本或知识图谱，存在矛盾难以解决、无法聚合规则等问题。本文提出User as Code范式，将用户模型表示为可执行的Python对象，能够动态执行操作、聚合数据、强制执行规则。该方法提升了记忆的准确性和可操作性。",
+      "llm_tldr": "个性化AI智能体的用户记忆常采用非结构化文本或知识图谱，存在矛盾难以解决、无法聚合规则等问题。本文提出User as Code范式，将用户模型表示为可执行的Python对象，能够动态执行操作、聚合数据、强制执行规则。该方法提升了记忆的准确性和可操作性。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.19911v1",
+      "source": "arxiv",
+      "title": "Multi-Agent Transactive Memory",
+      "abstract": "The decentralized deployment of LLM agents with diverse capabilities across diverse tasks motivates infrastructure for knowledge sharing across heterogeneous agent populations. Just as search engines index human-generated artifacts to support human problem solving, retrieval systems can organize agent-generated artifacts for reuse across agent populations. We extend retrieval-augmented generation - which demonstrates the value of human-authored artifacts to individual agents - to retrieval of agent-generated artifacts supporting a population of agents. In particular, agent trajectories encode reusable procedural knowledge, yet these artifacts are typically discarded after a single use or retained only by the producing agent, forcing newly instantiated agents to repeatedly rediscover existing solutions. We propose Multi-Agent Transactive Memory (MATM), a framework for population-level storage and retrieval of agent-generated trajectories, where producer agents contribute trajectories to a shared repository and consumer agents retrieve them to improve task execution. We focus on interactive environments (ALFWorld and WebArena), where trajectories are long and encode especially rich procedural structure. Our experiments demonstrate that retrieving trajectories from MATM improves downstream task performance and reduces interaction steps without coordination or joint training. These results position MATM as a design pattern for population-level experience sharing in open agent ecosystems.",
+      "authors": [
+        "To Eun Kim",
+        "Xuhong He",
+        "Dishank Jain",
+        "Ambuj Agrawal",
+        "Negar Arabzadeh",
+        "Fernando Diaz"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.IR"
+      ],
+      "published": "2026-06-18T08:04:59+00:00",
+      "link": "https://arxiv.org/pdf/2606.19911v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "proposes retrieval of agent-generated trajectories for reuse, resembles search infrastructure",
+      "llm_evidence_cn": "提出检索智能体生成轨迹以复用，类搜索基础设施",
+      "llm_evidence": "提出检索智能体生成轨迹以复用，类搜索基础设施",
+      "canonical_evidence": "提出检索智能体生成轨迹以复用，类搜索基础设施",
+      "llm_tldr_en": "Extends RAG to agent-generated artifacts, enabling a population of agents to share procedural knowledge via a retrieval system, analogous to search engines.",
+      "llm_tldr_cn": "异构LLM智能体在分布式部署中重复发现已有解决方案。本文扩展检索增强生成到智能体生成的轨迹，建立一个跨智能体记忆系统，使得新智能体可以检索到其他智能体成功轨迹中的程序性知识，减少重复工作，提升效率。实验表明能显著提高多智能体协作任务性能。",
+      "llm_tldr": "异构LLM智能体在分布式部署中重复发现已有解决方案。本文扩展检索增强生成到智能体生成的轨迹，建立一个跨智能体记忆系统，使得新智能体可以检索到其他智能体成功轨迹中的程序性知识，减少重复工作，提升效率。实验表明能显著提高多智能体协作任务性能。",
+      "llm_tags": [
+        "query:search-agent:composite"
+      ],
+      "matched_query_tag": "query:search-agent:composite",
+      "matched_query_text": "Papers central to 搜索智能体, especially work that connects or combines: l; multimodal search agents; deep research agents; search agents; agentic search; reinforcement learning for multi turn search, retrieval, and evidence collection; search agents with explicit working memory, evidence curation, and claim verification.",
+      "matched_requirement_id": "req-composite-search-agent",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.17053v1",
+      "source": "arxiv",
+      "title": "Context-Aware RL for Agentic and Multimodal LLMs",
+      "abstract": "Large language models (LLMs) often fail when answering requires identifying a small but decisive piece of evidence within a long or complex context, such as a single line in a tool trace or a subtle detail in an image. We propose ContextRL, a context-aware reinforcement learning (RL) method that improves long-horizon reasoning and multimodal performance through an \\emph{indirect} auxiliary objective. Instead of supervising only the final answer, ContextRL presents the model with a query, an answer, and two highly similar contexts, and rewards it for selecting the context that supports the query--answer pair, thereby encouraging fine-grained grounding. We construct contrastive context data in two domains: for coding agents, trajectories serve as contexts, yielding 1k pairs built via condition filtering; for multimodal reasoning, images serve as contexts, yielding 7K pairs built via generative editing and similarity search. ContextRL achieves average gains of +2.2% over standard GRPO on 5 long-horizon benchmarks, and +1.8% across 12 diverse visual question answering benchmarks. To disentangle the effect of the proposed objective from that of additional data, we compare against data-augmentation baselines that repurpose the same contrastive contexts as standard query--context--answer examples. These baselines provide little to no improvement, showing that the gains arise from the proposed context-selection objective rather than from the contrastive data alone.",
+      "authors": [
+        "Peiyang Xu",
+        "Bangzheng Li",
+        "Sijia Liu",
+        "Karthik R. Narasimhan",
+        "Pramod Viswanath",
+        "Prateek Mittal",
+        "Xingyu Fu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.CV"
+      ],
+      "published": "2026-06-15T17:59:28+00:00",
+      "link": "https://arxiv.org/pdf/2606.17053v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "context-aware RL for long-horizon reasoning",
+      "llm_evidence_cn": "上下文感知强化学习提升长程推理",
+      "llm_evidence": "上下文感知强化学习提升长程推理",
+      "canonical_evidence": "上下文感知强化学习提升长程推理",
+      "llm_tldr_en": "ContextRL uses an indirect auxiliary objective to improve long-horizon reasoning and multimodal performance by training models to select the correct context supporting a query-answer pair.",
+      "llm_tldr_cn": "针对LLM在长上下文或复杂环境中遗漏关键证据的问题，提出ContextRL方法，通过间接辅助目标——让模型从两个相似上下文中选出支持查询-答案对的那个——鼓励细粒度证据定位。基于编码智能体的轨迹构建对比数据，实验表明该方法能有效提升长程推理和多模态任务的性能。",
+      "llm_tldr": "针对LLM在长上下文或复杂环境中遗漏关键证据的问题，提出ContextRL方法，通过间接辅助目标——让模型从两个相似上下文中选出支持查询-答案对的那个——鼓励细粒度证据定位。基于编码智能体的轨迹构建对比数据，实验表明该方法能有效提升长程推理和多模态任务的性能。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2606.17454v1",
+      "source": "arxiv",
+      "title": "Dissecting model behavior through agent trajectories",
+      "abstract": "AI agent performance is not just a modeling problem, it is fundamentally a systems problem. The advanced capabilities of models are realized through agent harnesses. Therefore, a gap between model assumptions and harness behavior can easily prevent the model's full capabilities from translating into agent performance. We formalize this as the `intent-execution' gap: the mismatch between what the model intends and what the harness executes, and vice versa. We argue that minimizing this intent-execution gap is as important as other aspects of harness design such as tools and execution loops. To illustrate the impact of this harness-model alignment, we develop a simple and customizable harness called `Simple Strands Agent' (SSA). SSA aims to find the bulk of common patterns which generalize across different model families (such as Claude, Gemini, GPT, Grok, Qwen), as well as a small number of model-specific preferences. We make two contributions: (i) we $\\textbf{reproduce or improve on the pass@1}$ performance reported by diverse model-provider families on popular agentic benchmarks (SWE-Pro, SWE-Verified and Terminal-Bench-2), and (ii) building on an $\\textbf{analysis of 138k trajectories generated by SSA}$, we look beyond the $\\texttt{pass@1}$ numbers which tend to be relatively even across frontier models. By representing agent trajectories in code state-spaces, we observe model-level differences in problem-solving behavior. Finer-grained metrics such as edit frequency, testing activity, and phase-transitions reveal how individual models allocate effort across different stages of autonomous problem solving.",
+      "authors": [
+        "Gaurav Gupta",
+        "Vatshank Chaturvedi",
+        "Jun Huan",
+        "Anoop Deoras"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-06-16T03:17:03+00:00",
+      "link": "https://arxiv.org/pdf/2606.17454v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "analyzes agent trajectories and harness-model alignment for self-improvement",
+      "llm_evidence_cn": "分析智能体轨迹与框架-模型对齐，有助于自我改进",
+      "llm_evidence": "分析智能体轨迹与框架-模型对齐，有助于自我改进",
+      "canonical_evidence": "分析智能体轨迹与框架-模型对齐，有助于自我改进",
+      "llm_tldr_en": "Introduces intent-execution gap in agent harnesses, and proposes Simple Strands Agent (SSA) to explore common patterns; emphasizes harness-model alignment.",
+      "llm_tldr_cn": "AI智能体性能不仅取决于模型，还取决于智能体框架。本文形式化了'意图-执行差距'，并开发了简单可定制的框架SSA来展示框架-模型对齐的重要性。通过轨迹分析揭示常见模式，为自我进化智能体提供指导。",
+      "llm_tldr": "AI智能体性能不仅取决于模型，还取决于智能体框架。本文形式化了'意图-执行差距'，并开发了简单可定制的框架SSA来展示框架-模型对齐的重要性。通过轨迹分析揭示常见模式，为自我进化智能体提供指导。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.21136v1",
+      "source": "arxiv",
+      "title": "Horizon Adaptive Offline Policy Learning via Value Stitching",
+      "abstract": "Learning accurate value functions plays a decisive role for reinforcement learning (RL) agents to solve long-horizon, complex tasks. Conventional temporal-difference (TD) learning objectives suffer from value-estimation bias that accumulates over the horizon, while extended-horizon modeling methods, such as n-step TD backups and Q-chunking, adopt a rigid, fixed-horizon value-modeling recipe that is often not flexible enough to capture complex value structures in long-horizon, multi-stage tasks. In this paper, we show that enabling value updates with dynamic horizon composition can yield a strong offline policy learning scheme. Our method, Horizon Adaptive Offline Policy Learning via VAlue STitching (VAST), replaces fixed-horizon backups with recursive, horizon-adaptive value composition. Its key ingredient is to couple value optimization with a future state- and horizon-length-conditioned auxiliary value function that is learned through direct data supervision, and a stitching policy that optimally selects the reward-maximizing horizon length and future sub-goal to achieve horizon-adaptive value stitching. This design enables direct estimation and compositional \"stitching\" of variable-length returns grounded in actionable sub-goal states, providing an accurate and greedily exploitable value-supervision signal for offline policy optimization. Across 50 tasks on OGBench, VAST outperforms fixed-step, extended-horizon methods, and generative-value offline RL baselines, achieving strong performance particularly in high-complexity, long-horizon decision-making tasks.",
+      "authors": [
+        "Kexin Zheng",
+        "Xianyuan Zhan",
+        "Xintao Yan"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.RO"
+      ],
+      "published": "2026-06-19T06:20:45+00:00",
+      "link": "https://arxiv.org/pdf/2606.21136v1",
+      "tags": [
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "adaptive offline policy learning for long-horizon tasks",
+      "llm_evidence_cn": "用于长时域任务的自适应离线策略学习",
+      "llm_evidence": "用于长时域任务的自适应离线策略学习",
+      "canonical_evidence": "用于长时域任务的自适应离线策略学习",
+      "llm_tldr_en": "Proposes VAST, a horizon-adaptive offline policy learning method that replaces fixed-horizon backups with recursive, horizon-aware composition for long-horizon tasks.",
+      "llm_tldr_cn": "固定时域值建模无法捕捉长时域复杂价值结构。VAST方法使用递归和时域自适应成分替换固定时域备份，实现动态时域价值更新。实验表明动态时域组合能产生更强的离线策略学习方案，为长时域强化学习提供了新范式。",
+      "llm_tldr": "固定时域值建模无法捕捉长时域复杂价值结构。VAST方法使用递归和时域自适应成分替换固定时域备份，实现动态时域价值更新。实验表明动态时域组合能产生更强的离线策略学习方案，为长时域强化学习提供了新范式。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.18467v1",
+      "source": "arxiv",
+      "title": "ToolChain-CRC: Conformal Risk Control for Agentic AI Under Retrieval and Tool-Use Drift",
+      "abstract": "Modern AI agents retrieve documents, call tools, check intermediate information, and then produce a final answer or action. This creates a risk-control problem that is not visible from the final answer alone. A final response may look acceptable even when the retrieval was weak, a tool output was wrong, or an earlier step was unsupported. We propose ToolChain-CRC, a conformal risk-control method for retrieval-augmented and tool-using agents under drift. The method treats each agent run as a full trajectory of actions, observations, and final output. It builds step-level risk scores, combines them into a trajectory risk score, calibrates an accept-or-intervene rule, and adds an anytime alarm that can stop risky runs before the final answer. We prove trajectory-level risk control under exchangeable calibration runs, give a drift-aware extension with auditable constants, and prove an anytime escalation rule through a supermartingale construction. Experiments cover synthetic tool-chain drift, RAG/tool-use stress tests, public SQuAD-derived retrieval tasks, an API-free agentic QA case study, ablations, target-risk sensitivity checks, 20-seed robustness checks, a drift-margin audit, and a live RAG/tool-use agent benchmark. Across these settings, final-answer-only calibration can miss retrieval and tool failures, while trajectory-level calibration keeps accepted-trajectory risk below the target.",
+      "authors": [
+        "Jeffery Opoku",
+        "David Banahene"
+      ],
+      "primary_category": "stat.ML",
+      "categories": [
+        "stat.ML",
+        "cs.LG"
+      ],
+      "published": "2026-06-16T20:27:37+00:00",
+      "link": "https://arxiv.org/pdf/2606.18467v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "conformal risk control for retrieval and tool-use drift in agentic AI",
+      "llm_evidence_cn": "针对检索和工具使用漂移的保序风险控制方法",
+      "llm_evidence": "针对检索和工具使用漂移的保序风险控制方法",
+      "canonical_evidence": "针对检索和工具使用漂移的保序风险控制方法",
+      "llm_tldr_en": "ToolChain-CRC provides conformal risk control for retrieval-augmented and tool-using agents, building step-level and trajectory risk scores to detect risky runs before final answer.",
+      "llm_tldr_cn": "现代AI智能体检索文档、调用工具并检查中间信息，但最终输出可能掩盖检索或工具错误。本文提出ToolChain-CRC，一种保序风险控制方法，将每次智能体运行视为完整轨迹，构建步骤级风险分数并组合为轨迹风险分数，校准接受或干预规则，并添加随时报警功能。该方法在检索和工具使用漂移下有效识别高风险运行，保障了搜索智能体的可靠性。",
+      "llm_tldr": "现代AI智能体检索文档、调用工具并检查中间信息，但最终输出可能掩盖检索或工具错误。本文提出ToolChain-CRC，一种保序风险控制方法，将每次智能体运行视为完整轨迹，构建步骤级风险分数并组合为轨迹风险分数，校准接受或干预规则，并添加随时报警功能。该方法在检索和工具使用漂移下有效识别高风险运行，保障了搜索智能体的可靠性。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2606.18235v1",
+      "source": "arxiv",
+      "title": "EvolveNav: Proactive Preflection and Self-Evolving Memory for Zero-Shot Object Goal Navigation",
+      "abstract": "Zero-Shot Object-Goal Navigation (ZS-OGN) requires embodied agents to explore and locate target objects without any prior training. To this end, recent methods leverage foundation models. But they typically rely on static priors and lack adaptation, which leads to repeated errors and costly trial and error. In this paper, we propose a self-evolving ZS-OGN framework that enables continuous test-time improvement. Specifically, we build an agentic rule memory by extracting actionable knowledge from past trajectories. Then, we propose a retrieval strategy based on upper confidence bound, selecting effective rules by balancing semantic relevance and historical success. In addition, we introduce a memory-guided preflection module that forecasts potential outcomes before action, reducing inefficient exploration. Extensive experiments show that our method outperforms existing zero-shot baselines, achieving a 10.1\\% improvement in success rate with fewer unnecessary steps.",
+      "authors": [
+        "Qi Chai",
+        "Wenhao Shen",
+        "Nanjie Yao",
+        "Yue Xia",
+        "Kaiyong Zhao",
+        "Jie Ma",
+        "Guosheng Lin",
+        "Hao Wang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-16T17:56:57+00:00",
+      "link": "https://arxiv.org/pdf/2606.18235v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Self-evolving memory and rule extraction from agentic trajectories for zero-shot object navigation",
+      "llm_evidence_cn": "从智能体轨迹中提取规则构建自进化记忆，用于零样本目标导航",
+      "llm_evidence": "从智能体轨迹中提取规则构建自进化记忆，用于零样本目标导航",
+      "canonical_evidence": "从智能体轨迹中提取规则构建自进化记忆，用于零样本目标导航",
+      "llm_tldr_en": "EvolveNav uses self-evolving memory by extracting actionable knowledge from past trajectories and applying UCB-based retrieval for continuous improvement.",
+      "llm_tldr_cn": "零样本目标导航通常依赖静态先验，导致重复错误。本文提出EvolveNav框架，通过从历史轨迹中提取可行动知识构建规则记忆，并采用基于置信度上界的检索策略平衡语义相关性和历史成功率，同时引入记忆引导的预反射模块，实现测试时持续自我进化。",
+      "llm_tldr": "零样本目标导航通常依赖静态先验，导致重复错误。本文提出EvolveNav框架，通过从历史轨迹中提取可行动知识构建规则记忆，并采用基于置信度上界的检索策略平衡语义相关性和历史成功率，同时引入记忆引导的预反射模块，实现测试时持续自我进化。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.22528v1",
+      "source": "arxiv",
+      "title": "Governance Decay: How Context Compaction Silently Erases Safety Constraints in Long-Horizon LLM Agents",
+      "abstract": "Modern LLM agents increasingly rely on context compaction, summarization, or eviction to keep long-running sessions within a token budget. We show that this context-management layer is a safety-critical failure surface: in-context governance constraints that agents reliably obey while visible can be silently removed by compaction, causing the same agent to perform prohibited tool actions later in the session. We call this failure mode Governance Decay. We introduce ConstraintRot, a benchmark of long-horizon agent scenarios with deterministic tool-call grading, and measure compaction-induced violations across seven model families. Across 1,323 episodes, violation rises from 0% with the policy in full context to 30% after compaction, reaching 59% for some models; when the constraint survives the summary, violation remains 0%, but when it is dropped, violation reaches 38%. We further study a Compaction-Eviction Attack, in which adversarial in-context content biases the summarizer to omit a legitimate policy, and show that optimized injections defeat every evaluated model. Finally, we propose Constraint Pinning, a simple training-free mitigation that quarantines governance constraints from lossy compaction and restores violation to 0% in our benchmark. These results identify context management as a first-class governance surface for deployed LLM agents.",
+      "authors": [
+        "Shiyang Chen"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-21T14:30:20+00:00",
+      "link": "https://arxiv.org/pdf/2606.22528v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "context compaction causes safety constraint decay in long-horizon agents",
+      "llm_evidence_cn": "上下文压缩导致长程智能体安全约束衰减",
+      "llm_evidence": "上下文压缩导致长程智能体安全约束衰减",
+      "canonical_evidence": "上下文压缩导致长程智能体安全约束衰减",
+      "llm_tldr_en": "Shows that context compaction silently removes safety constraints in long-horizon LLM agents, causing violation rates to increase from 0% to 30%.",
+      "llm_tldr_cn": "现代LLM智能体依赖上下文压缩来管理长会话，但本文发现压缩层会悄然移除安全约束，导致本应遵守的治理策略被遗忘。作者引入ConstraintRot基准，在1323个回合中观察到违规率从0%升至30%。该工作揭示了长程智能体部署中的一个重要安全漏洞。",
+      "llm_tldr": "现代LLM智能体依赖上下文压缩来管理长会话，但本文发现压缩层会悄然移除安全约束，导致本应遵守的治理策略被遗忘。作者引入ConstraintRot基准，在1323个回合中观察到违规率从0%升至30%。该工作揭示了长程智能体部署中的一个重要安全漏洞。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
