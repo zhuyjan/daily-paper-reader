@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-06-23T21:22:58.731354+00:00",
-  "updated_date": "20260623",
+  "generated_at": "2026-06-24T21:14:07.386571+00:00",
+  "updated_date": "20260624",
   "carryover_days": 9,
   "tag_states": {
     "search-agent": {
-      "updated_date": "20260623",
+      "updated_date": "20260624",
       "carryover_days": 9,
       "items": [
         {
@@ -53,7 +53,7 @@
           "matched_requirement_id": "req-3",
           "selection_source": "carryover_cache",
           "paper_id": "2606.20122v1",
-          "carry_days": 2
+          "carry_days": 3
         },
         {
           "id": "2606.23525v1",
@@ -98,46 +98,7 @@
           "matched_requirement_id": "req-7",
           "selection_source": "carryover_cache",
           "paper_id": "2606.23525v1",
-          "carry_days": 1
-        },
-        {
-          "id": "2606.18671v1",
-          "source": "arxiv",
-          "title": "HANSEL: Extracting Breadcrumbs from Web Agent Trajectories for Interactive Verification",
-          "abstract": "AI web agents can perform complex, multi-step tasks such as searching for products, comparing options, and making purchases on behalf of users. However, verifying the correctness of an agent's output remains difficult. Existing transparency mechanisms, including full trajectory logs, source links, screenshots, and LLM-generated summaries, treat verification as a passive reading task, leaving users to sift through overwhelming logs or trust potentially unfaithful explanations. We present HANSEL (Highlighting Agent Navigation Steps as Evidence Links), a system that extracts interactive, verifiable evidence from web-agent trajectories. Given an agent trajectory, HANSEL extracts evidence pages and snippets and presents them as navigable, interactive views with relevant page state preserved (e.g., applied filters, search queries, and scroll positions), enabling users to verify how the agent arrived at its answer. When the agent's answer cannot be traced to any visited page, HANSEL explicitly flags this gap. A technical evaluation on 45 tasks from AssistantBench and Online-Mind2Web shows that HANSEL achieves 83.7% precision and 88.8% recall in identifying evidence pages, while reducing trajectory volume by 61.6%. In a controlled user study with 14 participants, HANSEL significantly reduced task completion time and perceived effort compared to a standard agent interface, while participants rated it significantly higher on usability, verification ease, and error identification. Our results demonstrate that reframing verification as an interactive activity, rather than passive consumption of agent explanations, leads to more efficient human oversight of AI agents.",
-          "authors": [
-            "Yujin Zhang",
-            "Daye Nam"
-          ],
-          "primary_category": "cs.HC",
-          "categories": [
-            "cs.HC"
-          ],
-          "published": "2026-06-17T04:13:20+00:00",
-          "link": "https://arxiv.org/pdf/2606.18671v1",
-          "tags": [
-            "keyword:search-agent",
-            "keyword:self-evolve",
-            "query:search-agent",
-            "query:self-evolve"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "extracting interactive verifiable evidence from web agent trajectories",
-          "llm_evidence_cn": "从网络智能体轨迹中提取交互式可验证证据",
-          "llm_evidence": "从网络智能体轨迹中提取交互式可验证证据",
-          "canonical_evidence": "从网络智能体轨迹中提取交互式可验证证据",
-          "llm_tldr_en": "HANSEL extracts interactive, verifiable evidence from web-agent trajectories, presenting snippets as navigable links for users to verify agent actions.",
-          "llm_tldr_cn": "AI网络智能体可执行多步搜索任务，但验证输出正确性困难。现有透明度机制使用全日志、截图或摘要，让用户被动阅读。本文提出HANSEL，从智能体轨迹中提取证据页面和片段，以可导航链接形式呈现，支持用户交互验证。该方法提升了搜索智能体输出的可信度和可审计性。",
-          "llm_tldr": "AI网络智能体可执行多步搜索任务，但验证输出正确性困难。现有透明度机制使用全日志、截图或摘要，让用户被动阅读。本文提出HANSEL，从智能体轨迹中提取证据页面和片段，以可导航链接形式呈现，支持用户交互验证。该方法提升了搜索智能体输出的可信度和可审计性。",
-          "llm_tags": [
-            "query:search-agent"
-          ],
-          "matched_query_tag": "query:search-agent",
-          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
-          "matched_requirement_id": "req-7",
-          "selection_source": "carryover_cache",
-          "paper_id": "2606.18671v1",
-          "carry_days": 1
+          "carry_days": 2
         },
         {
           "id": "2606.21124v1",
@@ -178,44 +139,7 @@
           "matched_requirement_id": "req-5",
           "selection_source": "carryover_cache",
           "paper_id": "2606.21124v1",
-          "carry_days": 1
-        },
-        {
-          "id": "2606.22151v1",
-          "source": "arxiv",
-          "title": "Novelty-Aware Agentic Retrieval: Comparing Research Contributions Through Structured Multi-Step Reasoning",
-          "abstract": "Scientific literature search is an information retrieval (IR) task in which ranked lists are insufficient: a researcher entering a new area needs to know not only which papers are relevant, but how they relate, where they overlap, how they differ, and what problem-method combinations are absent. Standard retrieval-augmented generation (RAG) summarizes documents independently, discarding this comparative signal. We present the Novelty-Aware Research Agent, a prototype agentic retrieval system that layers structured multi-step reasoning on a RAG pipeline through six typed-contract components: query analysis, a ReAct-style retrieval loop, relevance ranking, schema-guided contribution extraction, a three-pass comparison agent, and answer generation. Beyond returning relevant papers, it produces structured comparison artifacts: per-paper contribution records, paper-level overlaps, and a problem x method gap matrix. On a 100-paper corpus, the system supports five structured comparison capabilities that a standard RAG baseline supports none of, while remaining query-sensitive: across three main queries no paper appears in all three top-5 sets (mean pairwise Jaccard 0.12), and an extended seven-query evaluation holds the pattern across ten queries (mean Jaccard 0.115, 18 of 29 retrieved papers query-exclusive). Under author-assigned graded relevance the ranker attains mean Precision@5 1.000 and nDCG@5 0.752 on the main queries, ahead of BM25, dense, and hybrid retrieval; over ten queries Precision@5 is non-saturated at 0.980 with nDCG@5 0.739. Schema compliance is 86.7% on the main queries and 84.0% over the ten-query set, and validating 20 sampled empty gap-matrix cells yields a gap precision of 0.600. We discuss the latency-structure trade-off in agentic retrieval and identify corpus scale, author-assigned labels, and limited independent evaluation as the main limitations.",
-          "authors": [
-            "Shou-Tzu Han"
-          ],
-          "primary_category": "cs.IR",
-          "categories": [
-            "cs.IR"
-          ],
-          "published": "2026-06-20T17:04:02+00:00",
-          "link": "https://arxiv.org/pdf/2606.22151v1",
-          "tags": [
-            "keyword:search-agent",
-            "keyword:self-evolve",
-            "query:search-agent"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "deep research agent with structured multi-step retrieval and comparison",
-          "llm_evidence_cn": "深度研究智能体，具备结构化多步检索与比较能力",
-          "llm_evidence": "深度研究智能体，具备结构化多步检索与比较能力",
-          "canonical_evidence": "深度研究智能体，具备结构化多步检索与比较能力",
-          "llm_tldr_en": "Proposes a novelty-aware agentic retrieval system that uses structured multi-step reasoning to compare research contributions, going beyond standard RAG.",
-          "llm_tldr_cn": "该论文提出了一个新颖性感知的研究智能体检索系统，通过结构化多步推理（包括查询分析、ReAct式检索循环、相关性排序、模式引导的贡献提取和三遍比较）来比较研究贡献，超越了标准RAG的独立摘要方式。实验表明该系统能提供更丰富的论文间关系信息。",
-          "llm_tldr": "该论文提出了一个新颖性感知的研究智能体检索系统，通过结构化多步推理（包括查询分析、ReAct式检索循环、相关性排序、模式引导的贡献提取和三遍比较）来比较研究贡献，超越了标准RAG的独立摘要方式。实验表明该系统能提供更丰富的论文间关系信息。",
-          "llm_tags": [
-            "query:search-agent"
-          ],
-          "matched_query_tag": "query:search-agent",
-          "matched_query_text": "deep research agents",
-          "matched_requirement_id": "req-3",
-          "selection_source": "carryover_cache",
-          "paper_id": "2606.22151v1",
-          "carry_days": 1
+          "carry_days": 2
         },
         {
           "id": "2606.20954v1",
@@ -240,13 +164,13 @@
             "query:self-evolve"
           ],
           "llm_score": 8.0,
-          "llm_evidence_en": "learned relevance eviction for long-horizon agent memory and evidence curation",
-          "llm_evidence_cn": "学习型相关性驱逐用于长程智能体记忆和证据整理",
-          "llm_evidence": "学习型相关性驱逐用于长程智能体记忆和证据整理",
-          "canonical_evidence": "学习型相关性驱逐用于长程智能体记忆和证据整理",
-          "llm_tldr_en": "LRE learns to keep load-bearing history units via verbatim extraction, matching full-history accuracy on agents with zero compaction overhead.",
-          "llm_tldr_cn": "长程语言模型系统必须不断驱逐历史以控制上下文长度。本文提出LRE，一个仅需几KB的CPU学习型评分器，能识别并保留关键历史单元。在智能体任务中，LRE的准确率与保留全部历史相当，在简单任务上甚至超出27%，且无需额外计算开销。",
-          "llm_tldr": "长程语言模型系统必须不断驱逐历史以控制上下文长度。本文提出LRE，一个仅需几KB的CPU学习型评分器，能识别并保留关键历史单元。在智能体任务中，LRE的准确率与保留全部历史相当，在简单任务上甚至超出27%，且无需额外计算开销。",
+          "llm_evidence_en": "proposes LRE, a learned relevance eviction policy for long-horizon agent memory, supporting evidence curation",
+          "llm_evidence_cn": "提出LRE学习型相关性驱逐策略，用于长地平线智能体记忆的证据管理",
+          "llm_evidence": "提出LRE学习型相关性驱逐策略，用于长地平线智能体记忆的证据管理",
+          "canonical_evidence": "提出LRE学习型相关性驱逐策略，用于长地平线智能体记忆的证据管理",
+          "llm_tldr_en": "Presents LRE, a few-kilobyte scorer that learns which history units are load-bearing for long-running agents, matching full-history accuracy.",
+          "llm_tldr_cn": "针对长运行语言模型系统历史超出上下文窗口需驱逐的问题，提出LRE（学习型相关性驱逐），一种仅需几KB、CPU运行、无语言模型的评分器，学习哪些历史单元是关键的并直接保留。在匹配预算下，LRE在精度-成本平面上无基线能全面超越；在智能体任务上，LRE整体匹配保持全部历史的精度，在简单任务上甚至超越27%，且无需计算资源。",
+          "llm_tldr": "针对长运行语言模型系统历史超出上下文窗口需驱逐的问题，提出LRE（学习型相关性驱逐），一种仅需几KB、CPU运行、无语言模型的评分器，学习哪些历史单元是关键的并直接保留。在匹配预算下，LRE在精度-成本平面上无基线能全面超越；在智能体任务上，LRE整体匹配保持全部历史的精度，在简单任务上甚至超越27%，且无需计算资源。",
           "llm_tags": [
             "query:search-agent"
           ],
@@ -284,56 +208,13 @@
             "query:self-evolve"
           ],
           "llm_score": 8.0,
-          "llm_evidence_en": "environment-native verified search for long-horizon GUI agents with evidence curation",
-          "llm_evidence_cn": "环境原生验证搜索，用于长程GUI代理，涉及证据整理",
-          "llm_evidence": "环境原生验证搜索，用于长程GUI代理，涉及证据整理",
-          "canonical_evidence": "环境原生验证搜索，用于长程GUI代理，涉及证据整理",
-          "llm_tldr_en": "ENVS uses a training-time search-and-filter pipeline with environment verification to construct supervision for long-horizon GUI agents, improving robustness under interruptions.",
-          "llm_tldr_cn": "ENVS针对多模态GUI代理长程轨迹发现困难及反馈稀疏问题，提出训练时搜索过滤管道，利用环境分支验证成功路径并生成平衡步骤监督，同时引入OSWorld-Noisy评估中断鲁棒性。实验表明该方法显著提升策略质量。",
-          "llm_tldr": "ENVS针对多模态GUI代理长程轨迹发现困难及反馈稀疏问题，提出训练时搜索过滤管道，利用环境分支验证成功路径并生成平衡步骤监督，同时引入OSWorld-Noisy评估中断鲁棒性。实验表明该方法显著提升策略质量。",
-          "llm_tags": [
-            "query:search-agent"
-          ],
-          "matched_query_tag": "query:search-agent",
-          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
-          "matched_requirement_id": "req-7",
-          "selection_source": "carryover_cache",
-          "paper_id": "2606.22948v1",
-          "carry_days": 1
-        },
-        {
-          "id": "2606.20724v1",
-          "source": "arxiv",
-          "title": "When Web Agents Finish but Still Fail: Reproducible Triggers and Trace Diagnostics for Parallel Web Exploration",
-          "abstract": "Long-horizon web agents often fail in ways hidden by final-answer evaluation: they may visit useful pages, produce a well-formed answer, and terminate confidently while still missing fields, over-including unsupported items, or relying on stale evidence. We study these failures with Parallel WebBench, a parallel web-exploration benchmark containing 1,679 verified records: 350 manually curated parallel tasks and 1,329 reconstructed records with verified URL-based trajectories. We train WebExplorer-style agents with GRPO under human-only, balanced human-synthetic, and synthetic-heavy data mixtures. At 16k context and 16 interaction rounds, the best GRPO model improves completion over WebExplorer-8B from 50.7% to 96.0% and GPT-4.1-mini-judged element-wise F1 from 0.2489 to 0.4529, but binary accuracy remains far below completion. Trace-level analysis identifies three persistent failure modes: context-bound search loops, premature termination on partial answers, and synthesis collapse after relevant evidence has already been retrieved. These results show that synthetic-data GRPO reduces abstention and improves partial correctness, but leaves a completion-correctness gap that requires evidence-grounded coverage and synthesis diagnostics.",
-          "authors": [
-            "Aagam Sogani",
-            "Botao Rui",
-            "Swetha Vaidyanathan",
-            "Rishi Agarwal",
-            "Minghao Yan",
-            "Shivaram Venkataraman"
-          ],
-          "primary_category": "cs.AI",
-          "categories": [
-            "cs.AI",
-            "cs.LG"
-          ],
-          "published": "2026-06-16T23:00:25+00:00",
-          "link": "https://arxiv.org/pdf/2606.20724v1",
-          "tags": [
-            "keyword:search-agent",
-            "keyword:self-evolve",
-            "query:search-agent"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "reinforcement learning (GRPO) for multi-turn web exploration with evidence verification",
-          "llm_evidence_cn": "使用GRPO进行多轮Web探索与证据验证",
-          "llm_evidence": "使用GRPO进行多轮Web探索与证据验证",
-          "canonical_evidence": "使用GRPO进行多轮Web探索与证据验证",
-          "llm_tldr_en": "This work studies failures in long-horizon web agents, introduces Parallel WebBench, and uses GRPO with human/synthetic mixtures to improve completion rates.",
-          "llm_tldr_cn": "本文研究长程Web代理在最终答案评估下隐藏的失败模式，提出并行Web探索基准Parallel WebBench，并使用GRPO训练WebExplorer风格代理，在16轮交互下最佳模型完成率从50.7%提升到9x%。工作揭示了证据过时等问题，并提出轨迹诊断方法。",
-          "llm_tldr": "本文研究长程Web代理在最终答案评估下隐藏的失败模式，提出并行Web探索基准Parallel WebBench，并使用GRPO训练WebExplorer风格代理，在16轮交互下最佳模型完成率从50.7%提升到9x%。工作揭示了证据过时等问题，并提出轨迹诊断方法。",
+          "llm_evidence_en": "uses environment-native verified search for long-horizon GUI agent training with step-level supervision",
+          "llm_evidence_cn": "利用环境原生验证搜索进行长地平线GUI智能体训练，提供步骤级监督",
+          "llm_evidence": "利用环境原生验证搜索进行长地平线GUI智能体训练，提供步骤级监督",
+          "canonical_evidence": "利用环境原生验证搜索进行长地平线GUI智能体训练，提供步骤级监督",
+          "llm_tldr_en": "Proposes ENVS, a training-time search-and-filter pipeline that uses live desktop environments to construct verified supervision before policy optimization for long-horizon GUI agents.",
+          "llm_tldr_cn": "针对长地平线GUI智能体在真实桌面环境中轨迹发现困难的问题，提出ENVS框架，在训练阶段通过环境原生搜索和验证管道构建经验证的监督信号，再用于策略优化。该方法在OSWorld虚拟机上分支不同行为路径并验证成功叶子节点，训练全局平衡的步骤级监督。实验引入OSWorld-Noisy评估鲁棒性。结果表明该方法能有效提升长序列任务的成功率。",
+          "llm_tldr": "针对长地平线GUI智能体在真实桌面环境中轨迹发现困难的问题，提出ENVS框架，在训练阶段通过环境原生搜索和验证管道构建经验证的监督信号，再用于策略优化。该方法在OSWorld虚拟机上分支不同行为路径并验证成功叶子节点，训练全局平衡的步骤级监督。实验引入OSWorld-Noisy评估鲁棒性。结果表明该方法能有效提升长序列任务的成功率。",
           "llm_tags": [
             "query:search-agent"
           ],
@@ -341,7 +222,7 @@
           "matched_query_text": "reinforcement learning for multi turn search, retrieval, and evidence collection",
           "matched_requirement_id": "req-6",
           "selection_source": "carryover_cache",
-          "paper_id": "2606.20724v1",
+          "paper_id": "2606.22948v1",
           "carry_days": 1
         },
         {
@@ -391,33 +272,28 @@
           "matched_requirement_id": "req-6",
           "selection_source": "carryover_cache",
           "paper_id": "2606.22388v1",
-          "carry_days": 1
-        }
-      ]
-    },
-    "self-evolve": {
-      "updated_date": "20260623",
-      "carryover_days": 9,
-      "items": [
+          "carry_days": 2
+        },
         {
-          "id": "2606.18831v1",
+          "id": "2606.19847v1",
           "source": "arxiv",
-          "title": "Beyond Reward Engineering: A Data Recipe for Long-Context Reinforcement Learning",
-          "abstract": "Long-context reasoning is an essential capability for large language models, particularly when they are deployed as autonomous agents that must reason over lengthy trajectories. Reinforcement learning (RL) has recently emerged as a dominant paradigm for improving this ability, yet existing work largely focuses on reward engineering while diverse training data remains scarce. We revisit this problem from a data-centric perspective and show that a simple yet effective data recipe alone, paired with a minimal outcome-based GRPO setup, suffices to substantially improve long-context reasoning. Our recipe targets three complementary task families -- retrieval, multi-evidence synthesis, and reasoning -- for which we construct and curate eight datasets totaling ~14K examples. Experiments on three models (Qwen3-4B/8B/30B-A3B) yield average gains of +7.2/+3.2/+6.4 points across seven long-context benchmarks, surpassing prior RL training sets. We further demonstrate that these gains transfer to agentic tasks, where continuing RL training on an agent-tuned model with our data recipe improves GAIA by +4.8 and BrowseComp by +7.0 points. We will release our datasets to facilitate future research.",
+          "title": "AtomMem: Building Simple and Effective Memory System for LLM Agents via Atomic Facts",
+          "abstract": "Large language models (LLMs) demonstrate strong reasoning and generation abilities, but their fixed context windows limit long-term information accumulation and reuse across multi-session interactions. Existing memory-augmented systems often construct memory in a coarse and unstable manner, relying on inefficient memory representations or unstable unconstrained updates. To address these challenges, we propose AtomMem, a long-term memory system designed for value-dense storage and stable memory evolution. AtomMem introduces a Fact Executor, which selectively extracts high value atomic facts from long form interactions to serve as highly efficient memory representations. Subsequently, AtomMem organizes these facts into hierarchical event structures and temporal profiles, capturing coherent episodic contexts and tracking dynamically evolving user attributes over time. During retrieval, the system activates an associative memory graph to connect fragmented memories. Experiments on the LoCoMo benchmark confirm that AtomMem achieves state-of-the-art performance across various reasoning tasks, offering a scalable and economically viable solution for deploying intelligent personalized agents.",
           "authors": [
-            "Xiaoyue Xu",
-            "Sikui Zhang",
-            "Xiaorong Wang",
-            "Xu Han",
-            "Chaojun Xiao"
+            "Yanyu Yao",
+            "Shangze Li",
+            "Zhi Zheng",
+            "Hui Zheng",
+            "Qi Liu",
+            "Tong Xu",
+            "Enhong Chen"
           ],
           "primary_category": "cs.CL",
           "categories": [
-            "cs.CL",
-            "cs.AI"
+            "cs.CL"
           ],
-          "published": "2026-06-17T09:07:42+00:00",
-          "link": "https://arxiv.org/pdf/2606.18831v1",
+          "published": "2026-06-18T06:56:15+00:00",
+          "link": "https://arxiv.org/pdf/2606.19847v1",
           "tags": [
             "keyword:search-agent",
             "keyword:self-evolve",
@@ -425,22 +301,208 @@
             "query:self-evolve"
           ],
           "llm_score": 8.0,
-          "llm_evidence_en": "data recipe for long-context RL, boosting agent long-horizon reasoning",
-          "llm_evidence_cn": "面向长上下文RL的数据配方，提升智能体长程推理",
-          "llm_evidence": "面向长上下文RL的数据配方，提升智能体长程推理",
-          "canonical_evidence": "面向长上下文RL的数据配方，提升智能体长程推理",
-          "llm_tldr_en": "Proposes a data-centric recipe with minimal outcome-based GRPO to substantially improve long-context reasoning for autonomous agents.",
-          "llm_tldr_cn": "本文从数据角度重新审视长上下文强化学习，提出一种包含检索、多证据合成和推理三类任务的数据配方，配合最小化结果监督的GRPO设置，显著提升LLM在长序列上的推理能力。实验证明，无需复杂奖励工程，仅凭多样数据即可让自治智能体更好地处理长轨迹，对提升搜索智能体的多轮证据收集和推理能力有直接借鉴意义。",
-          "llm_tldr": "本文从数据角度重新审视长上下文强化学习，提出一种包含检索、多证据合成和推理三类任务的数据配方，配合最小化结果监督的GRPO设置，显著提升LLM在长序列上的推理能力。实验证明，无需复杂奖励工程，仅凭多样数据即可让自治智能体更好地处理长轨迹，对提升搜索智能体的多轮证据收集和推理能力有直接借鉴意义。",
+          "llm_evidence_en": "explicit working memory via atomic facts for agents",
+          "llm_evidence_cn": "通过原子事实为智能体提供显式工作记忆",
+          "llm_evidence": "通过原子事实为智能体提供显式工作记忆",
+          "canonical_evidence": "通过原子事实为智能体提供显式工作记忆",
+          "llm_tldr_en": "AtomMem builds a long-term memory system for LLM agents using atomic facts, enabling value-dense storage and stable memory evolution for multi-session interactions.",
+          "llm_tldr_cn": "针对LLM智能体固定上下文窗口限制长期信息积累的问题，提出了AtomMem长期记忆系统，通过事实执行器从长程交互中提取高价值原子事实作为高效记忆表示，并层次化组织事件。该系统实现了稠密存储和稳定记忆演化，为智能体提供了显式工作记忆与证据管理能力，对搜索智能体中的证据收集与验证具有直接意义。",
+          "llm_tldr": "针对LLM智能体固定上下文窗口限制长期信息积累的问题，提出了AtomMem长期记忆系统，通过事实执行器从长程交互中提取高价值原子事实作为高效记忆表示，并层次化组织事件。该系统实现了稠密存储和稳定记忆演化，为智能体提供了显式工作记忆与证据管理能力，对搜索智能体中的证据收集与验证具有直接意义。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+          "matched_requirement_id": "req-7",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.19847v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2606.21005v1",
+          "source": "arxiv",
+          "title": "Building Agent Harnesses for Scientific Curation from Multimodal Sources",
+          "abstract": "Scientific discovery workflows often depend on structured curation from the literature. This is difficult for current agents because the key evidence is scattered across long text, dense tables, and figures, and the final records often require reasoning across multiple evidence fragments rather than copying a single span. We study scientific curation from multimodal sources and introduce Beaver, an agent harness that extracts structured information from scientific papers while preserving provenance to the supporting evidence. Beaver combines a frontier agent with multimodal evidence tooling, task scaffolding, and artifact-grounded autoresearch. These components turn curation into a staged, auditable workflow and enable an iterative evaluate--diagnose--revise loop, where persistent run artifacts expose stage-localized failures and guide harness updates. Experiments show that Beaver reaches 81.0 on Gold-Referenced Attribute Score (GRAS), an attribute-level measure of agreement with gold curated records, outperforming frontier agents by over 23 absolute points. Ablations show that task scaffolding, multimodal evidence tooling, and provenance traces each contribute meaningfully to performance, while attribute-level analysis shows the largest gains on high-value attributes that require cross-modal reasoning and normalization. These results show that, for scientific curation from papers with multimodal evidence, harness design is a central determinant of agent performance.",
+          "authors": [
+            "Sheng Zhang",
+            "Qin Liu",
+            "Renqian Luo",
+            "Shufang Xie",
+            "Reuben Tan",
+            "Sean Hayes",
+            "Gregory Bryman",
+            "Wendong Ge",
+            "Roxy Zhang",
+            "Oluwaseun Egbelowo",
+            "Kelly Yee",
+            "Hoifung Poon"
+          ],
+          "primary_category": "cs.AI",
+          "categories": [
+            "cs.AI",
+            "cs.CL"
+          ],
+          "published": "2026-06-19T00:36:34+00:00",
+          "link": "https://arxiv.org/pdf/2606.21005v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "agent harness for scientific curation with explicit evidence provenance and multimodal sources",
+          "llm_evidence_cn": "用于科学策展的智能体框架，具有显式证据溯源和多模态来源",
+          "llm_evidence": "用于科学策展的智能体框架，具有显式证据溯源和多模态来源",
+          "canonical_evidence": "用于科学策展的智能体框架，具有显式证据溯源和多模态来源",
+          "llm_tldr_en": "Beaver is an agent harness that extracts structured information from multimodal scientific papers while preserving provenance to supporting evidence, enabling auditable curation workflows.",
+          "llm_tldr_cn": "针对科学文献中关键证据分散在文本、表格和图表中且需跨证据片段推理的问题，提出Beaver智能体框架，结合前沿模型与多模态证据工具，实现结构化信息提取并保留溯源。该框架将策展转化为分阶段可审计工作流，支持迭代评估与诊断，完全符合搜索智能体对显式工作记忆、证据收集与验证的要求。",
+          "llm_tldr": "针对科学文献中关键证据分散在文本、表格和图表中且需跨证据片段推理的问题，提出Beaver智能体框架，结合前沿模型与多模态证据工具，实现结构化信息提取并保留溯源。该框架将策展转化为分阶段可审计工作流，支持迭代评估与诊断，完全符合搜索智能体对显式工作记忆、证据收集与验证的要求。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+          "matched_requirement_id": "req-7",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.21005v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2606.24775v1",
+          "source": "arxiv",
+          "title": "Are We Ready For An Agent-Native Memory System?",
+          "abstract": "Memory for large language model (LLM) agents has rapidly evolved from simple retrieval-augmented mechanisms into a data management system that supports persistent information storage, retrieval, update, consolidation, and dynamic lifecycle governance throughout agent execution. Despite this evolution, existing evaluations still benchmark agent memory mainly through end-to-end task success metrics (e.g., F1, BLEU), while treating the underlying system as a monolithic black box. As a result, critical system-level concerns, including operational costs, architectural trade-offs across memory modules, and robustness under dynamic knowledge updates, remain insufficiently explored. In this paper, we present a systematic experimental study of agent memory from a data management perspective. We propose an analytical framework that decomposes agent memory into four core modules: memory representation and storage, extraction, retrieval and routing, and maintenance. Under this framework, we evaluate 12 representative memory systems and two reference baselines across five benchmark workloads spanning 11 datasets. Our extensive end-to-end evaluation shows that no single architecture dominates across all scenarios; instead, effectiveness depends heavily on how well the memory structure aligns with the workload bottleneck. Furthermore, through fine-grained ablation studies, we quantify their individual effects on representation fidelity, retrieval precision, update correctness, and long-horizon stability. Finally, we reveal cost-performance trade-offs under realistic workloads, showing localized maintenance is more cost-efficient than global reorganization. Based on these findings, we identify promising directions towards building truly agent-native memory systems. The code is publicly available at https://github.com/OpenDataBox/MemoryData.",
+          "authors": [
+            "Wei Zhou",
+            "Xuanhe Zhou",
+            "Shaokun Han",
+            "Hongming Xu",
+            "Guoliang Li",
+            "Zhiyu Li",
+            "Feiyu Xiong",
+            "Fan Wu"
+          ],
+          "primary_category": "cs.CL",
+          "categories": [
+            "cs.CL",
+            "cs.DB",
+            "cs.IR"
+          ],
+          "published": "2026-06-23T16:34:55+00:00",
+          "link": "https://arxiv.org/pdf/2606.24775v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "agent memory system for evidence curation and retrieval",
+          "llm_evidence_cn": "智能体记忆系统，支持证据管理和检索",
+          "llm_evidence": "智能体记忆系统，支持证据管理和检索",
+          "canonical_evidence": "智能体记忆系统，支持证据管理和检索",
+          "llm_tldr_en": "This paper systematically studies LLM agent memory from a data management perspective, evaluating storage, retrieval, update, and consolidation, highlighting system-level concerns beyond end-task metrics.",
+          "llm_tldr_cn": "现有对LLM智能体记忆的评估主要依赖端到端任务指标，忽视了系统层面的问题。本文从数据管理的角度对智能体记忆进行系统性实验研究，涵盖持久化存储、检索、更新、合并和动态生命周期管理。研究发现，记忆系统在操作成本、模块间架构权衡以及对动态知识更新的鲁棒性等方面亟待改进。该工作为构建更可靠的智能体记忆系统提供了重要参考。",
+          "llm_tldr": "现有对LLM智能体记忆的评估主要依赖端到端任务指标，忽视了系统层面的问题。本文从数据管理的角度对智能体记忆进行系统性实验研究，涵盖持久化存储、检索、更新、合并和动态生命周期管理。研究发现，记忆系统在操作成本、模块间架构权衡以及对动态知识更新的鲁棒性等方面亟待改进。该工作为构建更可靠的智能体记忆系统提供了重要参考。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+          "matched_requirement_id": "req-7",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.24775v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2606.20047v1",
+          "source": "arxiv",
+          "title": "PACMS: Submodular Context Selection as a Pluggable Engine for LLM Agents",
+          "abstract": "Conversational and tool-using LLM agents operate over a context window that fills from several directions simultaneously. As a session proceeds, the agent accumulates user and assistant turns, entries drawn from a persistent memory store, and often largest of all, the verbatim outputs of tool calls such as file reads, search results, and API responses. Once the cumulative context exceeds the model's token budget, the framework must decide what to keep.   The prevailing mechanism is recency truncation, sometimes paired with periodic summarization. This is topic-blind: a fact established early in a session is discarded simply because it is old, even when the current user query is about exactly that fact; conversely, verbose but irrelevant recent material is retained. Agents that must recall information across many turns, the defining case for memory, are precisely where recency truncation fails.   Existing alternatives sit outside the agent's assembly step. Retrieval augmented generation fetches external documents into the prompt but does not arbitrate the agent's \\emph{already-present} pooled context. Context-compression methods reduce token count by rewriting or pruning text, but operate query-blind and lossily. Neither treats memory entries, conversation turns, and tool outputs as a single candidate pool to be selected from by relevance at the moment the prompt is assembled.",
+          "authors": [
+            "Manu Ghulyani",
+            "Arunabh Singh",
+            "Karan Bharadwaj",
+            "Ankit Nath",
+            "Suranjan Goswami"
+          ],
+          "primary_category": "cs.IR",
+          "categories": [
+            "cs.IR"
+          ],
+          "published": "2026-06-18T10:22:57+00:00",
+          "link": "https://arxiv.org/pdf/2606.20047v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "submodular context selection for agent working memory and evidence",
+          "llm_evidence_cn": "用于智能体工作记忆和证据的子模上下文选择",
+          "llm_evidence": "用于智能体工作记忆和证据的子模上下文选择",
+          "canonical_evidence": "用于智能体工作记忆和证据的子模上下文选择",
+          "llm_tldr_en": "PACMS proposes a pluggable context selection engine for LLM agents using submodular optimization, effectively managing working memory by keeping relevant information despite token limits.",
+          "llm_tldr_cn": "对话和工具型LLM智能体面临上下文窗口超限问题，现有方法基于主题盲目的近期截断。本文提出PACMS，一种可插拔的上下文选择引擎，利用子模优化在token预算内选取最相关信息。该方法考虑了多种信息源（用户话语、记忆、工具输出），并支持多样性。实验表明，PACMS在多项任务中优于截断和摘要基线，有效改善了智能体的证据管理和工作记忆。",
+          "llm_tldr": "对话和工具型LLM智能体面临上下文窗口超限问题，现有方法基于主题盲目的近期截断。本文提出PACMS，一种可插拔的上下文选择引擎，利用子模优化在token预算内选取最相关信息。该方法考虑了多种信息源（用户话语、记忆、工具输出），并支持多样性。实验表明，PACMS在多项任务中优于截断和摘要基线，有效改善了智能体的证据管理和工作记忆。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+          "matched_requirement_id": "req-7",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.20047v1",
+          "carry_days": 1
+        }
+      ]
+    },
+    "self-evolve": {
+      "updated_date": "20260624",
+      "carryover_days": 9,
+      "items": [
+        {
+          "id": "2606.24064v1",
+          "source": "arxiv",
+          "title": "Beyond Trajectory Imitation: Strategy-Guided Policy Optimization for LLM Reasoning",
+          "abstract": "Distilling reasoning capabilities from strong to weak language models typically involves imitating specific solution trajectories, effectively transferring what to answer rather than how to reason. This trajectory-level imitation encourages memorization of instance-specific steps rather than acquisition of transferable problem-solving skills, limiting generalization to novel problems. We propose Strategy-Guided Policy Optimization (SGPO), which replaces instance-level trajectory imitation with reusable strategy distillation. SGPO extracts structured strategy descriptions from strong-model responses and, for each problem, constructs both autonomous and strategy-guided trajectories to enable direct comparison of the model's behavior with and without strategic guidance. The framework then addresses two key questions. For how to distill, a token-level forward-KL objective selectively transfers the distributional shift induced by strategy conditioning into the unguided policy, with proximal constraints ensuring stability. For when to distill, adaptive instance-level weighting strengthens guidance when autonomous exploration falls short and reduces it as the model's own competence grows. Experiments on four mathematical benchmarks across two model families show that SGPO consistently outperforms SFT, on-policy RL, and hybrid-policy baselines, improving the average score by 2.2 points over the strongest baseline on Qwen2.5-7B-Instruct. Analysis reveals that the forward-KL objective provides an inherently selective distillation signal that outperforms direct trajectory imitation, and that strategy distillation exhibits complementary scaling with base model capability.",
+          "authors": [
+            "Tianyuan Shi",
+            "Canbin Huang",
+            "Bei Li",
+            "Xin Chen",
+            "Xiaojun Quan",
+            "Jingang Wang",
+            "Qifan Wang"
+          ],
+          "primary_category": "cs.AI",
+          "categories": [
+            "cs.AI"
+          ],
+          "published": "2026-06-23T02:14:12+00:00",
+          "link": "https://arxiv.org/pdf/2606.24064v1",
+          "tags": [
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "strategy-guided policy optimization as alternative to trajectory imitation",
+          "llm_evidence_cn": "策略引导的策略优化替代轨迹模仿",
+          "llm_evidence": "策略引导的策略优化替代轨迹模仿",
+          "canonical_evidence": "策略引导的策略优化替代轨迹模仿",
+          "llm_tldr_en": "SGPO replaces trajectory imitation with reusable strategy distillation for LLM reasoning.",
+          "llm_tldr_cn": "SGPO用可复用的策略蒸馏替代实例级别的轨迹模仿，提取策略描述并构建自主与策略引导两种轨迹进行对比，促使模型学习通用问题解决技能而非记忆特定步骤。在多个推理任务上提升了泛化能力。",
+          "llm_tldr": "SGPO用可复用的策略蒸馏替代实例级别的轨迹模仿，提取策略描述并构建自主与策略引导两种轨迹进行对比，促使模型学习通用问题解决技能而非记忆特定步骤。在多个推理任务上提升了泛化能力。",
           "llm_tags": [
             "query:self-evolve"
           ],
           "matched_query_tag": "query:self-evolve",
-          "matched_query_text": "long-horizon agent reasoning",
-          "matched_requirement_id": "req-10",
+          "matched_query_text": "on-policy distillation",
+          "matched_requirement_id": "req-9",
           "selection_source": "carryover_cache",
-          "paper_id": "2606.18831v1",
-          "carry_days": 2
+          "paper_id": "2606.24064v1",
+          "carry_days": 1
         }
       ]
     }
