@@ -6,77 +6,79 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-25
-- 运行时间：2026-06-25 22:26:29 UTC
+- 最新运行日期：2026-06-26
+- 运行时间：2026-06-26 20:55:14 UTC
 - 运行状态：成功
 - 本次总论文数：19
 - 精读区：7
 - 速读区：12
 
 ### 今日简报（AI）
-今日19篇论文聚焦智能体长期记忆与自动化发现，两篇精读均获9.0高分。重点关注《Learning What Not to Forget》研究极低数据成本下的长时记忆机制，以及《Learning the ARTS of Search》探索搜索自动化发现新范式。普通读者可优先精读这两篇，后续可关注速读列表中ScaffoldAgent对开放研究的优化思路。
-- 详情：[/202606/25/README](/202606/25/README)
+1) 今日19篇论文聚焦智能体（Agent）系统评估、优化与数据生成，精读两篇9.0分：文档推理基准AGORA及评估者与智能体共同进化框架。  
+2) 最值得关注AGORA（智能体工作文档推理基准）与Red Queen Gödel机（评估者与智能体协同进化），为智能体可靠性提供新思路。  
+3) 建议读者重点研读速读中的《复合失败诊断与策略检索》及《自动合成数据》，以应对智能体实际部署中的鲁棒性与数据瓶颈。
+- 详情：[/202606/26/README](/202606/26/README)
 
 ### 精读区论文标签
-1. [Learning What Not to Forget: Long-Horizon Agent Memory from a Few Kilobytes of Learning](/202606/25/2606.20954v1-learning-what-not-to-forget-long-horizon-agent-memory-from-a-few-kilobytes-of-learning)  
-   标签：评分：9.0/10、query:self-evolve
-   evidence：长时程智能体记忆
-2. [Learning the ARTS of Search for Automated Discovery](/202606/25/2606.21891v1-learning-the-arts-of-search-for-automated-discovery)  
+1. [AGORA: An Archive-Grounded Benchmark for Agentic Workplace Document Reasoning](/202606/26/2606.24526v1-agora-an-archive-grounded-benchmark-for-agentic-workplace-document-reasoning)  
    标签：评分：9.0/10、query:search-agent
-   evidence：自动化发现中的智能体树搜索推理
-3. [Group-Graph Policy Optimization for Long-Horizon Agentic Reinforcement Learning](/202606/25/2606.22995v1-group-graph-policy-optimization-for-long-horizon-agentic-reinforcement-learning)  
+   evidence：需要在大规模档案中探索证据的智能体文档推理基准
+2. [The Red Queen Gödel Machine: Co-Evolving Agents and Their Evaluators](/202606/26/2606.26294v1-the-red-queen-gdel-machine-co-evolving-agents-and-their-evaluators)  
    标签：评分：9.0/10、query:self-evolve
-   evidence：长视界智能体强化学习的组图策略优化
-4. [Heuresis: Search Strategies for Autonomous AI Research Agents Across Quality, Diversity and Novelty](/202606/25/2606.25198v1-heuresis-search-strategies-for-autonomous-ai-research-agents-across-quality-diversity-and-novelty)  
-   标签：评分：9.0/10、query:search-agent
-   evidence：自主研究智能体的搜索策略
-5. [AtomMem: Building Simple and Effective Memory System for LLM Agents via Atomic Facts](/202606/25/2606.19847v1-atommem-building-simple-and-effective-memory-system-for-llm-agents-via-atomic-facts)  
+   evidence：通过在线强化学习和蒸馏实现代理与评估者的共同演化，用于长程自我改进
+3. [OPID: On-Policy Skill Distillation for Agentic Reinforcement Learning](/202606/26/2606.26790v1-opid-on-policy-skill-distillation-for-agentic-reinforcement-learning)  
+   标签：评分：9.0/10、query:self-evolve
+   evidence：针对智能体强化学习的在线策略技能蒸馏
+4. [AgentX: Towards Agent-Driven Self-Iteration of Industrial Recommender Systems](/202606/26/2606.26859v1-agentx-towards-agent-driven-self-iteration-of-industrial-recommender-systems)  
+   标签：评分：9.0/10、query:self-evolve
+   evidence：面向推荐迭代的自我进化多智能体系统
+5. [EvoEmbedding: Evolvable Representations for Long-Context Retrieval and Agentic Memory](/202606/26/2606.21649v2-evoembedding-evolvable-representations-for-long-context-retrieval-and-agentic-memory)  
    标签：评分：8.0/10、query:search-agent
-   evidence：通过原子事实为智能体提供显式工作记忆
-6. [Automating SKILL.md Generation for Computer-Using Agents via Interaction Trajectory Mining](/202606/25/2606.20363v1-automating-skillmd-generation-for-computer-using-agents-via-interaction-trajectory-mining)  
+   evidence：用于智能体记忆和长上下文检索的可演化嵌入
+6. [Beyond Trajectory Imitation: Strategy-Guided Policy Optimization for LLM Reasoning](/202606/26/2606.24064v1-beyond-trajectory-imitation-strategy-guided-policy-optimization-for-llm-reasoning)  
    标签：评分：8.0/10、query:self-evolve
-   evidence：从GUI交互轨迹挖掘技能以训练智能体策略
-7. [Building Agent Harnesses for Scientific Curation from Multimodal Sources](/202606/25/2606.21005v1-building-agent-harnesses-for-scientific-curation-from-multimodal-sources)  
-   标签：评分：8.0/10、query:search-agent
-   evidence：多模态代理框架用于科学证据策展
+   evidence：策略引导的策略优化替代轨迹模仿
+7. [RAVEN: Long-Horizon Reasoning & Navigation with a Visuo-Spatio-Temporal Memory](/202606/26/2606.25206v1-raven-long-horizon-reasoning--navigation-with-a-visuo-spatio-temporal-memory)  
+   标签：评分：8.0/10、query:self-evolve
+   evidence：长程推理与导航智能体
 
 ### 速读区论文标签
-1. [ScaffoldAgent: Utility-Guided Dynamic Outline Optimization for Open-Ended Deep Research](/202606/25/2606.20122v1-scaffoldagent-utility-guided-dynamic-outline-optimization-for-open-ended-deep-research)  
+1. [Diagnosing and Mitigating Compounding Failures in Agentic Persuasion via Taxonomic Strategy Retrieval](/202606/26/2606.24976v1-diagnosing-and-mitigating-compounding-failures-in-agentic-persuasion-via-taxonomic-strategy-retrieval)  
    标签：评分：8.0/10、query:search-agent
-   evidence：面向开放式深度研究的效用引导动态大纲优化
-2. [Fara-1.5: Scalable Learning Environments for Computer Use Agents](/202606/25/2606.20785v1-fara-15-scalable-learning-environments-for-computer-use-agents)  
+   evidence：提出分类策略检索以缓解劝说智能体中的复合错误
+2. [Semantic Consistency Policy Optimization for Reinforcement Learning of LLM Agents](/202606/26/2606.25852v1-semantic-consistency-policy-optimization-for-reinforcement-learning-of-llm-agents)  
    标签：评分：8.0/10、query:self-evolve
-   evidence：计算机使用智能体的可扩展数据生成
-3. [PulseCX: Breaking the Closed-World Assumption in Real-Time CX](/202606/25/2606.21124v1-pulsecx-breaking-the-closed-world-assumption-in-real-time-cx)  
+   evidence：在线策略强化学习与蒸馏用于长程智能体轨迹
+3. [Autodata: An agentic data scientist to create high quality synthetic data](/202606/26/2606.25996v1-autodata-an-agentic-data-scientist-to-create-high-quality-synthetic-data)  
    标签：评分：8.0/10、query:self-evolve
-   evidence：具有强化-衰减动力学的自进化记忆
-4. [PlanBench-XL: Evaluating Long-Horizon Planning of LLM Tool-Use Agents in Large-Scale Tool Ecosystems](/202606/25/2606.22388v1-planbench-xl-evaluating-long-horizon-planning-of-llm-tool-use-agents-in-large-scale-tool-ecosystems)  
-   标签：评分：8.0/10、query:self-evolve
-   evidence：评估LLM工具使用智能体长程规划的基准
-5. [Temporal Self-Imitation Learning](/202606/25/2606.19752v1-temporal-self-imitation-learning)  
+   evidence：用于代理训练的主体合成数据生成
+4. [Temporal Validity in Retrieval Memory: Eliminating Stale-Fact Errors for AI Agents over Evolving Knowledge](/202606/26/2606.26511v1-temporal-validity-in-retrieval-memory-eliminating-stale-fact-errors-for-ai-agents-over-evolving-knowledge)  
+   标签：评分：8.0/10、query:search-agent
+   evidence：智能体检索记忆的时间有效性维护
+5. [ARCO: Adaptive Rubric with Co-Evolution for Multi-Step LLM-Based Agents](/202606/26/2606.21262v1-arco-adaptive-rubric-with-co-evolution-for-multi-step-llm-based-agents)  
    标签：评分：7.0/10、query:self-evolve
-   evidence：从长程机器人任务中提取高效轨迹进行自我模仿学习
-6. [Temporal Self-Imitation Learning](/202606/25/2606.19752v2-temporal-self-imitation-learning)  
+   evidence：多步LLM智能体的自适应评分标准协同进化
+6. [ENVS: Environment-Native Verified Search for Long-Horizon GUI Agents](/202606/26/2606.22948v1-envs-environment-native-verified-search-for-long-horizon-gui-agents)  
    标签：评分：7.0/10、query:self-evolve
-   evidence：从时间高效轨迹中自我模仿用于长程策略学习
-7. [Multi-Agent Transactive Memory](/202606/25/2606.19911v1-multi-agent-transactive-memory)  
+   evidence：基于环境原生验证搜索的长视界GUI智能体
+7. [ESAA-Conversational: An Event-Sourced Memory Layer for Continuity, Handoff, and Curation Across Heterogeneous LLM Coding Agents](/202606/26/2606.23752v1-esaa-conversational-an-event-sourced-memory-layer-for-continuity-handoff-and-curation-across-heterogeneous-llm-coding-agents)  
    标签：评分：7.0/10、query:search-agent
-   evidence：利用检索实现智能体群体知识共享的交易记忆系统
-8. [PACMS: Submodular Context Selection as a Pluggable Engine for LLM Agents](/202606/25/2606.20047v1-pacms-submodular-context-selection-as-a-pluggable-engine-for-llm-agents)  
+   evidence：通过事件溯源记忆层为智能体提供显式工作记忆和连续性
+8. [SAFARI: Scaling Long Horizon Agentic Fault Attribution via Active Investigation](/202606/26/2606.24626v1-safari-scaling-long-horizon-agentic-fault-attribution-via-active-investigation)  
    标签：评分：7.0/10、query:search-agent
-   evidence：工具使用代理的子模上下文选择
-9. [What Must Generalist Agents Remember?](/202606/25/2606.18746v1-what-must-generalist-agents-remember)  
-   标签：评分：6.0/10、query:search-agent
-   evidence：通用智能体记忆需求的正式理论
-10. [Reward-free Pretraining for Reinforcement Learning via Occupancy Coverage Maximization](/202606/25/2606.21271v1-reward-free-pretraining-for-reinforcement-learning-via-occupancy-coverage-maximization)  
+   evidence：带短期记忆的工具增强诊断循环，用于长程智能体故障归因
+9. [Hierarchical Control in Multi-Agent Games: LLM-based Planning and RL Execution](/202606/26/2606.20014v1-hierarchical-control-in-multi-agent-games-llm-based-planning-and-rl-execution)  
    标签：评分：6.0/10、query:self-evolve
-   evidence：无奖励预训练可迁移探索策略，支持数据自由的智能体训练
-11. [Self-Compacting Language Model Agents](/202606/25/2606.23525v1-self-compacting-language-model-agents)  
-   标签：评分：6.0/10、query:self-evolve
-   evidence：智能体长轨迹的自压缩机制以管理上下文窗口
-12. [ReM-MoA: Reasoning Memory Sustains Mixture-of-Agents Scaling](/202606/25/2606.24437v1-rem-moa-reasoning-memory-sustains-mixture-of-agents-scaling)  
+   evidence：LLM规划用于长期多智能体任务
+10. [Reinforcement Learning for Computer-Use Agents with Autonomous Evaluation](/202606/26/2606.24515v1-reinforcement-learning-for-computer-use-agents-with-autonomous-evaluation)  
    标签：评分：6.0/10、query:search-agent
-   evidence：存储并排序推理轨迹的记忆，辅助证据策管
+   evidence：用于多轮智能体的强化学习与自主评估
+11. [VisCritic: Visual State Comparison as Process Reward for GUI Agents](/202606/26/2606.24525v1-viscritic-visual-state-comparison-as-process-reward-for-gui-agents)  
+   标签：评分：6.0/10、query:search-agent
+   evidence：为GUI智能体动作提供视觉过程奖励验证
+12. [Forget to Improve: On-Device LLM-Agent Continual Learning via Budget-Curated Memory](/202606/26/2606.25115v1-forget-to-improve-on-device-llm-agent-continual-learning-via-budget-curated-memory)  
+   标签：评分：6.0/10、query:search-agent
+   evidence：预算代理经验记忆管理
 
 
 <div class="dpr-home-promo-card">

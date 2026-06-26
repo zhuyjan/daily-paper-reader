@@ -1,130 +1,32 @@
 {
-  "generated_at": "2026-06-25T22:11:34.093329+00:00",
-  "updated_date": "20260625",
+  "generated_at": "2026-06-26T20:41:39.311513+00:00",
+  "updated_date": "20260626",
   "carryover_days": 9,
   "tag_states": {
     "search-agent": {
-      "updated_date": "20260625",
+      "updated_date": "20260626",
       "carryover_days": 9,
-      "items": [
-        {
-          "id": "2606.24775v1",
-          "source": "arxiv",
-          "title": "Are We Ready For An Agent-Native Memory System?",
-          "abstract": "Memory for large language model (LLM) agents has rapidly evolved from simple retrieval-augmented mechanisms into a data management system that supports persistent information storage, retrieval, update, consolidation, and dynamic lifecycle governance throughout agent execution. Despite this evolution, existing evaluations still benchmark agent memory mainly through end-to-end task success metrics (e.g., F1, BLEU), while treating the underlying system as a monolithic black box. As a result, critical system-level concerns, including operational costs, architectural trade-offs across memory modules, and robustness under dynamic knowledge updates, remain insufficiently explored. In this paper, we present a systematic experimental study of agent memory from a data management perspective. We propose an analytical framework that decomposes agent memory into four core modules: memory representation and storage, extraction, retrieval and routing, and maintenance. Under this framework, we evaluate 12 representative memory systems and two reference baselines across five benchmark workloads spanning 11 datasets. Our extensive end-to-end evaluation shows that no single architecture dominates across all scenarios; instead, effectiveness depends heavily on how well the memory structure aligns with the workload bottleneck. Furthermore, through fine-grained ablation studies, we quantify their individual effects on representation fidelity, retrieval precision, update correctness, and long-horizon stability. Finally, we reveal cost-performance trade-offs under realistic workloads, showing localized maintenance is more cost-efficient than global reorganization. Based on these findings, we identify promising directions towards building truly agent-native memory systems. The code is publicly available at https://github.com/OpenDataBox/MemoryData.",
-          "authors": [
-            "Wei Zhou",
-            "Xuanhe Zhou",
-            "Shaokun Han",
-            "Hongming Xu",
-            "Guoliang Li",
-            "Zhiyu Li",
-            "Feiyu Xiong",
-            "Fan Wu"
-          ],
-          "primary_category": "cs.CL",
-          "categories": [
-            "cs.CL",
-            "cs.DB",
-            "cs.IR"
-          ],
-          "published": "2026-06-23T16:34:55+00:00",
-          "link": "https://arxiv.org/pdf/2606.24775v1",
-          "tags": [
-            "keyword:search-agent",
-            "keyword:self-evolve",
-            "query:search-agent"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "agent-native memory system for persistent storage and retrieval",
-          "llm_evidence_cn": "智能体原生的持久存储与检索记忆系统",
-          "llm_evidence": "智能体原生的持久存储与检索记忆系统",
-          "canonical_evidence": "智能体原生的持久存储与检索记忆系统",
-          "llm_tldr_en": "Systematically studies agent memory from data management perspective, covering storage, retrieval, update, and lifecycle.",
-          "llm_tldr_cn": "该论文指出LLM智能体记忆已从简单检索增强演变为支持持久化、更新、合并的数据管理系统，但现有评估将其视为黑箱。从数据管理角度进行系统实验，考察操作成本、记忆模块架构权衡、动态知识更新下的鲁棒性。结果揭示了系统级问题，为设计显式工作记忆的搜索智能体提供了关键指导。",
-          "llm_tldr": "该论文指出LLM智能体记忆已从简单检索增强演变为支持持久化、更新、合并的数据管理系统，但现有评估将其视为黑箱。从数据管理角度进行系统实验，考察操作成本、记忆模块架构权衡、动态知识更新下的鲁棒性。结果揭示了系统级问题，为设计显式工作记忆的搜索智能体提供了关键指导。",
-          "llm_tags": [
-            "query:search-agent"
-          ],
-          "matched_query_tag": "query:search-agent",
-          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
-          "matched_requirement_id": "req-7",
-          "selection_source": "carryover_cache",
-          "paper_id": "2606.24775v1",
-          "carry_days": 1
-        },
-        {
-          "id": "2606.24526v1",
-          "source": "arxiv",
-          "title": "AGORA: An Archive-Grounded Benchmark for Agentic Workplace Document Reasoning",
-          "abstract": "Large language models are increasingly deployed as agents that reason over documents rather than answer from parametric knowledge. We study archive-grounded reasoning: locating sparse evidence across a large, messy collection of workplace files, reconciling inconsistent terminology, units, and time conventions, and computing an answer. Existing benchmarks address only parts of this setting and none jointly stresses archive-groundedness, agentic exploration, and cross-domain coverage. We introduce Agora, a benchmark pairing 362 questions with eight domain collections of 9,664 authentic documents and 372M tokens, far exceeding any model's context window, so agents must explore deliberately rather than scan exhaustively. Agora is built by an agentic pipeline combining cross-document task synthesis, leakage-preventing obfuscation, and difficulty filtering. Evaluating eight models, we find the task far from solved: even the strongest reaches only 59.4% accuracy, with notable variation across domains.",
-          "authors": [
-            "Honglin Guo",
-            "Qi Zhang",
-            "Yu Zhang",
-            "Weijie Li",
-            "Rui Zheng",
-            "Zhikai Lei",
-            "Qiyuan Peng",
-            "Zhiheng Xi",
-            "Tao Gui",
-            "Qi Zhang"
-          ],
-          "primary_category": "cs.CL",
-          "categories": [
-            "cs.CL"
-          ],
-          "published": "2026-06-23T12:57:18+00:00",
-          "link": "https://arxiv.org/pdf/2606.24526v1",
-          "tags": [
-            "keyword:search-agent",
-            "keyword:self-evolve",
-            "query:search-agent"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "Archive-grounded benchmark requiring evidence search, curation, and reasoning",
-          "llm_evidence_cn": "需要证据搜索、整理和推理的档案式基准",
-          "llm_evidence": "需要证据搜索、整理和推理的档案式基准",
-          "canonical_evidence": "需要证据搜索、整理和推理的档案式基准",
-          "llm_tldr_en": "Introduces Agora, a benchmark for archive-grounded reasoning where agents must explore large document collections to find evidence and compute answers.",
-          "llm_tldr_cn": "现有基准未联合要求档案真实性、智能体探索和跨域覆盖。本文提出Agora，包含362个问题和9,664份真实文档（3.72亿token），迫使智能体在超大文档库中主动寻找稀疏证据。任务要求协调不一致的术语和单位，类似于具有显式工作记忆和证据整理的搜索智能体。实验显示现有模型仍有很大提升空间。",
-          "llm_tldr": "现有基准未联合要求档案真实性、智能体探索和跨域覆盖。本文提出Agora，包含362个问题和9,664份真实文档（3.72亿token），迫使智能体在超大文档库中主动寻找稀疏证据。任务要求协调不一致的术语和单位，类似于具有显式工作记忆和证据整理的搜索智能体。实验显示现有模型仍有很大提升空间。",
-          "llm_tags": [
-            "query:search-agent"
-          ],
-          "matched_query_tag": "query:search-agent",
-          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
-          "matched_requirement_id": "req-7",
-          "selection_source": "carryover_cache",
-          "paper_id": "2606.24526v1",
-          "carry_days": 1
-        }
-      ]
+      "items": []
     },
     "self-evolve": {
-      "updated_date": "20260625",
+      "updated_date": "20260626",
       "carryover_days": 9,
       "items": [
         {
-          "id": "2606.22948v1",
+          "id": "2606.27136v1",
           "source": "arxiv",
-          "title": "ENVS: Environment-Native Verified Search for Long-Horizon GUI Agents",
-          "abstract": "As multimodal agents move from interface understanding to real software control, successful trajectory discovery in live desktop environments becomes a key challenge. GUI tasks require long-horizon sequences of precise mouse and keyboard actions, while feedback is sparse, delayed, and costly to obtain through VM rollouts. We propose Environment-Native Verified Search (ENVS), a training-time search-and-filter pipeline that uses the environment to construct verified supervision before policy optimization: it branches over behaviorally distinct GUI actions in live OSWorld VMs, verifies successful leaves, and trains from globally balanced step-level supervision. To evaluate robustness under realistic desktop interruptions, we also introduce OSWorld-Noisy, a dynamic benchmark for recoverable desktop interruptions that preserves the original tasks while testing whether agents can refocus, dismiss, wait, or recover under live perturbations. On the 300-task OSWorld pool, ENVS reaches 30.3 pass@8 on original evaluations and 29.0 on OSWorld-Noisy, outperforming matched ARPO-style online RL while reducing compute from 184-192 to 138-153 GPU-hours; even with only 30% of its search data, ENVS reaches 27.0 pass@8, exceeding ARPO from the base model. Training from noisy environments also better preserves visual-reasoning abilities on auxiliary benchmarks, including OSWorld-G Refusal (16.7 vs. 1.9) and BLINK Functional Correspondence (26.2 vs. 23.1).",
+          "title": "Joint Learning of Experiential Rules and Policies for Large Language Model Agents",
+          "abstract": "For LLM agents in multi-step interactive environments, a key challenge is to make effective use of accumulated interaction experience. Existing work has typically separated two uses of such experience: keeping it outside the model as natural-language rules for later prompting, or using trajectories and feedback to update the model parameters. The former is easy to interpret but can fall out of sync with the evolving policy; the latter improves the policy more broadly but provides only limited correction for local mistakes in sparse-reward settings. We present Joint Learning of Experiential Rules and Policies for LLM Agents (JERP), which updates a long-term experiential-rule pool and the policy from the same interaction trajectories. At decision time, JERP retrieves task-relevant rules and conditions the agent on them together with the interaction history. After each episode, it uses the collected trajectories both to optimize the policy and to revise the rule pool by comparing current rollouts with reference successful trajectories. This coupling keeps the rule pool aligned with the evolving policy while allowing stable and effective behaviors to be gradually absorbed into the model itself. Experiments on AlfWorld and WebShop show that JERP yields consistent gains in decision performance for complex interactive tasks.",
           "authors": [
-            "Yincheng Zhou",
-            "Athena Zhuoming Zhong",
-            "Shijie Zhang",
-            "Kevin Zhang",
-            "Teresa Xiaotao Shang",
-            "Shanghang Zhang"
+            "Shicheng Ye",
+            "Chao Yu"
           ],
           "primary_category": "cs.AI",
           "categories": [
-            "cs.AI",
-            "cs.CV"
+            "cs.AI"
           ],
-          "published": "2026-06-22T07:28:55+00:00",
-          "link": "https://arxiv.org/pdf/2606.22948v1",
+          "published": "2026-06-25T15:11:02+00:00",
+          "link": "https://arxiv.org/pdf/2606.27136v1",
           "tags": [
             "keyword:search-agent",
             "keyword:self-evolve",
@@ -132,98 +34,13 @@
             "query:self-evolve"
           ],
           "llm_score": 8.0,
-          "llm_evidence_en": "Long-horizon GUI agents with environment-native verified search",
-          "llm_evidence_cn": "面向长时域GUI智能体的环境本地验证搜索",
-          "llm_evidence": "面向长时域GUI智能体的环境本地验证搜索",
-          "canonical_evidence": "面向长时域GUI智能体的环境本地验证搜索",
-          "llm_tldr_en": "Proposes ENVS, a training-time search-and-filter pipeline that uses live desktop environment to construct verified supervision for long-horizon GUI agents.",
-          "llm_tldr_cn": "GUI智能体面临长时域动作序列和稀疏反馈的挑战。本文提出环境本地验证搜索（ENVS），在训练时利用真实桌面环境分支执行不同动作，验证成功轨迹，并从中提取全局平衡的步骤级监督。在OSWorld及其噪声变体上验证了有效性，显著提升了长时域GUI任务的完成率。",
-          "llm_tldr": "GUI智能体面临长时域动作序列和稀疏反馈的挑战。本文提出环境本地验证搜索（ENVS），在训练时利用真实桌面环境分支执行不同动作，验证成功轨迹，并从中提取全局平衡的步骤级监督。在OSWorld及其噪声变体上验证了有效性，显著提升了长时域GUI任务的完成率。",
-          "llm_tags": [
-            "query:self-evolve"
-          ],
-          "matched_query_tag": "query:self-evolve",
-          "matched_query_text": "long-horizon agent reasoning",
-          "matched_requirement_id": "req-10",
-          "selection_source": "carryover_cache",
-          "paper_id": "2606.22948v1",
-          "carry_days": 1
-        },
-        {
-          "id": "2606.24064v1",
-          "source": "arxiv",
-          "title": "Beyond Trajectory Imitation: Strategy-Guided Policy Optimization for LLM Reasoning",
-          "abstract": "Distilling reasoning capabilities from strong to weak language models typically involves imitating specific solution trajectories, effectively transferring what to answer rather than how to reason. This trajectory-level imitation encourages memorization of instance-specific steps rather than acquisition of transferable problem-solving skills, limiting generalization to novel problems. We propose Strategy-Guided Policy Optimization (SGPO), which replaces instance-level trajectory imitation with reusable strategy distillation. SGPO extracts structured strategy descriptions from strong-model responses and, for each problem, constructs both autonomous and strategy-guided trajectories to enable direct comparison of the model's behavior with and without strategic guidance. The framework then addresses two key questions. For how to distill, a token-level forward-KL objective selectively transfers the distributional shift induced by strategy conditioning into the unguided policy, with proximal constraints ensuring stability. For when to distill, adaptive instance-level weighting strengthens guidance when autonomous exploration falls short and reduces it as the model's own competence grows. Experiments on four mathematical benchmarks across two model families show that SGPO consistently outperforms SFT, on-policy RL, and hybrid-policy baselines, improving the average score by 2.2 points over the strongest baseline on Qwen2.5-7B-Instruct. Analysis reveals that the forward-KL objective provides an inherently selective distillation signal that outperforms direct trajectory imitation, and that strategy distillation exhibits complementary scaling with base model capability.",
-          "authors": [
-            "Tianyuan Shi",
-            "Canbin Huang",
-            "Bei Li",
-            "Xin Chen",
-            "Xiaojun Quan",
-            "Jingang Wang",
-            "Qifan Wang"
-          ],
-          "primary_category": "cs.AI",
-          "categories": [
-            "cs.AI"
-          ],
-          "published": "2026-06-23T02:14:12+00:00",
-          "link": "https://arxiv.org/pdf/2606.24064v1",
-          "tags": [
-            "keyword:self-evolve",
-            "query:search-agent",
-            "query:self-evolve"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "strategy-guided policy optimization as alternative to trajectory imitation",
-          "llm_evidence_cn": "策略引导的策略优化替代轨迹模仿",
-          "llm_evidence": "策略引导的策略优化替代轨迹模仿",
-          "canonical_evidence": "策略引导的策略优化替代轨迹模仿",
-          "llm_tldr_en": "SGPO replaces trajectory imitation with reusable strategy distillation for LLM reasoning.",
-          "llm_tldr_cn": "SGPO用可复用的策略蒸馏替代实例级别的轨迹模仿，提取策略描述并构建自主与策略引导两种轨迹进行对比，促使模型学习通用问题解决技能而非记忆特定步骤。在多个推理任务上提升了泛化能力。",
-          "llm_tldr": "SGPO用可复用的策略蒸馏替代实例级别的轨迹模仿，提取策略描述并构建自主与策略引导两种轨迹进行对比，促使模型学习通用问题解决技能而非记忆特定步骤。在多个推理任务上提升了泛化能力。",
-          "llm_tags": [
-            "query:self-evolve"
-          ],
-          "matched_query_tag": "query:self-evolve",
-          "matched_query_text": "on-policy distillation",
-          "matched_requirement_id": "req-9",
-          "selection_source": "carryover_cache",
-          "paper_id": "2606.24064v1",
-          "carry_days": 2
-        },
-        {
-          "id": "2606.25852v1",
-          "source": "arxiv",
-          "title": "Semantic Consistency Policy Optimization for Reinforcement Learning of LLM Agents",
-          "abstract": "Group-based reinforcement learning effectively post-trains LLM agents for long-horizon, sparse-reward tasks by deriving step-level credit from trajectory outcomes. However, this ties a step's credit to its rollout's final outcome: semantically near-identical intermediate steps receive opposite credit depending on whether their trajectory eventually succeeded or failed. Such semantic credit inconsistency sends conflicting gradients to similar actions and wastes the partially-correct progress inside failed rollouts. Motivated by this, we propose Semantic Consistency Policy Optimization (SCPO), a value-free reward-shaping method that mitigates this inconsistency by recovering step-level credit from successful siblings in the same rollout group. Concretely, SCPO scores each failed step against a successful sibling and adds positive step-level credit for new progress along that sibling. On ALFWorld and WebShop, SCPO matches or exceeds strong group-based baselines, reaching 93.7+/-4.1 percent success on ALFWorld and 74.8+/-2.0 percent on WebShop at 1.5B parameters, with gains concentrated on the hardest multi-step tasks.",
-          "authors": [
-            "Peng Xu",
-            "Sijia Chen",
-            "Junzhuo Li",
-            "Xuming Hu"
-          ],
-          "primary_category": "cs.LG",
-          "categories": [
-            "cs.LG",
-            "cs.AI"
-          ],
-          "published": "2026-06-24T14:02:13+00:00",
-          "link": "https://arxiv.org/pdf/2606.25852v1",
-          "tags": [
-            "keyword:search-agent",
-            "keyword:self-evolve",
-            "query:search-agent",
-            "query:self-evolve"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "reinforcement learning with credit assignment for long-horizon agent trajectories",
-          "llm_evidence_cn": "面向长时程轨迹的强化学习信用分配",
-          "llm_evidence": "面向长时程轨迹的强化学习信用分配",
-          "canonical_evidence": "面向长时程轨迹的强化学习信用分配",
-          "llm_tldr_en": "SCPO addresses semantic credit inconsistency in group-based RL for long-horizon LLM agents by recovering step-level credit from successful siblings.",
-          "llm_tldr_cn": "论文针对基于分组的强化学习中，语义相近的中间步骤因轨迹成败而获得相反信用的问题，提出语义一致性策略优化（SCPO）。SCPO通过从同一分组中成功轨迹恢复步骤级别信用，消除语义不一致。该方法无需价值函数，直接优化长时程稀疏奖励下的LLM智能体训练，对搜索智能体的多轮强化学习训练具有重要的方法学价值。",
-          "llm_tldr": "论文针对基于分组的强化学习中，语义相近的中间步骤因轨迹成败而获得相反信用的问题，提出语义一致性策略优化（SCPO）。SCPO通过从同一分组中成功轨迹恢复步骤级别信用，消除语义不一致。该方法无需价值函数，直接优化长时程稀疏奖励下的LLM智能体训练，对搜索智能体的多轮强化学习训练具有重要的方法学价值。",
+          "llm_evidence_en": "joint learning of policy and experiential rules from trajectories",
+          "llm_evidence_cn": "从轨迹中联合学习策略和经验规则",
+          "llm_evidence": "从轨迹中联合学习策略和经验规则",
+          "canonical_evidence": "从轨迹中联合学习策略和经验规则",
+          "llm_tldr_en": "JERP jointly updates an experiential-rule pool and agent policy from the same trajectories, improving long-horizon credit assignment and policy alignment.",
+          "llm_tldr_cn": "现有方法将经验作为外部规则用于提示或仅用于参数更新，但两者分离导致规则与策略不同步。JERP提出从相同交互轨迹中联合更新长期经验规则池和智能体策略，使规则与策略保持同步，并在稀疏奖励设置下提供更有效的局部修正。实验表明该方法在长期任务上优于单独使用规则或策略更新的方法。",
+          "llm_tldr": "现有方法将经验作为外部规则用于提示或仅用于参数更新，但两者分离导致规则与策略不同步。JERP提出从相同交互轨迹中联合更新长期经验规则池和智能体策略，使规则与策略保持同步，并在稀疏奖励设置下提供更有效的局部修正。实验表明该方法在长期任务上优于单独使用规则或策略更新的方法。",
           "llm_tags": [
             "query:self-evolve"
           ],
@@ -231,39 +48,27 @@
           "matched_query_text": "on policy reinforcement learning and distillation for long horizon agent trajectories",
           "matched_requirement_id": "req-14",
           "selection_source": "carryover_cache",
-          "paper_id": "2606.25852v1",
+          "paper_id": "2606.27136v1",
           "carry_days": 1
         },
         {
-          "id": "2606.25996v1",
+          "id": "2606.26669v1",
           "source": "arxiv",
-          "title": "Autodata: An agentic data scientist to create high quality synthetic data",
-          "abstract": "We introduce Autodata, a general method that enables AI agents to act as data scientists who build high quality training and evaluation data. We show how to train (meta-optimize) such a data scientist agent, so that it learns to create even stronger data. We describe the overall formulation, and a specific practical implementation, Agentic Self-Instruct. We conduct experiments on computer science research tasks, legal reasoning tasks and reasoning with mathematical objects, where we obtain improved results compared to classical synthetic dataset creation methods. Further, meta-optimizing the data scientist agent itself delivers an even larger performance uplift. Agentic data creation provides a way to convert increased inference compute into higher quality model training. Overall, we believe this direction has the potential to change the way we build AI data.",
+          "title": "SKILL-DISCO: Distilling and Compiling Agent Traces into Reusable Procedural Skills",
+          "abstract": "Agents often repeatedly solve similar task instances from scratch, leading to unnecessary reasoning cost and long execution traces. Prior work has explored workflow reuse and executable skill induction, but it remains unclear which task scenarios admit procedural skills and how the shared procedural structure should be represented across successful traces. We study this problem in FSM-defined scenarios, where successful traces can be viewed as paths in an unknown transition graph, and formulate procedural skills as reusable parameterized control-flow subgraphs. Based on this view, we introduce SkillDisCo, a distillation-and-compilation framework that distills reusable PFSM subgraphs from successful traces and compiles them into callable, executable, and verifiable procedural skills. Experiments on ALFWorld and WebArena show that SkillDisCo improves success rates and reduces agent turns across benchmarks and model scales, demonstrating the benefits of representing shared experience as reusable execution structures.",
           "authors": [
-            "Ilia Kulikov",
-            "Chenxi Whitehouse",
-            "Tianhao Wu",
-            "Yixin Nie",
-            "Swarnadeep Saha",
-            "Eryk Helenowski",
-            "Weizhe Yuan",
-            "Olga Golovneva",
-            "Jack Lanchantin",
-            "Yoram Bachrach",
-            "Jakob Foerster",
-            "Xian Li",
-            "Han Fang",
-            "Sainbayar Sukhbaatar",
-            "Jason Weston"
+            "Zhongxin Guo",
+            "Danrui Qi",
+            "Hanwen Gu",
+            "Peng Cheng",
+            "Yongqiang Xiong"
           ],
           "primary_category": "cs.AI",
           "categories": [
-            "cs.AI",
-            "cs.CL",
-            "cs.LG"
+            "cs.AI"
           ],
-          "published": "2026-06-24T16:08:31+00:00",
-          "link": "https://arxiv.org/pdf/2606.25996v1",
+          "published": "2026-06-25T07:02:32+00:00",
+          "link": "https://arxiv.org/pdf/2606.26669v1",
           "tags": [
             "keyword:search-agent",
             "keyword:self-evolve",
@@ -271,21 +76,21 @@
             "query:self-evolve"
           ],
           "llm_score": 8.0,
-          "llm_evidence_en": "agents as data scientists generating high-quality synthetic data for self-generated training",
-          "llm_evidence_cn": "智能体作为数据科学家自生成高质量合成数据，支持数据自由训练",
-          "llm_evidence": "智能体作为数据科学家自生成高质量合成数据，支持数据自由训练",
-          "canonical_evidence": "智能体作为数据科学家自生成高质量合成数据，支持数据自由训练",
-          "llm_tldr_en": "Autodata enables AI agents to act as data scientists to create high-quality synthetic training data, and meta-optimizes the data scientist agent to further improve data quality, achieving state-of-the-art results on multiple reasoning tasks.",
-          "llm_tldr_cn": "传统合成数据创建方法质量有限。本文提出Autodata，让AI智能体扮演数据科学家角色，自主构建高质量训练和评估数据，并进一步元优化该数据科学家智能体以生成更强数据。在计算机科学、法律推理等任务上取得改进，表明智能体数据创建可将推理计算转化为更高性能。",
-          "llm_tldr": "传统合成数据创建方法质量有限。本文提出Autodata，让AI智能体扮演数据科学家角色，自主构建高质量训练和评估数据，并进一步元优化该数据科学家智能体以生成更强数据。在计算机科学、法律推理等任务上取得改进，表明智能体数据创建可将推理计算转化为更高性能。",
+          "llm_evidence_en": "distilling agent traces into reusable procedural skills",
+          "llm_evidence_cn": "从智能体轨迹中蒸馏可重用的过程技能",
+          "llm_evidence": "从智能体轨迹中蒸馏可重用的过程技能",
+          "canonical_evidence": "从智能体轨迹中蒸馏可重用的过程技能",
+          "llm_tldr_en": "SkillDisCo distills reusable procedural skills from agent traces and compiles them into callable subgraphs, reducing reasoning cost and enabling skill reuse.",
+          "llm_tldr_cn": "智能体重复解决相似任务导致计算浪费。SkillDisCo将成功的智能体轨迹视为有限状态机中的路径，从中蒸馏出可重用的参数化控制流子图，并编译为可调用的执行单元。在多个任务场景中，该方法显著减少了推理成本和轨迹长度。",
+          "llm_tldr": "智能体重复解决相似任务导致计算浪费。SkillDisCo将成功的智能体轨迹视为有限状态机中的路径，从中蒸馏出可重用的参数化控制流子图，并编译为可调用的执行单元。在多个任务场景中，该方法显著减少了推理成本和轨迹长度。",
           "llm_tags": [
             "query:self-evolve"
           ],
           "matched_query_tag": "query:self-evolve",
-          "matched_query_text": "data free or self generated training for multi turn tool using agents",
-          "matched_requirement_id": "req-15",
+          "matched_query_text": "synthetic trajectory construction, verification, and curriculum shaping for autonomous agents",
+          "matched_requirement_id": "req-13",
           "selection_source": "carryover_cache",
-          "paper_id": "2606.25996v1",
+          "paper_id": "2606.26669v1",
           "carry_days": 1
         }
       ]
