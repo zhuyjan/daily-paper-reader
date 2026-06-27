@@ -1,99 +1,17 @@
 {
-  "generated_at": "2026-06-26T20:41:39.311513+00:00",
-  "updated_date": "20260626",
+  "generated_at": "2026-06-27T21:16:04.584395+00:00",
+  "updated_date": "20260627",
   "carryover_days": 9,
   "tag_states": {
     "search-agent": {
-      "updated_date": "20260626",
+      "updated_date": "20260627",
       "carryover_days": 9,
       "items": []
     },
     "self-evolve": {
-      "updated_date": "20260626",
+      "updated_date": "20260627",
       "carryover_days": 9,
-      "items": [
-        {
-          "id": "2606.27136v1",
-          "source": "arxiv",
-          "title": "Joint Learning of Experiential Rules and Policies for Large Language Model Agents",
-          "abstract": "For LLM agents in multi-step interactive environments, a key challenge is to make effective use of accumulated interaction experience. Existing work has typically separated two uses of such experience: keeping it outside the model as natural-language rules for later prompting, or using trajectories and feedback to update the model parameters. The former is easy to interpret but can fall out of sync with the evolving policy; the latter improves the policy more broadly but provides only limited correction for local mistakes in sparse-reward settings. We present Joint Learning of Experiential Rules and Policies for LLM Agents (JERP), which updates a long-term experiential-rule pool and the policy from the same interaction trajectories. At decision time, JERP retrieves task-relevant rules and conditions the agent on them together with the interaction history. After each episode, it uses the collected trajectories both to optimize the policy and to revise the rule pool by comparing current rollouts with reference successful trajectories. This coupling keeps the rule pool aligned with the evolving policy while allowing stable and effective behaviors to be gradually absorbed into the model itself. Experiments on AlfWorld and WebShop show that JERP yields consistent gains in decision performance for complex interactive tasks.",
-          "authors": [
-            "Shicheng Ye",
-            "Chao Yu"
-          ],
-          "primary_category": "cs.AI",
-          "categories": [
-            "cs.AI"
-          ],
-          "published": "2026-06-25T15:11:02+00:00",
-          "link": "https://arxiv.org/pdf/2606.27136v1",
-          "tags": [
-            "keyword:search-agent",
-            "keyword:self-evolve",
-            "query:search-agent",
-            "query:self-evolve"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "joint learning of policy and experiential rules from trajectories",
-          "llm_evidence_cn": "从轨迹中联合学习策略和经验规则",
-          "llm_evidence": "从轨迹中联合学习策略和经验规则",
-          "canonical_evidence": "从轨迹中联合学习策略和经验规则",
-          "llm_tldr_en": "JERP jointly updates an experiential-rule pool and agent policy from the same trajectories, improving long-horizon credit assignment and policy alignment.",
-          "llm_tldr_cn": "现有方法将经验作为外部规则用于提示或仅用于参数更新，但两者分离导致规则与策略不同步。JERP提出从相同交互轨迹中联合更新长期经验规则池和智能体策略，使规则与策略保持同步，并在稀疏奖励设置下提供更有效的局部修正。实验表明该方法在长期任务上优于单独使用规则或策略更新的方法。",
-          "llm_tldr": "现有方法将经验作为外部规则用于提示或仅用于参数更新，但两者分离导致规则与策略不同步。JERP提出从相同交互轨迹中联合更新长期经验规则池和智能体策略，使规则与策略保持同步，并在稀疏奖励设置下提供更有效的局部修正。实验表明该方法在长期任务上优于单独使用规则或策略更新的方法。",
-          "llm_tags": [
-            "query:self-evolve"
-          ],
-          "matched_query_tag": "query:self-evolve",
-          "matched_query_text": "on policy reinforcement learning and distillation for long horizon agent trajectories",
-          "matched_requirement_id": "req-14",
-          "selection_source": "carryover_cache",
-          "paper_id": "2606.27136v1",
-          "carry_days": 1
-        },
-        {
-          "id": "2606.26669v1",
-          "source": "arxiv",
-          "title": "SKILL-DISCO: Distilling and Compiling Agent Traces into Reusable Procedural Skills",
-          "abstract": "Agents often repeatedly solve similar task instances from scratch, leading to unnecessary reasoning cost and long execution traces. Prior work has explored workflow reuse and executable skill induction, but it remains unclear which task scenarios admit procedural skills and how the shared procedural structure should be represented across successful traces. We study this problem in FSM-defined scenarios, where successful traces can be viewed as paths in an unknown transition graph, and formulate procedural skills as reusable parameterized control-flow subgraphs. Based on this view, we introduce SkillDisCo, a distillation-and-compilation framework that distills reusable PFSM subgraphs from successful traces and compiles them into callable, executable, and verifiable procedural skills. Experiments on ALFWorld and WebArena show that SkillDisCo improves success rates and reduces agent turns across benchmarks and model scales, demonstrating the benefits of representing shared experience as reusable execution structures.",
-          "authors": [
-            "Zhongxin Guo",
-            "Danrui Qi",
-            "Hanwen Gu",
-            "Peng Cheng",
-            "Yongqiang Xiong"
-          ],
-          "primary_category": "cs.AI",
-          "categories": [
-            "cs.AI"
-          ],
-          "published": "2026-06-25T07:02:32+00:00",
-          "link": "https://arxiv.org/pdf/2606.26669v1",
-          "tags": [
-            "keyword:search-agent",
-            "keyword:self-evolve",
-            "query:search-agent",
-            "query:self-evolve"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "distilling agent traces into reusable procedural skills",
-          "llm_evidence_cn": "从智能体轨迹中蒸馏可重用的过程技能",
-          "llm_evidence": "从智能体轨迹中蒸馏可重用的过程技能",
-          "canonical_evidence": "从智能体轨迹中蒸馏可重用的过程技能",
-          "llm_tldr_en": "SkillDisCo distills reusable procedural skills from agent traces and compiles them into callable subgraphs, reducing reasoning cost and enabling skill reuse.",
-          "llm_tldr_cn": "智能体重复解决相似任务导致计算浪费。SkillDisCo将成功的智能体轨迹视为有限状态机中的路径，从中蒸馏出可重用的参数化控制流子图，并编译为可调用的执行单元。在多个任务场景中，该方法显著减少了推理成本和轨迹长度。",
-          "llm_tldr": "智能体重复解决相似任务导致计算浪费。SkillDisCo将成功的智能体轨迹视为有限状态机中的路径，从中蒸馏出可重用的参数化控制流子图，并编译为可调用的执行单元。在多个任务场景中，该方法显著减少了推理成本和轨迹长度。",
-          "llm_tags": [
-            "query:self-evolve"
-          ],
-          "matched_query_tag": "query:self-evolve",
-          "matched_query_text": "synthetic trajectory construction, verification, and curriculum shaping for autonomous agents",
-          "matched_requirement_id": "req-13",
-          "selection_source": "carryover_cache",
-          "paper_id": "2606.26669v1",
-          "carry_days": 1
-        }
-      ]
+      "items": []
     }
   }
 }

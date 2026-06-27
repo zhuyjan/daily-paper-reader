@@ -1,0 +1,547 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-27T21:16:04.583348+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 9,
+    "quick_skim_target": 12,
+    "quick_selected": 9
+  },
+  "deep_dive": [
+    {
+      "id": "2606.26793v1",
+      "source": "arxiv",
+      "title": "MIRROR: Novelty-Constrained Memory-Guided MCTS Red-Teaming for Agentic RAG",
+      "abstract": "Multimodal agentic retrieval-augmented generation (RAG) systems expand the attack surface beyond prompt injection to include text poisoning, image injection, direct-query attacks, and orchestrator-level tool manipulation. Existing red-teaming approaches are typically surface-specific and often recycle known attack templates; on text-poisoning benchmarks we measure 73-84% exact duplication. We present MIRROR, a unified cross-surface framework that performs memory-guided Monte Carlo tree search while conditioning candidate generation on retrieved context under an explicit novelty constraint. A deterministic Novelty Gate rejects any candidate matching the retrieval set under normalized comparison, allowing retrieval to inform search priors without enabling prompt copying. Across four attack surfaces on a multimodal agentic RAG target, MIRROR attains 76% ASR on image poisoning compared with 52% for baselines, 97% ASR on orchestrator attacks at half the query cost, and the lowest cross-surface variance (coefficient of variation 0.47). In contrast, specialized baselines collapse across surfaces: suffix optimization reaches 79% ASR on text poisoning but 1% on direct queries. We release ART-SafeBench with 41,815 in-package records and runtime adapters yielding 41,991+ total records across four surfaces.",
+      "authors": [
+        "Inderjeet Singh",
+        "Andrés Murillo",
+        "Motoyoshi Sekiya",
+        "Yuki Unno",
+        "Junichi Suga"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-06-25T09:26:49+00:00",
+      "link": "https://arxiv.org/pdf/2606.26793v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "red-teaming multimodal agentic RAG with memory-guided MCTS",
+      "llm_evidence_cn": "使用记忆引导MCTS对多模态智能体RAG进行红队攻击",
+      "llm_evidence": "使用记忆引导MCTS对多模态智能体RAG进行红队攻击",
+      "canonical_evidence": "使用记忆引导MCTS对多模态智能体RAG进行红队攻击",
+      "llm_tldr_en": "Proposes MIRROR, a unified cross-surface red-teaming framework for multimodal agentic RAG using memory-guided MCTS and novelty constraints.",
+      "llm_tldr_cn": "多模态智能体RAG系统攻击面广且现有方法重复率高，本文提出MIRROR框架，通过记忆引导蒙特卡洛树搜索和显式新颖性约束，统一生成跨表面的红队攻击。在文本投毒基准上重复率从73-84%降至几乎为零，有效发现新漏洞。",
+      "llm_tldr": "多模态智能体RAG系统攻击面广且现有方法重复率高，本文提出MIRROR框架，通过记忆引导蒙特卡洛树搜索和显式新颖性约束，统一生成跨表面的红队攻击。在文本投毒基准上重复率从73-84%降至几乎为零，有效发现新漏洞。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "multimodal search agents",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.22330v1",
+      "source": "arxiv",
+      "title": "Hypothesis-Driven Skill Optimization for LLM Agents",
+      "abstract": "External skills can improve action-oriented LLM agents without changing model weights, but persistent skill updates are risky when they are distilled from sparse or noisy trajectories. A plausible reflection may encode a useful procedure, a spurious shortcut, or a rule that the target executor cannot reliably follow. We propose Hypothesis-Driven Skill Optimization (HDSO), a train-free framework in which both the skill curator and the agent executor are frozen inference endpoints. The curator observes executor traces, proposes a falsifiable hypothesis with an explicit validation plan, instantiates the hypothesis as a candidate skill package, validates the package through paired control/treatment executions, reviews behavior differences, and consolidates only supported candidates into an approved repository. The executor consumes approved skills through progressive disclosure, preserving the executor-only path when no skill is selected. On ALFWorld, HDSO improves executor-only baselines by +6.9 Avg. SR points for Qwen3-8B and +4.0 points for Qwen3.6-27B. Under 20% randomly flipped success/failure feedback during skill discovery and validation, HDSO preserves a +7.1-point gain for Qwen3-8B. Transfer and heterogeneous-pair diagnostics further show that validated repositories can be useful beyond the run that produced them, but cross-model curation succeeds only when curator diagnosis, executor capability, and validation evidence align. HDSO provides an auditable skill lifecycle for frozen action agents rather than an unconstrained memory accumulation procedure.",
+      "authors": [
+        "Fangxin Shang",
+        "Yehui Yang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.SE"
+      ],
+      "published": "2026-06-21T04:43:20+00:00",
+      "link": "https://arxiv.org/pdf/2606.22330v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "train-free framework for LLM agent skill optimization",
+      "llm_evidence_cn": "无训练的LLM智能体技能优化框架",
+      "llm_evidence": "无训练的LLM智能体技能优化框架",
+      "canonical_evidence": "无训练的LLM智能体技能优化框架",
+      "llm_tldr_en": "Hypothesis-Driven Skill Optimization (HDSO) is a train-free framework for LLM agents that validates external skills via falsifiable hypotheses and controlled executions, enabling safe and reliable skill updates.",
+      "llm_tldr_cn": "提出假设驱动的技能优化框架HDSO，用于LLM智能体在无需训练的情况下优化技能。该方法通过可证伪的假设和对照执行来验证技能，避免不安全的持续性更新。适用于数据无需额外标注的场景，支持智能体自我进化。",
+      "llm_tldr": "提出假设驱动的技能优化框架HDSO，用于LLM智能体在无需训练的情况下优化技能。该方法通过可证伪的假设和对照执行来验证技能，避免不安全的持续性更新。适用于数据无需额外标注的场景，支持智能体自我进化。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "data-free agent training",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.25996v2",
+      "source": "arxiv",
+      "title": "Autodata: An agentic data scientist to create high quality synthetic data",
+      "abstract": "We introduce Autodata, a general method that enables AI agents to act as data scientists who build high quality training and evaluation data. We show how to train (meta-optimize) such a data scientist agent, so that it learns to create even stronger data. We describe the overall formulation, and a specific practical implementation, Agentic Self-Instruct. We conduct experiments on computer science research tasks, legal reasoning tasks and reasoning with mathematical objects, where we obtain improved results compared to classical synthetic dataset creation methods. Further, meta-optimizing the data scientist agent itself delivers an even larger performance uplift. Agentic data creation provides a way to convert increased inference compute into higher quality model training. Overall, we believe this direction has the potential to change the way we build AI data.",
+      "authors": [
+        "Ilia Kulikov",
+        "Chenxi Whitehouse",
+        "Tianhao Wu",
+        "Yixin Nie",
+        "Swarnadeep Saha",
+        "Eryk Helenowski",
+        "Weizhe Yuan",
+        "Olga Golovneva",
+        "Jack Lanchantin",
+        "Yoram Bachrach",
+        "Jakob Foerster",
+        "Xian Li",
+        "Han Fang",
+        "Sainbayar Sukhbaatar",
+        "Jason Weston"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-06-24T16:08:31+00:00",
+      "link": "https://arxiv.org/pdf/2606.25996v2",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "agentic data scientist for self-generated training data",
+      "llm_evidence_cn": "智能体数据科学家用于自生成训练数据",
+      "llm_evidence": "智能体数据科学家用于自生成训练数据",
+      "canonical_evidence": "智能体数据科学家用于自生成训练数据",
+      "llm_tldr_en": "Autodata meta-optimizes an agent to create high-quality synthetic datasets, enabling data-free agent training and self-improvement.",
+      "llm_tldr_cn": "高质量训练数据获取困难，现有合成数据方法质量有限。本文提出Autodata，将AI智能体作为数据科学家，通过元优化使其学会构建更优的训练和评估数据。具体实现Agentic Self-Instruct在计算机科学、法律和数学推理任务上超越经典合成数据方法，且元优化数据科学家本身带来更大提升。该方法为多轮工具使用智能体提供数据自由或自生成训练方案，直接支持自进化智能体所需的数据生成能力。",
+      "llm_tldr": "高质量训练数据获取困难，现有合成数据方法质量有限。本文提出Autodata，将AI智能体作为数据科学家，通过元优化使其学会构建更优的训练和评估数据。具体实现Agentic Self-Instruct在计算机科学、法律和数学推理任务上超越经典合成数据方法，且元优化数据科学家本身带来更大提升。该方法为多轮工具使用智能体提供数据自由或自生成训练方案，直接支持自进化智能体所需的数据生成能力。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "data free or self generated training for multi turn tool using agents",
+      "matched_requirement_id": "req-15",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.24775v1",
+      "source": "arxiv",
+      "title": "Are We Ready For An Agent-Native Memory System?",
+      "abstract": "Memory for large language model (LLM) agents has rapidly evolved from simple retrieval-augmented mechanisms into a data management system that supports persistent information storage, retrieval, update, consolidation, and dynamic lifecycle governance throughout agent execution. Despite this evolution, existing evaluations still benchmark agent memory mainly through end-to-end task success metrics (e.g., F1, BLEU), while treating the underlying system as a monolithic black box. As a result, critical system-level concerns, including operational costs, architectural trade-offs across memory modules, and robustness under dynamic knowledge updates, remain insufficiently explored. In this paper, we present a systematic experimental study of agent memory from a data management perspective. We propose an analytical framework that decomposes agent memory into four core modules: memory representation and storage, extraction, retrieval and routing, and maintenance. Under this framework, we evaluate 12 representative memory systems and two reference baselines across five benchmark workloads spanning 11 datasets. Our extensive end-to-end evaluation shows that no single architecture dominates across all scenarios; instead, effectiveness depends heavily on how well the memory structure aligns with the workload bottleneck. Furthermore, through fine-grained ablation studies, we quantify their individual effects on representation fidelity, retrieval precision, update correctness, and long-horizon stability. Finally, we reveal cost-performance trade-offs under realistic workloads, showing localized maintenance is more cost-efficient than global reorganization. Based on these findings, we identify promising directions towards building truly agent-native memory systems. The code is publicly available at https://github.com/OpenDataBox/MemoryData.",
+      "authors": [
+        "Wei Zhou",
+        "Xuanhe Zhou",
+        "Shaokun Han",
+        "Hongming Xu",
+        "Guoliang Li",
+        "Zhiyu Li",
+        "Feiyu Xiong",
+        "Fan Wu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.DB",
+        "cs.IR"
+      ],
+      "published": "2026-06-23T16:34:55+00:00",
+      "link": "https://arxiv.org/pdf/2606.24775v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "systematic study of agent-native memory systems supporting evidence curation and dynamic updates",
+      "llm_evidence_cn": "对支持证据策展和动态更新的代理原生记忆系统进行系统研究",
+      "llm_evidence": "对支持证据策展和动态更新的代理原生记忆系统进行系统研究",
+      "canonical_evidence": "对支持证据策展和动态更新的代理原生记忆系统进行系统研究",
+      "llm_tldr_en": "This paper presents a systematic experimental study of agent memory from a data management perspective, covering operational costs, architectural trade-offs, and robustness under dynamic updates.",
+      "llm_tldr_cn": "现有代理记忆评估仅关注端到端任务指标，忽视系统级问题。本文从数据管理视角对代理原生记忆系统进行系统实验研究，涵盖操作成本、架构权衡和动态知识更新下的鲁棒性。研究揭示了不同记忆模块的优缺点，为设计带有显式工作记忆的证据策展搜索代理提供了指导。",
+      "llm_tldr": "现有代理记忆评估仅关注端到端任务指标，忽视系统级问题。本文从数据管理视角对代理原生记忆系统进行系统实验研究，涵盖操作成本、架构权衡和动态知识更新下的鲁棒性。研究揭示了不同记忆模块的优缺点，为设计带有显式工作记忆的证据策展搜索代理提供了指导。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.21445v1",
+      "source": "arxiv",
+      "title": "AutoRAS: Learning Robust Agentic Systems with Primitive Representations",
+      "abstract": "The automated design of agentic systems offers a promising pathway for scaling large language models (LLMs) beyond single-agent reasoning. While prior work has advanced task performance through handcrafted or automatically generated multi-agent workflows, robustness is often treated as an afterthought, leaving systems vulnerable to external adversaries and internal failures. We propose AutoRAS, a framework for the Automated design of Robust Agentic Systems. AutoRAS formulates system design as generating a sequence of symbolic primitives that jointly encode structural connectivity and behavioral actions, and learns to optimize this sequence using execution-derived safety signals and flow-based sequence-level objectives. Extensive experiments show that AutoRAS achieves the best performance in both vanilla and adversarial settings, with the smallest performance degradation under attacks. Further analyses demonstrate strong transferability, stable optimization behavior, stability across primitive sets, and favorable cost trade-offs. Our code is available at $\\href{https://github.com/guohezuy/AutoRAS}{\\text{this https URL}}$.",
+      "authors": [
+        "Yang Yue",
+        "Xuancheng Zhu",
+        "Yuyang Ma",
+        "Guoshun Nan",
+        "Zihan Dou",
+        "Jingru Shan",
+        "Congyu Guo",
+        "Ji Zhang",
+        "Hua Wang",
+        "Jingfeng Zhang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-19T14:05:37+00:00",
+      "link": "https://arxiv.org/pdf/2606.21445v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "automated design of robust agentic systems with optimization",
+      "llm_evidence_cn": "自动设计鲁棒智能体系统并优化",
+      "llm_evidence": "自动设计鲁棒智能体系统并优化",
+      "canonical_evidence": "自动设计鲁棒智能体系统并优化",
+      "llm_tldr_en": "AutoRAS automatically generates and optimizes multi-agent workflows using symbolic primitives and flow-based objectives for robustness.",
+      "llm_tldr_cn": "现有自动设计智能体系统的方法忽视鲁棒性，导致易受攻击和内部故障。本文提出AutoRAS，将系统设计表示为符号原语序列，编码结构连接和行为动作，并利用执行导出的安全信号和流式序列目标进行优化。实验证明AutoRAS生成的系统在对抗攻击和内部失败下更鲁棒。该方法为自进化智能体提供了自动化架构搜索的途径，属于自进化主题下的方法论桥梁。",
+      "llm_tldr": "现有自动设计智能体系统的方法忽视鲁棒性，导致易受攻击和内部故障。本文提出AutoRAS，将系统设计表示为符号原语序列，编码结构连接和行为动作，并利用执行导出的安全信号和流式序列目标进行优化。实验证明AutoRAS生成的系统在对抗攻击和内部失败下更鲁棒。该方法为自进化智能体提供了自动化架构搜索的途径，属于自进化主题下的方法论桥梁。",
+      "llm_tags": [
+        "query:self-evolve:composite"
+      ],
+      "matched_query_tag": "query:self-evolve:composite",
+      "matched_query_text": "Papers central to 自进化智能体, especially work that connects or combines: r; on-policy distillation; long-horizon agent reasoning; data-free agent training; self-evolving agents; synthetic trajectory construction, verification, and curriculum shaping for autonomous agents; on policy reinforcement learning and distillation for long horizon agent trajectories; data free or self generated training for multi turn tool using agents.",
+      "matched_requirement_id": "req-composite-self-evolve",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.25421v1",
+      "source": "arxiv",
+      "title": "Beyond Next-Observation Prediction: Agent-Authored World Modeling for Sequential Decision Making",
+      "abstract": "Recent studies on world modeling for Large Language Model (LLM) agents typically formulate the learning objective as next-observation prediction. However, this objective ties supervision to what a transition happens to reveal, which may omit the dynamics most relevant to the agent's current decision. To bridge this gap, we propose Agent-Authored World Modeling (AAWM), a training procedure that constructs supervision from the policy's own decision needs. Specifically, at each state, the agent identifies what it needs to understand about the environment before acting. These needs drive the retrieval of relevant transition evidence across trajectories, which is then synthesized into training targets that capture decision-oriented dynamics instead of reconstructing the next observation. This aligns the training objective with the dynamics the policy needs before acting, not with the contents of the next observation. Experimental results validate the effectiveness of AAWM across multiple environments and training settings. These results show that decision-aware world-model targets provide a more effective learning signal than next-observation prediction.",
+      "authors": [
+        "Guangfeng Cai",
+        "Kaibing Yang",
+        "Shuo He",
+        "Yu Li",
+        "Shengtian Yang",
+        "Jiaqi Lv",
+        "Lei Feng"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-06-24T05:31:00+00:00",
+      "link": "https://arxiv.org/pdf/2606.25421v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "decision-driven retrieval of transition evidence across trajectories for agent world modeling",
+      "llm_evidence_cn": "基于决策需求的轨迹过渡证据检索",
+      "llm_evidence": "基于决策需求的轨迹过渡证据检索",
+      "canonical_evidence": "基于决策需求的轨迹过渡证据检索",
+      "llm_tldr_en": "Proposes Agent-Authored World Modeling (AAWM) where LLM agents retrieve and synthesize decision-relevant transition evidence from past trajectories, moving beyond next-observation prediction.",
+      "llm_tldr_cn": "现有LLM智能体世界建模局限于预测下一观测，忽视了与当前决策最相关的动态。本文提出Agent-Authored World Modeling (AAWM)，让智能体在每个状态识别决策所需的理解，据此跨轨迹检索相关过渡证据，并合成为训练目标。该方法使世界模型更聚焦于决策导向的动态，实验表明能提升序列决策性能。",
+      "llm_tldr": "现有LLM智能体世界建模局限于预测下一观测，忽视了与当前决策最相关的动态。本文提出Agent-Authored World Modeling (AAWM)，让智能体在每个状态识别决策所需的理解，据此跨轨迹检索相关过渡证据，并合成为训练目标。该方法使世界模型更聚焦于决策导向的动态，实验表明能提升序列决策性能。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.25191v1",
+      "source": "arxiv",
+      "title": "To Isolate or to Score? Model-Adaptive Assessment for Cost-Efficient Multi-Agent RAG",
+      "abstract": "Multi-agent document assessment for retrieval-augmented generation is computationally expensive, driving practitioners toward smaller, deployable models whose assessment mechanisms remain poorly understood. We conduct a controlled study of training-free interventions on 7B-9B instruction-tuned models across diverse QA benchmarks, revealing a sharp dichotomy in how models benefit from assessment. For weaker baselines, the dominant mechanism is per-document isolation. Astoundingly, assessment-free isolation matches full multi-agent assessment, demonstrating that resolving multi-document context confusion, rather than scoring quality, drives outsized gains of up to 50 percentage points. Conversely, for strong baselines where scoring quality matters, we introduce Reasoning-Score Coupling, a label-free perturbation probe that classifies scoring behavior. Integrating these findings, we propose MADARA, a model-adaptive routing architecture. Crucially, MADARA's diagnostic thresholds derived from a single pilot model generalize zero-shot to four unseen model families, providing a robust, lightweight pipeline to eliminate computational overhead.",
+      "authors": [
+        "Jungseob Lee",
+        "Chanjun Park",
+        "Heuiseok Lim"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-06-23T21:34:23+00:00",
+      "link": "https://arxiv.org/pdf/2606.25191v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "analysis of multi-agent RAG assessment for retrieval and evidence",
+      "llm_evidence_cn": "多智能体RAG评估机制分析，涉及检索和证据",
+      "llm_evidence": "多智能体RAG评估机制分析，涉及检索和证据",
+      "canonical_evidence": "多智能体RAG评估机制分析，涉及检索和证据",
+      "llm_tldr_en": "Study reveals that for weaker models, multi-agent assessment gains come from per-document isolation rather than scoring quality, informing retrieval architectures.",
+      "llm_tldr_cn": "多智能体文档评估在检索增强生成中计算昂贵，其机制不明。本文通过控制实验发现，对于弱基线模型，评估的主要收益来自文档隔离（解决多文档混淆），而不是评分质量。隔离本身可匹配完整多智能体评估效果，提升高达50个百分点。该发现为搜索智能体中的证据收集和评估提供了设计指导，即优先解决上下文混淆而非复杂评分。",
+      "llm_tldr": "多智能体文档评估在检索增强生成中计算昂贵，其机制不明。本文通过控制实验发现，对于弱基线模型，评估的主要收益来自文档隔离（解决多文档混淆），而不是评分质量。隔离本身可匹配完整多智能体评估效果，提升高达50个百分点。该发现为搜索智能体中的证据收集和评估提供了设计指导，即优先解决上下文混淆而非复杂评分。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "reinforcement learning for multi turn search, retrieval, and evidence collection",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.25960v1",
+      "source": "arxiv",
+      "title": "Agentic System as Compressor: Quantifying System Intelligence in Bits",
+      "abstract": "Large language models are turning from isolated predictors into agentic systems: they call tools, retrieve evidence, obey environment constraints, use verifiers, and complete tasks through search and multi-turn interaction. We adopts an analytical viewpoint based on \"compression is intelligence\": under a fixed task distribution, interface, and compute budget, a stronger agentic system lets a target object be reconstructed with fewer bits. We operationalize the measure with arithmetic coding, seed coding, and a fallback, and evaluate it in five settings: reversed text, chess moves, protein sequences, retrieval-augmented question answering, and semantic story compression; in all of them agentic components reduce codelength. These small, controlled experiments cover component types typical of real agentic systems, show that codelength can analyze how components, observers, and budgets change residual uncertainty, and offer guidance for evaluating real agent systems.",
+      "authors": [
+        "Zihan Qin",
+        "Hongrui Zhang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-24T15:32:49+00:00",
+      "link": "https://arxiv.org/pdf/2606.25960v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "measures agentic systems that call tools and retrieve evidence",
+      "llm_evidence_cn": "度量调用工具和检索证据的智能体系统",
+      "llm_evidence": "度量调用工具和检索证据的智能体系统",
+      "canonical_evidence": "度量调用工具和检索证据的智能体系统",
+      "llm_tldr_en": "Proposes a compression-based measure to quantify intelligence of agentic systems that use tools, retrieval, and multi-turn interaction, validated on retrieval-augmented QA and other tasks.",
+      "llm_tldr_cn": "提出用压缩率衡量智能体系统智能的新方法，覆盖工具调用、证据检索、多轮交互等能力。在五个任务上验证，包括检索增强问答，发现智能体组件均减少编码长度。为评估搜索智能体等系统提供了量化指标。",
+      "llm_tldr": "提出用压缩率衡量智能体系统智能的新方法，覆盖工具调用、证据检索、多轮交互等能力。在五个任务上验证，包括检索增强问答，发现智能体组件均减少编码长度。为评估搜索智能体等系统提供了量化指标。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.26907v1",
+      "source": "arxiv",
+      "title": "Qwen-Image-Agent: Bridging the Context Gap in Real-World Image Generation",
+      "abstract": "While text-to-image (T2I) models have achieved remarkable progress, they struggle with real-world requests that are often underspecified, implicit, or dependent on up-to-date knowledge. We identify this challenge as the Context Gap: the mismatch between the user context and the sufficient generation context for T2I models. To bridge this gap, we propose Qwen-Image-Agent, a unified agentic framework that integrates plan, reason, search, memory and feedback in a context-centric manner. Qwen-Image-Agent treats user input as partial context and progressively constructs the generation context through Context-Aware Planning and Context Grounding. Specifically, Context-Aware Planning identifies missing context and plans how it should be acquired and used, while Context Grounding gathers this context from reason, search, memory, and feedback. To evaluate agentic image generation, we further introduce Image Agent Bench (IA-Bench), a benchmark covering four core image agent capabilities: Plan, Reason, Search, and Memory. Experiments on IA-Bench, Mindbench and WISE-Verified show that Qwen-Image-Agent outperforms strong baselines and achieves state-of-the-art performance.",
+      "authors": [
+        "Zekai Zhang",
+        "Jiahao Li",
+        "Jie Zhang",
+        "Kaiyuan Gao",
+        "Kun Yan",
+        "Lihan Jiang",
+        "Ningyuan Tang",
+        "Shengming Yin",
+        "Tianhe Wu",
+        "Xiaoyue Chen",
+        "Xiao Xu",
+        "Yan Shu",
+        "Yanran Zhang",
+        "Yixian Xu",
+        "Yuxiang Chen",
+        "Zhendong Wang",
+        "Zihao Liu",
+        "Zikai Zhou",
+        "Huishuai Zhang",
+        "Dongyan Zhao",
+        "Chenfei Wu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-06-25T11:40:12+00:00",
+      "link": "https://arxiv.org/pdf/2606.26907v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Unified agentic framework integrating search, memory, and planning for context-aware image generation",
+      "llm_evidence_cn": "统一的智能体框架，集成搜索、记忆和规划以实现上下文感知的图像生成",
+      "llm_evidence": "统一的智能体框架，集成搜索、记忆和规划以实现上下文感知的图像生成",
+      "canonical_evidence": "统一的智能体框架，集成搜索、记忆和规划以实现上下文感知的图像生成",
+      "llm_tldr_en": "Qwen-Image-Agent bridges the context gap in real-world image generation by integrating plan, reason, search, memory and feedback. It treats user input as partial context and progressively constructs generation context through Context-Aware Planning and Context Grounding, demonstrating improved image quality and user alignment.",
+      "llm_tldr_cn": "现实世界中的文本到图像生成常因用户输入不明确或依赖最新知识而失败。本文提出Qwen-Image-Agent智能体框架，集成规划、推理、搜索、记忆和反馈，以上下文为中心逐步构建生成信息。通过上下文感知规划确定缺失信息并计划获取，再通过上下文基础确保生成内容与查询一致。实验证明该方法能生成更准确、更符合用户意图的图像，展示了搜索作为智能体组件在多媒体生成中的价值。",
+      "llm_tldr": "现实世界中的文本到图像生成常因用户输入不明确或依赖最新知识而失败。本文提出Qwen-Image-Agent智能体框架，集成规划、推理、搜索、记忆和反馈，以上下文为中心逐步构建生成信息。通过上下文感知规划确定缺失信息并计划获取，再通过上下文基础确保生成内容与查询一致。实验证明该方法能生成更准确、更符合用户意图的图像，展示了搜索作为智能体组件在多媒体生成中的价值。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "agentic search",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.26669v1",
+      "source": "arxiv",
+      "title": "SKILL-DISCO: Distilling and Compiling Agent Traces into Reusable Procedural Skills",
+      "abstract": "Agents often repeatedly solve similar task instances from scratch, leading to unnecessary reasoning cost and long execution traces. Prior work has explored workflow reuse and executable skill induction, but it remains unclear which task scenarios admit procedural skills and how the shared procedural structure should be represented across successful traces. We study this problem in FSM-defined scenarios, where successful traces can be viewed as paths in an unknown transition graph, and formulate procedural skills as reusable parameterized control-flow subgraphs. Based on this view, we introduce SkillDisCo, a distillation-and-compilation framework that distills reusable PFSM subgraphs from successful traces and compiles them into callable, executable, and verifiable procedural skills. Experiments on ALFWorld and WebArena show that SkillDisCo improves success rates and reduces agent turns across benchmarks and model scales, demonstrating the benefits of representing shared experience as reusable execution structures.",
+      "authors": [
+        "Zhongxin Guo",
+        "Danrui Qi",
+        "Hanwen Gu",
+        "Peng Cheng",
+        "Yongqiang Xiong"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-25T07:02:32+00:00",
+      "link": "https://arxiv.org/pdf/2606.26669v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "distilling agent traces into reusable procedural skills, trajectory compilation",
+      "llm_evidence_cn": "将智能体轨迹蒸馏为可重用过程技能，轨迹编译",
+      "llm_evidence": "将智能体轨迹蒸馏为可重用过程技能，轨迹编译",
+      "canonical_evidence": "将智能体轨迹蒸馏为可重用过程技能，轨迹编译",
+      "llm_tldr_en": "Introduces SkillDisCo, a distillation-and-compilation framework that extracts reusable PFSM subgraphs from successful agent traces for procedural skill reuse.",
+      "llm_tldr_cn": "为了解决智能体反复从头解决相似任务造成的不必要推理开销，提出SkillDisCo框架，从成功轨迹中蒸馏出可重用的参数化控制流子图，并编译为可调用技能。在有限状态机定义场景中，该方法显著减少了执行长度和推理成本，实现技能复用。",
+      "llm_tldr": "为了解决智能体反复从头解决相似任务造成的不必要推理开销，提出SkillDisCo框架，从成功轨迹中蒸馏出可重用的参数化控制流子图，并编译为可调用技能。在有限状态机定义场景中，该方法显著减少了执行长度和推理成本，实现技能复用。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "synthetic trajectory construction, verification, and curriculum shaping for autonomous agents",
+      "matched_requirement_id": "req-13",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.27136v1",
+      "source": "arxiv",
+      "title": "Joint Learning of Experiential Rules and Policies for Large Language Model Agents",
+      "abstract": "For LLM agents in multi-step interactive environments, a key challenge is to make effective use of accumulated interaction experience. Existing work has typically separated two uses of such experience: keeping it outside the model as natural-language rules for later prompting, or using trajectories and feedback to update the model parameters. The former is easy to interpret but can fall out of sync with the evolving policy; the latter improves the policy more broadly but provides only limited correction for local mistakes in sparse-reward settings. We present Joint Learning of Experiential Rules and Policies for LLM Agents (JERP), which updates a long-term experiential-rule pool and the policy from the same interaction trajectories. At decision time, JERP retrieves task-relevant rules and conditions the agent on them together with the interaction history. After each episode, it uses the collected trajectories both to optimize the policy and to revise the rule pool by comparing current rollouts with reference successful trajectories. This coupling keeps the rule pool aligned with the evolving policy while allowing stable and effective behaviors to be gradually absorbed into the model itself. Experiments on AlfWorld and WebShop show that JERP yields consistent gains in decision performance for complex interactive tasks.",
+      "authors": [
+        "Shicheng Ye",
+        "Chao Yu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-25T15:11:02+00:00",
+      "link": "https://arxiv.org/pdf/2606.27136v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "joint learning of rules and policies from trajectories",
+      "llm_evidence_cn": "从交互轨迹中联合学习规则和策略",
+      "llm_evidence": "从交互轨迹中联合学习规则和策略",
+      "canonical_evidence": "从交互轨迹中联合学习规则和策略",
+      "llm_tldr_en": "JERP jointly updates an experiential rule pool and the policy of LLM agents from the same interaction trajectories, combining interpretability of rules with broad policy improvement.",
+      "llm_tldr_cn": "提出JERP框架，通过同一交互轨迹同时更新LLM智能体的长期经验规则池和策略参数。该联合学习方法融合了规则的可解释性与策略参数的泛化能力，解决了现有方法中将经验用于规则或策略的割裂问题。在长程任务上展示了比单独使用规则或策略更优的性能和解释性。",
+      "llm_tldr": "提出JERP框架，通过同一交互轨迹同时更新LLM智能体的长期经验规则池和策略参数。该联合学习方法融合了规则的可解释性与策略参数的泛化能力，解决了现有方法中将经验用于规则或策略的割裂问题。在长程任务上展示了比单独使用规则或策略更优的性能和解释性。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on policy reinforcement learning and distillation for long horizon agent trajectories",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.27291v1",
+      "source": "arxiv",
+      "title": "Designing Reward Signals for Portable Query Generation: A Case Study in Industrial Semantic Job Search",
+      "abstract": "Job-search platforms rely on low-bandwidth query interfaces that often fail to capture the high-dimensional complexity of candidate profiles. We present an end-to-end RLAIF (Reinforcement Learning from AI Feedback) framework to generate \\emph{portable} job search queries, terms that abstract away seeker-specific identifiers while preserving generalizable qualifications. This task introduces a highly adversarial reward surface where policy optimization frequently exploits flaws in LLM-as-judge rubrics, resulting in degenerate verbatim-copying behaviors.   We conducted comprehensive empirical experiments to isolate the impact of optimization mechanics against structured reward engineering. Our results demonstrate that for critic-free optimizers, performance is overwhelmingly dictated by robust reward shaping, rendering the specific choice of algorithm largely immaterial. While critic-free per-rollout baseline methods (RLOO and REINFORCE++) natively resist reward-hacking, the group-relative advantage normalization in GRPO appears uniquely sensitive to spurious reward signals, making it disproportionately susceptible to exploitation. We show that introducing a deterministic, rule-based reward floor to correct for rewards assigned to verbatim copying mitigates this failure mode, resulting in a substantial $+0.147$ quality improvement on a cross-family evaluation judge. Ultimately, we show that the training-time reward model inflates performance gains by $2.4\\times$, confirming that the training success is fundamentally dependent on enforcing reward-shaping disciplines rather than selecting alternative optimizers.",
+      "authors": [
+        "Ping Liu",
+        "Qianqi Shen",
+        "Jianqiang Shen",
+        "Wenqiong Liu",
+        "Rajat Arora",
+        "Yunxiang Ren",
+        "Chunnan Yao",
+        "Dan Xu",
+        "Baofen Zheng",
+        "Wanjun Jiang",
+        "Andrii Soviak",
+        "Kevin Kao",
+        "Jingwei Wu",
+        "Wenjing Zhang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-06-25T17:09:12+00:00",
+      "link": "https://arxiv.org/pdf/2606.27291v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Reinforcement learning for query generation in job search, aligning with agentic search",
+      "llm_evidence_cn": "利用强化学习生成可迁移搜索查询，与智能体搜索相关",
+      "llm_evidence": "利用强化学习生成可迁移搜索查询，与智能体搜索相关",
+      "canonical_evidence": "利用强化学习生成可迁移搜索查询，与智能体搜索相关",
+      "llm_tldr_en": "RLAIF framework for portable job search query generation, addressing reward exploitation and demonstrating effective reward engineering for semantic search.",
+      "llm_tldr_cn": "该工作针对简历搜索场景中低带宽查询接口无法捕捉高维候选人复杂性的问题，提出基于RLAIF（从AI反馈的强化学习）的端到端框架，生成可迁移的搜索查询。研究揭示了LLM作为评判者时策略优化容易利用奖励漏洞导致退化解，并通过结构化奖励工程设计克服该问题。实验表明，精心设计的奖励信号可有效生成泛化性强的搜索查询，对工业搜索智能体具有实用价值。",
+      "llm_tldr": "该工作针对简历搜索场景中低带宽查询接口无法捕捉高维候选人复杂性的问题，提出基于RLAIF（从AI反馈的强化学习）的端到端框架，生成可迁移的搜索查询。研究揭示了LLM作为评判者时策略优化容易利用奖励漏洞导致退化解，并通过结构化奖励工程设计克服该问题。实验表明，精心设计的奖励信号可有效生成泛化性强的搜索查询，对工业搜索智能体具有实用价值。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "agentic search",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
