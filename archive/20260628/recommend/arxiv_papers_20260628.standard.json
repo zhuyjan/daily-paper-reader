@@ -1,0 +1,191 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-28T20:56:22.180818+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 1,
+    "quick_skim_target": 12,
+    "quick_selected": 1
+  },
+  "deep_dive": [
+    {
+      "id": "2606.25161v1",
+      "source": "arxiv",
+      "title": "TRUSTMEM: Learning Trustworthy Memory Consolidation for LLM Agents with Long-Term Memory",
+      "abstract": "Large language model (LLM) agents rely on long-term memory to support extended interactions and personalized assistance beyond finite context windows. Existing memory agents actively update external memory through generated write, revise, and delete operations, but these updates may omit important information, corrupt existing memory, or introduce unsupported hallucinated content. Once stored, such errors become persistent system-state failures that can affect future reasoning and generation. In this paper, we propose TrustMem, a framework designed to improve the trustworthiness of memory consolidation. TrustMem relies on a Memory Transition Verifier to evaluate the transition process of memory updates in terms of coverage, preservation, and faithfulness. It further constructs preference pairs among candidate updates under the same memory state, enabling preference-guided reinforcement learning to directly optimize memory updating behaviors. Extensive experiments demonstrate that TrustMem improves both memory utility and reliability: it achieves state-of-the-art results across MemoryAgentBench, HaluMem, and the Mem-alpha validation set, improves HaluMem memory extraction by 12.14 F1 points, and reduces transition-level omission, corruption, and hallucination by 40.1\\%, 79.1\\%, and 50.0\\%, respectively, compared with the strongest baseline for each error type.",
+      "authors": [
+        "Tianyu Yang",
+        "Sudipta Paul",
+        "Vijay Srinivasan",
+        "Vivek Kulkarni",
+        "Srinivas Chappidi"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-23T20:49:28+00:00",
+      "link": "https://arxiv.org/pdf/2606.25161v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "memory consolidation with verification for LLM agents",
+      "llm_evidence_cn": "面向LLM智能体带验证的记忆巩固",
+      "llm_evidence": "面向LLM智能体带验证的记忆巩固",
+      "canonical_evidence": "面向LLM智能体带验证的记忆巩固",
+      "llm_tldr_en": "TrustMem improves memory consolidation in LLM agents using a Memory Transition Verifier to ensure coverage and preservation.",
+      "llm_tldr_cn": "针对LLM智能体在记忆更新中可能遗漏、破坏或引入幻觉的问题，提出TrustMem框架。该框架引入记忆转换验证器，评估每次更新在覆盖性、保留性等维度上的质量，从而过滤不可靠操作。实验表明，TrustMem显著提升了长期记忆的准确性和可靠性，使智能体在长时间交互中保持更一致的表现。该工作为搜索智能体中的证据整理和声明验证提供了记忆管理支持。",
+      "llm_tldr": "针对LLM智能体在记忆更新中可能遗漏、破坏或引入幻觉的问题，提出TrustMem框架。该框架引入记忆转换验证器，评估每次更新在覆盖性、保留性等维度上的质量，从而过滤不可靠操作。实验表明，TrustMem显著提升了长期记忆的准确性和可靠性，使智能体在长时间交互中保持更一致的表现。该工作为搜索智能体中的证据整理和声明验证提供了记忆管理支持。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.24994v1",
+      "source": "arxiv",
+      "title": "ExTra: Exploratory Trajectory Optimization for Language Model Reinforcement Learning",
+      "abstract": "Reinforcement Learning with Verifiable Rewards (RLVR) for language-model reasoning can fail at both extremes of task difficulty: easy prompts often produce all-correct, low-diversity rollout groups with little gradient signal, while hard prompts can produce all-incorrect groups with no positive reward. We introduce ExTra (Exploratory Trajectory Optimization), a GRPO-compatible framework that extracts exploration signals from the model's own rollouts. ExTra combines two mechanisms: (i) a novelty reward that adds embedding-based diversity bonuses after GRPO normalization, rewarding diverse correct solutions; and (ii) entropy-guided prefix regeneration, which scores partial trajectories using entropy signals and continues exploration from promising intermediate steps. Across six mathematical reasoning benchmarks, ExTra improves Qwen3-1.7B over GRPO by about +5 points on pass@1 and +7 points on pass@16, showing that trajectory-level exploration signals can improve both single-sample accuracy and inference-time coverage.",
+      "authors": [
+        "Wenyang Hu",
+        "Junxiang Jia",
+        "Zhen Shu",
+        "Daniel Dahlmeier",
+        "See-Kiong Ng",
+        "Bryan Kian Hsiang Low"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-06-23T15:51:39+00:00",
+      "link": "https://arxiv.org/pdf/2606.24994v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Exploratory trajectory optimization for language model RL",
+      "llm_evidence_cn": "探索性轨迹优化方法用于语言模型强化学习",
+      "llm_evidence": "探索性轨迹优化方法用于语言模型强化学习",
+      "canonical_evidence": "探索性轨迹优化方法用于语言模型强化学习",
+      "llm_tldr_en": "Introduces ExTra, a GRPO-compatible framework with novelty reward and entropy-guided prefix regeneration to enhance exploration in RLVR for language models.",
+      "llm_tldr_cn": "语言模型推理RLVR在易和难任务上分别遇到低多样性或无正奖励问题。本文提出ExTra，结合新颖性奖励（嵌入多样性奖励）和熵引导前缀重生成（从高熵部分继续探索），在GRPO基础上提升探索效率。实验表明ExTra在多种推理任务上显著提高了性能和多样性。",
+      "llm_tldr": "语言模型推理RLVR在易和难任务上分别遇到低多样性或无正奖励问题。本文提出ExTra，结合新颖性奖励（嵌入多样性奖励）和熵引导前缀重生成（从高熵部分继续探索），在GRPO基础上提升探索效率。实验表明ExTra在多种推理任务上显著提高了性能和多样性。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on policy reinforcement learning and distillation for long horizon agent trajectories",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.27330v1",
+      "source": "arxiv",
+      "title": "Empowering GUI Agents via Autonomous Experience Exploration and Hindsight Experience Utilization for Task Planning",
+      "abstract": "Multimodal web agents can assist humans in operating repetitive GUI tasks, where effective task planning is essential for decomposing complex tasks into executable actions. While small open source MLLMs are cost efficient and privacy preserving compared with commercial large models, they suffer from weak planning and limited cross website generalization. To address these limitations, we introduce the planning experience exploration and utilization (PEEU) method, which autonomously explores environments to discover experiences and utilizes hindsight experience to synthesize strictly aligned, high level training data. To quantitatively analyze the generalization behaviors driving this performance, we propose the task decomposition hierarchical analysis framework (TDHAF) to systematically study compositional generalization across three task granularities: low, middle and high levels. Our analysis reveals that mastering low level atomic skills does not guarantee high level planning competence, while high level task training yields stronger OOD generalization. Experiments on real world benchmarks demonstrate PEEU's superior effectiveness: our 7B model achieves 30.6% accuracy, outperforming the much larger Qwen2.5-VL-32B model. These demonstrate constructing hindsight high level tasks and leveraging experiences is crucial for OOD planning abilities of small MLLMs.",
+      "authors": [
+        "Tianyi Men",
+        "Zhuoran Jin",
+        "Pengfei Cao",
+        "Yubo Chen",
+        "Kang Liu",
+        "Jun Zhao"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-06-25T17:44:48+00:00",
+      "link": "https://arxiv.org/pdf/2606.27330v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "autonomous experience exploration and hindsight utilization for self-evolving GUI agents",
+      "llm_evidence_cn": "自主经验探索与后见利用实现GUI智能体自进化",
+      "llm_evidence": "自主经验探索与后见利用实现GUI智能体自进化",
+      "canonical_evidence": "自主经验探索与后见利用实现GUI智能体自进化",
+      "llm_tldr_en": "Proposes PEEU, which enables GUI agents to autonomously explore and use hindsight experience to synthesize training data, achieving self-evolution for task planning.",
+      "llm_tldr_cn": "小模型GUI智能体规划能力弱且泛化差。本文提出PEEU方法，让智能体自主探索环境积累经验，并利用后见经验合成严格对齐的高层训练数据。实现任务规划的自进化，在跨网站泛化上显著提升。",
+      "llm_tldr": "小模型GUI智能体规划能力弱且泛化差。本文提出PEEU方法，让智能体自主探索环境积累经验，并利用后见经验合成严格对齐的高层训练数据。实现任务规划的自进化，在跨网站泛化上显著提升。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.27251v1",
+      "source": "arxiv",
+      "title": "Advancing Omnimodal Embodied Agents from Isolated Skills to Everyday Physical Autonomy",
+      "abstract": "Building persistent embodied agents in unstructured environments demands unified orchestration of heterogeneous tools spanning both cyber (APIs, IoT) and physical (manipulation, navigation) domains, coupled with autonomous recovery from physical failures that inevitably arise over extended operation. Existing systems treat these as separate problems: VLM-based planners lack a unified cyber-physical action space, agent frameworks accumulate unbounded context that degrades temporal coherence, and VLA policies execute open-loop without detecting their own failures. We argue that persistent autonomy requires not a monolithic model but a hierarchical asynchronous architecture with explicit separation of planning, memory, and verification. To this end, we present OmniAct, a framework integrating a multimodal semantic planner for skill routing across unified action spaces, an adaptive hierarchical memory with event-boundary-driven compression for sub-linear context growth, and an asynchronous visual preemption engine that closes the semantic loop during physical execution. Across 40 real-world long-horizon tasks on two robotic platforms coordinating four IoT devices, OmniAct achieves consistent improvements in end-to-end success across all complexity levels, maintains near-flat token consumption over under 100k+ accumulated interaction tokens, and elevates mid-scale open-weight models to proprietary-level performance.",
+      "authors": [
+        "Junhao Shi",
+        "Zezheng Huai",
+        "Siyin Wang",
+        "Jia Chen",
+        "Yubang Wang",
+        "Zhaoye Fei",
+        "Hechang Chen",
+        "Jingjing Gong",
+        "Xipeng Qiu",
+        "Yu-Gang Jiang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-25T16:36:35+00:00",
+      "link": "https://arxiv.org/pdf/2606.27251v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Hierarchical architecture with explicit separation of planning, memory, and verification",
+      "llm_evidence_cn": "具有规划、记忆和验证显式分离的层次化架构",
+      "llm_evidence": "具有规划、记忆和验证显式分离的层次化架构",
+      "canonical_evidence": "具有规划、记忆和验证显式分离的层次化架构",
+      "llm_tldr_en": "This paper proposes a hierarchical architecture for embodied agents that separates planning, memory, and verification, supporting autonomous recovery and evidence curation.",
+      "llm_tldr_cn": "持久具身智能体面临工具编排和故障恢复的挑战。本文提出层次化异步架构，显式分离规划、记忆和验证模块，实现自主故障检测和恢复。该设计方法可迁移至搜索智能体，支持显式工作记忆、证据整理和声明验证的功能解耦。",
+      "llm_tldr": "持久具身智能体面临工具编排和故障恢复的挑战。本文提出层次化异步架构，显式分离规划、记忆和验证模块，实现自主故障检测和恢复。该设计方法可迁移至搜索智能体，支持显式工作记忆、证据整理和声明验证的功能解耦。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

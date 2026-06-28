@@ -1,0 +1,69 @@
+{
+  "label": "2026-06-28",
+  "date": "2026-06-28",
+  "generated_at": "2026-06-28T21:00:03",
+  "count": 4,
+  "papers": [
+    {
+      "paper_id": "202606/28/2606.24994v1-extra-exploratory-trajectory-optimization-for-language-model-reinforcement-learning",
+      "section": "deep",
+      "title_en": "ExTra: Exploratory Trajectory Optimization for Language Model Reinforcement Learning",
+      "authors": "Wenyang Hu, Junxiang Jia, Zhen Shu, Daniel Dahlmeier, See-Kiong Ng, Bryan Kian Hsiang Low",
+      "date": "2026-06-23",
+      "pdf": "https://arxiv.org/pdf/2606.24994v1",
+      "score": "8.0",
+      "evidence": "探索性轨迹优化方法用于语言模型强化学习",
+      "tldr": "强化学习可验证奖励（RLVR）训练语言模型推理时，简单提示产生全正确但低多样性的轨迹，梯度信号弱；困难提示产生全错误轨迹，无正奖励。ExTra框架通过两种机制从模型自身rollouts提取探索信号：新奇奖励在GRPO归一化后增加多样性奖励，鼓励多样正确解；熵引导前缀重生成利用熵信号从有希望的中间步骤继续探索。在六个数学推理基准上，ExTra将Qwen3-1.7B的pass@1比GRPO提高约5点，pass@16提高约7点。结果表明，轨迹级探索能同时提升单样本准确率和推理时覆盖，为RLVR训练提供了有效探索机制。",
+      "tags": "query:self-evolve",
+      "abstract_en": "Reinforcement Learning with Verifiable Rewards (RLVR) for language-model reasoning can fail at both extremes of task difficulty: easy prompts often produce all-correct, low-diversity rollout groups with little gradient signal, while hard prompts can produce all-incorrect groups with no positive reward. We introduce ExTra (Exploratory Trajectory Optimization), a GRPO-compatible framework that extracts exploration signals from the model's own rollouts. ExTra combines two mechanisms: (i) a novelty reward that adds embedding-based diversity bonuses after GRPO normalization, rewarding diverse correct solutions; and (ii) entropy-guided prefix regeneration, which scores partial trajectories using entropy signals and continues exploration from promising intermediate steps. Across six mathematical reasoning benchmarks, ExTra improves Qwen3-1.7B over GRPO by about +5 points on pass@1 and +7 points on pass@16, showing that trajectory-level exploration signals can improve both single-sample accuracy and inference-time coverage.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202606/28/2606.25161v1-trustmem-learning-trustworthy-memory-consolidation-for-llm-agents-with-long-term-memory",
+      "section": "deep",
+      "title_en": "TRUSTMEM: Learning Trustworthy Memory Consolidation for LLM Agents with Long-Term Memory",
+      "authors": "Tianyu Yang, Sudipta Paul, Vijay Srinivasan, Vivek Kulkarni, Srinivas Chappidi",
+      "date": "2026-06-23",
+      "pdf": "https://arxiv.org/pdf/2606.25161v1",
+      "score": "8.0",
+      "evidence": "面向LLM智能体带验证的记忆巩固",
+      "tldr": "LLM代理依赖长期记忆支持持续交互，但现有记忆更新操作可能遗漏重要信息、污染已有记忆或引入幻觉，导致持久性系统错误。本文提出TrustMem框架，通过记忆转换验证器评估更新的覆盖率、保留性和忠实性，并利用偏好强化学习优化更新行为。实验在多个基准上取得最优结果，将遗漏、污染和幻觉分别降低40.1%、79.1%和50.0%。该工作提升了长期记忆的可靠性和实用性，为可信记忆管理提供了新思路。",
+      "tags": "query:search-agent",
+      "abstract_en": "Large language model (LLM) agents rely on long-term memory to support extended interactions and personalized assistance beyond finite context windows. Existing memory agents actively update external memory through generated write, revise, and delete operations, but these updates may omit important information, corrupt existing memory, or introduce unsupported hallucinated content. Once stored, such errors become persistent system-state failures that can affect future reasoning and generation. In this paper, we propose TrustMem, a framework designed to improve the trustworthiness of memory consolidation. TrustMem relies on a Memory Transition Verifier to evaluate the transition process of memory updates in terms of coverage, preservation, and faithfulness. It further constructs preference pairs among candidate updates under the same memory state, enabling preference-guided reinforcement learning to directly optimize memory updating behaviors. Extensive experiments demonstrate that TrustMem improves both memory utility and reliability: it achieves state-of-the-art results across MemoryAgentBench, HaluMem, and the Mem-alpha validation set, improves HaluMem memory extraction by 12.14 F1 points, and reduces transition-level omission, corruption, and hallucination by 40.1\\%, 79.1\\%, and 50.0\\%, respectively, compared with the strongest baseline for each error type.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202606/28/2606.27330v1-empowering-gui-agents-via-autonomous-experience-exploration-and-hindsight-experience-utilization-for-task-planning",
+      "section": "deep",
+      "title_en": "Empowering GUI Agents via Autonomous Experience Exploration and Hindsight Experience Utilization for Task Planning",
+      "authors": "Tianyi Men, Zhuoran Jin, Pengfei Cao, Yubo Chen, Kang Liu, Jun Zhao",
+      "date": "2026-06-25",
+      "pdf": "https://arxiv.org/pdf/2606.27330v1",
+      "score": "8.0",
+      "evidence": "自主经验探索与后见利用实现GUI智能体自进化",
+      "tldr": "针对小型开源多模态大语言模型在GUI任务规划中泛化能力弱的问题，提出PEEU方法，通过自主探索环境发现经验并利用后见经验合成严格对齐的高层训练数据。7B模型在真实基准上达到30.6%准确率，超越Qwen2.5-VL-32B。揭示高层任务训练对跨网站组合泛化的关键作用，为小型模型提升规划能力提供有效范式。",
+      "tags": "query:self-evolve",
+      "abstract_en": "Multimodal web agents can assist humans in operating repetitive GUI tasks, where effective task planning is essential for decomposing complex tasks into executable actions. While small open source MLLMs are cost efficient and privacy preserving compared with commercial large models, they suffer from weak planning and limited cross website generalization. To address these limitations, we introduce the planning experience exploration and utilization (PEEU) method, which autonomously explores environments to discover experiences and utilizes hindsight experience to synthesize strictly aligned, high level training data. To quantitatively analyze the generalization behaviors driving this performance, we propose the task decomposition hierarchical analysis framework (TDHAF) to systematically study compositional generalization across three task granularities: low, middle and high levels. Our analysis reveals that mastering low level atomic skills does not guarantee high level planning competence, while high level task training yields stronger OOD generalization. Experiments on real world benchmarks demonstrate PEEU's superior effectiveness: our 7B model achieves 30.6% accuracy, outperforming the much larger Qwen2.5-VL-32B model. These demonstrate constructing hindsight high level tasks and leveraging experiences is crucial for OOD planning abilities of small MLLMs.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202606/28/2606.27251v1-advancing-omnimodal-embodied-agents-from-isolated-skills-to-everyday-physical-autonomy",
+      "section": "quick",
+      "title_en": "Advancing Omnimodal Embodied Agents from Isolated Skills to Everyday Physical Autonomy",
+      "authors": "Junhao Shi, Zezheng Huai, Siyin Wang, Jia Chen, Yubang Wang, Zhaoye Fei, Hechang Chen, Jingjing Gong, Xipeng Qiu, Yu-Gang Jiang",
+      "date": "2026-06-25",
+      "pdf": "https://arxiv.org/pdf/2606.27251v1",
+      "score": "6.0",
+      "evidence": "具有规划、记忆和验证显式分离的层次化架构",
+      "tldr": "构建持久化具身智能体需统一网络与物理工具，并自主恢复故障。现有系统将规划、记忆和执行分离不足，导致上下文膨胀和开环执行。OmniAct提出层次化异步架构，包含统一动作空间的语义规划器、基于事件边界压缩的自适应记忆和异步视觉抢占引擎。在40个长时任务中，端到端成功率一致提升，token消耗近常数，使开源模型达到专有性能。",
+      "tags": "query:search-agent",
+      "abstract_en": "Building persistent embodied agents in unstructured environments demands unified orchestration of heterogeneous tools spanning both cyber (APIs, IoT) and physical (manipulation, navigation) domains, coupled with autonomous recovery from physical failures that inevitably arise over extended operation. Existing systems treat these as separate problems: VLM-based planners lack a unified cyber-physical action space, agent frameworks accumulate unbounded context that degrades temporal coherence, and VLA policies execute open-loop without detecting their own failures. We argue that persistent autonomy requires not a monolithic model but a hierarchical asynchronous architecture with explicit separation of planning, memory, and verification. To this end, we present OmniAct, a framework integrating a multimodal semantic planner for skill routing across unified action spaces, an adaptive hierarchical memory with event-boundary-driven compression for sub-linear context growth, and an asynchronous visual preemption engine that closes the semantic loop during physical execution. Across 40 real-world long-horizon tasks on two robotic platforms coordinating four IoT devices, OmniAct achieves consistent improvements in end-to-end success across all complexity levels, maintains near-flat token consumption over under 100k+ accumulated interaction tokens, and elevates mid-scale open-weight models to proprietary-level performance.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

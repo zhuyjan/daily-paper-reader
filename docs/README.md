@@ -6,58 +6,34 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-27
-- 运行时间：2026-06-27 21:23:11 UTC
+- 最新运行日期：2026-06-28
+- 运行时间：2026-06-28 20:59:55 UTC
 - 运行状态：成功
-- 本次总论文数：12
+- 本次总论文数：4
 - 精读区：3
-- 速读区：9
+- 速读区：1
 
 ### 今日简报（AI）
-今日12篇论文聚焦LLM Agent技能优化与合成数据生成，精读两篇高分工作。
-值得关注假设驱动的Agent技能优化方法，以及自动生成合成数据的智能体数据科学家。
-建议进一步了解Agent原生记忆系统与世界模型，为长期自主决策奠定基础。
-- 详情：[/202606/27/README](/202606/27/README)
+1) 今日4篇论文聚焦强化学习轨迹优化与LLM长期记忆，其中2篇精读双获8分，另有一篇全模态具身智能速读。  
+2) 最值得关注的方向：通过《ExTra》探索性轨迹优化提升语言模型RL效率，以及《TRUSTMEM》为LLM智能体设计可信记忆巩固机制。  
+3) 建议普通读者优先精读这两篇8分论文，快速把握强化学习与长期记忆在LLM中的前沿进展。
+- 详情：[/202606/28/README](/202606/28/README)
 
 ### 精读区论文标签
-1. [Hypothesis-Driven Skill Optimization for LLM Agents](/202606/27/2606.22330v1-hypothesis-driven-skill-optimization-for-llm-agents)  
+1. [ExTra: Exploratory Trajectory Optimization for Language Model Reinforcement Learning](/202606/28/2606.24994v1-extra-exploratory-trajectory-optimization-for-language-model-reinforcement-learning)  
    标签：评分：8.0/10、query:self-evolve
-   evidence：无训练的LLM智能体技能优化框架
-2. [Autodata: An agentic data scientist to create high quality synthetic data](/202606/27/2606.25996v2-autodata-an-agentic-data-scientist-to-create-high-quality-synthetic-data)  
-   标签：评分：8.0/10、query:self-evolve
-   evidence：智能体数据科学家用于自生成训练数据
-3. [MIRROR: Novelty-Constrained Memory-Guided MCTS Red-Teaming for Agentic RAG](/202606/27/2606.26793v1-mirror-novelty-constrained-memory-guided-mcts-red-teaming-for-agentic-rag)  
+   evidence：探索性轨迹优化方法用于语言模型强化学习
+2. [TRUSTMEM: Learning Trustworthy Memory Consolidation for LLM Agents with Long-Term Memory](/202606/28/2606.25161v1-trustmem-learning-trustworthy-memory-consolidation-for-llm-agents-with-long-term-memory)  
    标签：评分：8.0/10、query:search-agent
-   evidence：使用记忆引导MCTS对多模态智能体RAG进行红队攻击
+   evidence：面向LLM智能体带验证的记忆巩固
+3. [Empowering GUI Agents via Autonomous Experience Exploration and Hindsight Experience Utilization for Task Planning](/202606/28/2606.27330v1-empowering-gui-agents-via-autonomous-experience-exploration-and-hindsight-experience-utilization-for-task-planning)  
+   标签：评分：8.0/10、query:self-evolve
+   evidence：自主经验探索与后见利用实现GUI智能体自进化
 
 ### 速读区论文标签
-1. [Are We Ready For An Agent-Native Memory System?](/202606/27/2606.24775v1-are-we-ready-for-an-agent-native-memory-system)  
-   标签：评分：7.0/10、query:search-agent
-   evidence：对支持证据策展和动态更新的代理原生记忆系统进行系统研究
-2. [Beyond Next-Observation Prediction: Agent-Authored World Modeling for Sequential Decision Making](/202606/27/2606.25421v1-beyond-next-observation-prediction-agent-authored-world-modeling-for-sequential-decision-making)  
-   标签：评分：7.0/10、query:search-agent
-   evidence：基于决策需求的轨迹过渡证据检索
-3. [Agentic System as Compressor: Quantifying System Intelligence in Bits](/202606/27/2606.25960v1-agentic-system-as-compressor-quantifying-system-intelligence-in-bits)  
-   标签：评分：7.0/10、query:search-agent
-   evidence：度量调用工具和检索证据的智能体系统
-4. [SKILL-DISCO: Distilling and Compiling Agent Traces into Reusable Procedural Skills](/202606/27/2606.26669v1-skill-disco-distilling-and-compiling-agent-traces-into-reusable-procedural-skills)  
-   标签：评分：7.0/10、query:self-evolve
-   evidence：将智能体轨迹蒸馏为可重用过程技能，轨迹编译
-5. [Joint Learning of Experiential Rules and Policies for Large Language Model Agents](/202606/27/2606.27136v1-joint-learning-of-experiential-rules-and-policies-for-large-language-model-agents)  
-   标签：评分：7.0/10、query:self-evolve
-   evidence：从交互轨迹中联合学习规则和策略
-6. [Designing Reward Signals for Portable Query Generation: A Case Study in Industrial Semantic Job Search](/202606/27/2606.27291v1-designing-reward-signals-for-portable-query-generation-a-case-study-in-industrial-semantic-job-search)  
-   标签：评分：7.0/10、query:search-agent
-   evidence：利用强化学习生成可迁移搜索查询，与智能体搜索相关
-7. [AutoRAS: Learning Robust Agentic Systems with Primitive Representations](/202606/27/2606.21445v1-autoras-learning-robust-agentic-systems-with-primitive-representations)  
-   标签：评分：6.0/10、query:self-evolve
-   evidence：自动设计鲁棒智能体系统并优化
-8. [To Isolate or to Score? Model-Adaptive Assessment for Cost-Efficient Multi-Agent RAG](/202606/27/2606.25191v1-to-isolate-or-to-score-model-adaptive-assessment-for-cost-efficient-multi-agent-rag)  
+1. [Advancing Omnimodal Embodied Agents from Isolated Skills to Everyday Physical Autonomy](/202606/28/2606.27251v1-advancing-omnimodal-embodied-agents-from-isolated-skills-to-everyday-physical-autonomy)  
    标签：评分：6.0/10、query:search-agent
-   evidence：多智能体RAG评估机制分析，涉及检索和证据
-9. [Qwen-Image-Agent: Bridging the Context Gap in Real-World Image Generation](/202606/27/2606.26907v1-qwen-image-agent-bridging-the-context-gap-in-real-world-image-generation)  
-   标签：评分：6.0/10、query:search-agent
-   evidence：统一的智能体框架，集成搜索、记忆和规划以实现上下文感知的图像生成
+   evidence：具有规划、记忆和验证显式分离的层次化架构
 
 
 <div class="dpr-home-promo-card">
