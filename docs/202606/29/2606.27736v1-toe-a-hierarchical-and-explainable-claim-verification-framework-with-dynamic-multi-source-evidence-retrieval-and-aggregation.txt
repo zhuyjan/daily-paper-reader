@@ -1,0 +1,426 @@
+Title: ToE: A Hierarchical and Explainable Claim Verification Framework with Dynamic Multi-source Evidence Retrieval and Aggregation
+
+URL Source: https://arxiv.org/pdf/2606.27736v1
+
+Published Time: Mon, 29 Jun 2026 00:26:21 GMT
+
+Number of Pages: 9
+
+Markdown Content:
+# ToE: A Hierarchical and Explainable Claim Verification Framework with Dynamic Multi-source Evidence Retrieval and Aggregation 
+
+Zhaoqi Wang ∗, Zijian Zhang ∗, Kun Zheng ∗, Zhen Li ∗, Xin Li ∗, Chunlei Li †, Jiamou Liu ‡∗School of Cyberspace Science and Technology, Beijing Institute of Technology 
+
+†TravelSky Technology Limited 
+
+‡School of Computer Science, University of Auckland 
+
+Abstract —Content Warning: This paper contains examples of misinformation used only for research purpose. The rapid spread of fake news poses increasing threats to information ecosystems, especially as AI-generated misinformation under Generative Engine Optimization (GEO) poisoning allows ad-versarially crafted content to be systematically surfaced by retrieval systems, contaminating LLM reasoning. In this paper, we propose Tree of Evidence (ToE), a hierarchical evidence reasoning framework for automated fact-checking that models each claim as a dynamically expanding argument tree. ToE integrates a reinforcement learning-driven multi-source retrieval agent, an evidence evaluation agent, and an argument tree aggregation algorithm to iteratively decompose, retrieve, and verify claims through an explainable evidence chain. We further provide a theoretical analysis of the retrieval process, deriving a formal error bound that guarantees the learned policy converges to a neighborhood of the information-theoretically optimal pol-icy. Experiments across multiple datasets and backbone LLMs demonstrate that ToE achieves improvements ranging from 4 to 24 percentage points over competitive baselines, with particularly pronounced gains on adversarially poisoned inputs. 
+
+I. I NTRODUCTION 
+
+Large language models (LLMs), such as the DeepSeek se-ries [1] and the GPT series [2], have demonstrated impressive capabilities across a wide range of tasks. However, due to their reliance on static training data, LLMs lack access to real-time information, which makes them prone to hallucination. To address this limitation, two major lines of work have been proposed. Retrieval-Augmented Generation (RAG) constructs an external knowledge index and retrieves relevant documents at inference time to supply the model with up-to-date con-text [3]. Tool calling [4], on the other hand, enables LLMs to dynamically invoke external tools such as search engines during generation, thereby grounding responses in freshly retrieved information. Both approaches alleviate the halluci-nation problem to a certain extent. However, the introduction of third-party information also brings new risks. AI-generated or manually fabricated misinformation can lead LLMs to produce incorrect conclusions [5], [6], [7]. This risk may be further exacerbated by GEO, a technique that structures content to maximize its discoverability by retrieval algorithms such as embedding-based ranking [8]. Compared to manually written truthful content, adversarially crafted misinformation optimized via GEO can be systematically ranked higher in retrieval results, making it more likely to be consumed by LLMs. For example, as illustrated in Figure 1, when a user asks “Who is the CEO of OpenAI?” , an attacker can inject a fabricated document claiming that Tim Cook has joined OpenAI as CEO, which once ranked alongside legitimate sources, contaminates the retrieved context and causes the LLM to produce a confidently wrong answer. 
+
+Fig. 1. Illustration of LLM context pollution via malicious retrieval 
+
+To combat the spread of misinformation, researchers have proposed a range of detection methods. Early work relies on deep learning-based approaches [9], but these methods suffer from limited generalizability, as the inherent diversity of online information across topics, styles, and platforms makes it difficult to transfer models trained on one distribution to unseen data from another [10]. More recently, LLM-based fake news detection methods have been proposed [11], [10], [12], [13], which leverage the reasoning capabilities of LLMs to analyze input content and identify potential misinformation. While these methods achieve promising results on scientific or knowledge-intensive claims, they struggle with time-sensitive news, particularly in the face of AI-generated misinformation where fabricated content is fluent, coherent, and difficult to distinguish from genuine reporting without access to real-time external knowledge. To address this challenge, we propose ToE, a hierarchical evidence reasoning framework for automated fact-checking. ToE models a claim as a dynamically expanding argument tree and verifies it through three core components: a reinforce-
+
+> arXiv:2606.27736v1 [cs.AI] 26 Jun 2026
+
+ment learning-driven multi-source retrieval agent that collects evidence across platforms according to the characteristics of the claim under investigation, an evidence evaluation agent that scores the veracity and reliability of the claim based on the collected evidence, and an argument tree aggregation agent that decomposes the claim into sub-claims along di-mensions such as who, what, when, where, why, and how, expanding the subtree for deeper verification when the current evidence is insufficient for a reliable judgment. Node-level scores are propagated bottom-up through the tree, and the process terminates when the root node reaches a convergence or decisiveness threshold, yielding a final veracity score along with the full reasoning tree. We summarize our main contributions as follows:  
+
+> •
+
+We propose ToE, a hierarchical evidence reasoning framework for automated fact-checking. To the best of our knowledge, this is the first algorithm based on dy-namic evidence collection and evaluation, which produces an interpretable argument tree as an explainable evidence chain for each verdict.  
+
+> •
+
+We provide a theoretical analysis of the retrieval frame-work by modeling evidence collection as a Partially Observable Markov Decision Process, and derive a formal error bound showing that the learned policy converges to a neighborhood of the information-theoretically optimal policy.  
+
+> •
+
+We construct an adversarial dataset AdvFact to evaluate robustness under GEO poisoning, and conduct experi-ments across multiple datasets and LLMs with ablation studies on the retrieval action space, demonstrating the ef-fectiveness and generalizability of the proposed approach. II. R ELATED WORK 
+
+With the rapid development of AI, LLM-based agents address the knowledge staleness problem by invoking external search tools to retrieve relevant information as supplementary context [3], [4]. However, this reliance on third-party sources introduces new vulnerabilities. Prior work has demonstrated that AI-generated misinformation injected into retrieval results can mislead LLMs into producing incorrect conclusions, with potentially severe consequences in domains such as medicine and finance [6], [14]. While deep learning-based detection methods have been proposed to identify such content [9], they rely on surface-level stylistic features and fail to generalize to AI-generated misinformation that differs from truthful content only in subtle factual details. For instance, a claim such as “Tim Cook is Apple’s CEO” can be corrupted to “Tim Cook became OpenAI’s CEO yesterday,” a statement that is stylistically indistinguishable from genuine news yet factually false. Recent work leverages the reasoning capabilities of LLMs to assist in verifying the reliability of information. F3 framework guides LLMs through stepwise logical analysis and evidence consistency assessment via prompt engineering techniques such as zero-shot chain-of-thought reasoning and deductive generation, producing a veracity judgment for the input claim [11]. TELLER decomposes fake news detection into a set of structured evaluation questions, directing LLMs to analyze news from dimensions including factual accuracy, contextual consistency, and source credibility, then aggre-gates the dimension-level scores through interpretable logical rules to reach a final verdict [10]. However, these methods predominantly rely on LLMs to analyze content provided by the claim content, and show limited performance against AI-generated misinformation. STEEL adopts a multi-round retrieval-augmented strategy in which an LLM assesses the confidence of initial retrieval results and automatically gener-ates refined queries to iteratively collect additional web evi-dence when the current evidence is insufficient, alleviating the dependence on static knowledge bases [12]. AdSent rewrites input claims into sentiment-neutralized variants to force the veracity classifier to rely solely on factual content, improving robustness against sentiment-manipulated misinformation [15]. However, it provides limited defense against misinformation grounded in fabricated facts. III. M ETHOD 
+
+To counter the potential impact of false and misleading information, we propose ToE, a hierarchical evidence reason-ing framework for automated fact-checking. ToE models the verification of a claim as a dynamically growing argument tree. At each step, it collects and evaluates evidence from heterogeneous sources — including Wikipedia, Arxiv, fact-checking platforms, search engine results, and social media. Based on the evaluation results, new subtrees are expanded to progressively refine the veracity judgment. This process ultimately produces an interpretable evidence tree that traces the full reasoning process. As depicted in Fig. 2, the system initializes the argument tree with the claim under investigation as the root node and enters the main iterative loop. At each iteration, the priority of each pending node is computed dynamically based on the uncertainty of its parent and its own estimated importance, so that nodes with the greatest expected contribution to the final judgment are processed first. For each selected node, the system analyzes semantic features of the claim, such as its category and geographic scope, and generates three types of search queries: general background queries, supporting evidence queries, and counter-evidence queries. This design ensures comprehensive and objective evidence collection and reduces confirmation bias. A retrieval agent trained via re-inforcement learning then executes searches autonomously across heterogeneous sources, including Wikipedia, PolitiFact, social media, and the general web, and decides dynamically when to stop retrieval. The collected content is parsed by an LLM to extract evidence snippets directly relevant to the claim, each annotated with attributes such as stance and source credibility, forming a structured evidence set. Based on this evidence, the system computes two core scores for the current node: veracity, which measures the probability that the claim is true, and reliability, which measures how strongly the current evidence supports that judgment. 2Fig. 2. An overview of ToE framework. 
+
+After each node is evaluated, scores are propagated bottom-up through the tree via an aggregation network, continuously updating the root node’s overall judgment. If a node’s reli-ability is insufficient, indicating that the available evidence does not yet support a confident verdict, the system invokes an LLM to decompose the claim into finer-grained, more verifiable sub-claims along various dimensions, covering time, location, person, event, cause, and information source, and adds them as new child nodes for further processing. Con-currently, subtrees that have reached high reliability with a sufficiently decisive verdict are pruned to avoid redundant computation. The iterative process continues until the root node’s judgment converges, a decisiveness threshold is met, or the maximum number of iterations is reached, ultimately producing a veracity score for the claim and a complete argument tree available for traceability and review. 
+
+A. Theoretical Foundations 
+
+The verification process in ToE can be understood through two complementary theoretical lenses: a decision-theoretic for-mulation that characterizes the structure of the search problem, and an information-theoretic interpretation that justifies the design of the reward signal driving the retrieval agent. 
+
+a) POMDP Formulation.: The core challenge in auto-mated fact-checking is that the ground-truth veracity v∗ ∈
+
+[0 , 1] of a claim c is a latent variable that cannot be directly observed. The system can only accumulate evidence through sequential search actions and must form a judgment under persistent uncertainty. This structure maps naturally onto a Partially Observable Markov Decision Process (POMDP) [16], defined as the tuple (S, A, O, T , R), with components as follows. The state st = ( Et, f c) is the joint representation of the evidence set Et accumulated up to step t and the semantic features fc of the claim under investigation, where 
+
+fc encodes attributes such as claim category and geographic scope. The action at ∈ A is selected from the eight-option discrete action space of the retrieval agent, covering heterogeneous source types including Wikipedia, arXiv, fact-checking platforms, social media, and a stop action. The 
+
+observation ot ∈ O is the set of documents retrieved after executing action at, which is subsequently processed by the evidence evaluation agent into structured evidence objects annotated with stance and credibility attributes. The transition 
+
+T (st+1 | st, a t) describes how the evidence set is updated upon receiving new observations: Et+1 = Et ∪{ ot}. The belief state bt = ( vn,t , r n,t ) is maintained by the evaluation network, which maps the current evidence set and claim features to a veracity score vn,t and a reliability score rn,t . Crucially, the evaluation network serves as a belief state estimator rather than an independently trained value network: it is a domain-driven module that produces a posterior estimate of v∗ given all available evidence, which distinguishes ToE from standard Actor-Critic architectures where the value function is learned separately from the environment model. 
+
+b) Information-Seeking Objective.: The reward signal driving the retrieval agent admits a natural information-theoretic interpretation. At each step t, the agent receives a step reward proportional to the reliability gain ∆rt = rn,t −rn,t −1.We interpret this gain as an approximation of the conditional mutual information between the latent veracity v∗ and the new observation ot given prior evidence [17]: 
+
+∆rt ≈ I(v∗; ot | E t−1) = H(v∗ | E t−1) − H(v∗ | E t). (1) Each search action reduces the system’s epistemic uncertainty about the true veracity of the claim, and the reliability score 
+
+rn,t serves as a tractable surrogate for the posterior confidence over v∗.To establish a formal performance guarantee for the greedy retrieval policy, we assume that the reliability function r :2O → [0 , 1] is submodular with respect to the evidence 3set, meaning that the marginal reliability gain from any new observation o satisfies 
+
+r(EA ∪ { o}) − r(EA) ≥ r(EB ∪ { o}) − r(EB ), (2) for any EA ⊆ E B . This assumption captures the diminish-ing returns property of evidence accumulation: once a suf-ficient evidential foundation has been established, redundant or corroborating observations contribute progressively less to resolving uncertainty. This is empirically well-motivated in the fact-checking setting, where the first few high-quality sources typically determine the verdict and additional evidence yields smaller marginal gains. Under this assumption, the greedy policy that selects at each step the action maximizing the expected reliability gain is guaranteed to achieve performance no worse than (1 − 1/e ) of the optimal non-greedy policy, providing a formal justification for the step reward design. We further note that the approximation in the mutual infor-mation interpretation is bounded. If the evaluation network’s reliability estimate satisfies |rn,t − ˜rn,t | ≤ ϵ for all t, where 
+
+˜rn,t denotes the ideal reliability derived from the true posterior, then the per-step deviation of the reward signal from the true information gain is uniformly controlled, as formalized below. 
+
+Theorem 1. Let ˜rn,t denote the ideal reliability score de-rived from the true posterior over v∗, and suppose the evaluation network satisfies |rn,t − ˜rn,t | ≤ ϵ for all t.Then the per-step deviation of the reward signal from the true conditional mutual information is uniformly bounded by |∆rt − I(v∗; ot | E t−1)| ≤ 2ϵ for all t ∈ {1, . . . , T },and consequently the average cumulative deviation over the retrieval horizon satisfies 1
+
+> T
+
+PTt=1 |∆rt − I(v∗; ot | E t−1)| ≤ 
+
+2ϵ, independently of T .Proof. By the triangle inequality and the pointwise approxi-mation ∆˜ rt ≈ I(v∗; ot | E t−1), each term satisfies: 
+
+|∆rt − I(v∗; ot | E t−1)| ≤ | ∆rt − ∆˜ rt|
+
+= |(rn,t − rn,t −1) − (˜ rn,t − ˜rn,t −1)|≤ | rn,t − ˜rn,t | + |rn,t −1 − ˜rn,t −1|≤ 2ϵ. (3) This bound holds uniformly for all t, so the average over T
+
+steps is also bounded by 2ϵ.
+
+c) Reward Fidelity and Policy-Level Guarantee.: This per-step guarantee further implies a bound on the policy-level performance gap. Let π∗ denote the optimal policy under the true information gain reward I(v∗; ot | E t−1), and let ˆπ denote the policy optimized under the approximate reward ∆rt. By the simulation lemma for finite-horizon MDPs, a uniform per-step reward perturbation of δ induces a value function gap of at most 2T δ . Substituting the per-step bound δ = 2 ϵ from Theorem 1, the value gap over a fixed horizon T satisfies: 
+
+V π∗
+
+− V ˆπ ≤ 4T ϵ, (4) where V π = Eπ
+
+hPTt=1 I(v∗; ot | E t−1)
+
+i
+
+denotes the expected cumulative information gain under policy π. The per-step bound of 2ϵ is independent of the horizon length T and ensures that the approximate reward preserves the correct greedy action ranking whenever the gap between the best and second-best actions exceeds 4ϵ. In our setting, the retrieval agent operates over a short fixed horizon with at most 10 retrieved documents per node and a maximum tree depth of 5, so the cumulative deviation remains small in absolute terms relative to the reliability range [0 , 1] . These results formalize the conditions under which the learned reliability estimate is a faithful proxy for the true information gain, justifying the use of the surrogate reward in policy optimization. 
+
+B. RL-Driven Retrieval Agent 
+
+As one of the core components of ToE, the retrieval agent is responsible for searching the web for content relevant to the claim under investigation. The agent first analyzes the input claim to extract a set of semantic features, including its category (e.g., historical, scientific, or political) and attributes such as whether it describes a recent event, a historical fact, or a factual statement. These claim-level features are combined with step-level search state features, including the number of searches performed, the number of supporting snippets retrieved, and the number of counter-evidence snippets re-trieved, to form the current state st. The state is fed into a policy network πθ , which selects an action at from a discrete action space. The action space covers eight options: searching general web sources, searching for counter-evidence, querying arXiv for academic papers, querying Wikipedia, searching social media platforms, querying fact-checking sites such as PolitiFact and Snopes, searching Reddit discussions, and stopping the search. This design reflects the observation that different types of claims are best verified through different sources. Established facts benefit from dedicated fact-checking sites, encyclopedic knowledge is well served by Wikipedia, and time-sensitive claims, particularly statements attributed to public figures or official bodies, are often most efficiently verified via social media. The explicit counter-evidence action further ensures that the agent actively seeks disconfirming information rather than collecting only supporting content. Given the selected action, the agent uses an LLM to gener-ate a search query tailored to the claim’s content and then invokes the corresponding tool to retrieve results from the target source. After each search step, a step reward rt is computed and stored together with the transition in a trajectory buffer. Once the buffer reaches the designated capacity, the policy network is updated online using Group Relative Policy Optimization (GRPO) [18], a reinforcement learning algorithm that estimates advantages by comparing returns within a group of sampled trajectories, eliminating the need for a separate value network. The concrete policy state is a 29-dimensional vector. It con-tains claim-level attributes, including a 6-dimensional category indicator, a 3-dimensional locale indicator, and binary flags for recent events, historical facts, factual statements, opinions, and predictions. It also records search progress, including the number and ratio of completed searches, and evidence status, 4including the total number of retrieved evidence items, their stance breakdown, per-source search counts, and whether an official or authoritative source has been found. The policy network is a feed-forward model with hidden dimensions 128, 128, and 64, followed by a softmax action head. At each search step t, the reward is computed as 
+
+rt = wr ·∆rel t +wv ·| ∆ver t|+we ·min( nnew  
+
+> t
+
+, 4) ·δe +bt −δstep ,
+
+(5) where ∆rel t and |∆ver t| denote the changes in reliability and veracity, nnew  
+
+> t
+
+is the number of newly retrieved evidence items, 
+
+bt includes high-reliability and authoritative-source bonuses, and δstep penalizes unnecessary searches. Table I summarizes the main hyperparameters. During the first Nwarm claims, the agent follows a heuristic warm-up policy based on claim category and recency, after which GRPO updates are triggered whenever the trajectory buffer accumulates G completed tra-jectories.                                     
+
+> TABLE I HYPERPARAMETERS OF THE POLICY NETWORK .
+> Parameter Symbol Value
+> Reliability improvement weight wr1.0 Veracity change weight wv0.5 Evidence bonus weight we0.05 Per-step penalty δstep 0.01 High-confidence threshold τh0.8 Authoritative source bonus bauth 0.1 High-reliability bonus brel 0.2 Group size G8Discount factor γ0.99 Clipping range ε0.2 Entropy coefficient α0.01 KL coefficient β0.1 Learning rate –1e-5 Max gradient norm –0.5 Warm-up claims Nwarm 8Max search steps per claim –5
+
+C. Evidence Evaluation Agent 
+
+After the retrieval agent collects relevant documents, each document Di is processed individually. To avoid exceeding the context limit of the LLM, each document is first split into chunks. Each chunk is submitted to a cleaning LLM that extracts statements directly relevant to the claim. Once all chunks of a document are processed, the extracted statements are combined with the document’s metadata, such as URL and author information, and submitted to an analysis LLM. This LLM determines the document’s stance toward the claim (supporting, refuting, or neutral), whether it originates from an official or authoritative source, and whether it constitutes a primary report or a republication, among other attributes. The result is a structured evidence object Ei. After all documents are processed, the full evidence set E and the claim’s semantic features are passed to the evaluation network, which produces two scores for the current node: a veracity score vn and a reliability score rn.As illustrated in Fig. 3, the evaluation network jointly pre-dicts veracity and reliability through a stance-aware multi-path  
+
+> Fig. 3. Detail of Evaluation Network.
+
+attention mechanism. Claim features and evidence features are first encoded by a claim encoder and a shared evidence encoder into high-dimensional claim embeddings and evidence embeddings, respectively. In parallel, the evidence features are also passed through a quality gate, a small multilayer network that produces a per-evidence quality weight reflecting its estimated relevance and credibility. The encoded evidence then enters the stance-aware group attention module, where evidence objects are partitioned into three parallel processing tracks according to their annotated stance: supporting, neutral, and refuting. A mask generator takes as input the stance labels, the quality gate weights, and a binary evidence mask indicating which evidence slots are occupied, and produces two types of masks for each track. The safe mask is a hard binary mask that blocks invalid or cross-stance evidence from attending to the current track. The soft mask is a continuous weight derived from the quality gate output, used to scale attention outputs by evidence quality. Within each track, the evidence embeddings pass through a multi-head self-attention layer gated by the safe mask, enabling intra-stance contextual interaction. The attention outputs are then multiplied by the soft mask to inject quality priors, and mean pooling compresses the variable-length evidence set within each track into a fixed-dimensional stance aggregation vector. In the fusion stage, the original claim embedding and the three stance aggregation vectors are concatenated along the feature dimension, forming a compact unified representation that encodes the claim content alongside the evidential signal from all three stances. This representation is passed through a shared network for global feature integra-tion, after which it is routed to two parallel output heads: a veracity MLP and a reliability MLP, producing the final veracity score and reliability score, respectively. 5The evaluation network uses a 12-dimensional claim feature vector and a padded 20 × 8 evidence matrix with a binary evidence mask. Claim features encode category, locale, and whether the claim describes a recent event, historical fact, or factual statement. Each evidence item encodes stance, source type, relevance, and credibility. Training targets are produced by an LLM judge, which assigns soft veracity and reliability scores based on evidential support, source authority, evidence quantity, cross-source consistency, and directness. Given targets (˜ v, ˜r), the network minimizes 
+
+L = BCE (ˆ v, ˜v) + BCE (ˆ r, ˜r), (6) where ˆv and ˆr are the predicted veracity and reliability scores. The model is optimized with Adam using a learning rate of 
+
+10 −3 and gradient norm clipping at 1.0.
+
+D. Tree Management 
+
+Once a node obtains its veracity score vn∗ and reliability score rn∗ from the evaluation network, the tree management module determines how the argument tree should evolve. Algorithm 1 summarizes the full procedure, where three binary flags govern the control flow: the expansion flag δn, the decisiveness flag ϕn, and the convergence flag γ. These flags are defined in terms of five thresholds: the expansion reliability threshold τ exp  
+
+> r
+
+, the decision reliability threshold τ dec  
+
+> r
+
+, the upper and lower veracity thresholds τ + 
+
+> v
+
+and τ − 
+
+> v
+
+, and the convergence tolerance τc. Specifically:  
+
+> •
+
+δn = 1 if rself  
+
+> n
+
+< τ exp  
+
+> r
+
+, indicating that the node’s self-reliability is too low for a confident judgment and further evidence is needed; the root node is always expanded on its first evaluation regardless of this condition.  
+
+> •
+
+ϕn = 1 if raggr  
+
+> n
+
+> τ dec  
+
+> r
+
+and vaggr  
+
+> n
+
+/∈ [τ − 
+
+> v
+
+, τ + 
+
+> v
+
+], indicating that the aggregated evidence is sufficiently reliable and the verdict is unambiguously true or false.  
+
+> •
+
+γ = 1 if the range of v0 over the last three iterations is below τc and raggr  
+
+> 0
+
+> τ exp  
+
+> r
+
+, indicating that the root veracity score has stabilized and further iterations are unlikely to change the outcome. If the expansion flag δn∗ = 1 , indicating that the self-reliability rn∗ falls below τ exp  
+
+> r
+
+and the node is eligible for expansion, the system invokes a decomposition LLM. The LLM breaks the claim into two to four sub-claims, each targeting a distinct verification dimension: geographic accu-racy, entity identity, core event, causal relationship, source credibility, quantitative accuracy, or contextual background. Each sub-claim is assigned an importance weight, with all weights summing to one, and the resulting sub-claims are appended to the argument tree T as children of the current node and added to the processing queue Q. After any structural change to the tree, scores are propagated bottom-up via the aggregation network. For each node, the network takes as input the node’s own veracity and reliability scores alongside those of all processed children that reflect the combined evidence from the entire subtree. This update refreshes the root node’s scores v0 and r0 to reflect all available evidence. As illustrated in Fig. 4, the aggregation network encodes the 
+
+Algorithm 1 Tree of Evidence Verification 
+
+Input : Initial claim c0, maximum iterations Tmax , and thresh-olds τ exp  
+
+> r
+
+, τ dec  
+
+> r
+
+, τ + 
+
+> v
+
+, τ − 
+
+> v
+
+, τ c.
+
+Output : Final root veracity score v0 and reliability score 
+
+r0. 
+
+> 1:
+
+Initialize tree T with root node n0 ← c0 
+
+> 2:
+
+Initialize queue Q ← { n0} 
+
+> 3:
+
+for t = 1 , 2, . . . , T max do  
+
+> 4:
+
+if Q is empty then  
+
+> 5:
+
+break  
+
+> 6:
+
+end if  
+
+> 7:
+
+n∗ ← arg max n∈Q PRIORITY (n) 
+
+> 8:
+
+Q ← Q \ { n∗} 
+
+> 9:
+
+E ← GET EVIDENCE (n∗) 
+
+> 10:
+
+vn∗ , r n∗ ← EVALUATE (n∗, E) 
+
+> 11:
+
+if δn∗ = 1 then  
+
+> 12:
+
+S ← DECOMPOSE (n∗) 
+
+> 13:
+
+T .ADD (n∗, S) 
+
+> 14:
+
+Q ← Q ∪ S  
+
+> 15:
+
+end if  
+
+> 16:
+
+v0, r 0 ← AGGREGATE (T ) 
+
+> 17:
+
+T , Q ← PRUNE (T , Q) 
+
+> 18:
+
+if γ = 1 or ϕ0 = 1 then  
+
+> 19:
+
+break  
+
+> 20:
+
+end if  
+
+> 21:
+
+end for  
+
+> 22:
+
+return (v0, r 0)
+
+node’s own 16-dimensional feature vector and the feature vectors of its evaluated children, applies self-attention over child representations, and uses cross-attention from the parent node to aggregate child evidence into updated veracity and reliability scores.  
+
+> Fig. 4. Detail of Tree Aggregation Network.
+
+Before neural training, ToE uses a rule-based bottom-up aggregation scheme as an interpretable fallback and a source of soft supervision. Leaf and unexpanded nodes inherit their self-assessed scores. Internal nodes compute veracity as a reliability- and importance-weighted average of child veracity scores, while reliability is adjusted by the number of available children and the consistency of their veracity estimates. The 6neural aggregator is then trained bottom-up on completed trees. Its loss combines a supervised root loss and an imitation loss over non-root nodes: 
+
+Lroot = wroot [BCE (ˆ vroot , y v ) + BCE (ˆ rroot , y r )] , (7) 
+
+Limit = wimit · 1
+
+|N | 
+
+X
+
+> i∈N
+
+[BCE (ˆ vi, ˜vi) + BCE (ˆ ri, ˜ri)] , (8) with wroot = 1 .0 and wimit = 0 .1. The aggregation network is optimized with AdamW using a learning rate of 10 −4, weight decay 10 −5, and gradient norm clipping at 1.0.Following aggregation, the system performs a top-down pruning pass. For any non-leaf node whose decisiveness flag 
+
+ϕn = 1 , meaning its aggregated reliability raggr  
+
+> n
+
+exceeds τ dec 
+
+> r
+
+and its aggregated veracity vaggr  
+
+> n
+
+falls outside [τ − 
+
+> v
+
+, τ + 
+
+> v
+
+], all pending descendants are removed from Q, avoiding unnec-essary computation on branches that no longer affect the outcome. The loop then checks whether the convergence flag 
+
+γ = 1 or the root’s decisiveness flag ϕ0 = 1 . Convergence holds when the range of v0 over the last three iterations drops below τc and raggr  
+
+> 0
+
+exceeds τ exp  
+
+> r
+
+. If either condition is met, the system terminates and returns v0 and r0 as the final verdict. Otherwise, the next node is selected from 
+
+Q according to its priority score, which is computed as a weighted combination of the parent node’s uncertainty and the node’s own importance weight assigned at decomposition time, and the next iteration begins. IV. E VALUATION 
+
+A. Experimental Setup 
+
+Datasets. We evaluate ToE on three publicly available fact-checking benchmarks. The LIAR dataset [19] contains 12,836 human-labeled short statements about political news, each annotated with one of six fine-grained veracity labels along with speaker metadata such as party affiliation and job title. PolitiFact [20] comprises 21,152 expert-verified statements sourced from the PolitiFact website, spanning claims made between 2008 and 2022 across six verdict categories. Check-COVID [21] is a domain-specific benchmark of 1,504 COVID-19 related claims drawn from news sources, each verified against evidence from scientific journal articles and labeled as supported, refuted, or lacking sufficient information. To enable consistent three-class accuracy evaluation across all datasets, we map each dataset’s original labels to a unified label set: true, false, and uncertain. For LIAR and PolitiFact, the labels pants-fire, false, and barely-true are mapped to false; half-true is mapped to uncertain; and mostly-true and true are mapped to true. The two datasets differ only in that PolitiFact uses mostly-false in place of barely-true, which is likewise mapped to false. For Check-COVID, the labels SUPPORT, REFUTE, and NOTENOUGHINFO are mapped to true, false, and uncertain, respectively. To further assess the robustness of ToE against AI-generated misinformation, we construct 
+
+AdvFact , an adversarial benchmark designed to simulate sophisticated false claims that are stylistically convincing yet factually incorrect. We randomly sample 100 false statements from the LIAR dataset and apply two complementary poison-ing strategies to generate 100 samples each: FakeGPT [14] rewrites each statement into a more fluent and detail-rich false narrative, while PoisonedRAG [6] injects adversarially crafted passages into the retrieval corpus to mislead evidence-based reasoning. The resulting dataset contains 200 samples in total, all labeled as false, and is evaluated directly without any additional training. 
+
+Comparison Methods. We compare ToE against a range of LLM-based fact-checking methods. Direct prompting feeds the raw claim directly to an LLM and asks for a veracity judgment without any additional context. Z-CoT and DefGen [11] are two structured prompting strategies proposed by the same work, eliciting step-by-step reasoning through zero-shot chain-of-thought and deductive generation, respectively, without external retrieval. AFaCTA [13] employs a multi-agent voting mechanism to aggregate judgments from multiple LLM in-stances. TELLER [10] models the verification process through a dual cognitive and decision-making system. STEEL [12] performs iterative multi-round retrieval to progressively gather evidence before reaching a verdict. AdSent [15] neutralizes sentiment signals in the input claim to improve veracity judg-ment. To assess whether the gains of ToE generalize across model scales, we instantiate all methods on two backbone LLMs: DeepSeek-V3.2 [22], a large-scale model, and gpt-oss-20b [23], a smaller open-weight reasoning model released by OpenAI. 
+
+ToE Settings. The argument tree is constrained to a max-imum depth of 5 and a maximum of Tmax = 20 iterations. The thresholds are set as τ exp  
+
+> r
+
+= 0 .7 (expansion), τ dec  
+
+> r
+
+= 0 .7
+
+(decision), τ + 
+
+> v
+
+= 0.7, τ − 
+
+> v
+
+= 0.3 (veracity bounds), and 
+
+τc = 0 .1 (convergence). For the retrieval agent, each search action returns at most 3 results, and the total number of retrieved documents per node is capped at 10. The final veracity score v ∈ [0 , 1] is mapped to a three-way verdict: 
+
+v < 0.4 is classified as False , 0.4 ≤ v ≤ 0.6 as Uncertain ,and v > 0.6 as True . To validate that our approach is dataset-agnostic , we train exclusively on the training split of the LIAR dataset and evaluate directly on its test split as well as all other datasets without any dataset-specific fine-tuning or adaptation. 
+
+B. Results and Analysis 
+
+Table II compares ToE against six baseline methods across four datasets and two LLMs. In each trial, 50 claims are sampled from each dataset using a fixed random seed, and all methods are prompted to base their judgments solely on the provided input to ensure a fair comparison. Each experiment is repeated ten times and the median accuracy is reported. The four datasets cover distinct claim domains, and ToE performs consistently across all of them. The improvement is most visible on AdvFact, indicating that the method generalizes to adversarially framed claims. Notably, the Direct baseline, which prompts the LLM to judge claims without any external retrieval, achieves non-trivial accuracy on several datasets, likely because some claims in these benchmarks overlap with knowledge seen during pretraining, enabling correct judgments 7TABLE II AVERAGE ACCURACY COMPARISON OF DIFFERENT METHODS ACROSS DATASETS AND LLM S                                                                         
+
+> Method DeepSeek-V3.2 GPT-OSS-20B LIAR PolitiFact CheckCOVID AdvFact LIAR PolitiFact CheckCOVID AdvFact
+> Direct 0.38 0.32 0.28 0.16 0.24 0.40 0.26 0.08 AFacTA 0.32 0.44 0.36 0.12 0.32 0.48 0.32 0.12 ZCoT 0.42 0.60 0.52 0.36 0.34 0.22 0.44 0.20 DefGen 0.50 0.38 0.36 0.28 0.38 0.56 0.40 0.24 STEEL 0.46 0.60 0.40 0.16 0.20 0.38 0.46 0.14 TELLER 0.46 0.68 0.56 0.40 0.60 0.64 0.52 0.32 Adsent 0.40 0.46 0.36 0.30 0.44 0.48 0.22 0.52
+> ToE 0.62 0.72 0.60 0.64 0.68 0.62 0.48 0.54
+
+from parametric memory alone. The results also suggest that backbone capability influences method effectiveness: ZCoT, which relies heavily on chain-of-thought reasoning, scores 0.60 on PolitiFact under DeepSeek-V3.2 but drops to 0.22 under GPT-OSS-20B, reflecting its sensitivity to the underly-ing model’s reasoning capacity. ToE improves over the Direct baseline across all settings, confirming that structured retrieval and evidence aggregation provide reliable gains beyond para-metric knowledge.  
+
+> Fig. 5. Heatmap of Action Distribution.
+
+To investigate the agent’s adaptive search behavior, we man-ually collected 30 claims across six categories. Each category consists of five claims (two true, two false, and one uncertain) to evaluate performance across different veracity labels. run ToE on all samples, and record the frequency with which the retrieval agent selects each evidence source. Figure 5 reveals clear category-specific patterns. Scientific claims show the highest Arxiv usage at 26.4%, reflecting the agent’s preference for peer-reviewed literature when evaluating technical asser-tions. Political claims and health claims exhibit the strongest reliance on Factcheck at 35.5% and 34.5% respectively, con-sistent with the availability of expert fact-checking records for these domains. Celebrity claims favor Social Media at 24.5%, where public figures’ statements and reactions are most readily documented. Historical claims distribute usage more evenly across Web Engine, Wiki, and Factcheck, suggesting that verifying historical statements benefits from multiple complementary sources. The Other category shows the highest Web Engine usage at 32.4%, which is expected given the heterogeneous nature of claims that do not fall into a well-defined domain. Table III presents an ablation study on the retrieval tool space, where we partition the available tools into four functional groups: academic sources (ArXiv), counter-evidence search (RefuteSearch), fact-checking databases (Wiki and PolitiFact), and social media platforms (Twitter and Red-dit). Removing any single group consistently degrades over-all accuracy, confirming that each tool category contributes complementary evidence. The most severe drop occurs when fact-checking sources are removed, reducing overall accuracy to 56.6% and true-claim accuracy to 50.0%, which suggests that structured fact-checking records provide the most direct and reliable signal for veracity assessment. These patterns indicate that the retrieval agent, trained with rule-based warm-up, learns to allocate search actions in a domain-aware manner rather than applying a uniform retrieval strategy across all claim types and highlight the particular importance of the design of a diverse tool space. V. C ONCLUSION 
+
+We presented ToE, a tree-structured argument reasoning framework for automated fact-checking. By organizing evi-dence into a hierarchical argument tree and guiding retrieval and evidence scoring through a trained agent, ToE decomposes complex claims into verifiable sub-arguments and aggregates evidence. Experiments across multiple datasets and claim domains demonstrate that the approach generalizes consis-tently, offering a viable path toward evidence-grounded claim verification resilient to GEO poisoning. REFERENCES [1] A. Liu, B. Feng, B. Xue, B. Wang, B. Wu, C. Lu, C. Zhao, C. Deng, C. Zhang, C. Ruan et al. , “Deepseek-v3 technical report,” arXiv preprint arXiv:2412.19437 , 2024. [2] J. Achiam, S. Adler, S. Agarwal, L. Ahmad, I. Akkaya, F. L. Aleman, D. Almeida, J. Altenschmidt, S. Altman, S. Anadkat et al. , “Gpt-4 technical report,” arXiv preprint arXiv:2303.08774 , 2023. [3] P. Lewis, E. Perez, A. Piktus, F. Petroni, V. Karpukhin, N. Goyal, H. K¨ uttler, M. Lewis, W.-t. Yih, T. Rockt¨ aschel et al. , “Retrieval-augmented generation for knowledge-intensive nlp tasks,” Advances in neural information processing systems , vol. 33, pp. 9459–9474, 2020. [4] T. Schick, J. Dwivedi-Yu, R. Dess` ı, R. Raileanu, M. Lomeli, E. Hambro, L. Zettlemoyer, N. Cancedda, and T. Scialom, “Toolformer: Language models can teach themselves to use tools,” Advances in Neural Infor-mation Processing Systems , vol. 36, pp. 68 539–68 551, 2023. [5] Z. Zhong, Z. Huang, A. Wettig, and D. Chen, “Poisoning re-trieval corpora by injecting adversarial passages,” arXiv preprint arXiv:2310.19156 , 2023. 
+
+8TABLE III ABLATION STUDY OF THE SEARCH TOOL SPACE .
+
+Metrics Overall Acc. Acc. (TRUE) Acc. (FALSE) Acc. (UNCERTAIN) Avg. Steps 
+
+Full Tool Space (All Actions) 80.0% 91.6% 75.0% 66.7% 5.4 w/o Academic ( ArXiv ) 73.3% 75.0% 83.3% 50.0% 6.8 w/o Counter-Evidence ( RefuteSearch ) 63.3% 83.3% 50.0% 50.0% 4.0 w/o Factcheck ( Wiki, PolitiFact ) 56.6% 50.0% 75.0% 33.3% 7.8 w/o Social Media ( Twitter, Reddit ) 63.3% 66.6% 83.3% 16.6% 3.8 [6] W. Zou, R. Geng, B. Wang, and J. Jia, “Poisonedrag: Knowledge corruption attacks to retrieval-augmented generation of large language models,” arXiv preprint arXiv:2402.07867 , 2024. [7] Z. Wang, D. He, Z. Zhang, Y. Liu, J. Liu, Z. Zeng, Z. Qin, Z. Li, X. Li, H. Yao, J. An, Y. Liu, Y. Li, Q. Sun, X. Liu, and L. Zhu, “Combating knowledge corruption in agent systems: A byzantine-tolerant secure collaborative rag framework,” in Proceedings of the ACM Web Conference 2026 , ser. WWW ’26. ACM, 2026. [8] P. Aggarwal, V. Murahari, T. Rajpurohit, A. Kalyan, K. Narasimhan, and A. Deshpande, “Geo: Generative engine optimization,” in Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining , 2024, pp. 5–16. [9] X. Zhou and R. Zafarani, “A survey of fake news: Fundamental the-ories, detection methods, and opportunities,” ACM Computing Surveys (CSUR) , vol. 53, no. 5, pp. 1–40, 2020. [10] H. Liu, W. Wang, H. Li, and H. Li, “Teller: A trustworthy framework for explainable, generalizable and controllable fake news detection,” in 
+
+Findings of the Association for Computational Linguistics: ACL 2024 ,2024, pp. 15 556–15 583. [11] J. Lucas, A. Uchendu, M. Yamashita, J. Lee, S. Rohatgi, and D. Lee, “Fighting fire with fire: The dual role of llms in crafting and detecting elusive disinformation,” in Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing , 2023, pp. 14 279– 14 305. [12] G. Li, W. Lu, W. Zhang, D. Lian, K. Lu, R. Mao, K. Shu, and H. Liao, “Re-search for the truth: Multi-round retrieval-augmented large language models are strong fake news detectors,” arXiv preprint arXiv:2403.09747 , 2024. [13] J. Ni, M. Shi, D. Stammbach, M. Sachan, E. Ash, and M. Leippold, “Afacta: Assisting the annotation of factual claim detection with reliable llm annotators,” in Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) ,2024, pp. 1890–1912. [14] Y. Huang and L. Sun, “Fakegpt: fake news generation, explanation and detection of large language models,” arXiv preprint arXiv:2310.05046 ,2023. [15] S. Tahmasebi, E. M¨ uller-Budack, and R. Ewerth, “Robust fake news detection using large language models under adversarial sentiment attacks,” arXiv preprint arXiv:2601.15277 , 2026. [16] L. P. Kaelbling, M. L. Littman, and A. R. Cassandra, “Planning and acting in partially observable stochastic domains,” Artificial intelligence ,vol. 101, no. 1-2, pp. 99–134, 1998. [17] S. Kothawade, N. Beck, K. Killamsetty, and R. Iyer, “Similar: Sub-modular information measures based active learning in realistic scenar-ios,” Advances in Neural Information Processing Systems , vol. 34, pp. 18 685–18 697, 2021. [18] Z. Shao, P. Wang, Q. Zhu, R. Xu, J. Song, X. Bi, H. Zhang, M. Zhang, Y. Li, Y. Wu et al. , “Deepseekmath: Pushing the limits of mathematical reasoning in open language models,” arXiv preprint arXiv:2402.03300 ,2024. [19] W. Y. Wang, ““liar, liar pants on fire”: A new benchmark dataset for fake news detection,” in Proceedings of the 55th annual meeting of the association for computational linguistics (volume 2: short papers) , 2017, pp. 422–426. [20] R. Misra, “Politifact fact check dataset,” 09 2022. [21] G. Wang, K. Harwood, L. Chillrud, A. Ananthram, M. Subbiah, and K. McKeown, “Check-covid: Fact-checking covid-19 news claims with scientific evidence,” in Findings of the Association for Computational Linguistics: ACL 2023 , 2023, pp. 14 114–14 127. [22] DeepSeek-AI, “Deepseek-v3.2: Pushing the frontier of open large lan-guage models,” 2025. [23] OpenAI, “gpt-oss-120b & gpt-oss-20b model card,” 2025. [Online]. Available: https://arxiv.org/abs/2508.10925 
+
+9

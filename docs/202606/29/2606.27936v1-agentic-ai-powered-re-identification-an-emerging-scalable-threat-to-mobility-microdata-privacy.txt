@@ -1,0 +1,255 @@
+Title: Agentic AI-Powered Re-Identification: An Emerging, Scalable Threat to Mobility Microdata Privacy
+
+URL Source: https://arxiv.org/pdf/2606.27936v1
+
+Published Time: Mon, 29 Jun 2026 00:42:21 GMT
+
+Number of Pages: 15
+
+Markdown Content:
+# Agentic AI-Powered Re-Identification: An Emerging, Scalable Threat to Mobility Microdata Privacy 
+
+Oscar Thees 1⋆, Roman Müller 1∗, and Matthias Templ 1
+
+University of Applied Sciences and Arts Northwestern Switzerland (FHNW), Riggenbachstrasse 16, 4600 Olten, Switzerland 
+
+oscar.thees@fhnw.ch 
+
+Abstract. The widespread collection of fine-grained location data by commercial data brokers creates a re-identification risk that is not widely recognised by the public. While prior research has established that mo-bility traces are highly unique and that individuals can, in principle, be identified from a handful of spatio-temporal points, such attacks have his-torically required significant manual effort from skilled analysts, limiting their practical scale. In this feasibility study, we demonstrate in a real world setting that agen-tic AI fundamentally changes this threat model. We present an end-to-end pipeline in which large language model agents autonomously search the open web, cross-reference public records and social media, and re-solve raw coordinate sequences to candidate identities – without human intervention. We evaluate the pipeline on a spatio-temporal dataset con-taining simulated location points anchored at and around true home and work addresses, focusing on a high-risk disclosure scenario. Our results demonstrate that, from spatio-temporal data and public sources alone, our agentic AI successfully re-identified 18 of the 25 re-identifiable indi-viduals (72%) and 18 of 43 cases overall (41.9%). We discuss implications for Statistical Disclosure Control (SDC) prac-tice and outline the near-future escalation that data custodians and reg-ulators must anticipate. De facto anonymity – an implicit foundation of SDC practice – is shifting. Agentic AI strengthens the case that re-identification is reasonably likely by any means under the GDPR Recital-26 standard, at costs of minutes-and-dollars per target. 
+
+Keywords: Mobility data · Re-identification · Statistical Disclosure Con-trol · Agentic AI · Large language models · Disclosure risk 
+
+## 1 Introduction 
+
+Every day, hundreds of millions of smartphones emit precise GPS coordinates that are silently collected by a largely invisible industry of commercial data bro-kers [9,10,21]. These coordinates – timestamped and collected at sub-minute res-olution – are packaged into mobility datasets and traded on open markets under   
+
+> ⋆∗
+
+Equal contribution.  
+
+> arXiv:2606.27936v1 [cs.CR] 26 Jun 2026 2O. Thees, R. Müller, M. Templ
+
+the label of anonymised data. In practice, anonymisation is limited to the removal of direct identifiers; the fine-grained traces (themselves strong quasi-identifiers) remain at full resolution, often alongside device-level metadata [21]. Recent anal-yses confirm that this practice – routinely labelled anonymisation but, under GDPR’s identifiability standard, more properly pseudonymisation – remains the industry default despite its well-documented technical inadequacy [12]. Under the GDPR identifiability standard [6], such spatio-temporal data is personal data whenever re-identification is reasonably likely by any means – a position reinforced by recent CJEU jurisprudence such as the IAB Europe ruling [3]. The scale is substantial: a single broker dataset documented by journalists contained more than 50 billion location pings from 12 million U.S. smartphones over a few months [27]. The privacy risk embedded in such data is well-documented [22]. Standard anonymisation techniques – suppression, spatial generalisation, trajectory per-turbation – offer limited protection against a determined adversary who can cross-reference external information sources [31,23]. Yet despite this theoretical clarity, practical large-scale re-identification has remained a labour-intensive task confined to skilled analysts [15]. The bottleneck has not been the uniqueness of mobility traces, but the human effort required to link raw coordinate traces to a real-world identity and validate the result. 
+
+The agentic AI inflection point. We argue that recent advances in large lan-guage model (LLM) agents change this picture decisively. A modern LLM agent can autonomously decompose a complex investigative task into sub-goals, is-sue queries to search engines, retrieve and parse web pages, reason over the returned evidence, and iterate until a conclusion is reached – all without human involvement [30]. What previously required an experienced open-source intelli-gence (OSINT) analyst working for hours can now be delegated to an agent that completes equivalent steps in minutes and can be parallelised across many targets at low marginal cost [24,18]. 
+
+De facto anonymity and the feasibility threshold. AI challenges de facto anonymity by expanding the set of identification methods that are realistically feasible in practice. Because anonymity depends not on the abstract impossibility of re-identification but on whether identification is reasonably likely using available means [6], improvements in AI-driven linkage, inference, and retrieval materially raise disclosure risk. At the same time, generative AI lowers the expertise re-quired to perform such attacks, making capabilities once limited to specialised analysts increasingly available to a broader range of actors [19,8]. 
+
+Our contribution. In this paper we make the following contributions: 
+
+– We develop and evaluate an agentic re-identification pipeline that takes raw coordinate traces as input and resolves them to candidate identities using web-based open-source intelligence tools (Section 3.1). Agentic AI-Powered Re-Identification 3
+
+– We show that the agentic pipeline correctly named 18 of the 25 re-identifiable individuals (72%) and 18 of all 43 cases (41.9%) at an average cost of $2.24 and 17 minutes per target. Further, we discuss the effectiveness and scaling capabilities of the pipeline compared to a human analyst (Section 4). 
+
+– We sketch two near-future escalation vectors – agentic outreach to confirm candidates and collect additional re-identifiable information, and locally-executed open-weight models – and outline what each implies for SDC if attacker effort continues to fall (Section 5). The ethical study design choices that resolve the tension between scientific rigour and privacy protection (i.e., consent-based recruitment, simulated traces around true home and work anchors, exclusively public sources during attribu-tion, and non-release of both the simulated data and the underlying code and prompts) are detailed in Section 3.2. Section 2 reviews related work, Section 3 present the pipeline and the setup, Section 4 reports results, and Section 5 dis-cusses implications. 
+
+## 2 Related Work 
+
+Re-identification of mobility data. Journalistic investigations have demonstrated that commercially traded location data can often be linked to individuals, even when the datasets contain neither direct identifiers nor sociodemographic infor-mation [27,21]. This is especially concerning when such data are collected or disseminated without meaningful user consent [9,10]. The re-identification risk of mobility data has also been extensively stud-ied in academia. For example, de Montjoye et al. [22] demonstrated that four spatio-temporal points suffice to single out 95% of individuals in a mobile phone dataset of 1.5 million users. Farzanehfar et al. [7] subsequently reproduced this finding to country-scale datasets, finding that four spatio-temporal points still uniquely identified up to 93% of individuals. This uniqueness is not necessar-ily confined to fine-grained GPS traces: Zang and Bolot [31] showed that even coarse-grained location data based on mobile call records retains enough unique-ness to enable re-identification. Spatial and temporal patterns in location data can reveal points of interest (POIs), such as home, workplace, or leisure venues, creating substantial opportunities for re-identification and user profiling even when coordinates are imprecise [23,29]. By using information associated with POIs, such as exact addresses, an adversary can conduct web searches to infer identifying information, including the name of a person registered at a specific residential address [16]. A methodological precedent close to ours is Krumm’s 2007 study [16], which extracted home locations from two-week GPS traces of 172 drivers, ran the in-ferred coordinates through a free white-pages reverse lookup, and successfully named about 5% of subjects. Krumm explicitly identified two technological bot-tlenecks: poor reverse geocoding (only 1.2% of pings matched the true home address) and incomplete white-pages coverage (43% of self-reported addresses 4 O. Thees, R. Müller, M. Templ 
+
+returned no listing). Our work extends this line of research by replacing the four hand-coded inference heuristics and the single reverse-lookup call with an LLM-agent pipeline that exploits the breadth of modern web. 
+
+AI agents and automated OSINT. Re-identifying individuals at scale from spatio-temporal mobility traces has historically required sophisticated technical knowl-edge, including API configuration, data preprocessing, and familiarity with OS-INT techniques. We argue that, in the age of AI, these barriers are significantly lowered, expanding the pool of potential adversaries who could misuse these capabilities. Staab et al. [24] showed that LLMs can infer personal attributes such as location, income, and sex from short pieces of public text, achieving up to 85% top-1 accuracy while operating at roughly 100 × lower cost and 240 ×
+
+faster than human investigators – a first concrete quantification of the speed and cost advantage that makes large-scale privacy attacks practical. Building on this attribute-inference paradigm, Lermen et al. [18] demonstrated that LLM agents can already autonomously de-anonymise users at scale. Their agents sum-marized anonymised Hacker News profiles, searched the web, cross-referenced sources, and reasoned over the evidence to infer likely real-world identities. Al-though their attack targets text-based online identities rather than GPS micro-data, the underlying paradigm shift is the same: a task previously requiring hours of manual expert effort becomes scalable and inexpensive through agentic tool use. Recent technological advances further show that location privacy is not lim-ited to explicit GPS data; sensitive location information can also be inferred from images. Luo et al. [20] showed that adversaries can use multimodal large reason-ing models to infer geolocation information from user-generated images, such as selfies shared on social media platforms. Such inferences may expose sensitive places, including a user’s home address or frequently visited leisure locations. 
+
+## 3 Methodology 
+
+3.1 Agentic Re-Identification Pipeline 
+
+Threat model. We adopt a threat model in which an adversary has obtained raw GPS mobility trace data for a single device – for instance, by purchasing it from a commercial data broker – and seeks to recover the real-world identity of the device’s primary user. In the disclosure-control taxonomy this corresponds to identity disclosure [5]. The adversary has access only to freely available data on the public web (e.g., search engines, online directories, public registers, social media, news, and business registers) and to LLM agents. No fake social media profiles, social engineering, or any other form of deception is used to gain access to additional information. A re-identification is judged successful only when the trace is linked to a specific named individual. Thus, the harm extends beyond merely naming the device-holder. Once a candidate is named, every subsequent ping in the trace ceases to be an anonymised data point and becomes a movement diary attached to that person – for example, a local politician’s weekly visits to Agentic AI-Powered Re-Identification 5
+
+the ice-hockey rink, the Friday afternoon drop-off at a children’s football club, or the Monday-evening table at a named restaurant. What is novel in our setting is not this threat model but its operational-isation: prior work assumed human-analyst effort as the practical bottleneck, whereas we equip the adversary with autonomous LLM agents that can execute the same attack at scale and at orders-of-magnitude lower cost than a human investigator [24,18]. The pipeline decomposes the re-identification task into seven specialist stages controlled by a central orchestrator, grouped into three conceptual phases (Fig-ure 1). Each stage produces structured output consumed by the next; the orches-trator enforces quality gates between transitions and halts the run early when evidence falls below a sufficiency threshold. In the spatial-analysis phase, Stage 0 validates the input and Stage 1 ( GPS Analyst ) extracts HOME and WORK anchors using grid-based mode-finding on the raw trace (see Figure 2), classifying them by temporal pattern (night/weekend-dominant locations indicate likely HOME, while weekday daytime-dominant locations indicate likely WORK). The location-attribution phase (Stages 2–3) grounds these anchors in real-world addresses and assesses their residential speci-ficity: Stage 2 ( Location Enricher ) reverse-geocodes each anchor against several derived coordinates, producing an address candidate with consensus confidence and a bundle of plausible alternatives when geocodes disagree. For WORK clus-ters it additionally enumerates named institutions near the mode point as candi-date employers. Stage 3 ( Building Analyst ) queries the Swiss Federal Register of Buildings and Dwellings (GWR) [26] for the HOME building and sets a ceiling on the attribution strength that downstream stages may reach. A single-family dwelling permits full re-identification , a small multi-unit building caps the result at partial re-identification unless later evidence is unusually strong, and large apartment blocks or non-residential structures may halt the pipeline with a not re-identifiable verdict. In the identity-attribution phase (Stages 4–6), candidate identities are identified and validated. Stage 4 ( Candidate Scorer ) ranks indi-vidual candidates from public directories and registers using both HOME and WORK evidence; Stage 5 ( Identity Verifier ) seeks independent corroboration for the top candidate in social-media and public sources as a second-opinion check. Finally, in Stage 6, the Final Synthesizer aggregates the accumulated evidence and renders the final attribution outcome. 6 O. Thees, R. Müller, M. Templ Input Validator  Stage 0 
+
+Validates structure and coverage of  input data 
+
+GPS Analyst  Stage 1 
+
+GPS  cluster  analysis and identification of key loca tion 
+
+anchors  (e.g., home, work, leisure) 
+
+Building Analyst  Stage 3 
+
+Looks up building register; judges whether HOME is 
+
+searchable 
+
+Location Enricher  Stage 2 
+
+Geocodes anchors to addresses and POIs 
+
+Candidate Scorer  Stage 4 
+
+Identifies c andidate names at the address; ranks by 
+
+HOME and WORK evidence 
+
+Final Synthesizer  Stage 6 
+
+Renders final verdict: fully, partially, or not re-identifiable 
+
+Identity Verifier  Stage 5 
+
+Confirms candidate identity against social media and 
+
+public registers 
+
+Central or chestrator 
+
+Coordinates the agent team,  judges each gate 
+
+against  accumulated evidence,  and halts the run when a 
+
+gate fails. 
+
+Schema valid? 
+
+HOME cluster found? 
+
+Residential address? 
+
+Building searchable? 
+
+Enough candidates? 
+
+Identity verified? 
+
+Score above threshold? 
+
+A
+
+B
+
+C
+
+D
+
+E
+
+F
+
+G
+
+Fig. 1. The agentic re-identification pipeline: seven specialist agents (icons) connected by quality gates (barriers). The central orchestrator routes stage outputs, enforces gates, and maintains a running uncertainty ledger; the run halts whenever a gate’s criteria are not met. Agent and gate icons designed with the assistance of Claude Opus 4.7 (Anthropic, 2026). Agentic AI-Powered Re-Identification 7Home Work    
+
+> GPS pings anchor (mode point) coarse cell (0.001°) fine cell (0.0001°)
+
+Fig. 2. Stage 1 grid-based mode finding on a simulated fictitious trace, illustrating the home cluster (left) and the work cluster (right). Grey grid lines mark the 0.001 ◦ ×0.001 ◦
+
+cells the GPS-analyst agent rounds pings into ( ≈ 111 m × 76 m). The coarse cell with the most pings is highlighted (dashed blue); within it, the agent re-bins pings on a finer 0.0001 ◦ × 0.0001 ◦ grid ( ≈ 11 m × 7.6 m) and picks the densest fine cell (solid red) as the cluster’s mode. A representative coordinate inside that cell (red dot) is the anchor passed to the downstream stages. Background: © Federal Office of Topography swisstopo. 
+
+A central design principle is strict monotonicity: earlier stages establish ge-ometric and address-level anchors that later stages may enrich but not revise. This ensures that the attribution chain remains traceable and prevents circular reasoning between the spatial and identity phases. Explicit quality gates between stages prevent weak or ambiguous evidence from propagating forward. If the address evidence fails to meet a residential-specificity threshold, the pipeline halts before identity search begins. Likewise, identity candidates that cannot be positively corroborated by behavioural evi-dence are not passed to the synthesis stage. A running uncertainty ledger tracks unresolved ambiguities from each stage and is surfaced in the final output, mak-ing the limits of each inference explicit. The pipeline thus follows a conservative, evidence-chained attribution logic: each phase can only proceed on the basis of positive evidence from the prior phase, and the final output reflects not only the strongest achievable attribution but also the conditions under which that attribution fails. 8 O. Thees, R. Müller, M. Templ 
+
+3.2 Study Design and Simulated Data 
+
+This work sits in inherent tension between methodological rigour and individ-ual privacy: empirically establishing the attack in a real-world setting requires performing it on real individuals – potentially compromising their privacy. We address this tension as follows: First, the sample is consent-based, and location information is included only for participants who gave explicit consent. Second, GPS traces are simulated around participants’ real home and work ad-dresses, rather than obtained from real data brokers. Third, re-identification re-lies only on publicly available information, without the use of fake profiles, social engineering, or any form of deception. Finally, we do not release the simulated dataset, the underlying code, the prompts, or the agent skills. To evaluate re-identification under controlled and ethically grounded condi-tions, we constructed a simulated GPS dataset derived from the real home and work addresses of study participants. All participants explicitly consented for their home and work address data to be used in re-identification experiments. No pre-screening for online visibility or public linkability was applied, so the sample includes individuals across the full spectrum of digital footprint – from those who appear prominently in public registers and employer websites to those with no retrievable online presence. Home and work locations constitute the two most discriminative spatial an-chors for re-identification: prior work has shown that only a handful of spatio-temporal points suffice to uniquely identify the vast majority of individuals in a mobility dataset, with home and work being the most informative pair [13,25]. We therefore simulated location clusters around participants’ true home ad-dresses and, where applicable, their true work addresses, with GPS pings gen-erated around each anchor using spatial jitter to reflect realistic device noise; Figure 2 illustrates one such pair of clusters. Traces are simulated over a three-week period. Pings cluster at the home anchor during morning and evening hours and at the work anchor during the day; leisure stops are short-duration clusters positioned near but distinct from the two anchors, suppressed at night so that night-time pings remain predomi-nantly at home. Leisure stops do not correspond to participants’ actual locations. Instead, they are introduced as noise to increase difficulty to infer participants’ home and workplace locations. Each trace also incorporates random dropouts, burst-sampling artefacts at stable locations, and a small fraction of out-of-order timestamps, mimicking real-world data quality. The simulation parameters (i.e., sampling cadence, spatial accuracy distribution, home/work anchoring patterns, and dropout characteristics) are informed by a real commercial broker dataset that the authors examined for this purpose, so that the simulated traces qualita-tively resemble what an adversary would actually receive. No individuals in the broker dataset were re-identified, and the dataset is not used in any other part of the study. 
+
+Sample description. A convenience sample of n = 43 participants was recruited in Switzerland. Of these, 21 participants lived in single-household buildings and Agentic AI-Powered Re-Identification 9
+
+22 lived in multi-household buildings. Publicly available online information var-ied across participants: 19 were listed in a public residential register, 17 had their name and home address listed on other websites, 6 maintained a personal website, 32 had a LinkedIn profile, and 33 were listed by name on a company website. 
+
+Ground truth and scoring. Ground truth consisted of each participant’s self-reported real name, home address, and work address, where applicable, col-lected at the time of consent, together with their online presence as used to assess re-identifiability. Each pipeline run produces one of three result types: 
+
+full re-identification , partial re-identification , or not re-identifiable . A full re-identification verdict was assigned when the spatio-temporal data could be un-ambiguously linked to a named candidate. A partial re-identification verdict was assigned when the pipeline narrowed the candidate set to a small group of co-residents at the correct address and household, but could not identify a single individual. A not re-identifiable verdict was assigned when the available evidence was insufficient to support either full or partial re-identification. For each partic-ipant, the authors manually verified the degree of re-identifiability through web search against which pipeline performance is reported in Section 4. 
+
+Pipeline development and implementation. The pipeline was developed against a separate development set of six GPS test traces: agent prompts, quality-gate thresholds, and orchestrator stop rules were refined iteratively by inspecting per-stage outputs and adjusting whenever a stage produced an incorrect attribution or an unjustified escalation. The 43 participant traces were used only for the final evaluation reported in Section 4; no parameter, prompt, or threshold was modified in response to evaluation-set outcomes. The pipeline is orchestrated by Anthropic’s Claude Code command-line in-terface (CLI) [2] in non-interactive mode ( claude -p ), running the orchestrator and stage specifications of Section 3.1 within a single tool-using session. Runs use 
+
+claude-sonnet-4-6 as the primary model, with the CLI’s default settings for temperature, top-p, and other generation controls; pre-authorised tools include web search, web fetch, and local file read/write. Per-run JSON and CSV logs capture stage outputs, token counts, and wall-clock time, from which the cost and runtime figures in Section 4 are computed directly. A bash script parallelises one session per device CSV file at a concurrency of four on a Linux server. To prevent information leakage, all ground-truth participant information was stored in a separate, isolated environment inaccessible to the agents. 
+
+## 4 Results 
+
+We applied the pipeline to the 43 participant traces described in Section 3.2, scoring each run against the manually established re-identifiability label. Table 1 summarises the results of these re-identification attempts. Full re-identification was achieved in 18 of 43 cases (41.9%). Among the 19 cases in which the pipeline 10 O. Thees, R. Müller, M. Templ 
+
+returned a named candidate, 18 matched the ground truth, corresponding to a full re-identification precision of 94.7%. Conversely, among the 25 cases in which full re-identification was possible, the pipeline recovered the name of the individual in 18 cases (72.0%); the remaining seven cases were wrongly classified as partially ( n = 2 ) or not re-identifiable ( n = 5 ). However, in the two cases, in which the agentic re-identification attempt achieved only partial rather than full re-identification, the predicted household link included the correct household, enabling the adversary to infer at least the individual’s correct last name. Furthermore, in two of the five cases in which full re-identification was possible but the pipeline returned no re-identification, the correct candidate name had been found. However, the pipeline concluded that the evidence was insufficient, either because workplace verification was unavail-able or because the inferred home address corresponded to a multi-unit building. For the 16 ground-truth cases that were not re-identifiable, the pipeline cor-rectly halted without naming a candidate in 14 instances (87.5%). One case nonetheless produced a named-candidate output owing to an incorrect match between a candidate name and home address, and one produced partial re-identification in which the identified household was incorrect because the house number had been wrongly inferred from the GPS data. Regarding re-identifiability, participants with a higher online footprint – in particular those listed in a pub-lic residential register – were more readily re-identified than those with limited online presence.                        
+
+> Table 1. Confusion matrix: ground-truth outcome (rows) vs. re-identification pipeline outcome (columns); n= 43 evaluation cases.
+> Re-Identification Pipeline Outcome
+> Full re-identification Partial re-identification Not re-identifiable Total
+> Full re-identification 18 2525 Partial re-identification 0202Not re-identifiable 1114 16
+> Total 19 519 43
+> Full re-identification : pipeline returned a uniquely identified individual; Partial re-identification : household confirmed, but shared by multiple residents – no individual uniquely identifiable; Not re-identifiable : pipeline halted without naming a candidate.
+
+Cost and run-time. Across the 43 evaluation runs, each attempt cost on average $2.24 in API charges at list prices, produced on average 58.5K output tokens (range: 39.5K–78.9K), and took on average 17 minutes of unattended compu-tation (range: 11.7–28.5 minutes). The pipeline parallelises freely; all 43 runs completed in a single day at a concurrency of four. No controlled human-analyst baseline was conducted. Agentic AI-Powered Re-Identification 11 
+
+## 5 Discussion and Conclusion 
+
+The agentic re-identification pipeline presented in this study successfully re-identified 72% of cases for which unambiguously re-identification was possible. For comparison, Krumm’s 2007 inference attack succeeded on roughly 5% of subjects, limited by the technological maturity of geocoders and directories at the time [16]. At an average of 17 minutes and $2.24 per attempt (Section 4), and with free parallelism, the marginal cost of mass re-identification is low re-altive to manual human effort. A manual attempt by a human analyst would demand continuous attention and would likely take longer – plausibly consid-erably longer without specialised tooling – though we did not measure human performance directly. The decisive advantage of the agentic pipeline is therefore not raw per-case speed but the combination of low cost, wall-clock parallelism, and the elimination of human involvement, consistent with the cost advantage Staab et al. [24] report for LLM-driven inference. Although building such a pipeline still requires some technical expertise, these barriers are substantially reduced as AI-assisted software development lowers the skill threshold for implementing, adapting, and scaling similar workflows [8]. As these technologies continue to improve, constructing and operating systems to re-identify individuals will become increasingly accessible over time, posing new challenges for privacy. We call on the SDC community to develop adversarial risk models that ex-plicitly account for the capabilities and scale of agentic AI attacks. Defenders should adopt SDC techniques that come with formal guarantees rather than relying on de facto anonymity claims. Although GDPR Recital 26 [6] and sub-sequent CJEU jurisprudence [3] classify pseudonymised data including location traces as personal data when re-identification is reasonably likely, broker data is routinely released under anonymisation claims that conflate the two [9,10,21]. 
+
+Limitations. For ethical reasons, and consistent with prior work [19,18], no exact prompts or code used in this study is disclosed, as doing so could facilitate misuse, including the targeting of real individuals. The simulated dataset is similarly withheld: although it is anchored on consenting participants, the per-trace spatio-temporal resolution is high enough that release would carry residual re-identification risk for the participants themselves. Three bounds apply to the generalisability of our findings. The simulated traces share a single generator that is informed by – but not statistically cali-brated against – a real broker dataset; the evaluation is scoped to Switzerland and to country-specific directory and register sources; and the sample is small relative to broker datasets containing millions of devices, making the reported re-identification rates a proof-of-concept feasibility result rather than a popula-tion estimate. The country-specificity bound is particularly relevant for Stage 3, which relies on the Swiss Federal Register of Buildings and Dwellings (GWR) [26] for per-building category and dwelling counts. Equivalent national registers exist in many other countries and would support the same gate logic, but where they do not the pipeline would have to fall back to less precise proxy data. 12 O. Thees, R. Müller, M. Templ 
+
+Compared with real data broker data, our simulation anchors only home and work locations. Real broker traces may also include leisure-location dwell pat-terns, which an adversary could cross-reference with public membership records or event listings, thereby potentially increasing the risk of re-identification fur-ther. However, real data may also contain noisier GPS points, making it more difficult to pinpoint exact addresses. Several methodological caveats further bound our conclusions. We did not run a non-agentic baseline, so the cost and time advantages discussed above are anchored to Staab’s text-domain measurements [24] and to our own informal ob-servation rather than to a controlled comparison. Frontier LLMs include safety filters that constrain privacy-sensitive operations; our results are conditional on the specific safety posture of the model versions used [19,18,15]. Because each evaluation case was run only once, we did not quantify the run-to-run variabil-ity of pipeline outcomes. Finally, the public directory sites our pipeline queries impose access controls and anti-crawling measures whose impact at higher scale our small-sample evaluation does not capture. 
+
+Future Work and the Escalating Threat Horizon. The re-identification pipeline presented in this paper was limited to searching and reading publicly available information. A technically feasible and more concerning next step would be for an adversary to extend the agent’s capabilities to collect non-public or semi-public information. This could include the use of more sophisticated tooling, such as image geolocation [20], people-search services, and facial recognition [1,28]. It could also involve autonomous management of fake social-media accounts, direct outreach to individuals or companies via e-mail or even telephone, or other forms of social engineering [17,11]. Such capabilities could substantially improve the adversary’s ability to identify and verify candidates. A second dimension concerns local execution: open-weight LLMs in the 30– 65B parameter range can plausibly carry the structured stages on commodity hardware [14,4]. Local execution could be used to reduce the per-target cost floor and remove the API audit trail, undermining detection strategies that rely on hosted-model logs or rate-limit signatures. Taken together, these trends point toward a threat horizon in which such attacks become progressively cheaper and more capable. The statistical disclosure control community should therefore treat agentic AI adversaries as a real rather than a hypothetical threat. 
+
+Acknowledgements. This work was funded by the Swiss National Science Foun-dation with grant "Harnessing event and longitudinal data in industry and health sector through privacy preserving technologies" (grant number 211751). 
+
+Disclosure of Interests. The authors have no competing interests to declare that are relevant to the content of this article. Agentic AI-Powered Re-Identification 13 
+
+## References 
+
+1. Acquisti, A., Gross, R., Stutzman, F.: Face recognition and privacy in the age of augmented reality. Journal of Privacy and Confidentiality 6(2), 1–20 (2014). 
+
+https://doi.org/10.29012/jpc.v6i2.638 
+
+2. Anthropic: Claude Code. https://www.anthropic.com/claude- code (2026), accessed May 2026 3. Court of Justice of the European Union: Press release no 44/24: Judgment in case c-604/22 | iab europe. https://curia.europa.eu/jcms/upload/docs/applicati on/pdf/2024-03/cp240044en.pdf (2024), press release, 7 March 2024 4. Dettmers, T., Pagnoni, A., Holtzman, A., Zettlemoyer, L.: QLoRA: Efficient fine-tuning of quantized LLMs. In: Proceedings of the 37th International Conference on Neural Information Processing Systems (NeurIPS 2023). pp. 10088–10115 (2023), 
+
+https://dl.acm.org/doi/10.5555/3666122.3666563 
+
+5. Duncan, G.T., Lambert, D.: The risk of disclosure for microdata. Journal of Busi-ness & Economic Statistics 7(2), 207–217 (1989). https://doi.org/10.1080/07 350015.1989.10509729 
+
+6. European Parliament and Council of the European Union: Regulation (EU) 2016/679 on the protection of natural persons with regard to the processing of personal data (General Data Protection Regulation), recital 26. Official Journal of the European Union, L 119/1 (2016), https://gdpr-info.eu/ 
+
+7. Farzanehfar, A., Houssiau, F., de Montjoye, Y.A.: The risk of re-identification remains high even in country-scale location datasets. Patterns 2(3), 100204 (2021). 
+
+https://doi.org/10.1016/j.patter.2021.100204 
+
+8. Fawzy, A., Tahir, A., Blincoe, K.: Vibe coding in practice: Motivations, chal-lenges, and a future outlook – a grey literature review. In: Proceedings of the 48th IEEE/ACM International Conference on Software Engineering (ICSE-SEIP ’26). ACM (2026). https://doi.org/10.1145/3786583.3786866 
+
+9. Federal Trade Commission: FTC takes action against Gravy Analytics, Venntel for unlawfully selling location data tracking consumers to sensitive sites. https: //www.ftc.gov/news-events/news/press-releases/2024/12/ftc-takes-actio n-against-gravy-analytics-venntel-unlawfully-selling-location-data-t racking-consumers (2024), press release, 3 December 2024 10. Federal Trade Commission: FTC takes action against Mobilewalla for collecting and selling sensitive location data. https://www.ftc.gov/news-events/news/pre ss-releases/2024/12/ftc-takes-action-against-mobilewalla-collecting-s elling-sensitive-location-data (2024), press release, 3 December 2024 11. Figueiredo, J., Carvalho, A., Castro, D., Gonçalves, D., Santos, N.: Sounds Vishy: Automating vishing attacks with AI-powered systems. In: Proceedings of the ACM Asia Conference on Computer and Communications Security (ASIA CCS ’25). pp. 407–424. ACM (2025). https://doi.org/10.1145/3708821.3733866 
+
+12. Gadotti, A., Rocher, L., Houssiau, F., Creţu, A.M., de Montjoye, Y.A.: Anonymiza-tion: The imperfect science of using data while preserving privacy. Science Advances 
+
+10 (29), eadn7053 (2024). https://doi.org/10.1126/sciadv.adn7053 
+
+13. Golle, P., Partridge, K.: On the anonymity of home/work location pairs. In: Pro-ceedings of the 7th International Conference on Pervasive Computing. Lecture Notes in Computer Science, vol. 5538, pp. 390–397. Springer (2009). https: //doi.org/10.1007/978-3-642-01516-8_26 
+
+14. Grattafiori, A., Dubey, A., Jauhri, A., et al.: The Llama 3 herd of models (2024). 
+
+https://doi.org/10.48550/arXiv.2407.21783 14 O. Thees, R. Müller, M. Templ 15. Ko, M., Jeong, J., Thakur, S.S., Kim, G., Jia, R.: From weak cues to real identities: Evaluating inference-driven de-anonymization in LLM agents (2026). https://do i.org/10.48550/arXiv.2603.18382 
+
+16. Krumm, J.: Inference attacks on location tracks. In: LaMarca, A., Langheinrich, M., Truong, K.N. (eds.) Pervasive Computing. Lecture Notes in Computer Science, vol. 4480, pp. 127–143. Springer, Berlin, Heidelberg (2007). https://doi.org/10 .1007/978-3-540-72037-9_8 
+
+17. Kumarage, T., Johnson, C., Adams, J., Ai, L., Kirchner, M., Hoogs, A., Garland, J., Hirschberg, J., Basharat, A., Liu, H.: Personalized attacks of social engineering in multi-turn conversations: LLM agents for simulation and detection. In: Proceedings of the COLM 2025 Workshop on AI Agents: Capabilities and Safety (2025). https: //doi.org/10.48550/arXiv.2503.15552 
+
+18. Lermen, S., Paleka, D., Swanson, J., Aerni, M., Carlini, N., Tramèr, F.: Large-scale online deanonymization with LLMs (2026). https://doi.org/10.48550/arXiv.2 602.16800 
+
+19. Li, T.: Agentic LLMs as powerful deanonymizers: Re-identification of participants in the anthropic interviewer dataset (2026). https://doi.org/10.48550/arXiv.2 601.05918 
+
+20. Luo, W., Lu, T., Zhang, Q., Liu, X., Hu, B., Zhao, Y., Zhao, J., Gao, S., McDaniel, P., Xiang, Z., Xiao, C.: Doxing via the lens: Revealing location-related privacy leakage on multi-modal large reasoning models (2026). https://doi.org/10.485 50/arXiv.2504.19373 , accepted as a poster at the 14th International Conference on Learning Representations (ICLR 2026) 21. Meineck, S., Dachwitz, I.: Data broker files: How data brokers sell our location data and jeopardise national security. https://netzpolitik.org/2024/data-bro ker-files-how-data-brokers-sell-our-location-data-and-jeopardise-nat ional-security/ (2024), netzpolitik.org and Bayerischer Rundfunk investigation, 16 July 2024 22. de Montjoye, Y.A., Hidalgo, C.A., Verleysen, M., Blondel, V.D.: Unique in the crowd: The privacy bounds of human mobility. Scientific Reports 3, 1376 (2013). 
+
+https://doi.org/10.1038/srep01376 
+
+23. Primault, V., Boutet, A., Mokhtar, S.B., Brunie, L.: The long road to compu-tational location privacy: A survey. IEEE Communications Surveys & Tutorials 
+
+21 (3), 2772–2793 (2019). https://doi.org/10.1109/COMST.2018.2873950 
+
+24. Staab, R., Vero, M., Balunović, M., Vechev, M.: Beyond memorization: Violating privacy via inference with large language models. In: Proceedings of the Inter-national Conference on Learning Representations (ICLR). ICLR (2024). https: //doi.org/10.48550/arXiv.2310.07298 
+
+25. Ströbl, B., Kapp, A.: Investigating vulnerabilities of GPS trip data to trajectory-user linking attacks (2025). https://doi.org/10.48550/arXiv.2502.08217 
+
+26. Swiss Federal Statistical Office: Federal register of buildings and dwellings (GWR). 
+
+https://www.bfs.admin.ch/bfs/en/home/registers/federal-register-build ings-dwellings.html (2026), accessed May 2026 27. Thompson, S.A., Warzel, C.: Twelve million phones, one dataset, zero privacy. 
+
+https://www.nytimes.com/interactive/2019/12/19/opinion/location-track ing-cell-phone.html (2019), new York Times Opinion, 19 December 2019 28. Wang, Z., Yang, S., Lu, J., Chow, K.H.: Protego: User-centric pose-invariant pri-vacy protection against face recognition-induced digital footprint exposure (2025). 
+
+https://doi.org/10.48550/arXiv.2508.02034 Agentic AI-Powered Re-Identification 15 29. Wiedemann, N., Janowicz, K., Raubal, M., Kounadi, O.: Where you go is who you are: A study on machine learning based semantic privacy attacks. Journal of Big Data 11 (39) (2024). https://doi.org/10.1186/s40537-024-00888-8 
+
+30. Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., Cao, Y.: Re-Act: Synergizing reasoning and acting in language models. In: Proceedings of the International Conference on Learning Representations (ICLR). ICLR (2023). 
+
+https://doi.org/10.48550/arXiv.2210.03629 
+
+31. Zang, H., Bolot, J.: Anonymization of location data does not work: A large-scale measurement study. In: Proceedings of the 17th Annual International Conference on Mobile Computing and Networking (MobiCom). pp. 145–156. ACM (2011). 
+
+https://doi.org/10.1145/2030613.2030630
