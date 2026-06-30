@@ -1,17 +1,147 @@
 {
-  "generated_at": "2026-06-29T21:53:16.311093+00:00",
-  "updated_date": "20260629",
+  "generated_at": "2026-06-30T21:07:41.146305+00:00",
+  "updated_date": "20260630",
   "carryover_days": 9,
   "tag_states": {
     "search-agent": {
-      "updated_date": "20260629",
+      "updated_date": "20260630",
       "carryover_days": 9,
       "items": []
     },
     "self-evolve": {
-      "updated_date": "20260629",
+      "updated_date": "20260630",
       "carryover_days": 9,
-      "items": []
+      "items": [
+        {
+          "id": "2606.30639v1",
+          "source": "arxiv",
+          "title": "Self-Evolving World Models for LLM Agent Planning",
+          "abstract": "World models offer a principled way to equip long-horizon LLM agents with foresight: predictions of action consequences before execution. However, unreliable foresight can be ignored, misused, or even degrade downstream decision-making. In this paper, we introduce WorldEvolver, a self-evolving world model framework that revises its deployment-time context while keeping the downstream agent and all model parameters frozen. WorldEvolver integrates three modules: (i) Episodic Memory, which exploits real action transitions through retrieval-based simulation; (ii) Semantic Memory, which extracts persistent heuristic rules from prediction-observation mismatches; and (iii) Selective Foresight, which filters low-confidence predictions before integrating them into agent reasoning context. We evaluate WorldEvolver on ALFWorld and ScienceWorld, measuring world model prediction accuracy on Word2World and downstream agent success rate on AgentBoard. Extensive experiments show that WorldEvolver achieves the highest prediction accuracy across three backbones and leads other world model baselines on downstream agent success rate, demonstrating that test-time memory revision enhances both predictive fidelity and planning performance.",
+          "authors": [
+            "Xuan Zhang",
+            "Wenxuan Zhang",
+            "See-Kiong Ng",
+            "Yang Deng"
+          ],
+          "primary_category": "cs.AI",
+          "categories": [
+            "cs.AI",
+            "cs.CL"
+          ],
+          "published": "2026-06-29T17:58:43+00:00",
+          "link": "https://arxiv.org/pdf/2606.30639v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "Self-evolving world model for LLM agent planning",
+          "llm_evidence_cn": "用于LLM智能体规划的自进化世界模型",
+          "llm_evidence": "用于LLM智能体规划的自进化世界模型",
+          "canonical_evidence": "用于LLM智能体规划的自进化世界模型",
+          "llm_tldr_en": "WorldEvolver introduces a self-evolving world model that revises deployment-time context using episodic and semantic memory to improve long-horizon planning for LLM agents.",
+          "llm_tldr_cn": "当前LLM智能体的世界模型在部署后无法自我改进。WorldEvolver提出一种自进化世界模型框架，通过情景记忆和语义记忆模块，从实际动作转换中提取规则并过滤低置信度预测，从而不断修正部署期间的上下文，且无需更新下游智能体或模型参数。实验表明该方法显著提升了长时程规划性能，为自进化智能体提供了新范式。",
+          "llm_tldr": "当前LLM智能体的世界模型在部署后无法自我改进。WorldEvolver提出一种自进化世界模型框架，通过情景记忆和语义记忆模块，从实际动作转换中提取规则并过滤低置信度预测，从而不断修正部署期间的上下文，且无需更新下游智能体或模型参数。实验表明该方法显著提升了长时程规划性能，为自进化智能体提供了新范式。",
+          "llm_tags": [
+            "query:self-evolve"
+          ],
+          "matched_query_tag": "query:self-evolve",
+          "matched_query_text": "self-evolving agents",
+          "matched_requirement_id": "req-12",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.30639v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2606.30616v1",
+          "source": "arxiv",
+          "title": "Scaling the Horizon, Not the Parameters: Reaching Trillion-Parameter Performance with a 35B Agent",
+          "abstract": "We introduce Agents-A1, a 35B Mixture-of-Experts Agentic Model that reaches trillion-parameter-level performance by scaling the agent horizon. We investigate agent-horizon scaling from two perspectives: scaling long-horizon trajectories and scaling heterogeneous agent abilities. To support this goal, we build a long-horizon knowledge-action infrastructure that connects external knowledge, actions, observations, and verifier outcomes, producing agentic trajectories with an average length of 45K tokens. Based on this, we train Agents-A1 with a three-stage recipe. First, we perform full-domain supervised fine-tuning to align the base model with broad agentic behaviors. Second, we train domain-level teacher models to capture specialized expertise in each domain. Third, we propose a multi-teacher domain-routed on-policy distillation with salient vocabulary alignment to improve knowledge transfer efficiency across different domains, unifying six heterogeneous domains into one deployable student model. Agents-A1 achieves strong and broad performance for long-horizon agent benchmarks. Compared with 1T-parameter model such as Kimi-K2.6 and DeepSeek-V4-pro, Agents-A1 achieves leading results on SEAL-0 (56.4), IFBench (80.6), HiPhO (46.4), FrontierScience-Olympiad (79.0), and MolBench-Bind (56.8), and remains highly competitive on SciCode (44.3), HLE (47.6) and BrowseComp (75.5). We hope this work provides the community with a practical path for scaling the horizon using a 35B agent that can reach or match the performance of 1T models on long-horizon tasks.",
+          "authors": [
+            "Lei Bai",
+            "Zongsheng Cao",
+            "Yang Chen",
+            "Zhiyao Cui",
+            "Shangheng Du",
+            "Yue Fan",
+            "Shiyang Feng",
+            "Zijie Guo",
+            "Haonan He",
+            "Liang He",
+            "Xiaohan He",
+            "Shuyue Hu",
+            "Yusong Hu",
+            "Songtao Huang",
+            "Yichen Jiang",
+            "Hao Li",
+            "Xin Li",
+            "Dahua Lin",
+            "Weihao Lin",
+            "Fenghua Ling",
+            "Dongrui Liu",
+            "Zhuo Liu",
+            "Runmin Ma",
+            "Chunjiang Mu",
+            "Haoyang Peng",
+            "Tianshuo Peng",
+            "Jinxin Shi",
+            "Luohe Shi",
+            "Boyuan Sun",
+            "Zelin Tan",
+            "Shengji Tang",
+            "Qianyi Wang",
+            "Yiming Wu",
+            "Yi Xie",
+            "Xiangchao Yan",
+            "Jingqi Ye",
+            "Peng Ye",
+            "Fangchen Yu",
+            "Jiakang Yuan",
+            "Bihao Zhan",
+            "Bo Zhang",
+            "Chen Zhang",
+            "Shufei Zhang",
+            "Shuaiyu Zhang",
+            "Wenlong Zhang",
+            "Yiqun Zhang",
+            "Junpeng Zhao",
+            "Zhijie Zhong",
+            "Bowen Zhou",
+            "Yuhao Zhou"
+          ],
+          "primary_category": "cs.CL",
+          "categories": [
+            "cs.CL"
+          ],
+          "published": "2026-06-29T17:50:54+00:00",
+          "link": "https://arxiv.org/pdf/2606.30616v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "Scaling agent horizon for long-horizon reasoning",
+          "llm_evidence_cn": "扩展智能体视界以实现长时程推理",
+          "llm_evidence": "扩展智能体视界以实现长时程推理",
+          "canonical_evidence": "扩展智能体视界以实现长时程推理",
+          "llm_tldr_en": "Agents-A1 achieves trillion-parameter-level performance in a 35B model by scaling agent horizon with long trajectories (45K tokens) and a three-stage training recipe.",
+          "llm_tldr_cn": "现有方法通常通过扩大模型参数来提升性能，但成本高昂。本文提出通过扩展智能体视界（agent horizon）来达到同等效果。作者构建了长时程知识-动作基础设施，生成平均长度45K token的轨迹，并采用三阶段训练（全域SFT、领域教师模型、混合训练）训练35B的MoE模型Agents-A1，在多个基准上达到万亿参数级性能，揭示了视界扩展作为参数扩展的替代路径。",
+          "llm_tldr": "现有方法通常通过扩大模型参数来提升性能，但成本高昂。本文提出通过扩展智能体视界（agent horizon）来达到同等效果。作者构建了长时程知识-动作基础设施，生成平均长度45K token的轨迹，并采用三阶段训练（全域SFT、领域教师模型、混合训练）训练35B的MoE模型Agents-A1，在多个基准上达到万亿参数级性能，揭示了视界扩展作为参数扩展的替代路径。",
+          "llm_tags": [
+            "query:self-evolve"
+          ],
+          "matched_query_tag": "query:self-evolve",
+          "matched_query_text": "long-horizon agent reasoning",
+          "matched_requirement_id": "req-10",
+          "selection_source": "carryover_cache",
+          "paper_id": "2606.30616v1",
+          "carry_days": 1
+        }
+      ]
     }
   }
 }

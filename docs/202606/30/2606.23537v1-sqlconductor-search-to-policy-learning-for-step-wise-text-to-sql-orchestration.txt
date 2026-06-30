@@ -1,0 +1,1285 @@
+Title: SQLConductor: Search-to-Policy Learning for Step-wise Text-to-SQL Orchestration
+
+URL Source: https://arxiv.org/pdf/2606.23537v1
+
+Published Time: Tue, 23 Jun 2026 03:26:52 GMT
+
+Number of Pages: 14
+
+Markdown Content:
+# SQLConductor: Search-to-Policy Learning for Step-wise Text-to-SQL Orchestration 
+
+# Yizhang Zhu 
+
+HKUST(GZ) Guangzhou, China yzhu305@connect.hkust-gz.edu.cn 
+
+# Zhangyang Peng 
+
+HKUST(GZ) Guangzhou, China zpeng529@connect.hkust-gz.edu.cn 
+
+# Boyan Li 
+
+HKUST(GZ) Guangzhou, China bli303@connect.hkust-gz.edu.cn 
+
+# Yuyu Luo* 
+
+HKUST(GZ) Guangzhou, China yuyuluo@hkust-gz.edu.cn 
+
+## ABSTRACT 
+
+Text-to-SQL enables users to access relational databases through natural language questions, but real-world Text-to-SQL remains challenging due to the need for coordinated reasoning over complex database environments. Existing systems often rely on carefully designed multi-stage Text-to-SQL pipelines, sometimes further en-hanced with trained reasoning models specialized for individual stages. However, such fixed pipelines rely on predefined stage or-ders, limiting their adaptivity to different query demands and inter-mediate evidence. Recent orchestration-based methods provide a more flexible alternative by composing specialized modules for each query, but typical plan-then-execute orchestration still commits to a complete workflow before execution and cannot sufficiently adapt to intermediate artifacts and feedback. In this paper, we propose SQLConductor , a step-wise orchestra-tion learning framework for Text-to-SQL. SQLConductor formu-lates typical Text-to-SQL subtasks as specialized actions in an action space for flexible workflow composition, and trains a policy model to decide the next action based on intermediate artifacts and feed-back. To learn such an adaptive policy, SQLConductor introduces 
+
+Search-to-Policy Learning , which uses Monte Carlo Tree Search to explore candidate workflows and stability estimation to iden-tify robust workflow supervision. The policy model is trained with Stability-weighted Supervised Fine-tuning to prioritize high-quality orchestration patterns, and further enhanced through Curriculum Reinforcement Learning. In this way, broad offline workflow search is transformed into a deployable policy for efficient step-wise or-chestration at inference time. Extensive experiments on BIRD-Dev and out-of-distribution datasets show that SQLConductor achieves superior execution accuracy and strong generalization, reaching 73.2% EX on BIRD-Dev by training a compact orchestration policy to coordinate frozen larger action models, outperforming prior meth-ods directly training comparable or larger Text-to-SQL backbones. Further analyses show that the learned policy adapts workflow orchestration to diverse query demands. 
+
+## 1 INTRODUCTION 
+
+Text-to-SQL aims to enable non-technical users to access relational databases through natural language (NL) questions [ 11 , 26 ] and has become an important interface for data analytics and business intel-ligence in the era of large language models (LLMs) [29, 32, 62, 64]. Despite recent progress, real-world Text-to-SQL remains challeng-ing. A practical Text-to-SQL system needs to locate relevant tables and columns in large and heterogeneous schemas, align query conditions with database contents, and construct complex query (b) Plan-then-Execute Orchestration 
+
+(c) Step-wise Orchestration (Ours) 
+
+> Orchestrated Workflow
+
+Execute Orchestrated Workflow in Order  
+
+> Final SQL
+> NL Ques(on Database
+> Orchestrate
+
+a1 a2 a3
+
+## a1 a2 a3 a4   
+
+> NL Ques(on Database NL Ques(on Database
+
+a1 a2 a3
+
+a1 a2 a3 a4
+
+a1 a2 a3 a4 Final SQL    
+
+> NL Ques(on Database NL Ques(on Database NL Ques(on Database
+
+(a) Fixed Pipeline        
+
+> State State ……
+> Want to take previous
+> ac9on (a 2) again? ok
+> 123456
+
+a1 a2 a3 a4 a2 a5   
+
+> NL Ques(on Database NL Ques(on Database NL Ques(on Database
+> Final SQL
+
+Figure 1: Comparison of fixed workflow, plan-then-execute orchestration, and step-wise orchestration for Text-to-SQL. 
+
+logic [ 17 , 30 ]. Correct SQL generation therefore requires coordinat-ing these reasoning steps into an effective solving procedure. 
+
+From Fixed Pipelines to Orchestration. To handle these difficul-ties, some Text-to-SQL systems introduce meticulously designed pipelines to decompose Text-to-SQL into more manageable sub-tasks, such as schema linking, value retrieval, SQL generation, revi-sion, and selection [ 3, 5, 48 , 52 ]. Some methods further strengthen such pipelines by incorporating stage-specific reasoning models trained with large-scale supervision [ 12 , 44 , 49 ]. These designs have achieved strong performance by introducing structured reasoning procedures and task-specific adaptation. However, as shown in Figure 1(a), this paradigm relies on a pre-defined stage order. This rigidity limits adaptivity to different query demands and intermediate evidence. For straightforward questions, the fixed procedure may also introduce unnecessary steps, extra noise, and a higher risk of hallucination [ 4, 63 ]. For complex cases, once an early stage misses key schemas or values, later stages may proceed under a flawed premise, leading to error propagation. Although intermediate artifacts such as filtered schemas and execu-tion feedback can provide useful signals, a fixed pipeline can only utilize them for later stages rather than reconsider earlier decisions. A more flexible direction is to coordinate Text-to-SQL through workflow orchestration. Rather than applying the same workflow to every question, orchestration selectively composes specialized modules into a query-specific workflow [ 8, 42 , 58 ]. This separates 
+
+> arXiv:2606.23537v1 [cs.DB] 22 Jun 2026 Yizhang Zhu, Zhangyang Peng, Boyan Li, and Yuyu Luo*
+
+subtask reasoning from process organization : specialized modules handle concrete Text-to-SQL subtasks, while an orchestration policy decides which to invoke and how to combine them [18, 36, 57]. 
+
+Attempts at Text-to-SQL Orchestration. Some recent methods have started to explore orchestration for Text-to-SQL. A typical strategy is plan-then-execute orchestration [ 51 ] as illustrated by Figure 1(b): the system first plans a complete workflow for the input query, and then invokes action modules in the order specified by the planned workflow. Compared with fixed pipelines, plan-then-execute orchestration provides better flexibility by producing a query-specific workflow. However, as shown in Figure 1(b), once the workflow execution begins, its procedure becomes fixed again. As a result, the system is still limited in adjusting later decisions based on intermediate artifacts or execution feedback. These limitations suggest that planning a complete workflow before execution is not sufficient. A more desirable approach is to leverage intermediate results for step-wise orchestration as illus-trated in Figure 1(c): instead of committing to the entire workflow upfront, the system can use intermediate artifacts and execution feedback to decide the next action accordingly. This can enable the workflow to better adapt to the solving demand and evolving reasoning process of each query. 
+
+Challenges. However, learning such a step-wise orchestration policy is non-trivial, mainly due to the following challenges. 
+
+(C1) Heterogeneous Workflow Demands Across Queries. 
+
+Different queries can require diverse workflow compositions. Some queries may be resolved through direct SQL generation, whereas others may require additional evidence-gathering, refinement, or iterative generation as intermediate feedback emerges. Therefore, effective orchestration requires both a composable decision space and a policy that adapts its orchestration decisions to each query’s evolving reasoning process. 
+
+(C2) Scarce Workflow Data for Orchestration Learning. 
+
+Learning such adaptive orchestration requires large-scale, high-quality, and diverse Text-to-SQL workflow data that covers dif-ferent queries and databases, workflow compositions, or decision patterns and reasoning trajectories. However, such data is rarely available and impractical to obtain through manual annotation. This raises the challenge of deriving workflow-level supervision without relying on human-crafted workflows. 
+
+(C3) Large, Non-Unique, and Noisy Workflow Space. The workflow space is combinatorial and inherently diverse. A question may admit multiple valid workflows, and no single canonical work-flow can generally serve as the ground truth. Moreover, a workflow that reaches the correct answer is not necessarily reliable, since its success may be accidental or unstable. Effective orchestration learn-ing therefore requires identifying high-quality workflows while preserving useful workflow diversity. 
+
+Our Proposal. To systematically address these challenges, we pro-pose SQLConductor , a step-wise orchestration learning framework for Text-to-SQL. To address C1, SQLConductor formulates typical Text-to-SQL subtasks as specialized action modules in an action space, and trains a policy model to make step-wise orchestration de-cisions based on the current solving context. This allows the system to compose workflows with flexible action combinations for various query demands. To address C2, SQLConductor introduces Search-to-Policy Learning , where MCTS-based Workflow Exploration treats workflow construction as a tree-structured search over the action space. By balancing broad exploration with execution-guided selec-tion, it automatically discovers diverse promising workflows, avoid-ing the need for human-crafting. To address C3, SQLConductor further estimates the stability of explored workflows and curates re-liable yet diverse trajectories for policy learning. The policy model is first trained with Stability-weighted Supervised Fine-tuning to absorb robust orchestration patterns, and is then enhanced through 
+
+Curriculum Reinforcement Learning .In this way, broad offline search is converted into a deployable policy that can make efficient step-wise orchestration decisions at inference time to adapt to the different demands and evolving reasoning processes for diverse queries. 
+
+Contributions. We make the following contributions: 
+
+(S1) A Step-wise Orchestration Learning Framework. We propose SQLConductor , a step-wise orchestration learning frame-work for Text-to-SQL that separates process organization from subtask execution. Instead of planning and fixing a complete work-flow upfront, SQLConductor learns to dynamically orchestrate next action based on intermediate artifacts and feedback, enabling query-specific workflows with adaptive depths and module compositions. 
+
+(S2) Search-to-Policy Learning for Adaptive Orchestration. 
+
+We introduce a Search-to-Policy Learning mechanism to train the orchestration policy. We first perform MCTS-based Workflow Ex-ploration to discover high-quality and diverse candidate trajecto-ries, then curate reliable workflows through stability estimation, training the policy model with Stability-weighted Supervised Fine-tuning to prioritize robust orchestration patterns while preserving diversity, followed by Curriculum Reinforcement Learning for fur-ther enhancement. This transforms offline workflow search into an inference-time policy for adaptive orchestration. 
+
+(S3) Extensive Experiments and Empirical Insights. 
+
+SQLConductor achieves superior execution accuracy, reaching 73.2% EX on BIRD-Dev by training only a much smaller orches-tration policy to coordinate frozen larger action models, outper-forming prior methods that directly train comparable or larger Text-to-SQL backbones. Additionally, SQLConductor demonstrates strong generalization across out-of-distribution datasets without specific training. Further analyses also reveal how SQLConductor adapts workflow orchestration to diverse queries. 
+
+## 2 PRELIMINARIES 2.1 Text-to-SQL 
+
+The Text-to-SQL task aims to translate a natural language question into an executable SQL query over a relational database. Formally, given a natural language question 𝑞 and a database D, a Text-to-SQL system generates an SQL query 𝑦 . Executing 𝑦 on D produces the query result used to answer 𝑞 , denoted as Exec D (𝑦 ).Text-to-SQL is primarily evaluated with execution accuracy (EX), which measures whether the predicted SQL query produces the same execution result as the ground-truth query [ 22 ]. Let 𝑦 ∗ denote the ground-truth SQL. A predicted query 𝑦 is considered correct if: 
+
+Exec D (𝑦 ) = Exec D (𝑦 ∗). (1) SQLConductor : Search-to-Policy Learning for Step-wise Text-to-SQL Orchestration 
+
+## 2.2 Workflow Orchestration for Text-to-SQL 
+
+To handle the coordinated reasoning required by real-world Text-to-SQL, workflow orchestration provides a flexible formulation that organizes specialized action modules into a workflow. Formally, let 
+
+A = {𝑎 (1) , 𝑎 (2) , . . . , 𝑎 (𝐾 ) } denote an action space. A workflow is a finite action sequence: 
+
+𝜏 = (𝑎 1, 𝑎 2, . . . , 𝑎 𝑇 ), 𝑎 𝑡 ∈ A . (2) Executing a workflow on (𝑞, D) further induces a trajectory that records the orchestration states and intermediate action outputs: 
+
+𝜉 = (𝑠 0, 𝑎 1, 𝑜 1, 𝑠 1, . . . , 𝑎 𝑇 , 𝑜 𝑇 , 𝑠 𝑇 ), 𝑜 𝑡 = 𝑎 𝑡 (𝑠 𝑡 −1, D) , (3) where 𝑠 0 is the initial orchestration state induced by (𝑞, D) , 𝑜 𝑡 is the output of action 𝑎 𝑡 , and 𝑠 𝑡 is the updated state after incorporat-ing 𝑜 𝑡 . The workflow can therefore be viewed as the action-level abstraction extracted from a trajectory. In Text-to-SQL, the final prediction 𝑦 is obtained from the terminal state. 
+
+Plan-then-Execute Orchestration. One orchestration strategy is to first use an orchestration policy 𝜋 to generate a complete workflow, as shown in Figure 1(b): 
+
+𝜏 = 𝜋 (𝑞, D) . (4) The actions in 𝜏 are then invoked in order. Compared with a uni-versal fixed pipeline, plan-then-execute orchestration provides a query-specific workflow. However, since the entire workflow is determined before execution, the action sequence is not revisable according to intermediate evidence produced during execution. 
+
+Step-wise Orchestration. In contrast, step-wise orchestration applies the orchestration policy during execution, as shown in Fig-ure 1(c). At each step 𝑡 , the policy selects the next action according to the current orchestration state, i.e., 
+
+𝑎 𝑡 = 𝜋 (𝑠 𝑡 −1), 𝜏 𝜋 = (𝑎 1, 𝑎 2, . . . , 𝑎 𝑇 ). (5) After the selected action is invoked, its output is incorporated into the orchestration state, which forms the context for the next de-cision. Since each state incorporates previous actions and their outputs, the next decision can condition on updated evidence, mak-ing the workflow adaptive to the evolving solving context of each query. In this paper, we focus on learning such a step-wise workflow orchestration policy for Text-to-SQL. 
+
+## 3 SQLCONDUCTOR OVERVIEW 
+
+Figure 2 illustrates the overall framework of SQLConductor , which consists of two phases: offline Search-to-Policy Training and on-line Deployment . In the offline phase, SQLConductor uses MCTS to explore Text-to-SQL workflows, curates workflow supervision, and trains a policy model with stability-weighted supervision and reinforcement learning. In the online phase, the learned policy model coordinates action modules step by step to solve each in-put query. This design separates process organization from subtask reasoning : the trainable policy learns how to orchestrate effective Text-to-SQL workflow, while frozen LLM-driven specialized action modules carry out concrete subtasks in the workflow. 
+
+Offline: Search-to-Policy Training. As illustrated in Figure 2-A, the goal of the offline phase is to learn a step-wise orchestration policy from automatically constructed workflow supervision. 
+
+(1) MCTS-based Workflow Exploration. SQLConductor first per-forms Monte Carlo Tree Search over the action space. Each node represents an orchestration state, and each edge corresponds to an action selection. The search process broadly explores different action compositions and workflow depths, while using execution outcomes to guide the discovery of promising workflows. This produces a diverse set of candidate workflows for each training instance, covering a wide range of potential solving paths. 
+
+(2) Workflow Supervision Curation. The searched workflows are diverse but may contain unstable or accidental successes. Therefore, SQLConductor further processes and curates workflow supervision before training. Specifically, it extracts workflow skeletons, i.e., 
+
+action sequences, from candidate trajectories, groups with the same skeleton, and estimates the stability of each workflow according to its success and failure statistics. Then, SQLConductor selects top-ranked workflow skeletons and converts their representative trajectories into step-level instruction-tuning formatted data, which contains the current orchestration context, its next action, and the corresponding stability score. This step filters unreliable workflows while preserving diverse orchestration patterns. 
+
+(3) Stability-weighted Supervised Fine-tuning. Based on the curated training samples, SQLConductor introduces Stability-weighted Supervised Fine-tuning to train the policy model in step 3. Different from treating all selected samples equally, this training objective assigns larger weights to samples with higher stability scores. In this way, the policy is encouraged to learn more robust or-chestration patterns from explored workflows, while still retaining alternative valid solving strategies. 
+
+(4) Curriculum Reinforcement Learning. In step 4, SQLConductor further enhances the policy through curriculum reinforcement learning. The curriculum emphasizes challenging queries that are less effectively solved during MCTS-based exploration. For these instances, the policy rolls out to orchestrate workflows and receives rewards based on execution-oriented feedback. This further cali-brates the policy for complex cases, especially in deciding when to collect additional evidence or regenerate a new query iteratively. 
+
+Online: System Deployment. After training, SQLConductor is de-ployed as a step-wise Text-to-SQL workflow orchestration system. Given an unseen question 𝑞 and database D, the learned policy model iteratively selects an action based on the current orches-tration state; the system then automatically parses to invoke the corresponding action module and updates the state with its output. This process continues until the termination is determined, after which SQLConductor outputs the current SQL query as the final prediction. Thus, the workflow is constructed during execution and adapted to the evolving solving context of each query. 
+
+## 4 THE DESIGN DETAILS OF SQLCONDUCTOR 4.1 Action Space 
+
+SQLConductor separates workflow orchestration from subtask rea-soning. To support flexible workflow composition, we expose typi-cal Text-to-SQL capabilities as callable action modules. Following prior practice [ 19 , 50 ], we implement seven actions for typical sub-tasks in Text-to-SQL to instantiate the action space. Formally, 
+
+A = {𝑎 dec , 𝑎 val , 𝑎 op , 𝑎 sch , 𝑎 gen , 𝑎 ref , 𝑎 term }, (6) Yizhang Zhu, Zhangyang Peng, Boyan Li, and Yuyu Luo* 1. Monte Carlo Tree Search-based Text-to-SQL Workflow Explora>on 
+
+an
+
+> S0
+> S1
+
+a1
+
+> S0
+> S1
+
+a2   
+
+> S0
+> S1
+> S0
+> S1
+> (1) Selection (2) Expansion (3) Simulation (4) Backpropagation
+> Repeat
+
+…
+
+Candidate Traj. 3. Stability-weighted SFT 
+
+(1) Workflow Skeleton Extrac6on 
+
+…… 
+
+p = 0.80 ( : 3, : 0) 
+
+( : 4, : 1) p = 0.71 
+
+> 1st
+> 2nd
+> Randomly
+> choose one
+> correct traj.
+> candidate as
+> represen5ve
+
+(2) Reasoning Augmenta6on for Orch. Decision   
+
+> …
+> reasoning reasoning reasoning reasoning
+
++ + + +
+
+## … … 
+
+> <reasoning>…</reasoning> <call> Operator Identification </call>
+> <results>… Identified SQL operation needed for this
+> System Prompt (Instruction, DB schema, question, … )
+> question, i.e. output of this worker …</results>
+> <reasoning>…</reasoning> <call> Schema Pruning </call> …
+> Top-k
+> <reasoning>…</reasoning>
+> <results> …… </results>
+> System Prompt…
+> <reasoning>…</reasoning>
+> <call> … </call>
+> <results> …… </results>
+> <call> … </call>
+
+…… 
+
+> MASK
+> MASK
+> Stability-Weighted
+> Workflow SFT
+
+4. Curriculum RL 
+
+> …
+> NL
+> Query
+> DB
+
+S0 ? … SQL 
+
+2. Text-to-SQL Workflow Supervision Cura>on 
+
+(3) - Outcome 
+
+> - Executability
+> Reward
+> Reward
+
+Rewards 
+
+Rollout 
+
+Ac>on Space 
+
+Ques5on 
+
+Decomposi5on Relevant Value 
+
+Extrac5on 
+
+Opera5on 
+
+Iden5fica5on 
+
+SQL Query 
+
+Genera5on 
+
+Schema 
+
+Pruning 
+
+SQL Query 
+
+Refinement 
+
+Terminate 
+
+and Output More Actions 
+
+can be 
+
+integrated … 
+
+> Gold
+> SQL
+
+NL Ques>ons [Training Set] 
+
+What is the average salaries of 
+
+employees in Software Dept.? 
+
+What is the average salaries of 
+
+employees in Software Dept.? 
+
+Tell me the total number of dept. 
+
+What is the average salaries of 
+
+employees in Software Dept.? 
+
+What is the average salaries of 
+
+employees in Software Dept.? How many employees in the Sales 
+
+department earn more than 80K? 
+
+Employees 
+
+- emp_id (PK) 
+
+- name 
+
+- dept_id (FK) 
+
+- Telephone 
+
+Departments 
+
+- dept_id (PK) 
+
+- name 
+
+- loca5on 
+
+- duty 
+
+…
+
+Databases [Training Set] 
+
+Employees 
+
+- emp_id (PK) 
+
+- name 
+
+- dept_id (FK) 
+
+- Telephone 
+
+Departments 
+
+- dept_id (PK) 
+
+- name 
+
+- loca5on 
+
+- duty 
+
+…
+
+Employees 
+
+- emp_id (PK) 
+
+- name 
+
+- dept_id (FK) 
+
+- Telephone 
+
+Departments 
+
+- dept_id (PK) 
+
+- name 
+
+- loca5on 
+
+- duty …
+
+List all students with A+ in math. 
+
+NL Ques>on [Test Set] 
+
+Student_info 
+
+- sid (PK) 
+
+- name 
+
+Math_grades 
+
+- sid (FK) 
+
+- grade 
+
+## …
+
+Database [Test Set] 
+
+[A] Offline Phase: Search-to-Policy Learning 
+
+[B] Online Phase: System Deployment 
+
+S0 S1
+
+> System Prompt & Task Instruction…
+> <reasoning>………</reasoning>
+> <call> Operator Identification </call>
+> Previous Context & Reasoning…
+> <reasoning>………</reasoning>
+> <call> Schema Pruning </call>
+
+S2 Sn-2
+
+> Previous Context & Reasoning…
+> <reasoning>………</reasoning>
+> <call> SQL Query Generation </call>
+
+Sn-1
+
+> Previous Context & Reasoning…
+> <reasoning>………</reasoning>
+> <call> Terminate and Output </call>
+
+Sn
+
+SQL 
+
+> Output
+
+Update 
+
+> +
+> +
+> Tag( )
+
+Figure 2: The framework overview of SQLConductor. 
+
+where the first six actions invoke frozen LLM-driven subtask mod-ules, and 𝑎 term terminates the workflow and returns predicted SQL. Given an orchestration state 𝑠 𝑡 −1, invoking an action 𝑎 𝑡 ∈ A pro-duces an action-specific output 𝑜 𝑡 , which is incorporated into the subsequent state 𝑠 𝑡 following Eq. (3). Importantly, Eq. (6) defines available capabilities rather than a predefined execution order. Conditioned on the current intermedi-ate artifacts and feedback, the policy may skip unnecessary actions, gather additional evidence, revisit an earlier action, regenerate a candidate query, refine an existing query, or terminate when ob-taining a sufficient SQL candidate. Figure 2 summarizes the action space, and we describe each action below. 
+
+Question Decomposition ( 𝑎 dec ). NL questions may compactly ex-press multiple constraints or dependencies [ 35 ]. This action rewrites the original question into fine-grained requirements while preserv-ing semantics, making the underlying sub-intents easier to consume in later reasoning. For example, “How many employees in the Sales department earn more than 80K?” can be decomposed into identi-fying Sales employees, filtering salaries above 80K, and counting the remaining employees. 
+
+Relevant Value Extraction ( 𝑎 val ). NL questions often contain values that should be grounded into SQL predicates. Given the question and database information, this action infers condition values likely needed for SQL construction and provides predicate-level hints. For example, for the Sales-department question above, it may identify “Sales” and “80K” as relevant condition values. 
+
+Operation Identification ( 𝑎 op ). Questions may imply SQL opera-tions such as aggregation, grouping, ordering, comparison, dedupli-cation, temporal transformation, scalar functions, or nested queries. This action records operation-level requirements as intermediate evidence to reduce the burden on later analysis. For example, it may identify AVG(salary) for an average-salary question, or a ranking pattern like ORDER BY salary DESC LIMIT 1 .
+
+Schema Pruning ( 𝑎 sch ). Large databases often contain many irrel-evant tables and columns. Based on the question and accumulated evidence, this action selects a compact schema subset that preserves the tables, columns, and relational paths needed for the current query. Because it remains callable throughout the workflow, the pol-icy may invoke it again when later feedback suggests that essential schema elements may be omitted. 
+
+SQL Query Generation ( 𝑎 gen ). This action synthesizes a complete SQL candidate from the current orchestration state. Following DAIL-SQL [ 7], SQLConductor adopts few-shot in-context learning, and the LLM is prompted with the question, schema, few-shot examples, and accumulated evidence. The generated query is executed on the database, and the feedback is incorporated into the updated state, allowing generation to be invoked again after new values, schema elements, or operation cues are obtained. 
+
+SQL Query Refinement ( 𝑎 ref ). When an existing SQL candidate re-quires targeted correction, SQLConductor can apply this action fol-lowing the strategy of DeepEye-SQL [ 15 ]. The candidate is checked by a fail-fast toolchain covering syntax and execution validation, SQLConductor : Search-to-Policy Learning for Step-wise Text-to-SQL Orchestration 
+
+Algorithm 1 MCTS-based Workflow Exploration                                                                                                                        
+
+> Input: Question 𝑞 , database D, action space A, rollout budget 𝑁 rollout ,expansion samples 𝑁 exp , reward samples 𝐾 , maximum depth 𝑇 max
+> Output: Candidate trajectory set X ( 𝑞, D )
+> 1: 𝑠 0←InitState (𝑞, D )
+> 2: Initialize Ψ=(𝑉 , 𝐸 )with root 𝑣 0where 𝑠 (𝑣 0)=𝑠 0;X ( 𝑞, D ) ← ∅
+> 3: for 𝑖 =1, . . . , 𝑁 rollout do
+> 4: 𝑣 ←𝑣 0
+> 5: while 𝑣 is non-terminal and fully expanded do
+> 6: 𝑎 ←UCTSelect (𝑣 ),𝑣 ←Child (𝑣, 𝑎 )⊲Selection, Eq. (7)
+> 7: end while
+> 8: if 𝑣 is non-terminal and Depth (𝑣 )<𝑇 max then
+> 9: C ← Expand (𝑣, A, 𝑁 exp ,D ) ,𝑣 ←Sample ( C) ⊲Expansion
+> 10: end if
+> 11: while 𝑣 is non-terminal and Depth (𝑣 )<𝑇 max do
+> 12: C ← Expand (𝑣, A, 𝑁 exp ,D ) ,𝑣 ←Sample ( C) ⊲Simulation
+> 13: end while
+> 14: if 𝑣 is non-terminal then 𝑣 ←ForceTerminate (𝑣 )
+> 15: 𝜉 ←Trace (𝑣 0, 𝑣 ),𝑦 ←ExtractSQL (𝑠 (𝑣 ) )
+> 16: 𝑟 ←𝑅 (𝑦 ;D, 𝐾 )⊲Eq. (8)
+> 17: Backpropagate (𝜉, 𝑟 )⊲Backpropagation
+> 18: X ( 𝑞, D ) ← X ( 𝑞, D ) ∪ { 𝜉 }
+> 19: end for
+> 20: return X ( 𝑞, D )
+
+logical verification, and query-quality checking. If a defect is de-tected, the diagnostic signal is converted into an explicit revision instruction for the LLM to produce a corrected candidate. 
+
+Terminate and Output ( 𝑎 term ). This terminal action ends the workflow and returns the latest SQL candidate as the prediction. Allowing the policy to select 𝑎 term adaptively avoids redundant modules for straightforward questions while preserving the option to invest more reasoning steps when evidence remains insufficient. The action space is intentionally modular. Additional Text-to-SQL capabilities can be incorporated as new actions without chang-ing the overall orchestration formulation. In the next subsection, we describe how SQLConductor explores compositions of these actions through Monte Carlo Tree Search to construct diverse candidate workflows for policy learning. 
+
+## 4.2 MCTS-based Workflow Exploration 
+
+The action space introduced in Section 4.1 enables flexible work-flow composition, but also induces a large combinatorial search space. Manually specifying high-quality workflows for different questions is therefore impractical, while directly sampling trajec-tories from an LLM may cover only a limited set of orchestration patterns. To automatically discover diverse orchestration patterns, SQLConductor performs Monte Carlo Tree Search (MCTS) [ 2, 13 ]over the action space for each training instance (𝑞, D) .
+
+Tree-structured Workflow Search. We construct a search tree 
+
+Ψ = (𝑉 , 𝐸 ) rooted at the initial orchestration state 𝑠 0. Each node 𝑣 ∈ 𝑉 stores an orchestration state 𝑠 (𝑣 ) reached after a sequence of action invocations, and each edge corresponds to an action-induced state transition. Specifically, invoking action 
+
+𝑎 𝑡 at state 𝑠 𝑡 −1 produces an intermediate output 𝑜 𝑡 and an up-dated state 𝑠 𝑡 . A root-to-terminal path therefore induces a trajec-tory 𝜉 = (𝑠 0, 𝑎 1, 𝑜 1, 𝑠 1, . . . , 𝑎 𝑇 , 𝑜 𝑇 , 𝑠 𝑇 ), whose action-only projection 
+
+𝜏 (𝜉 ) = (𝑎 1, . . . , 𝑎 𝑇 ) is the corresponding workflow. Trajectories retain concrete intermediate artifacts, while workflows abstract action-composition patterns. Algorithm 1 summarizes the exploration procedure. As illus-trated in Figure 2-A(1), each rollout consists of selection, expansion, simulation, and backpropagation. 
+
+Selection. Starting from the root, MCTS traverses the current tree until it reaches a terminal state or a node with unexplored children. At each visited node 𝑣 , the next action is selected by the Upper Confidence Bound for Trees (UCT) criterion [13]: 
+
+𝑎 ∗ = arg max 
+
+> 𝑎 ∈ A ( 𝑣 )
+
+"
+
+𝑄 (𝑣, 𝑎 )
+
+𝑁 (𝑣, 𝑎 ) + 𝑐 √︄ ln 𝑁 (𝑣 )
+
+𝑁 (𝑣, 𝑎 )
+
+#
+
+, (7) where A ( 𝑣 ) is applicable action set at node 𝑣 ; 𝑄 (𝑣, 𝑎 ) and 𝑁 (𝑣, 𝑎 )
+
+denote accumulated reward and visit count of edge (𝑣, 𝑎 ); 𝑁 (𝑣 ) is the visit count of 𝑣 ; and 𝑐 controls the exploration–exploitation trade-off. Unvisited actions are prioritized before applying Eq (7). 
+
+Expansion. When traversal reaches a non-terminal frontier node, SQLConductor expands the tree by invoking applicable action mod-ules. To preserve exploration diversity, the same action may be sampled multiple times with a non-zero temperature, producing al-ternative child states under the same preceding context. Each child stores the updated orchestration state and the newly generated intermediate artifact. 
+
+Simulation. Starting from an expanded child, SQLConductor con-tinues sampling and invoking actions until Terminate and Output 
+
+is selected. Because each state incorporates accumulated artifacts and feedback, later actions operate on an evolving solving con-text. When a rollout reaches a terminal state, SQLConductor ex-tracts its SQL candidate 𝑦 and evaluates it with an execution-consistency reward. Following existing research [ 19 , 44 ], we sample additional SQL candidates Y𝐾 = {𝑦 (1) , . . . , 𝑦 (𝐾 ) } from the current SQL-generation context and compute 
+
+𝑅 (𝑦 ) = bE𝑦 ( 𝑗 ) ∈ Y 𝐾 
+
+I  Exec D (𝑦 ) = Exec D (𝑦 ( 𝑗 ) ) . (8) If 𝑦 is non-executable, we set 𝑅 (𝑦 ) = 0. This reward assigns higher scores to candidates whose execution results are reproduced consistently across multiple generations, providing a lightweight execution-oriented signal for guiding exploration. 
+
+Backpropagation. The reward is propagated from the terminal node back to root, updating visit counts and accumulated rewards of the edges along the explored path. Repeating this procedure allocates more rollouts to promising regions while still exploring al-ternative action compositions. Meanwhile, SQLConductor records completed trajectories as candidates for subsequent supervision curation. After 𝑁 rollout iterations, the collected trajectory set is 
+
+X( 𝑞, D) = 𝜉 (1) , 𝜉 (2) , . . . , 𝜉 (𝑀 ) . (9) 
+
+## 4.3 Workflow Supervision Curation 
+
+MCTS-based exploration produces diverse candidate trajectories for each training instance. However, these trajectories cannot be directly used as policy supervision. The explored trajectories only record action calls and action outputs, without explicit reasoning for Yizhang Zhu, Zhangyang Peng, Boyan Li, and Yuyu Luo* 
+
+orchestration decisions, and some successful trajectories may be ac-cidental. Therefore, SQLConductor curates the explored trajectories into reliable, reasoning-augmented, and instruction-tuning-ready supervision, as shown in Figure 2-A(2) and detailed in Algorithm 2. 
+
+Workflow Skeleton Extraction. Given a MCTS explored trajec-tory 𝜉 , we first extract its workflow skeleton ( i.e., workflow 𝜏 ) by keeping only its action sequence: 𝜏 (𝜉 ) = (𝑎 1, 𝑎 2, . . . , 𝑎 𝑇 ). Different trajectories with the same workflow are grouped together: 
+
+X𝜏 = {𝜉 ∈ X( 𝑞, D) | 𝜏 (𝜉 ) = 𝜏 }, (10) where X( 𝑞, D) denotes the set of candidate trajectories explored for the training instance. For each workflow 𝜏 , we count the number of successful trajectories 𝑠 𝜏 and the total number of trajectories 
+
+𝑛 𝜏 = |X 𝜏 |, where success is determined by execution correctness. Figure 3(a) shows that MCTS explores a broad set of trajectories with diverse workflow skeletons for each question. 
+
+Workflow Stability Estimation. Since the combinatorial space is large, most workflows are observed only once or a limited number of times. To account for sparse observations, SQLConductor defines each workflow’s stability score as the posterior predictive proba-bility of success under a Bernoulli model with a uniform Beta (1, 1)
+
+prior, as given by Laplace’s rule of succession [56]: 
+
+ˆ𝑝 𝜏 = 𝑠 𝜏 + 1
+
+𝑛 𝜏 + 2 , (11) The resulting ˆ𝑝 𝜏 serves as a Laplace-smoothed workflow stability score. It assigns higher scores to workflows that repeatedly lead to successful executions, while avoiding extreme estimates for rarely observed workflows. For each training instance, SQLConductor ranks all workflows with 𝑠 𝜏 > 0 by ˆ𝑝 𝜏 to select the top-𝑘 workflows, and randomly samples one successful trajectory from each selected group as the representative trajectory 𝜉 +. Since grouped trajectories share the same high-level orchestration decisions, retaining one representative per workflow reduces redundant supervision and exploration-frequency bias. This keeps multiple valid workflow pat-terns for the same question, rather than forcing a single canonical workflow. Figure 3(b) shows that the selected top-3 workflows have clearly higher stability scores among all explored workflows. 
+
+Reasoning Augmentation for Orchestration Decisions. The representative trajectory 𝜉 + contains the selected actions and their outputs, but the policy model should also learn why an action is selected under the current orchestration context. Thus, we aug-ment each representative trajectory with step-level orchestration reasoning. For each step 𝑡 , we prompt a deployed LLM to generate the orchestration reasoning 𝑒 𝑡 = LLM (𝑞, D, ¯𝜉 <𝑡 , 𝑎 𝑡 , 𝑜 𝑡 ) for invoking 
+
+𝑎 𝑡 , where ¯𝜉 <𝑡 is the augmented trajectory prefix before step 𝑡 , and 
+
+𝑎 𝑡 , 𝑜 𝑡 are the selected current action and its observed output. The reasoning is inserted before the corresponding action call, yielding: 
+
+¯𝜉 = (𝑠 0, 𝑒 1, 𝑎 1, 𝑜 1, 𝑠 1, . . . , 𝑒 𝑇 , 𝑎 𝑇 , 𝑜 𝑇 , 𝑠 𝑇 ). (12) This step-wise augmentation is more controllable than generating reasoning for the whole trajectory at once, because the LLM only needs to justify a fixed action under a fixed context and observed result. Since the trajectory has already been selected from stable successful candidates, the generated reasoning is grounded in high-quality orchestration behavior. 
+
+Algorithm 2 Workflow Supervision Curation 
+
+Input: Training set I, MCTS explored trajectories X ( 𝑞, D ) , top-𝑘 
+
+Output: Curated supervision set C 
+
+> 1:
+
+C ← ∅  
+
+> 2:
+
+for all (𝑞, D, 𝑦 ∗ ) ∈ I do  
+
+> 3:
+
+Extract 𝜏 (𝜉 ) = (𝑎 1, . . . , 𝑎 𝑇 ) for each 𝜉 ∈ X ( 𝑞, D )  
+
+> 4:
+
+X𝜏 ← { 𝜉 ∈ X ( 𝑞, D ) | 𝜏 (𝜉 ) = 𝜏 } for each distinct 𝜏 ⊲ Eq. (10)  
+
+> 5:
+
+for all workflow group X𝜏 do  
+
+> 6:
+
+𝑠 𝜏 ← | { 𝜉 ∈ X 𝜏 : 𝜉 is successful } | , 𝑛 𝜏 ← | X 𝜏 | 
+
+> 7:
+
+ˆ𝑝 𝜏 ← 𝑠 𝜏 + 1
+
+𝑛 𝜏 + 2 // Laplace-smoothed stability score ⊲ Eq. (11)  
+
+> 8:
+
+end for  
+
+> 9:
+
+T ← top-𝑘 ( { 𝜏 | 𝑠 𝜏 > 0}; ˆ 𝑝 𝜏 ) // Select top-𝑘 workflows  
+
+> 10:
+
+for all 𝜏 ∈ T do 
+
+// Randomly select a successful representative trajectory  
+
+> 11:
+
+𝜉 + = (𝑠 0, 𝑎 1, 𝑜 1, . . . , 𝑎 𝑇 , 𝑜 𝑇 , 𝑠 𝑇 ) ∈ X 𝜏  
+
+> 12:
+
+Initialize ¯𝜉 ← ( 𝑠 0 ) 
+
+> 13:
+
+for 𝑡 = 1, . . . ,𝑇 do  
+
+> 14:
+
+𝑒 𝑡 ← LLM (𝑞, D, ¯𝜉 <𝑡 , 𝑎 𝑡 , 𝑜 𝑡 ), ¯𝜉 ← ¯𝜉 ⊕ ( 𝑒 𝑡 , 𝑎 𝑡 , 𝑜 𝑡 , 𝑠 𝑡 ) 
+
+> 15:
+
+end for  
+
+> 16:
+
+C ← C ∪ { ( Tag ( ¯𝜉 ), ˆ𝑝 𝜏 ) }  
+
+> 17:
+
+end for  
+
+> 18:
+
+end for  
+
+> 19:
+
+return C10 15 20 25 30 35 40 45  
+
+> Count per Question
+> 0
+> 300
+> 600
+> 900
+> 1200
+> Number of Questions
+> (a) MCTS Exploration Distribution
+> =34.7
+> =25.3
+> Explored Trajectories
+> Unique Workflow Skeletons
+> MCTS All
+> Explored
+> Selected
+> Top-3
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> Laplace-Smoothed
+> Stability Score
+> (b) Stability Score Distribution
+> =0.548 =0.766
+> MCTS All Explored
+> Selected Top-3
+
+Figure 3: Statistics of workflow exploration and curation. 
+
+Finally, as shown in Figure 4, we serialize each augmented trajec-tory into a tagged instruction-tuning format, where <reasoning> 
+
+and <call> are supervised as policy-generated content, and 
+
+<results> is the output of the corresponding action. 
+
+System Prompt: 𝑞, D, A, instruction , . . . 
+
+<reasoning> 𝑒 1</reasoning><call> 𝑎 1</call><results> 𝑜 1</results> 
+
+· · · 
+
+<reasoning> 𝑒 𝑇 </reasoning><call> 𝑎 𝑇 </call><results> 𝑜 𝑇 </results> 
+
+Figure 4: Instruction-tuning format for subsequent training. 
+
+## 4.4 Stability-weighted Supervised Fine-tuning 
+
+After workflow supervision curation, each selected sample consists of a tagged augmented trajectory Tag ( ¯𝜉 ) and its workflow stabil-ity score ˆ𝑝 𝜏 . This stage introduces a Stability-weighted Supervised Fine-tuning to train the policy to learn from robust orchestration patterns from selected workflows, while still preserving diversity from alternative valid solving strategies. 
+
+Action Result Masking. In SQLConductor , the training objective focuses on learning orchestration for Text-to-SQL workflow. Thus, different from fine-tuning Text-to-SQL generators, SQLConductor only updates the compact policy model. SQLConductor : Search-to-Policy Learning for Step-wise Text-to-SQL Orchestration 
+
+As mentioned in Section 4.3, the tagged instruction-tuning for-matted data contains both policy-generated content and action-generated observations. Since <results> is not produced by the policy, forcing the policy to predict it would introduce irrelevant supervision and bias the model from learning workflow orchestra-tion [ 34 ]. Therefore, SQLConductor keeps <results> in the con-text for subsequent decisions, but masks it out from the training loss [ 6 , 34 , 61 ]. Formally, let Tag ( ¯𝜉 ) be the serialized token sequence. We define a tag-aware binary mask 𝑚 𝑖 as: 
+
+Tag ( ¯𝜉 ) = (𝑧 1, 𝑧 2, . . . , 𝑧 𝑁 ), (13) 
+
+𝑚 𝑖 =
+
+(
+
+0, 𝑧 𝑖 ∈ <results> · · · </results> ,
+
+1, otherwise . (14) In practice, the system prompt and other non-response tokens are also excluded following the standard instruction-tuning setting. The result-masked loss is: 
+
+ℓmask (𝜃 ; ¯𝜉 ) = − 1
+
+Í𝑁 𝑖 =1 𝑚 𝑖 𝑁 ∑︁ 
+
+> 𝑖 =1
+
+𝑚 𝑖 log 𝑃 𝜃 (𝑧 𝑖 | 𝑧 <𝑖 ). (15) This normalization prevents longer trajectories or longer action outputs from dominating the optimization. Meanwhile, the masked results remain visible in the context, allowing the policy to learn state-conditioned decisions from evolving intermediate evidence. 
+
+Stability-weighted Objective. Although the curated trajectories are selected from successful candidates, they are not equally reliable. A workflow that succeeds repeatedly during MCTS-based explo-ration provides stronger evidence of robust orchestration behavior than one that succeeds only occasionally. Therefore, SQLConductor uses the Laplace-smoothed workflow stability score ˆ𝑝 𝜏 from Eq. (11) to weight the supervised learning objective. For the selected trajectories of the same question, SQLConductor converts stability scores into normalized training weights. This avoids treating ˆ𝑝 𝜏 as an absolute loss scale and instead uses it to define the relative importance of different valid workflows for the same question. Specifically, we adopt power normalization: 
+
+𝑤 𝜏 = ˆ𝑝 𝛼 𝜏 
+
+Í𝜏 ′ ∈ T 𝑝 𝛼 𝜏 ′
+
+, (16) where T denotes the selected top-𝑘 workflows for a certain ques-tion. The exponent 𝛼 controls the strength of stability preference. Following prior work on distribution sharpening [ 1], we set 𝛼 = 2.The final Stability-weighted Supervised Fine-tuning objective is: 
+
+LSFT (𝜃 ) = E(𝑞, D,𝑦 ∗ )∼I 
+
+"∑︁  
+
+> 𝜏 ∈ T
+
+𝑤 𝜏 ℓmask (𝜃 ; ¯𝜉 𝜏 )
+
+#
+
+, (17) where ¯𝜉 𝜏 is the representative augmented trajectory of workflow 
+
+𝜏 . This objective prioritizes stable orchestration patterns while still preserving multiple valid workflows for the same question. As a result, the policy obtains a reliability-aware initialization for tagged interaction formatting and step-wise action decision, which is further enhanced by curriculum reinforcement learning. 
+
+## 4.5 Curriculum Reinforcement Learning 
+
+Stability-weighted Supervised Fine-tuning trains the policy model to learn reliable orchestration patterns selected from MCTS explo-ration. However, its supervision still comes from curated successful trajectories. For difficult instances, successful trajectories can be sparse during exploration, making supervised signals less sufficient for learning how to recover from imperfect intermediate decisions. Therefore, SQLConductor further applies Curriculum Reinforcement Learning to enhance the orchestration policy on challenging queries through self-rollouts and execution-oriented rewards. 
+
+Curriculum Construction. We construct the reinforcement learn-ing (RL) set according to the difficulty observed during MCTS-based exploration. For each training instance (𝑞, D, 𝑦 ∗), let X( 𝑞, D) de-note the explored trajectory set, and let X+ (𝑞, D) denote the subset of successful ones obtaining correct predicted SQL. We define the MCTS success ratio as: 
+
+𝜌 (𝑞, D) = |X + (𝑞, D)| |X( 𝑞, D)| . (18) A lower 𝜌 (𝑞, D) indicates that successful trajectories are more sparsely yielded in the exploration, suggesting a more challenging query. Given a threshold 𝛾 , we construct the curriculum set as: 
+
+IRL = {( 𝑞, D, 𝑦 ∗) ∈ I | 𝜌 (𝑞, D) < 𝛾 }. (19) This curriculum directs the RL stage toward challenging instances that are less effectively solved during exploration, complementing curated supervision with further policy optimization. 
+
+Policy Rollout with GRPO. We adapt GRPO [ 25 , 36 , 43 , 57 ] to workflow orchestration by optimizing the policy over grouped step-wise rollouts with execution-oriented rewards. For each instance in IRL , the current policy performs step-wise rollout by interacting with the frozen action modules. As shown in Figure 5, starting from the initial state 𝑠 0, the policy repeatedly generates orchestration reasoning and selects an action. The corresponding action module is then invoked, with its output result appended to the context for the next decision. The rollout stops when the policy decides to terminate and output or reaches the maximum step limit 𝑇 max ,yielding a final predicted SQL query 𝑦 𝑖 . Each rollout is scored by an execution-oriented reward 𝑟 𝑖 , which will be elaborated next. Following GRPO, we sample a group of 𝐺 rollouts for the same training instance: {𝜉 𝑖 , 𝑦 𝑖 , 𝑟 𝑖 }𝐺 𝑖 =1, where 𝜉 𝑖 is the rollout trajectory, 𝑦 𝑖 
+
+is its final predicted SQL, and 𝑟 𝑖 is the scalar reward computed from execution feedback. GRPO estimates the advantage of each rollout by comparing it with other rollouts in the same group: 
+
+ˆ𝐴 𝑖 = 𝑟 𝑖 − 𝜇 𝑟 
+
+𝜎 𝑟 + 𝛿 , 𝜇 𝑟 = 1
+
+𝐺 
+
+> 𝐺
+
+∑︁ 
+
+> 𝑗 =1
+
+𝑟 𝑗 , (20) where 𝜎 𝑟 is the standard deviation of group rewards and 𝛿 is a small constant for numerical stability. This relative advantage avoids training an additional value model and encourages the policy to prefer workflows that perform better than other sampled workflows for the same question. As in Eq. (13) , we serialize each rollout 𝜉 𝑖 into a token sequence 
+
+𝑧 𝑖, 1: 𝑁 𝑖 . Let Ω𝑖 ⊆ { 1, . . . , 𝑁 𝑖 } denote the index set of policy-generated tokens, including tokens in <reasoning> and <call> . Let 𝑃 𝜃 denote the autoregressive token distribution induced by the policy model 
+
+𝜋 𝜃 . For each 𝑡 ∈ Ω𝑖 , we define the probability ratio: 
+
+𝜂 𝑖,𝑡 = 𝑃 𝜃 (𝑧 𝑖,𝑡 | 𝑧 𝑖, <𝑡 )
+
+𝑃 𝜃 old (𝑧 𝑖,𝑡 | 𝑧 𝑖, <𝑡 ) . (21) Yizhang Zhu, Zhangyang Peng, Boyan Li, and Yuyu Luo* …
+
+DB 
+
+NLQ 
+
+# ? … SQL 2
+
+# ? … SQL 1
+
+# ? … SQL n
+
+…
+
+> 1
+
+r
+
+> 2
+
+r
+
+> n
+
+r
+
+…
+
+> 1A
+
+…
+
+> 2A
+> nA
+> Group
+> Computa/on
+
+S0
+
+> (a) Executability Reward
+> SQL 1
+> SQL 2
+
++0 
+
++1 
+
+> Executable SQL
+> Non-executable 1
+> 2
+
+S1
+
+> (1)
+
+S1
+
+> (2)
+
+S1   
+
+> (n)
+> (b) Outcome Reward
+> SQL 2Gold SQL
+> city cnt
+> Boston
+> Denver
+> 3
+> 2
+> city cnt
+> Boston
+> Austin
+> 3
+> 1
+> SQL 3
+> city cnt
+> Boston
+> Denver
+> 3
+> 2
+> ExecF1 = 0.5
+> ExecF1 = 1.0 +2.0
+> +0.5
+
+Figure 5: Rollout and reward computation in curriculum reinforcement learning for SQLConductor. 
+
+Therefore, our GRPO objective for SQLConductor is: 
+
+JGRPO (𝜃 ) = 1
+
+𝐺 
+
+> 𝐺
+
+∑︁ 
+
+> 𝑖 =1
+
+1
+
+|Ω𝑖 |∑︁ 𝑡 ∈Ω𝑖 
+
+min 
+
+
+
+𝜂 𝑖,𝑡 ˆ𝐴 𝑖 ,
+
+clip (𝜂 𝑖,𝑡 , 1 − 𝜖 𝑐 , 1 + 𝜖 𝑐 ) ˆ𝐴 𝑖 
+
+
+
+− 𝛽𝐷 KL (𝑃 𝜃 ∥ 𝑃 ref )
+
+(22) where 𝑃 𝜃 old is the policy used to generate the rollouts, 𝑃 ref is the SFT-trained reference policy, and 𝜖 𝑐 and 𝛽 control clipping and KL regularization. As in SFT, only policy-generated tokens are optimized, while action results are treated as observations. 
+
+Execution-oriented Reward. The reward is designed to encour-age both executable SQL generation and semantically correct exe-cution results. Given a predicted SQL 𝑦 𝑖 , SQLConductor executes it on D and compares its result with the execution result of the ground-truth SQL query 𝑦 ∗.
+
+(1) Executability Reward encourages the policy to produce work-flows that lead to valid SQL: 
+
+𝑟 exe (𝑦 𝑖 ) = I [𝑦 𝑖 executes on D without error/timeout ] . (23) 
+
+(2) Outcome Reward measures the quality of the final execution result. Exact execution correctness remains the primary target, while partial result overlap can also be used to provide a more fine-grained signal for distinguishing near-correct predictions [ 9 ]. For this purpose, we employ ExecF1 over the execution result table of predicted and gold SQL. Specifically, for executable 𝑦 𝑖 , let V𝑖 and 
+
+V∗ denote the multisets of normalized cell values in Exec D (𝑦 𝑖 ) and 
+
+Exec D (𝑦 ∗), respectively. The numbers of matched, prediction-only, and gold-only values are: 
+
+TP = |V 𝑖 ∩ V ∗ |, FP = |V 𝑖 \ V ∗ |, FN = |V ∗ \ V 𝑖 |, (24) where repeated values are counted according to their multiplicities. As Prec = TP /( TP +FP ), Rec = TP /( TP + FN ), ExecF1 then denotes: 
+
+ExecF1 (𝑦 𝑖 , 𝑦 ∗) = 2 · Prec · Rec Prec + Rec . (25) For non-executable 𝑦 𝑖 , the outcome reward is also 0. Otherwise, the outcome reward is: 
+
+𝑟 out (𝑦 𝑖 ) =
+
+(
+
+1 + ExecF1 (𝑦 𝑖 , 𝑦 ∗), Exec D (𝑦 𝑖 ) = Exec D (𝑦 ∗),
+
+ExecF1 (𝑦 𝑖 , 𝑦 ∗), otherwise . (26) Here, exactly correct executions receive an additional reward, while partially correct results are still rewarded according to ExecF1. The final reward combines outcome quality and executability: 
+
+𝑟 𝑖 = 𝜆𝑟 out (𝑦 𝑖 ) + ( 1 − 𝜆 )𝑟 exe (𝑦 𝑖 ), (27) 
+
+Algorithm 3 Online Deployment of SQLConductor 
+
+Input: Test question 𝑞 test , test database Dtest , action space A, learned policy model 𝜋 𝜃 , maximum steps 𝑇 max 
+
+Output: Predicted SQL query 𝑦  
+
+> 1:
+
+𝑠 0 ← InitState (𝑞 test , Dtest ) 
+
+> 2:
+
+for 𝑡 = 1, . . . ,𝑇 max do  
+
+> 3:
+
+𝑢 𝑡 ← 𝜋 𝜃 (𝑞 test , Dtest , A, 𝑠 𝑡 −1 ) // Generate orchestration reasoning  
+
+> 4:
+
+𝑒 𝑡 ← Extract (𝑢 𝑡 , <reasoning> , </reasoning> ) 
+
+> 5:
+
+𝑎 𝑡 ← Extract (𝑢 𝑡 , <call> , </call> ) 
+
+> 6:
+
+if 𝑎 𝑡 = 𝑎 term then  
+
+> 7:
+
+𝑦 ← ExtractSQL (𝑠 𝑡 −1 ) 
+
+> 8:
+
+return 𝑦  
+
+> 9:
+
+end if  
+
+> 10:
+
+𝑜 𝑡 ← 𝑎 𝑡 (𝑠 𝑡 −1, Dtest ) // Invoke and perform the corresponding action  
+
+> 11:
+
+𝑠 𝑡 ← UpdateState (𝑠 𝑡 −1, 𝑒 𝑡 , 𝑎 𝑡 , 𝑜 𝑡 ) 
+
+> 12:
+
+end for  
+
+> 13:
+
+𝑦 ← ExtractSQL (𝑠 𝑇 max ) 
+
+> 14:
+
+return 𝑦 
+
+where 𝜆 ∈ [ 0, 1] balances outcome correctness and executability. Through curriculum reinforcement learning, the orchestration policy is further optimized from its own rollout behaviors on chal-lenging instances. This completes the offline Search-to-Policy Train-ing phase, after which the learned policy is deployed for online step-wise orchestration for Text-to-SQL workflow. 
+
+## 4.6 Online Deployment 
+
+After offline Search-to-Policy Training, SQLConductor is deployed as a step-wise workflow orchestration system for unseen Text-to-SQL queries. Given a test question 𝑞 test and database Dtest , the learned policy model 𝜋 𝜃 iteratively selects actions conditioned on the current orchestration state until termination or the maximum step limit is reached. Algorithm 3 outlines the online procedure. 
+
+Step-wise Orchestration. At each step 𝑡 , SQLConductor serializes the current orchestration state 𝑠 𝑡 −1 into the same tagged interaction format used in training. The policy model then generates a decision segment containing orchestration reasoning and an action call: 
+
+𝑢 𝑡 = <reasoning> 𝑒 𝑡 </reasoning><call> 𝑎 𝑡 </call> .
+
+The system parses 𝑒 𝑡 from <reasoning> and 𝑎 𝑡 from <call> ,and maps the parsed action name to an action module in A. If 𝑎 𝑡 
+
+is a non-terminating action, the corresponding action module is invoked to produce its results and output 𝑜 𝑡 , as in Eq. (3) . The 𝑜 𝑡 is appended to the context and incorporated into the orchestration state for the next decision. Therefore, although the action result is not generated by the policy, it remains visible as intermediate evidence for subsequent policy decisions. 
+
+Termination and SQL Output. The action space includes a ter-mination action 𝑎 term , corresponding to Terminate and Output .When the parsed <call> is 𝑎 term , the process terminates and ex-tracts the current SQL candidate from the terminal orchestration state as the final prediction. If the maximum step limit is reached, the termination is automatically triggered. The induced workflow for the test instance is therefore: 𝜏 𝜃 = (𝑎 1, 𝑎 2, . . . , 𝑎 𝑇 ), where 𝑇 ≤ 𝑇 max 
+
+is determined online by the learned policy. This procedure enables SQLConductor to produce query-specific workflows with adaptive action organization, conditioned on evolving orchestration state. SQLConductor : Search-to-Policy Learning for Step-wise Text-to-SQL Orchestration 
+
+## 5 EXPERIMENTS 5.1 Experimental Setup 
+
+Datasets. We use the following datasets for training and evaluation: 
+
+• BIRD-Train [22 ] is used to construct workflow supervision and train the orchestration policy through Search-to-Policy Learning. 
+
+• BIRD-Dev [22 ] is used for the main evaluation, containing 1,534 challenging cross-domain questions over 11 databases. 
+
+• Out-of-distribution (OOD) datasets include Spider-Test [ 54 ], KaggleDBQA [ 14 ], and ScienceBenchmark [ 59 ]. Spider-Test is a cross-domain benchmark; KaggleDBQA contains real web databases with less standardized schemas; ScienceBenchmark focuses on complex scientific databases with highly specialized queries on policy, astrophysics, and cancer research. They are used only for OOD evaluation without dataset-specific training. 
+
+Metrics. We use execution accuracy (EX) as the primary metric, which evaluates whether the predicted SQL returns the same exe-cution result as the reference gold SQL on the database. 
+
+Baselines. We compare our SQLConductor with the following state-of-the-art Text-to-SQL baselines: 
+
+• Model-level training baselines directly employ task-specific training with large-scale data to improve LLMs’ Text-to-SQL translation capabilities, including CodeS [ 21 ], Reasoning-SQL [40], SQL-R1 [37], and OmniSQL [20]. 
+
+• Fixed-pipeline systems follow human-designed multi-stage procedures for Text-to-SQL, including (i) prompting-based sys-tems such as CHESS [ 47 ] and DeepEye-SQL [ 15 ]; as well as (ii) trained-model-enhanced systems: XiYan-SQL [ 28 ], CSC-SQL [44], CHASE-SQL [38], and OpenSQL [12]. 
+
+• Dynamic-workflow systems try to go beyond fixed pipelines, including search-based methods such as Alpha-SQL [ 19 ], and the recent plan-then-execute orchestration method of SquRL [51]. 
+
+Implementation. All experiments are conducted on 8 Nvidia A100 GPUs. Implementations are summarized as follows: 
+
+• Model configuration. SQLConductor trains Qwen3-8B/4B poli-cies to coordinate frozen action modules; unless otherwise spec-ified, we use trained Qwen3-8B as default policy and Qwen2.5-Coder-32B-Instruct as default action LLM . We also evaluate Qwen2.5-Coder-14B-Instruct and more recent Gemma4-31B-It to study the effect of action-model capacity and model family. 
+
+• Policy training. MCTS exploration uses 𝑁 rollout = 24 . The policy is first trained for two epochs with Stability-weighted Supervised Fine-tuning, using learning rate 1 × 10 −5 with a cosine scheduler, LoRA rank 𝑟 = 64 , 𝛼 LoRA = 128 . It is then further optimized for two epochs with Curriculum Reinforcement Learning, using learning rate 1 × 10 −6, 𝜆 = 0.8, 𝐺 = 4.
+
+• Inference. All LLMs are deployed with their official recom-mended configurations; 𝑇 max is set to 10 .
+
+## 5.2 Overall Performance 
+
+RQ1: How does SQLConductor compare against existing state-of-the-art Text-to-SQL systems? 
+
+Table 1 reports the main comparison on BIRD-Dev. With the 8B policy paired with Gemma4-31B-It as the action LLM, SQLConductor achieves 73.2% EX, the highest result among all compared systems, outperforming the strongest baselines across model-level training, fixed-pipeline, and dynamic-workflow cat-egories, including systems that rely on much larger proprietary models. Notably, this result is obtained by training only the orches-tration policy while keeping the action LLM frozen, rather than fine-tuning a dedicated Text-to-SQL backbone. To control for the same underlying models, we further compare methods built on Qwen2.5-Coder-32B-Instruct. Under this com-parable setting, SQLConductor reaches 71.2% EX, outperforming fixed-pipeline systems such as DeepEye-SQL (70.6%), CSC-SQL (70.7%), and OpenSQL (70.0%), the model-level training baseline OmniSQL-32B (67.0%), and the search-based Alpha-SQL (69.7%), all reasoning with the same backbone. This controlled comparison thus highlights the performance advantage of SQLConductor under the same backbone setting. The subset results show the same trend: SQLConductor achieves the best performance across all difficulty levels with reported subset scores. SQLConductor reaches 78.5% , 66.1% , and 61.8% on Simple ,
+
+Moderate , and Challenging subsets, respectively, outperforming the strongest baseline on each subset by 2.0%, 2.1%, and 4.6%. Notably, with the 8B policy, SQLConductor obtains the same competitive performance in Challenging set when paired with Qwen2.5-Coder-14B-Instruct and Qwen2.5-Coder-32B-Instruct (57.6%), and reduc-ing the policy from 8B to 4B lowers overall EX by only marginal points. These results suggest that the learned orchestration policy can robustly coordinate action LLMs with different capacities, and that SQLConductor ’s advantage comes from effective workflow orchestration rather than simply scaling model size. Figure 6 compares BIRD-Dev EX with the size of trained param-eters across methods that adapt model weights. SQLConductor lies in the favorable accuracy-per-trained-parameter region: it trains only a 4B/8B orchestration policy while keeping the action LLM frozen, yet achieves superior EX. Compared with model-level train-ing baselines and trained-model-enhanced fixed-pipeline systems, SQLConductor shifts learning from the Text-to-SQL backbone to the orchestration policy, supporting the central premise that learned orchestration can be more parameter-efficient than further training a monolithic Text-to-SQL model. 
+
+RQ2: Does SQLConductor learn a generalizable policy for Text-to-SQL orchestration? 
+
+We then evaluate whether our trained policy to unseen database domains and query styles. Specifically, we test SQLConductor on Spider-Test, KaggleDBQA, and ScienceBenchmark without dataset-specific re-training, and pair the 8B policy with Qwen2.5-Coder-32B-Instruct for comparison with open-source baselines. As shown in Table 2, SQLConductor achieves the best OOD average of 72.4% , outperforming the strongest fixed-pipeline base-line OpenSQL (71.0%), the dynamic-workflow baseline Alpha-SQL (69.6%), and the model-level training baseline OmniSQL-32B (69.1%). The gains are more pronounced on complex OOD cases involv-ing noisy schemas or domain-specialized queries. In particular, SQLConductor achieves the best results on KaggleDBQA and Sci-enceBenchmark, reaching 66.0% and 62.3% , respectively. These results indicate that the learned orchestration policy generalizes beyond the training distribution, suggesting that SQLConductor does not simply fit and memorize dataset-specific patterns, but learns orchestration behavior that remains effective across diverse Text-to-SQL settings. Yizhang Zhu, Zhangyang Peng, Boyan Li, and Yuyu Luo* 
+
+Table 1: Main comparison on BIRD-Dev. We report execution accuracy (EX, %) on three difficulty subsets and the full set;  
+
+> \
+
+/ denote trained/frozen models, and – denotes unavailable results. 
+
+Method Base LLM #Params Avail. Dyn. Workflow Simple Moderate Challenge Total EX 
+
+CodeS [21] \ StarCoder-15B 15B ✓ ✗ 65.8 48.8 42.4 58.5 Reasoning-SQL [40] \ Qwen2.5-Coder-14B-Instruct 14B ✗ ✗ – – – 65.3 SQL-R1 [37] \ Qwen2.5-Coder-14B-Instruct 14B ✓ ✗ 72.4 59.7 56.5 67.1 OmniSQL-32B [20] \ Qwen2.5-Coder-32B-Instruct 32B ✓ ✗ 73.3 59.3 51.7 67.0 CHESS [47] Qwen2.5-Coder-32B-Instruct 32B ✓ ✗ 73.5 60.9 53.5 67.8 DeepEye-SQL [15] Qwen2.5-Coder-32B-Instruct 32B ✓ ✗ 76.5 63.5 55.6 70.6 XiYan-32B [28] \ Qwen2.5-Coder-32B-Instruct 32B ✓ ✗ 72.2 59.5 55.2 66.8 CSC-SQL [44] \ Qwen2.5-Coder-32B-Instruct 32B ✗ ✗ – – – 70.7 CHASE-SQL [38] \ Gemini-1.5-Flash UNK ✗ ✗ – – – 73.0 
+
+Gemini-1.5-Pro >200B OpenSQL [12] \ Qwen2.5-Coder-32B 32B ✗ ✗ – – – 70.0 Alpha-SQL [19] Qwen2.5-Coder-32B-Instruct 32B ✓ ✓ 74.5 64.0 57.2 69.7 SquRL [51] \ Qwen2.5-7B-It 7B ✓ ✓ – – – 67.6 
+
+Qwen-Plus >100B 
+
+SQLConductor (Ours) \ Qwen3-4B 4B ✓ ✓ 76.5 62.2 56.3 70.3 
+
+Qwen2.5-Coder-32B-Instruct 32B 
+
+SQLConductor (Ours) \ Qwen3-8B 8B ✓ ✓ 77.3 63.1 57.6 71.2 
+
+Qwen2.5-Coder-32B-Instruct 32B 
+
+SQLConductor (Ours) \ Qwen3-8B 8B ✓ ✓ 75.8 62.6 57.6 70.1 
+
+Qwen2.5-Coder-14B-Instruct 14B 
+
+SQLConductor (Ours) \ Qwen3-8B 8B ✓ ✓ 78.5 66.1 61.8 73.2 
+
+Gemma4-31B-It 31B 4 8 16 32 >200 Trained Model Size (B) 
+
+> 65
+> 66
+> 67
+> 68
+> 69
+> 70
+> 71
+> 72
+> 73
+> BIRD-Dev EX (%)
+> SquRL
+> Reasoning-SQL
+> SQL-R1
+> XiYan-22B
+> XiYan-32B
+> OmniSQL-14B
+> OmniSQL-32B
+> CSC-SQL
+> BASE-SQL (Qwen)
+> BASE-SQL (DS)
+> OpenSQL
+> Distillery
+> CHASE-SQL
+> Ours (Qwen)
+> Ours (Gemma)
+> Ours (Qwen)
+
+Figure 6: BIRD-Dev EX vs. trained parameter size for training-based methods. Marker size indicates inference model size. 
+
+## 5.3 Efficiency and Resource Cost 
+
+RQ3: Can SQLConductor achieve a favorable inference-time accuracy–cost profile? 
+
+We focus on per-query workflow cost under a shared Qwen2.5-Coder-32B-Instruct action LLM backbone. For a consistent compar-ison, we measure the token usage and API cost of action-LLM calls, which are available from the execution traces of representative fixed-pipeline and dynamic-workflow systems. Costs are computed according to official Qwen API pricing. Table 3 reports the average tokens and the corresponding cost per query. 
+
+SQLConductor achieves the highest EX with the lowest measured per-query cost. As shown in Table 3, under the shared Qwen2.5-Coder-32B-Instruct backbone, SQLConductor achieves 71.2% EX with only 7.1k input tokens and 12.2k output tokens per query. This corresponds to roughly 16 ×, 10 ×, and 2× lower token usage than CHESS, Alpha-SQL, and DeepEye-SQL, respectively. The reduced token consumption leads to an average cost of only $0.012 per query, with the orchestration policy adding just $0.001 , making SQLConductor about 8×, 7×, and 2× cheaper than these baselines while achieving higher EX. In wall-clock time, SQLConductor is 
+
+Table 2: OOD evaluation. Note that SQLConductor is de-ployed without additional dataset-specific training. 
+
+Method Spider. Kaggle. Science. OOD Avg. 
+
+CodeS + \ StarCoder-15B 85.1 42.2 51.2 59.5 SQL-R1 + \ Qwen2.5-Coder-14B-Instruct 88.1 54.6 57.6 66.8 OmniSQL-32B + \ Qwen2.5-Coder-32B-Instruct 89.8 56.8 60.6 69.1 CHESS + Qwen2.5-Coder-32B-Instruct 87.1 54.6 56.9 66.2 DeepEye-SQL + Qwen2.5-Coder-32B-Instruct 88.7 61.6 60.6 70.3 XiYan-32B + \ Qwen2.5-Coder-32B-Instruct 88.4 53.0 53.2 64.9 OpenSQL + \ Qwen2.5-Coder-32B 88.3 63.2 61.5 71.0 Alpha-SQL + Qwen2.5-Coder-32B-Instruct 87.8 62.7 58.2 69.6 SQLConductor + \ Qwen3-8B + Qwen2.5-Coder-32B-Instruct 88.9 66.0 62.3 72.4 
+
+Table 3: Per-query cost measured by action-LLM token usage under shared Qwen2.5-Coder-32B-Instruct. Parentheses de-note the extra orchestration policy cost (custom Qwen3-8B).                               
+
+> Method EX ↑Total Time (h) ↓Input (k) ↓Output (k) ↓Avg. Cost ($) ↓
+> CHESS 67.8 21.8 268.0 37.5 0.109 DeepEye-SQL 70.6 4.9 20.3 21.5 0.024 Alpha-SQL 69.7 29.1 124.4 68.7 0.094 SQLConductor 71.2 5.6 7.1 12.2 0.012 (+0.001)
+
+substantially faster than CHESS and Alpha-SQL and remains close to DeepEye-SQL. Overall, this shows that SQLConductor offers a more favorable inference-time trade-off among workflow-based Text-to-SQL methods, making efficiency an integral outcome of orchestration rather than a separate engineering optimization. SQLConductor : Search-to-Policy Learning for Step-wise Text-to-SQL Orchestration Simple Moderate Challenging All 
+
+> 1
+> 2
+> 3
+> 4
+> 5
+> 6+
+> Workflow Length  SFT+RL
+> Non-trained
+
+Figure 7: Workflow-length distributions across BIRD-Dev difficulty-levels. Trained vs. Non-trained policy. Table 4: Ablation of SFT and RL stages on BIRD-Dev.                     
+
+> Orchestration Backbone Simple Moderate Challenge Total EX
+> SFT + RL (full) 77.3 63.1 57.6 71.2
+> SFT only, w/o RL 77.5 62.9 52.1 70.7 RL only, w/o SFT 76.3 62.4 55.6 70.2 Non-trained policy 73.8 62.5 51.0 68.3
+
+## 5.4 Adaptive Orchestration Analysis 
+
+RQ4: Does SQLConductor improve accuracy by allocating or-chestration effort according to query demands, rather than simply increasing workflow length? 
+
+A higher EX alone does not establish adaptivity: a policy may improve performance simply by spending more inference steps, analogous to test-time scaling. To rule out this explanation, we com-pare the trained policy with the same 8B backbone before Search-to-Policy training, with both coordinating the same Qwen2.5-Coder-32B-Instruct action LLM on BIRD-Dev. Figure 7 shows the workflow-length distributions across difficulty subsets, and Table 4 reports the corresponding EX. The trained policy improves EX on every difficulty subset, raising overall accuracy from 68.3% to 71.2% , with the largest gain on 
+
+Challenging queries (51.0% to 57.6% ). This improvement does not come from uniformly longer workflows: in the aggregate All panel, the non-trained policy issues more action calls on average but obtains lower EX. In contrast, our trained policy changes how effort is distributed across queries. Its workflow-length distribution shifts upward from Simple to Challenging queries, while the non-trained policy shows much weaker difficulty-aware adaptation. These results suggest that Search-to-Policy learning improves not only EX but also the allocation of orchestration effort. The trained policy achieves higher EX with fewer average action calls, while assigning additional steps more selectively to harder queries. This behavior distinguishes adaptive orchestration from brute-force workflow expansion: the gain comes from where computation is spent, rather than simply from spending more computation overall. 
+
+## 5.5 Ablation Study 
+
+RQ5: What roles do Stability-weighted SFT and Curriculum RL play in learning orchestration policies? 
+
+Table 4 ablates these two stages while keeping the same 8B policy backbone and Qwen2.5-Coder-32B-Instruct action LLM. 
+
+Stability-weighted SFT establishes orchestration abilities, while Curriculum RL further improves difficult-query handling. Stability-weighted SFT raises EX from 68.3% to 70.7%, showing the value of curated workflow supervision. Curriculum RL also improves over the untrained policy, suggesting that execution rewards provide Non-train. SFT SFT+RL                           
+
+> 0
+> 25
+> 50
+> 75
+> 100
+> Proportion (%)
+> (a) Simple
+> 86.6% 85.4% 83.4%
+> 12.4% 12.0% 12.3%
+> Non-train. SFT SFT+RL
+> (b) Moderate
+> 81.7% 72.6% 70.3%
+> 15.1%
+> 15.1% 16.2%
+> 12.3% 13.6%
+> Non-train. SFT SFT+RL
+> 0
+> 25
+> 50
+> 75
+> 100
+> Proportion (%)
+> (c) Challenging
+> 75.2% 60.0% 53.8%
+> 11.7%
+> 22.1% 21.4%
+> 13.1% 17.9% 24.8%
+> Non-train. SFT SFT+RL
+> (d) BIRD-Dev All
+> 84.0% 79.1% 76.6%
+> 13.2% 13.9% 14.3%
+> 7.0% 9.1%
+> Single-round Gen+Refine Multi-round
+
+Figure 8: SQL-stage orchestration patterns by training stage and query difficulty in BIRD-Dev. Table 5: Ablation of training, policy scale, and adaptive exe-cution on BIRD-Dev.                             
+
+> Orch. Policy #Params Simple Moderate Challenge Total EX
+> SFT + RL 8B 77.3 63.1 57.6 71.2
+> 4B 76.5 62.2 56.3 70.3 Non-trained 8B 73.8 62.5 51.0 68.3 32B 75.2 63.4 54.5 69.7 Fixed workflow –74.4 64.2 52.1 69.2
+
+useful learning signals even without supervised trajectories. Com-bining both achieves the best overall EX, especially on Challenging 
+
+queries: 57.6% versus 52.1% for SFT-only and 55.6% for RL-only. Figure 8 explains the gain at the behavior level. From untrained 
+
+→ SFT → SFT+RL, the policy shifts from single-round SQL gen-eration toward refinement and multi-round SQL construction, es-pecially increasing multi-round SQL generation on Challenging 
+
+queries. This suggests complementary roles: Stability-weighted SFT helps SQLConductor absorb robust and diverse workflow patterns, while Curriculum RL further calibrates on challenging cases. 
+
+RQ6: Are the gains of SQLConductor attributable to policy learning, policy scale, adaptive workflow orchestration, or their combination? 
+
+Table 5 isolates the effects of policy training, policy scale, and adaptive execution, while keeping the action LLM fixed. 
+
+Policy capacity helps but is insufficient. Within the same training condition, larger policies achieve higher EX: the non-trained 32B policy outperforms the non-trained 8B policy (69.7% vs. 68.3%), and the trained 8B policy outperforms the trained 4B policy (71.2% vs. 70.3%). However, the non-trained 8B policy still underperforms the fixed workflow baseline (68.3% vs. 69.2%), indicating that policy scale alone does not guarantee reliable orchestration. 
+
+Adaptivity requires a reliable orchestration policy. Dynamic ac-tion selection is not automatically beneficial. When the policy is weak, adaptivity may lead to misallocated actions and fall behind a fixed workflow. As the policy becomes stronger or well-trained, adaptivity becomes beneficial: the non-trained 32B policy reaches 69.7%, while the trained 4B and 8B policies further improve to 70.3% and 71.2%, respectively. This suggests that adaptive orchestration Yizhang Zhu, Zhangyang Peng, Boyan Li, and Yuyu Luo* 
+
+Table 6: Ablation of SFT supervision curation on BIRD-Dev. All variants use the Qwen3-8B policy backbone w/o. RL.                         
+
+> SFT-only Policy Simple Moderate Challenge Total EX
+> Stability-weighted (Top-3) 77.5 62.9 52.1 70.7
+> Top-1 only 77.0 63.3 51.4 70.4 Shortest correct workflow only 75.4 59.0 48.6 67.9 Non-trained policy 73.8 62.5 51.0 68.3 SQL Query Refinement
+> SELECT
+> COUNT( DISTINCT t1.code)
+> FROM sets AS t1
+> INNER JOIN ……
+> WHERE
+> t1.block = 'Commander'
+> AND t2.language =
+> 'Portuguese (Brasil)'
+> SQL Query Genera0on
+> SELECT COUNT
+> (set_translations.setCode)
+> FROM sets
+> INNER JOIN ……
+> WHERE sets.block = 'Commander'
+> AND set_translations.language =
+> 'Portuguese (Brasil)'
+> SQL Query Genera0on
+> SELECT COUNT ……
+> FROM … INNER JOIN…
+> WHERE sets.block = 'Commander'
+> AND set_translations.language =
+> 'Portuguese (Brasil)'
+> Relevant Value Extrac0on
+> The previous SQL is almost correct…
+> In database content, it’s not 'Brasil'
+> but 'Portuguese (Brazil)' ……
+> SQL Query Genera0on
+> SELECT COUNT ……
+> FROM … INNER JOIN ……
+> WHERE t1.block = 'Commander'
+> AND t2.language =
+> 'Portuguese (Brazil)'
+
+(a) Orch. by Non-trained Policy (b) Orch. by Trained Policy 
+
+Figure 9: Case study. 
+
+should be viewed as a policy-controlled capability rather than an inherent advantage of dynamic workflows. 
+
+Policy learning is more effective than raw scaling. The trained 4B policy surpasses the non-trained 32B policy (70.3% vs. 69.7%), despite being roughly 8× smaller. This indicates that Search-to-Policy learning contributes orchestration behavior that cannot be explained by policy capacity alone. Overall, the gains of SQLConductor arise from the combination of adaptive execution and learned orchestration, with policy learn-ing playing the central role. Adaptive execution can underperform a fixed workflow under an unreliable policy, but becomes notably more effective when guided by a sufficiently capable learned policy. 
+
+RQ7: How does supervision curation approach affect policy learning in Stability-weighted Supervised Fine-tuning? 
+
+To study the effect of supervision curation, Table 6 compares three strategies under the same Qwen3-8B policy backbone with RL disabled: using the explored shortest correct workflow for each query, using the top-1 workflow with the highest stability score, and using our stability-weighted top-3. 
+
+Correct workflows are not equally effective supervision. Training on the shortest correct workflow reduces total EX to 67.9%, even below the non-trained policy (68.3%), with larger drops on Mod-erate and Challenging queries. This suggests that shortest-path supervision may bias the policy toward under-orchestration, as a workflow reaching the correct answer is not necessarily a robust orchestration pattern. Using the top-1 workflow improves EX to 70.4%, while the stability-weighted top-3 strategy achieves the best overall EX (70.7%) and the best Challenging performance. These results show that SFT benefits not from imitating arbitrary correct trajectories, but from curated supervision that captures stable and diverse orchestration patterns across search rollouts. 
+
+## 5.6 Case Study 
+
+Figure 9 presents a representative example from BIRD-Dev (QID: 405) to demonstrate how SQLConductor adapts its workflow. The question requires precise value grounding: several similar surface forms exist ( e.g., Brasil and Brazil ), but only the database-stored form can be executed correctly. Both policies initially use the plau-sible but mismatched condition Portuguese (Brasil) , which fails to match the stored value. After this failure, the non-trained pol-icy naturally calls SQL refinement. However, without new value evidence, it preserves the wrong condition and leaves the error unresolved. In contrast, the trained policy recognizes the failure as a potential value-grounding issue. It first invokes relevant-value extraction to identify Portuguese (Brazil) , then regenerates the query with the corrected condition. This case shows that learned step-wise orchestration can respond to execution failure by gather-ing missing evidence before regeneration, rather than repeatedly refining an under-grounded query, which is consistent with the aggregate analysis in Section 5.4. 
+
+## 6 RELATED WORK 
+
+LLM-based Text-to-SQL. Earlier LLM-based methods mainly prompt general-purpose LLMs for Text-to-SQL reasoning [ 5, 17 ,39 , 46 ]. For example, DAIL-SQL [ 7 ] studies in-context learning through demonstration selection. Some other works also focus on task-specific training, including fine-tuning [ 20 , 24 ], reinforcement learning [ 40 , 53 , 60 ], and incremental pre-training [ 21 ], to enhance the Text-to-SQL translation capabilities of open-source LLMs. 
+
+Workflow Organization in Text-to-SQL. Since real-world Text-to-SQL often involves multi-stage reasoning, many systems orga-nize the solving process as a workflow [ 26 , 30 , 31 ]. CHESS [ 47 ]and DeepEye-SQL [ 15 ] introduce carefully designed multi-stage pipelines for schema linking, SQL generation, revision, and selec-tion to improve Text-to-SQL performance with prompting-based LLMs [ 16 , 27 ]. Some systems further integrate trained reasoning models into such pipelines [ 28 , 38 , 45 ] or use specially trained LLMs for every individual stage [ 10 , 12 , 41 , 44 , 49 ]. However, these pipelines usually follow predefined stage orders, limiting their adap-tivity to different query demands and intermediate feedback. Some methods thus explore dynamic workflow organization for Text-to-SQL, including complexity-based routing [ 63 ] and inference-time MCTS search over reasoning paths [ 19 , 23 , 33 , 55 ]. More recently, SquRL [ 51 ] attempts to plan a complete query-specific workflow before execution. While these methods improve system flexibility, they either incur substantial online search costs or still fix the work-flow once execution begins. In contrast, SQLConductor introduces Search-to-Policy Learning to train a step-wise orchestration policy, enabling adaptive action selection and workflow revision during inference without extensive online search. 
+
+## 7 CONCLUSION 
+
+We propose SQLConductor , a step-wise orchestration learning framework for Text-to-SQL that adapts Text-to-SQL workflow composition. SQLConductor introduces Search-to-Policy Learning, which combines MCTS-based workflow exploration and curation, Stability-weighted Supervised Fine-tuning, and Curriculum Rein-forcement Learning to transform broad offline search into a deploy-able orchestration policy. Extensive experiments demonstrate that SQLConductor achieves strong performance and generalization, with adaptive Text-to-SQL orchestration. SQLConductor : Search-to-Policy Learning for Step-wise Text-to-SQL Orchestration 
+
+## REFERENCES 
+
+[1] David Berthelot, Nicholas Carlini, Ian Goodfellow, Nicolas Papernot, Avital Oliver, and Colin Raffel. 2019. Mixmatch: A holistic approach to semi-supervised learning. Advances in neural information processing systems 32 (2019). [2] Cameron B Browne, Edward Powley, Daniel Whitehouse, Simon M Lucas, Peter I Cowling, Philipp Rohlfshagen, Stephen Tavener, Diego Perez, Spyridon Samoth-rakis, and Simon Colton. 2012. A survey of monte carlo tree search methods. 
+
+IEEE Transactions on Computational Intelligence and AI in games 4, 1 (2012), 1–43. [3] Zhenbiao Cao, Yuanlei Zheng, Zhihao Fan, Xiaojin Zhang, Wei Chen, and Xiang Bai. 2024. RSL-SQL: Robust Schema Linking in Text-to-SQL Generation. CoRR 
+
+abs/2411.00073 (2024). [4] Alejandro Cuadron, Dacheng Li, Wenjie Ma, Xingyao Wang, Yichuan Wang, Siyuan Zhuang, Shu Liu, Luis Gaspar Schroeder, Tian Xia, Huanzhi Mao, et al .2025. The danger of overthinking: Examining the reasoning-action dilemma in agentic tasks. arXiv preprint arXiv:2502.08235 (2025). [5] Xuemei Dong, Chao Zhang, Yuhang Ge, Yuren Mao, Yunjun Gao, Jinshu Lin, Dongfang Lou, et al . 2023. C3: Zero-shot text-to-sql with chatgpt. arXiv preprint arXiv:2307.07306 (2023). [6] Jiazhan Feng, Shijue Huang, Xingwei Qu, Ge Zhang, Yujia Qin, Baoquan Zhong, Chengquan Jiang, Jinxin Chi, and Wanjun Zhong. 2026. ReTool: Reinforcement Learning for Strategic Tool Use in LLMs. In The Fourteenth International Confer-ence on Learning Representations . https://openreview.net/forum?id=tRk1nofSmz [7] Dawei Gao, Haibin Wang, Yaliang Li, Xiuyu Sun, Yichen Qian, Bolin Ding, and Jingren Zhou. 2024. Text-to-SQL Empowered by Large Language Models: A Benchmark Evaluation. Proc. VLDB Endow. 17, 5 (2024), 1132–1145. [8] Hongcheng Gao, Yue Liu, Yufei He, Longxu Dou, Chao Du, Zhijie Deng, Bryan Hooi, Min Lin, and Tianyu Pang. 2025. Flowreasoner: Reinforcing query-level meta-agents. arXiv preprint arXiv:2504.15257 (2025). [9] Yuxiang Guo, Zhuoran Du, Nan Tang, Kezheng Tang, Congcong Ge, and Yunjun Gao. 2026. DTBench: A Synthetic Benchmark for Document-to-Table Extraction. In Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining .[10] Mingqian He, Yongliang Shen, Wenqi Zhang, Qiuying Peng, Jun Wang, and Weiming Lu. 2025. Star-sql: Self-taught reasoner for text-to-sql. In Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) . 24365–24375. [11] Zijin Hong, Zheng Yuan, Qinggang Zhang, Hao Chen, Junnan Dong, Feiran Huang, and Xiao Huang. 2025. Next-generation database interfaces: A survey of llm-based text-to-sql. IEEE Transactions on Knowledge and Data Engineering 
+
+(2025). [12] Ruilin Hu, Yuyu Luo, Guoliang Li, Shuangqiao Wu, and Yun Luo. 2026. OpenSQL: Data-Efficient Text-to-SQL for Open-Source LLMs via Synthesized Intermediate Supervision. Proc. VLDB Endow. (2026). [13] Levente Kocsis and Csaba Szepesvári. 2006. Bandit based monte-carlo planning. In European conference on machine learning . Springer, 282–293. [14] Chia-Hsuan Lee, Oleksandr Polozov, and Matthew Richardson. 2021. KaggleD-BQA: Realistic Evaluation of Text-to-SQL Parsers. In ACL/IJCNLP (1) . Association for Computational Linguistics, 2261–2273. [15] Boyan Li, Chong Chen, Zhujun Xue, Yinan Mei, and Yuyu Luo. 2026. DeepEye-SQL: A Software-Engineering-Inspired Text-to-SQL Framework. Proc. ACM Manag. Data 4, 3 (2026). https://doi.org/10.1145/3802035 [16] Boyan Li, Ou Ocean Kun Hei, Yue Yu, and Yuyu Luo. 2026. DPC: Training-Free Text-to-SQL Candidate Selection via Dual-Paradigm Consistency. https: //doi.org/10.48550/arXiv.2604.15163 arXiv:2604.15163 [cs.DB] Accepted to ACL 2026 Main Track. [17] Boyan Li, Yuyu Luo, Chengliang Chai, Guoliang Li, and Nan Tang. 2024. The Dawn of Natural Language to SQL: Are We Fully Ready? [Experiment, Analysis & Benchmark]. Proc. VLDB Endow. 17, 11 (2024), 3318–3331. [18] Boyan Li, Yiran Peng, Yupeng Xie, Sirong Lu, Yizhang Zhu, Xing Mu, Xinyu Liu, and Yuyu Luo. 2026. DeepEye: A Steerable Self-driving Data Agent System. In Companion of the International Conference on Management of Data (India) 
+
+(SIGMOD Companion ’26) . Association for Computing Machinery, New York, NY, USA, 74–77. https://doi.org/10.1145/3788853.3801612 [19] Boyan Li, Jiayi Zhang, Ju Fan, Yanwei Xu, Chong Chen, Nan Tang, and Yuyu Luo. 2025. Alpha-SQL: Zero-Shot Text-to-SQL using Monte Carlo Tree Search. In Forty-second International Conference on Machine Learning .[20] Haoyang Li, Shang Wu, Xiaokang Zhang, Xinmei Huang, Jing Zhang, Fuxin Jiang, Shuai Wang, Tieying Zhang, Jianjun Chen, Rui Shi, Hong Chen, and Cuiping Li. 2025. OmniSQL: Synthesizing High-quality Text-to-SQL Data at Scale. Proc. VLDB Endow. 18, 11 (2025), 4695–4709. [21] Haoyang Li, Jing Zhang, Hanbing Liu, Ju Fan, Xiaokang Zhang, Jun Zhu, Renjie Wei, Hongyan Pan, Cuiping Li, and Hong Chen. 2024. CodeS: Towards Building Open-source Language Models for Text-to-SQL. Proc. ACM Manag. Data 2, 3 (2024), 127. [22] Jinyang Li, Binyuan Hui, Ge Qu, Jiaxi Yang, Binhua Li, Bowen Li, Bailin Wang, Bowen Qin, Ruiying Geng, Nan Huo, Xuanhe Zhou, Chenhao Ma, Guoliang Li, Kevin Chen-Chuan Chang, Fei Huang, Reynold Cheng, and Yongbin Li. 2023. Can LLM Already Serve as A Database Interface? A BIg Bench for Large-Scale Database Grounded Text-to-SQLs. In NeurIPS .[23] Weibin Liao, Xin Gao, Tianyu Jia, Rihong Qiu, Yifan Zhu, Yang Lin, Xinyu Ma, Junfeng Zhao, and Yasha Wang. 2026. LearNAT: Learning NL2SQL with AST-guided Task Decomposition for Large Language Models. In The Fourteenth International Conference on Learning Representations . https://openreview.net/ forum?id=q6kXd8Gpfj [24] Xiaotian Lin, Yanlin Qi, Yizhang Zhu, Themis Palpanas, Chengliang Chai, Nan Tang, and Yuyu Luo. 2025. LEAD: iterative data selection for efficient LLM instruction tuning. Proceedings of the VLDB Endowment 19, 3 (2025), 426–439. [25] Shih-Yang Liu, Xin Dong, Ximing Lu, Shizhe Diao, Peter Belcak, Mingjie Liu, Min-Hung Chen, Hongxu Yin, Yu-Chiang Frank Wang, Kwang-Ting Cheng, Yejin Choi, Jan Kautz, and Pavlo Molchanov. 2026. GDPO: Group reward-Decoupled Normalization Policy Optimization for Multi-reward RL Optimization. In Forty-third International Conference on Machine Learning .[26] Xinyu Liu, Shuyu Shen, Boyan Li, Peixian Ma, Runzhi Jiang, Yuxin Zhang, Ju Fan, Guoliang Li, Nan Tang, and Yuyu Luo. 2025. A Survey of Text-to-SQL in the Era of LLMs: Where are we, and where are we going? IEEE Transactions on Knowledge and Data Engineering (2025). [27] Xinyu Liu, Shuyu Shen, Boyan Li, Nan Tang, and Yuyu Luo. 2025. NL2SQL-BUGs: A Benchmark for Detecting Semantic Errors in NL2SQL Translation. In 
+
+Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2 (Toronto ON, Canada) (KDD ’25) . Association for Computing Machinery, New York, NY, USA, 5662–5673. https://doi.org/10.1145/3711896. 3737427 [28] Yifu Liu, Yin Zhu, Yingqi Gao, Zhiling Luo, Xiaoxia Li, Xiaorong Shi, Yuntao Hong, Jinyang Gao, Yu Li, Bolin Ding, and Jingren Zhou. 2026. XiYan-SQL: A Novel Multi-Generator Framework for Text-to-SQL. IEEE Trans. Knowl. Data Eng. 38, 4 (2026), 2474–2487. [29] Tianqi Luo, Chuhan Huang, Leixian Shen, Boyan Li, Shuyu Shen, Wei Zeng, Nan Tang, and Yuyu Luo. 2026. nvBench 2.0: Resolving Ambiguity in Text-to-Visualization through Stepwise Reasoning. In The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track . https: //openreview.net/forum?id=PuzbYHf1GR [30] Yuyu Luo, Guoliang Li, Ju Fan, Chengliang Chai, and Nan Tang. 2025. Natural language to sql: State of the art and open problems. Proceedings of the VLDB Endowment 18, 12 (2025), 5466–5471. [31] Yuyu Luo, Guoliang Li, Ju Fan, and Nan Tang. 2026. Data Agents: Levels, State of the Art, and Open Problems. arXiv preprint arXiv:2602.04261 (2026). [32] Yuyu Luo, Xuedi Qin, Nan Tang, and Guoliang Li. 2018. DeepEye: Towards Automatic Data Visualization. In 34th IEEE International Conference on Data Engineering, ICDE 2018, Paris, France, April 16-19, 2018 . IEEE Computer Society, 101–112. https://doi.org/10.1109/ICDE.2018.00019 [33] Shuai Lyu, Haoran Luo, Ripeng Li, Zhonghong Ou, Jiangfeng Sun, Yang Qin, Xiaoran Shang, Meina Song, and Yifan Zhu. 2025. Sql-o1: A self-reward heuristic dynamic search method for text-to-sql. arXiv preprint arXiv:2502.11741 (2025). [34] Da Ma, Ziyue Yang, Hongshen Xu, Haotian Fang, Kai Yu, and Lu Chen. 2026. Empowering LLM Tool Invocation with Tool-call Reward Model. In The Four-teenth International Conference on Learning Representations . https://openreview. net/forum?id=LnBEASInVr [35] Peixian Ma, Boyan Li, Runzhi Jiang, Ju Fan, Nan Tang, and Yuyu Luo. 2024. A Plug-and-Play Natural Language Rewriter for Natural Language to SQL. arXiv preprint arXiv:2412.17068 (2024). [36] Stefan Nielsen, Edoardo Cetin, Peter Schwendeman, Qi Sun, Jinglue Xu, and Yujin Tang. 2026. Learning to Orchestrate Agents in Natural Language with the Conductor. In The Fourteenth International Conference on Learning Representations .https://openreview.net/forum?id=U23A2BUKYt [37] Ma Peixian, Xialie Zhuang, Chengjin Xu, Xuhui Jiang, Ran Chen, and Jian Guo. 2025. SQL-R1: Training natural language to sql reasoning model by reinforcement learning. In The Thirty-ninth Annual Conference on Neural Information Processing Systems .[38] Mohammadreza Pourreza, Hailong Li, Ruoxi Sun, Yeounoh Chung, Shayan Talaei, Gaurav Tarlok Kakkar, Yu Gan, Amin Saberi, Fatma Ozcan, and Sercan Ö. Arik. 2025. CHASE-SQL: Multi-Path Reasoning and Preference Optimized Candidate Selection in Text-to-SQL. In ICLR . OpenReview.net. [39] Mohammadreza Pourreza and Davood Rafiei. 2023. DIN-SQL: Decomposed In-Context Learning of Text-to-SQL with Self-Correction. In Thirty-seventh Con-ference on Neural Information Processing Systems .[40] Mohammadreza Pourreza, Shayan Talaei, Ruoxi Sun, Xingchen Wan, Hailong Li, Azalia Mirhoseini, Amin Saberi, and Sercan O Arik. 2025. Reasoning-SQL: Rein-forcement Learning with SQL Tailored Partial Rewards for Reasoning-Enhanced Text-to-SQL. In Second Conference on Language Modeling .[41] Yang Qin, Chao Chen, Zhihang Fu, Ze Chen, Dezhong Peng, Peng Hu, and Jieping Ye. 2025. ROUTE: Robust Multitask Tuning and Collaboration for Text-to-SQL. In The Thirteenth International Conference on Learning Representations .[42] Jianhao Ruan, Zhihao Xu, Yiran Peng, Fashen Ren, Zhaoyang Yu, Xinbing Liang, Jinyu Xiang, Yongru Chen, Bang Liu, Chenglin Wu, Yuyu Luo, and Jiayi Zhang. 2026. AOrchestra: Automating Sub-Agent Creation for Agentic Orchestration. Yizhang Zhu, Zhangyang Peng, Boyan Li, and Yuyu Luo* 
+
+arXiv:2602.03786 [cs.AI] https://arxiv.org/abs/2602.03786 [43] Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei Zhang, Mingchuan Zhang, YK Li, Yang Wu, et al . 2024. Deepseekmath: Pushing the limits of mathematical reasoning in open language models. arXiv preprint arXiv:2402.03300 (2024). [44] Lei Sheng and Xu Shuai Shuai. 2025. CSC-SQL: Corrective Self-Consistency in Text-to-SQL via Reinforcement Learning. In IJCNLP-AACL (Findings) . The Asian Federation of Natural Language Processing and The Association for Computa-tional Linguistics, 1473–1496. [45] Lei Sheng, Shuai-Shuai Xu, and Wei Xie. 2025. BASE-SQL: A powerful open source Text-To-SQL baseline approach. arXiv preprint arXiv:2502.10739 (2025). [46] Chang-Yu Tai, Ziru Chen, Tianshu Zhang, Xiang Deng, and Huan Sun. 2023. Exploring chain of thought style prompting for text-to-sql. In Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing . 5376–5393. [47] Shayan Talaei, Mohammadreza Pourreza, Yu-Chen Chang, Azalia Mirhoseini, and Amin Saberi. 2024. CHESS: Contextual Harnessing for Efficient SQL Synthesis. 
+
+CoRR abs/2405.16755 (2024). [48] Bing Wang, Changyu Ren, Jian Yang, Xinnian Liang, Jiaqi Bai, LinZheng Chai, Zhao Yan, Qian-Wen Zhang, Di Yin, Xing Sun, and Zhoujun Li. 2025. MAC-SQL: A Multi-Agent Collaborative Framework for Text-to-SQL. In Proceedings of the 31st International Conference on Computational Linguistics .[49] Pengfei Wang, Baolin Sun, Xuemei Dong, Yaxun Dai, Hongwei Yuan, Mengdie Chu, Yingqi Gao, Xiang Qi, Peng Zhang, and Ying Yan. 2025. Agentar-Scale-SQL: Advancing Text-to-SQL through Orchestrated Test-Time Scaling. arXiv:2509.24403 [cs.CL] https://arxiv.org/abs/2509.24403 [50] Yihan Wang, Peiyu Liu, Runyu Chen, Jiaxing Pu, and Wei Xu. 2025. Squrve: A Unified and Modular Framework for Complex Real-World Text-to-SQL Tasks. 
+
+arXiv preprint arXiv:2510.24102 (2025). [51] Yihan Wang, Peiyu Liu, Runyu Chen, and Wei Xu. 2026. Beyond Static Pipelines: Learning Dynamic Workflows for Text-to-SQL. arXiv preprint arXiv:2602.15564 
+
+(2026). [52] Xiangjin Xie, Guangwei Xu, Lingyan Zhao, and Ruijie Guo. 2025. OpenSearch-SQL: Enhancing Text-to-SQL with Dynamic Few-shot and Consistency Align-ment. Proc. ACM Manag. Data 3, 3 (2025), 194:1–194:24. [53] Zhewei Yao, Guoheng Sun, Lukasz Borchmann, Gaurav Nuti, Zheyu Shen, Ming-hang Deng, Bohan Zhai, Hao Zhang, Ang Li, and Yuxiong He. 2025. Arctic-text2sql-r1: Simple rewards, strong reasoning in text-to-sql. arXiv preprint arXiv:2505.20315 (2025). [54] Tao Yu, Rui Zhang, Kai Yang, Michihiro Yasunaga, Dongxu Wang, Zifan Li, James Ma, Irene Li, Qingning Yao, Shanelle Roman, Zilin Zhang, and Dragomir R. Radev. 2018. Spider: A Large-Scale Human-Labeled Dataset for Complex and Cross-Domain Semantic Parsing and Text-to-SQL Task. In EMNLP . Association for Computational Linguistics, 3911–3921. [55] Shuozhi Yuan, Liming Chen, Miaomiao Yuan, and Zhao Jin. 2026. MCTS-SQL: Light-Weight LLMs Can Master the Text-to-SQL Through Monte Carlo Tree Search. In Proceedings of the AAAI Conference on Artificial Intelligence , Vol. 40. 34521–34529. [56] Sandy L Zabell. 1989. The rule of succession. Erkenntnis 31, 2 (1989), 283–321. [57] Fan Zhang, Vireo Zhang, Shengju Qian, Haoxuan Li, Hao Wu, Jinyang Wu, Donghao Zhou, Zhihong Zhu, Zheng Lian, Xin Wang, and Pheng-Ann Heng. 2026. Orchestra-o1: Omnimodal Agent Orchestration. arXiv:2606.13707 [cs.AI] https://arxiv.org/abs/2606.13707 [58] Jiayi Zhang, Jinyu Xiang, Zhaoyang Yu, Fengwei Teng, Xiong-Hui Chen, Jiaqi Chen, Mingchen Zhuge, Xin Cheng, Sirui Hong, Jinlin Wang, Bingnan Zheng, Bang Liu, Yuyu Luo, and Chenglin Wu. 2025. AFlow: Automating Agentic Workflow Generation. In The Thirteenth International Conference on Learning Representations . https://openreview.net/forum?id=z5uVAKwmjf [59] Yi Zhang, Jan Deriu, George Katsogiannis-Meimarakis, Catherine Kosten, Geor-gia Koutrika, and Kurt Stockinger. 2023. ScienceBenchmark: A Complex Real-World Benchmark for Evaluating Natural Language to SQL Systems. Proc. VLDB Endow. 17, 4 (2023), 685–698. [60] Yuxin Zhang, Meihao Fan, Ju Fan, Mingyang Yi, Yuyu Luo, Guoliang Li, Bin Wu, and Wenchao Zhou. 2026. Reward-SQL: Boosting Text-to-SQL via Stepwise Execution-Aware Reasoning and Process-Supervised Rewards. Proceedings of the ACM on Management of Data 4, 3 (SIGMOD (2026), 1–27. [61] Yabo Zhang, Yihan Zeng, Qingyun Li, Zhen Hu, Kavin Han, and Wangmeng Zuo. 2025. Tool-R1: Sample-Efficient Reinforcement Learning for Agentic Tool Use. 
+
+arXiv preprint arXiv:2509.12867 (2025). [62] Yizhang Zhu, Shiyin Du, Boyan Li, Yuyu Luo, and Nan Tang. 2024. Are large language models good statisticians? Advances in Neural Information Processing Systems 37 (2024), 62697–62731. [63] Yizhang Zhu, Runzhi Jiang, Boyan Li, Nan Tang, and Yuyu Luo. 2025. EllieSQL: Cost-Efficient Text-to-SQL with Complexity-Aware Routing. In Second Conference on Language Modeling .[64] Yizhang Zhu, Liangwei Wang, Chenyu Yang, Xiaotian Lin, Boyan Li, Wei Zhou, Xinyu Liu, Zhangyang Peng, Tianqi Luo, Yu Li, et al . 2025. A Survey of Data Agents: Emerging Paradigm or Overstated Hype? arXiv preprint arXiv:2510.23587 
+
+(2025).
