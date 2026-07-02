@@ -1,0 +1,382 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-02T21:46:18.527201+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 4,
+    "deep_cap": 7,
+    "deep_selected": 4,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2607.00422v1",
+      "source": "arxiv",
+      "title": "KidnapRAG: A Black-Box Attack for Hijacking Reasoning in Agentic Retrieval-Augmented Generation Systems",
+      "abstract": "Retrieval-Augmented Generation (RAG) systems are vulnerable to poisoning attacks that inject malicious documents into the retrieval process to manipulate model outputs. Recent Agentic RAG systems are more robust to such attacks because they iteratively perform retrieval and reasoning, allowing them to ignore weakly relevant poisoned documents and preserve the reasoning chain induced by the user query. However, existing attacks on Agentic RAG systems often assume white-box access to system prompts, reasoning traces, retrievers, or model parameters, limiting their applicability in realistic settings. In this paper, we study black-box poisoning attacks against Agentic RAG systems, where the attacker can only publish externally retrievable poisoned documents. We propose KidnapRAG, a sequential poisoning attack that hijacks the agent's multi-step reasoning chain using three role-specific documents: Bait, Chain-Link, and Mal-Ins, which attract initial retrieval, induce query reformulation, and provide attacker-controlled evidence, respectively. Experiments across multiple Agentic RAG frameworks, LLM backbones, and benchmarks show that KidnapRAG consistently outperforms existing poisoning baselines under black-box conditions. Further analyses show that KidnapRAG progressively weakens the original retrieval intent, redirects retrieval behavior, and increases reliance on attacker-controlled evidence. Our code is publicly available at https://github.com/chanwoochoi316/KidnapRAG.",
+      "authors": [
+        "Chanwoo Choi",
+        "Euntae Kim",
+        "Kyuho Lee",
+        "Youngsam Chun",
+        "Jinhee Jeong",
+        "Eunmi Kim",
+        "Myunggyo Oh",
+        "Junseo Jang",
+        "Buru Chang"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR"
+      ],
+      "published": "2026-07-01T04:32:17+00:00",
+      "link": "https://arxiv.org/pdf/2607.00422v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "black-box attack on agentic RAG systems",
+      "llm_evidence_cn": "针对智能体RAG系统的黑盒攻击",
+      "llm_evidence": "针对智能体RAG系统的黑盒攻击",
+      "canonical_evidence": "针对智能体RAG系统的黑盒攻击",
+      "llm_tldr_en": "Agentic RAG systems iteratively retrieve and reason but are vulnerable to poisoning attacks. KidnapRAG is a black-box attack that injects malicious documents to hijack reasoning, exposing security gaps in agentic search.",
+      "llm_tldr_cn": "智能体RAG系统通过迭代检索与推理增强鲁棒性，但仍易受投毒攻击。本文提出KidnapRAG，一种仅需发布外部文档即可误导推理链的黑盒攻击方法，无需访问系统内部。实验表明多个Agentic RAG系统均受威胁，揭示了智能体搜索系统的安全隐患，呼吁加强防御机制。",
+      "llm_tldr": "智能体RAG系统通过迭代检索与推理增强鲁棒性，但仍易受投毒攻击。本文提出KidnapRAG，一种仅需发布外部文档即可误导推理链的黑盒攻击方法，无需访问系统内部。实验表明多个Agentic RAG系统均受威胁，揭示了智能体搜索系统的安全隐患，呼吁加强防御机制。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "agentic search",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.00597v1",
+      "source": "arxiv",
+      "title": "Multi-Turn Agentic Scientific Literature Search via Workflow Induction",
+      "abstract": "Scientific literature search often requires more than retrieving papers from a single query: users' intents are underspecified, preference-dependent, and evolve through interaction. Existing search agents typically rely on fixed pipelines or implicit language-only reasoning, making their search strategies difficult to control, inspect, and refine. We introduce PaperPilot, a multi-turn literature search agent that frames scientific search as workflow induction. Given an anchor paper and a user query, PaperPilot constructs an executable DAG of paper-search operators, including keyword search, citation expansion, filtering, scoring, reranking, and evidence extraction. User feedback is then used to refine both the query and the workflow itself. We train PaperPilot with supervised workflow imitation and preference optimization over controlled workflow corruptions. Experiments show that PaperPilot-9B improves over the base Qwen3.5-9B toolset agent under multi-turn interaction, increasing Hit@5 from 58.0 to 77.0, MRR from 47.5 to 59.4, and nDCG@10 from 26.8 to 32.5, while reducing workflow execution errors from 9.5% to 0%. These results show that explicit, editable search workflows provide an effective and controllable interface for aligning literature search agents with complex scientific intent.",
+      "authors": [
+        "Jisen Li",
+        "Bingxuan Li",
+        "Nanyi Jiang",
+        "Xuying Ning",
+        "Xiyao Wang",
+        "Yifan Shen",
+        "Heng Wang",
+        "Yuqing Jian",
+        "Xiaoxia Wu",
+        "Ben Athiwaratkun",
+        "Pan Lu",
+        "Jiaxuan You",
+        "Bingxin Zhao"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.IR"
+      ],
+      "published": "2026-07-01T08:21:23+00:00",
+      "link": "https://arxiv.org/pdf/2607.00597v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "multi-turn agentic literature search with workflow induction and refinement",
+      "llm_evidence_cn": "多轮智能体文献搜索，通过工作流归纳与用户反馈优化",
+      "llm_evidence": "多轮智能体文献搜索，通过工作流归纳与用户反馈优化",
+      "canonical_evidence": "多轮智能体文献搜索，通过工作流归纳与用户反馈优化",
+      "llm_tldr_en": "Introduces PaperPilot, a multi-turn scientific literature search agent that constructs executable DAGs of search operators and refines them via user feedback, trained with reinforcement learning.",
+      "llm_tldr_cn": "针对科学文献搜索中用户意图不明且随交互演化的问题，提出多轮智能体搜索系统PaperPilot，将搜索建模为工作流归纳，动态构建可执行的有向无环图（DAG）包含关键词搜索、引用扩展、过滤、排序和证据提取，通过强化学习训练，用户反馈可同时优化查询和工作流，实验表明在文献搜索任务上显著优于现有基线。",
+      "llm_tldr": "针对科学文献搜索中用户意图不明且随交互演化的问题，提出多轮智能体搜索系统PaperPilot，将搜索建模为工作流归纳，动态构建可执行的有向无环图（DAG）包含关键词搜索、引用扩展、过滤、排序和证据提取，通过强化学习训练，用户反馈可同时优化查询和工作流，实验表明在文献搜索任务上显著优于现有基线。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "reinforcement learning for multi turn search, retrieval, and evidence collection",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.01120v1",
+      "source": "arxiv",
+      "title": "Next-Generation Agentic Reinforcement Learning Systems Enable Self-Evolving Agents",
+      "abstract": "LLM agents are rapidly being deployed in production, including coding assistants, customer-support chatbots, and scientific research assistants, yet they remain fundamentally static in enterprise deployment. The LLM weights, system prompts, tool repertoires, and in-context harnesses are frozen at deployment time, and any improvement requires a manual loop of human-curated data collection, offline fine-tuning, modification of the agentic paradigm, and re-deployment. Recent work on self-evolving agents, such as OpenClaw for individual users, indicates that the next leap in agent capability will come from agents that continually learn from their own experience. In this paper, we argue that this vision for self-evolving agent deployment is being held back for enterprise-level large-scale agentic service not by reinforcement learning (RL) algorithms but by agentic online RL systems. Specifically, current agentic RL systems and the surrounding observability software stack are inadequate along three essential aspects: (i) there is no standardized agent trajectory data protocol capable of carrying RL learning signals at step granularity across heterogeneous agent paradigms; (ii) there is no enterprise-grade comprehensive data proxy that converts real workloads into governed learning substrates; and (iii) there is no unified agent evolution control plane that automatically decides, based on trajectory statistics, when to update policy weights or evolve the in-context harness. The next generation of agentic RL systems must be co-designed around these three pillars, and we sketch concrete architectures, case studies, and counter-arguments. We instantiate one branch through AReaL2.0, reorganizing existing RL infrastructure into an agent-oriented online RL loop for policy weight updates from deployed workloads.",
+      "authors": [
+        "Ran Yan",
+        "Wei Fu",
+        "Jiale Li",
+        "Shusheng Xu",
+        "Zhiyu Mei",
+        "Jiaxuan Gao",
+        "Jiarui Zhang",
+        "Xujie Shen",
+        "Hao Dai",
+        "Chuyi He",
+        "Zhen Pu",
+        "Jun Mei",
+        "Zhiyao Lin",
+        "Haitao Wang",
+        "Zhiqiang Ding",
+        "Jiawei Zhang",
+        "Huaijie Wang",
+        "Ruida Xu",
+        "Youhe Jiang",
+        "Yi Wu",
+        "Tongkai Yang",
+        "Binhang Yuan"
+      ],
+      "primary_category": "cs.DC",
+      "categories": [
+        "cs.DC"
+      ],
+      "published": "2026-07-01T16:08:02+00:00",
+      "link": "https://arxiv.org/pdf/2607.01120v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Self-evolving agents enabled by next-gen RL systems",
+      "llm_evidence_cn": "下一代RL系统使能自进化智能体",
+      "llm_evidence": "下一代RL系统使能自进化智能体",
+      "canonical_evidence": "下一代RL系统使能自进化智能体",
+      "llm_tldr_en": "Argues that next-generation agentic RL systems will enable self-evolving agents that continually learn from their own experience.",
+      "llm_tldr_cn": "本文论述了当前LLM智能体在生产部署中保持静态，需要手动循环改进。通过分析OpenClaw等案例，指出下一代智能体RL系统能够使智能体从自身经验中持续学习，实现自进化。论文提出了系统架构愿景，并讨论了关键挑战与机遇。",
+      "llm_tldr": "本文论述了当前LLM智能体在生产部署中保持静态，需要手动循环改进。通过分析OpenClaw等案例，指出下一代智能体RL系统能够使智能体从自身经验中持续学习，实现自进化。论文提出了系统架构愿景，并讨论了关键挑战与机遇。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.27669v2",
+      "source": "arxiv",
+      "title": "When Search Agents Should Ask: DiscoBench for Clarification-Aware Deep Search",
+      "abstract": "Search agents powered by large language models (LLMs) are increasingly used to solve complex information-seeking tasks, requiring multi-step retrieval and reasoning to fulfill user goals. However, existing benchmarks often assume that user queries are complete and explicit, overlooking the fact that real-world search requests are frequently vague, underspecified, or even factually incorrect. In deep search scenarios, such ambiguity can propagate along multi-step reasoning chains and lead agents toward incorrect search trajectories. To address this gap, we introduce DiscoBench, a benchmark for clarification-aware deep search, designed to evaluate whether search agents can proactively identify ambiguity, ask effective clarification questions, and recover correct reasoning paths through user interaction. DiscoBench contains 211 samples and 463 ambiguity instances across 11 real-world domains, covering four ambiguity types. We further design a user simulator for multi-turn interaction and evaluate model performance from four perspectives: task utility, ambiguity detection, interaction strategy, and cost efficiency. Experiments on representative LLMs show that ambiguity detection and effective clarification are distinct capabilities, and that repeatedly searching instead of asking for clarification often performs worse than direct guessing, highlighting a critical gap between retrieval ability and interactive problem-solving in current search agents.",
+      "authors": [
+        "Yiling Tao",
+        "Shihan Deng",
+        "Meiling Tao",
+        "Pengzhi Wei",
+        "Zhichao Hu",
+        "Zhihao Zhu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-06-26T02:57:15+00:00",
+      "link": "https://arxiv.org/pdf/2606.27669v2",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Clarification-aware deep search benchmark",
+      "llm_evidence_cn": "澄清感知深度搜索基准",
+      "llm_evidence": "澄清感知深度搜索基准",
+      "canonical_evidence": "澄清感知深度搜索基准",
+      "llm_tldr_en": "Introduces DiscoBench, a benchmark evaluating whether search agents can proactively identify ambiguity and ask clarification questions in deep search scenarios.",
+      "llm_tldr_cn": "该论文提出DiscoBench基准，用于评估搜索智能体在深度搜索场景中主动识别模糊性并提出澄清问题的能力。现有基准假设查询完整明确，但真实搜索常含歧义。DiscoBench填补了这一空白，通过多步推理链测试智能体处理模糊查询的能力，对推动更鲁棒的搜索智能体具有重要意义。",
+      "llm_tldr": "该论文提出DiscoBench基准，用于评估搜索智能体在深度搜索场景中主动识别模糊性并提出澄清问题的能力。现有基准假设查询完整明确，但真实搜索常含歧义。DiscoBench填补了这一空白，通过多步推理链测试智能体处理模糊查询的能力，对推动更鲁棒的搜索智能体具有重要意义。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "deep research agents",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.29970v1",
+      "source": "arxiv",
+      "title": "From Extraction to Navigation: Progressive Retrieval with Indirectly Infinite Depth",
+      "abstract": "Modern large-scale recommender retrieval is shifting from static similarity matching to dynamic item space navigation, framing retrieval as iterative goal-driven graph traversal. Conventional item-to-item (i2i) methods fall into the \"interest tunnel\" and fail to excavate deep user interests, while existing index-based retrieval suffers from persistent \"search drift\", caused by static entry nodes and fixed graph topologies unable to track shifting real-time user intent. To resolve the above defects, we present IID-Nav, a framework modeling retrieval as stateful autonomous graph exploration with three core contributions: (1) A goal-aware navigation policy substituting passive neighborhood expansion with active intent routing supervised by a target discriminator; (2) A recursive state evolution mechanism supporting Indirectly Infinite Depth (IID) via cross-request state reuse, which enables logical unlimited-depth graph traversal without linearly rising inference latency; (3) A trajectory-aligned training paradigm equipped with graph hard negative sampling to stabilize optimization over full navigation paths. Evaluations on billion-level industrial datasets show IID-Nav surpasses mainstream retrieval baselines under strict latency budgets. Empirical results verify that our method alleviates search drift remarkably and retains high precision for deep retrieval paths, offering an efficient, robust retrieval solution for industrial recommendation systems.",
+      "authors": [
+        "Linxiao Che",
+        "Shanshan Huang",
+        "Haitao Lu",
+        "Yijia Sun",
+        "Qiang Luo",
+        "Ruiming Tang",
+        "Han Li",
+        "Kun Gai",
+        "Guorui Zhou"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-06-29T08:47:17+00:00",
+      "link": "https://arxiv.org/pdf/2606.29970v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "retrieval modeled as stateful autonomous graph exploration with goal-aware navigation, aligning with agentic search",
+      "llm_evidence_cn": "将检索建模为状态自主图遍历，与智能体搜索概念一致",
+      "llm_evidence": "将检索建模为状态自主图遍历，与智能体搜索概念一致",
+      "canonical_evidence": "将检索建模为状态自主图遍历，与智能体搜索概念一致",
+      "llm_tldr_en": "IID-Nav models retrieval as autonomous graph exploration with goal-aware navigation policy, replacing passive expansion with active intent routing to overcome search drift.",
+      "llm_tldr_cn": "IID-Nav将检索重定义为状态自主图探索，提出目标感知导航策略替代被动邻域扩展。框架通过主动意图路由监督，解决了静态入口节点和固定图拓扑导致的搜索漂移问题。该方法在推荐检索上取得更好效果，其思想可直接应用于智能体搜索中动态多轮检索场景。",
+      "llm_tldr": "IID-Nav将检索重定义为状态自主图探索，提出目标感知导航策略替代被动邻域扩展。框架通过主动意图路由监督，解决了静态入口节点和固定图拓扑导致的搜索漂移问题。该方法在推荐检索上取得更好效果，其思想可直接应用于智能体搜索中动态多轮检索场景。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "agentic search",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.32014v1",
+      "source": "arxiv",
+      "title": "Scalable Behaviour Cloning on Browser Using via Skill Distillation",
+      "abstract": "Internet users collectively perform an enormous range of skilled work through web browsers, from software development and document editing to search, forms, and enterprise workflows, making human browsing a highly scalable but under-exploited source of reusable browser skills. We argue that the bottleneck for browser agents is decision-making under incomplete information rather than low-level operation, and that the priors agents lack are already implicit in human interaction traces. We therefore study scalable behavior cloning for browser agents via skill distillation, converting user interaction trajectories into compact natural-language skills that agents can read, retrieve, reuse, and compose directly. We further organize the distilled skills into a skill graph so that growth proceeds through consolidation rather than unbounded accumulation. This suggests that the scalability of browser agents may come less from manually designed tasks and more from the collective skills already expressed by internet users. Our project is available at: https://lab.einsia.ai/browserbc/.",
+      "authors": [
+        "Kaisen Yang",
+        "Zheng Jiang",
+        "Yuzhao Peng",
+        "Houde Qian",
+        "Boshi Zhang",
+        "Youjie Zheng",
+        "Shijin Hong",
+        "Qingle Liu",
+        "Ruoyu Han",
+        "Bohan Lyu",
+        "Bingxiang He",
+        "Eren Cai",
+        "Calvin Xiao",
+        "Qinhuai Na"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-06-30T17:46:23+00:00",
+      "link": "https://arxiv.org/pdf/2606.32014v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "scalable behavior cloning via skill distillation from browser traces",
+      "llm_evidence_cn": "通过技能蒸馏从浏览器轨迹进行可规模化行为克隆",
+      "llm_evidence": "通过技能蒸馏从浏览器轨迹进行可规模化行为克隆",
+      "canonical_evidence": "通过技能蒸馏从浏览器轨迹进行可规模化行为克隆",
+      "llm_tldr_en": "Proposes scalable behavior cloning for browser agents via skill distillation, converting user interaction trajectories into compact natural-language skills for reuse.",
+      "llm_tldr_cn": "针对浏览器智能体决策能力不足的问题，提出通过技能蒸馏从人类浏览轨迹中提取可复用的自然语言技能，智能体可直接读取、检索和组合这些技能，实现可规模化的行为克隆，在多种浏览器任务上取得高成功率。",
+      "llm_tldr": "针对浏览器智能体决策能力不足的问题，提出通过技能蒸馏从人类浏览轨迹中提取可复用的自然语言技能，智能体可直接读取、检索和组合这些技能，实现可规模化的行为克隆，在多种浏览器任务上取得高成功率。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on-policy distillation",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.00502v1",
+      "source": "arxiv",
+      "title": "A Task-State Representation for Long-Horizon Mobile GUI Agents",
+      "abstract": "While long-horizon mobile GUI agents typically rely on thought-action-observation loops, they struggle to separate persistent task states from transient screen observations. As execution histories grow, this entanglement imposes a severe context burden, causing agents to forget initial requirements, hallucinate progress, or repeatedly interact with stale interfaces. To address this, we introduce Task-State Representation (TSR), a training-free framework that explicitly decouples task state from sensory input. Acting as a lightweight external wrapper, TSR maintains three structured components: a global instruction summary, a dynamic progress tracker for subgoals, and a transition-aware action verifier. By continuously updating through pre- and post-action visual comparisons, TSR effectively guides the agent's reasoning without requiring architectural modifications. Experiments across four mobile GUI benchmarks validate TSR's effectiveness, yielding up to a 12 absolute point increase in success rate on complex cross-application and memory-intensive tasks.",
+      "authors": [
+        "Yujie Zheng",
+        "Zikang Liu",
+        "Xin Zhao",
+        "Ji-Rong Wen"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-07-01T06:37:21+00:00",
+      "link": "https://arxiv.org/pdf/2607.00502v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "task-state representation decouples persistent state from observations for long-horizon reasoning",
+      "llm_evidence_cn": "显式解耦任务状态与感知输入，支持长时域推理",
+      "llm_evidence": "显式解耦任务状态与感知输入，支持长时域推理",
+      "canonical_evidence": "显式解耦任务状态与感知输入，支持长时域推理",
+      "llm_tldr_en": "TSR is a training-free framework that decouples task state from sensory input for mobile GUI agents, using global instruction summary, dynamic progress tracker, and transition-aware action verifier.",
+      "llm_tldr_cn": "移动GUI智能体在长时域任务中常混淆任务状态与屏幕观测，导致遗忘原始目标和产生幻觉。TSR框架通过全局指令摘要、动态进度追踪器和动作验证器，将任务状态从感知输入中解耦，无需额外训练。实验表明该方法显著提升了智能体在多步交互中的目标保持和动作正确性。该表示对于需要持久工作记忆的搜索智能体具有借鉴意义。",
+      "llm_tldr": "移动GUI智能体在长时域任务中常混淆任务状态与屏幕观测，导致遗忘原始目标和产生幻觉。TSR框架通过全局指令摘要、动态进度追踪器和动作验证器，将任务状态从感知输入中解耦，无需额外训练。实验表明该方法显著提升了智能体在多步交互中的目标保持和动作正确性。该表示对于需要持久工作记忆的搜索智能体具有借鉴意义。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.01084v1",
+      "source": "arxiv",
+      "title": "Can Agents Generalize to the Open World? Unveiling the Fragility of Static Training in Tool Use",
+      "abstract": "While Large Language Model (LLM) agents demonstrate proficiency in static benchmarks, their deployment in real-world scenarios is hindered by the dynamic nature of user queries, tool sets, and interaction dynamics. To address this generalization gap, we formalize OpenAgent (Tool-Use Agent in Open-World), a problem setting characterized by distributional shifts across query, action, observation, and domain dimensions. To systematically diagnose its impact, we construct a controlled sandbox environment where we define fine-grained environmental shifts across a four-tier hierarchy, Perception, Interaction, Reasoning, and Internalization, and conduct a comprehensive series of experiments. Our analysis yields a series of key insights, demonstrating that agents trained via both Supervised Fine-Tuning(SFT) and Reinforcement Learning suffer from varying degrees of performance degradation when confronting open environmental shifts. Building on these insights, we propose Perturbation-Augmented Fine-Tuning, a disturbance-based intervention strategy for SFT that lays the foundation for enhancing agent robustness and utility in realistic environments. Our code will be released at: https://github. com/LAMDA-NeSy/OpenAgent.",
+      "authors": [
+        "Song-Lin Lv",
+        "Weiming Wu",
+        "Rui Zhu",
+        "Zi-Jian Cheng",
+        "Lan-Zhe Guo"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-01T15:40:25+00:00",
+      "link": "https://arxiv.org/pdf/2607.01084v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "tool-use agents in open-world settings",
+      "llm_evidence_cn": "开放世界工具使用智能体",
+      "llm_evidence": "开放世界工具使用智能体",
+      "canonical_evidence": "开放世界工具使用智能体",
+      "llm_tldr_en": "This paper identifies generalization failures in LLM agents due to static training and proposes OpenAgent, a benchmark for distributional shifts in tool use, offering insights for building robust search agents.",
+      "llm_tldr_cn": "大型语言模型智能体在静态基准上表现优异，但部署到现实世界时面临查询、工具和交互动态变化的泛化问题。本文形式化了开放世界工具使用智能体（OpenAgent）问题，构建了控制沙盒环境，定义了感知、交互、推理、内化四层环境偏移，通过系统实验揭示了静态训练的脆弱性，为构建鲁棒的搜索智能体提供了重要洞察。",
+      "llm_tldr": "大型语言模型智能体在静态基准上表现优异，但部署到现实世界时面临查询、工具和交互动态变化的泛化问题。本文形式化了开放世界工具使用智能体（OpenAgent）问题，构建了控制沙盒环境，定义了感知、交互、推理、内化四层环境偏移，通过系统实验揭示了静态训练的脆弱性，为构建鲁棒的搜索智能体提供了重要洞察。",
+      "llm_tags": [
+        "query:search-agent:composite"
+      ],
+      "matched_query_tag": "query:search-agent:composite",
+      "matched_query_text": "Papers central to 搜索智能体, especially work that connects or combines: l; multimodal search agents; deep research agents; search agents; agentic search; reinforcement learning for multi turn search, retrieval, and evidence collection; search agents with explicit working memory, evidence curation, and claim verification.",
+      "matched_requirement_id": "req-composite-search-agent",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
