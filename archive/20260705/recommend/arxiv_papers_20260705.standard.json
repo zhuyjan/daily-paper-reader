@@ -1,0 +1,258 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-05T21:22:18.480239+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 3,
+    "quick_skim_target": 12,
+    "quick_selected": 3
+  },
+  "deep_dive": [
+    {
+      "id": "2607.01935v1",
+      "source": "arxiv",
+      "title": "A-TMA: Decoupling State-Aware Memory Failures in Long-Term Agent Memory",
+      "abstract": "Long term memory lets LLM agents act as persistent assistants, but user facts change. A useful memory system must know what is true now, what used to be true, and what changed. We study \\emph{ghost memory}, a state coordination failure in which old, current, and transition facts coexist in the memory bank, remain mixed during retrieval, and mislead the answer model. We argue that memory systems should be understood and optimized from three levels: bank maintenance, retrieval, and answer time resolution. We propose ATMA, a state aware overlay for existing memory systems. ATMA keeps superseded and transition records in the bank, builds evidence packets for the query's requested state view, and exposes current, historical, and transition labels to QA. We further call for decoupled evaluation of bank, retrieval, and answer level failures, since final QA accuracy can hide where ghost memory occurs. To make this failure measurable, we build LTP (LoCoMo Temporal Plus), a conflict heavy benchmark for ghost memory, and evaluate on LoCoMo for long conversation generalization. On LTP, Graphiti+ATMA improves conflict accuracy by 0.240 absolute over Graphiti. On LoCoMo, Graphiti+ATMA raises temporal F1 from 0.0295 to 0.1705. The gains are host dependent, but they indicate that explicit state roles can reduce memory failures hidden by final QA accuracy.",
+      "authors": [
+        "Zitong Shi",
+        "Yixuan Tang",
+        "Anthony Kum Hoe Tung"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-02T09:28:29+00:00",
+      "link": "https://arxiv.org/pdf/2607.01935v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "state-aware memory with evidence packets for agent search",
+      "llm_evidence_cn": "面向智能体搜索的状态感知记忆与证据包",
+      "llm_evidence": "面向智能体搜索的状态感知记忆与证据包",
+      "canonical_evidence": "面向智能体搜索的状态感知记忆与证据包",
+      "llm_tldr_en": "A-TMA introduces a state-aware memory overlay that manages ghost memory failures in LLM agents by maintaining current, historical, and transition facts with evidence packets for query resolution.",
+      "llm_tldr_cn": "该论文研究智能体长期记忆中的幽灵记忆问题，即旧事实、当前事实和转换事实混合导致检索误导。提出A-TMA，一种状态感知记忆覆盖层，在记忆库中保留已淘汰和转换记录，为查询构建证据包，并暴露当前、历史和转换标签。实验证明该方法能有效缓解状态协调失败，提升智能体问答的准确性。",
+      "llm_tldr": "该论文研究智能体长期记忆中的幽灵记忆问题，即旧事实、当前事实和转换事实混合导致检索误导。提出A-TMA，一种状态感知记忆覆盖层，在记忆库中保留已淘汰和转换记录，为查询构建证据包，并暴露当前、历史和转换标签。实验证明该方法能有效缓解状态协调失败，提升智能体问答的准确性。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.31229v1",
+      "source": "arxiv",
+      "title": "Agentic-Ideation: Sample Efficient Agentic Trajectories Synthesis for Scientific Ideation Agents",
+      "abstract": "Ideation plays a pivotal role in scientific discovery. Recent LLM, especially AI Scientist systems, show promising potential for automated ideation. However, existing approaches predominantly rely on pre-defined agentic workflows. This constraint severely limits the flexibility required to navigate the vast search space of scientific literature and the complex action space of research reasoning. Recently, training Agentic LLMs has emerged as a promising direction, offering flexible reasoning frameworks and the capability for autonomous tool utilization. However, there remains a non-trivial challenge: applying previous agentic data synthesis methods to scientific ideation suffers from prohibitively high data synthesis cost. To bridge this gap, we propose Agentic-Ideation, a novel framework comprising an automated trajectory synthesis pipeline and a specialized agentic LLM trained for scientific ideation. Specifically, we first define a comprehensive tool space incorporating three external tools and three cognitive tools. Then we introduce an Oracle-Guided Data Synthesis strategy. By leveraging a reference idea as oracle guidance, this approach steers the multi-agent system to efficiently reconstruct the logical reasoning and tool invocation paths, transforming aimless trial-and-error into directed trajectory generation. Finally, we train the agent on these synthesized trajectories, employing a masking strategy on tool execution results. This ensures the model focuses on decision-making logic without interference from external feedback. Experimental results demonstrate that our method outperforms the SOTA workflow-based baseline by \\textbf{11.91\\%} in overall quality. Furthermore, our approach improves the sample efficiency of high-quality data synthesis by \\textbf{over 10$\\times$}.",
+      "authors": [
+        "Keyu Zhao",
+        "Lingyan Kong",
+        "Fengli Xu",
+        "Yong Li"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-30T07:07:51+00:00",
+      "link": "https://arxiv.org/pdf/2606.31229v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Sample efficient agentic trajectory synthesis for scientific ideation",
+      "llm_evidence_cn": "面向科学创意的样本高效智能体轨迹合成",
+      "llm_evidence": "面向科学创意的样本高效智能体轨迹合成",
+      "canonical_evidence": "面向科学创意的样本高效智能体轨迹合成",
+      "llm_tldr_en": "Proposes a sample-efficient method to synthesize agentic trajectories for scientific ideation, reducing cost compared to prior methods.",
+      "llm_tldr_cn": "针对科学创意生成任务，现有智能体数据合成方法成本高昂。该论文提出了一种样本高效的智能体轨迹合成方法，通过优化采样策略和利用先验知识，显著降低了合成成本。在多个科学文献库上的实验表明，该方法生成的轨迹能够有效训练智能体完成灵活的研究推理，为自主科学发现提供了经济可行的数据生成途径。",
+      "llm_tldr": "针对科学创意生成任务，现有智能体数据合成方法成本高昂。该论文提出了一种样本高效的智能体轨迹合成方法，通过优化采样策略和利用先验知识，显著降低了合成成本。在多个科学文献库上的实验表明，该方法生成的轨迹能够有效训练智能体完成灵活的研究推理，为自主科学发现提供了经济可行的数据生成途径。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "synthetic trajectory construction, verification, and curriculum shaping for autonomous agents",
+      "matched_requirement_id": "req-13",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.31422v1",
+      "source": "arxiv",
+      "title": "Ask the World Before Acting: Budgeted Environment Probing for World-Model Calibration",
+      "abstract": "Long-horizon language agents do not only choose actions; they carry a private model of the world from one decision to the next. When that model drifts, a later failure can be decided before the failing action is ever taken. We study a direct repair mechanism: before committing to the next task action, an agent may ask the environment about one belief field and write the answer back into its world model. This makes environment interaction a scarce calibration resource, not merely a way to advance the task. We introduce \\method, a budgeted probing operator for structured belief tables. The useful probes are not the same everywhere. Procedural beliefs, such as tool dependencies, can often be repaired by targeted checks, but those checks spend steps that the task may need. Spatial beliefs, such as object locations and graph edges, rely more on structural cues; the agent's own confidence can be a poor guide when the world changes off-screen. A type-stratified analysis formalizes this probe-action frontier, and controlled experiments show that mid-planning environment evidence reduces terminal world-model error when the probe policy follows the structure of the task.",
+      "authors": [
+        "Xinyuan Song",
+        "Zekun Cai"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-30T09:45:49+00:00",
+      "link": "https://arxiv.org/pdf/2606.31422v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "proposes budgeted environment probing for world-model calibration in long-horizon language agents",
+      "llm_evidence_cn": "提出了在长程智能体中通过环境探测校准世界模型的预算约束方法",
+      "llm_evidence": "提出了在长程智能体中通过环境探测校准世界模型的预算约束方法",
+      "canonical_evidence": "提出了在长程智能体中通过环境探测校准世界模型的预算约束方法",
+      "llm_tldr_en": "Long-horizon language agents suffer from world model drift; this paper introduces a budgeted probing mechanism that asks the environment about belief fields to calibrate the world model before task failure.",
+      "llm_tldr_cn": "该论文指出长程语言智能体的世界模型会随时间漂移，导致后续失败。作者提出一种预算约束的环境探测机制：在采取任务动作前，智能体可向环境询问特定信念字段并更新世界模型。该方法将环境交互视为稀缺校准资源。实验表明，该方法能有效修复程序性信念（如工具依赖），避免累积错误。这项工作为长程智能体的在线自我校准提供了新范式。",
+      "llm_tldr": "该论文指出长程语言智能体的世界模型会随时间漂移，导致后续失败。作者提出一种预算约束的环境探测机制：在采取任务动作前，智能体可向环境询问特定信念字段并更新世界模型。该方法将环境交互视为稀缺校准资源。实验表明，该方法能有效修复程序性信念（如工具依赖），避免累积错误。这项工作为长程智能体的在线自我校准提供了新范式。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.32034v1",
+      "source": "arxiv",
+      "title": "QVal: Cheaply Evaluating Dense Supervision Signals for Long-Horizon LLM Agents",
+      "abstract": "LLM agents increasingly act over long horizons, where a single trajectory can contain hundreds or thousands of actions. In these settings, outcome-only rewards provide too sparse guidance, failing to inform the model about the goodness of intermediate actions. Dense supervision methods aim to solve this problem by scoring intermediate steps, from intrinsic confidence to self-distillation and embedding similarities. However, it is common practice to evaluate them by measuring the downstream performance of a training pipeline that integrates them. This is expensive, conflates supervision quality with training engineering confounders, and renders different methodological families requiring distinct training setups incomparable. As a result, dense supervision methods are rarely benchmarked on common ground. We introduce QVal, a training-free testbed for directly evaluating dense supervision signals. Given a state-action pair, QVal measures how well a method's score is Q-aligned: whether it orders actions according to the Q-values of a strong reference-policy. This lets us compare signals before any training run and separate signal quality from other engineering choices. We instantiate QVal as QVal-v1.0, benchmarking 21 dense supervision methods across four diverse environments and seven methodological families, with over 1.2K evaluation experiments across six open-weight model backbones. We find that simple prompting baselines consistently outperform recent dense supervision methods from the literature, and that performance clusters strongly by family. These findings hold across model sizes, environments, and observation modalities. QVal is designed to be easily extensible to new environments and methods, enabling researchers to iterate on dense supervision methods before any training run.",
+      "authors": [
+        "Sergio Hernández-Gutiérrez",
+        "Matteo Merler",
+        "Ilze Amanda Auzina",
+        "Joschka Strüber",
+        "Ameya Prabhu",
+        "Matthias Bethge"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-06-30T17:58:23+00:00",
+      "link": "https://arxiv.org/pdf/2606.32034v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "evaluates dense supervision for long-horizon LLM agents",
+      "llm_evidence_cn": "评估长视界LLM代理的密集监督信号",
+      "llm_evidence": "评估长视界LLM代理的密集监督信号",
+      "canonical_evidence": "评估长视界LLM代理的密集监督信号",
+      "llm_tldr_en": "QVal cheaply evaluates dense supervision signals for long-horizon LLM agents, decoupling supervision quality from training engineering.",
+      "llm_tldr_cn": "长视界LLM代理中，稀疏的结果奖励无法指导中间步骤。QVal提出一种低成本评估方法，将密集监督信号的质量与训练工程分离，使不同方法可以公平比较。实验表明该方法能有效区分不同监督策略的效果，为长序列代理训练提供了可靠的评估基准。",
+      "llm_tldr": "长视界LLM代理中，稀疏的结果奖励无法指导中间步骤。QVal提出一种低成本评估方法，将密集监督信号的质量与训练工程分离，使不同方法可以公平比较。实验表明该方法能有效区分不同监督策略的效果，为长序列代理训练提供了可靠的评估基准。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.30251v1",
+      "source": "arxiv",
+      "title": "TACO: Tool-Augmented Credit Optimization for Agentic Tool Use",
+      "abstract": "Agentic multimodal models perform diverse operations on an image via code and reason over the returned view, an effective paradigm for fine-grained visual question answering. However, code operations can be useful, redundant, or misleading. Outcome-only rewards cannot precisely distinguish these cases, and existing process rewards either fail to attribute final correctness to individual tool calls, or require an external judge model. To address this, we introduce Tool-Augmented Credit Optimization (TACO), a GRPO variant for code-tool agents built on two coupled advantage channels. The first, Differential Answer-Probe Reward (DAPR), is a self-supervised, judge-free tool-contribution advantage that credits each tool call by its own effect on answering correctly. Probe tokens inserted into the model's reasoning elicit its predictions with and without the tool, and the difference in outcome reward is taken as the call's value: positive for a useful call, negative for a misleading one, and zero for one that changes nothing. This reuses the existing answer checker with no auxiliary judge, and, being a difference rather than an absolute probe score, is naturally robust to probe-hacking. The second is the outcome advantage from the final answer, distributed by Outcome-Gated Advantage Routing (OGAR): a parameter-free rule that, conditioned on the call's outcome, delivers this credit only to the responsible segments, suppressing wasted tool calls without any cost term. We train TACO through a two-stage SFT+RL pipeline. Extensive experiments across perception, reasoning, and general multimodal benchmarks show that it yields consistent accuracy gains and learns to invoke its tools only when they help.",
+      "authors": [
+        "Mingkuan Feng",
+        "Jinyang Wu",
+        "Hao Gu",
+        "Fangrui Lv",
+        "Ruihan Jin",
+        "Chuyuan Zhang",
+        "Zhengqi Wen",
+        "Jianhua Tao"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA"
+      ],
+      "published": "2026-06-29T13:01:05+00:00",
+      "link": "https://arxiv.org/pdf/2606.30251v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "GRPO variant for credit assignment in tool-using agents, applicable to RL training",
+      "llm_evidence_cn": "工具使用智能体的信用分配GRPO变体，适用于强化学习训练",
+      "llm_evidence": "工具使用智能体的信用分配GRPO变体，适用于强化学习训练",
+      "canonical_evidence": "工具使用智能体的信用分配GRPO变体，适用于强化学习训练",
+      "llm_tldr_en": "TACO introduces a GRPO variant with differential answer-probe reward for judge-free tool-contribution credit assignment in agentic tool use.",
+      "llm_tldr_cn": "该论文提出TACO（工具增强信用优化），一种面向代码工具智能体的GRPO变体。包含两个优势通道：差分答案探针奖励（DAPR）自监督地根据每次工具调用对正确回答的影响分配信用，无需外部裁判模型；另一个是结果奖励。该方法能精确区分有用、冗余或误导的工具调用，优化智能体的工具使用策略。适用于多轮工具使用场景，可支撑自进化智能体的策略学习。",
+      "llm_tldr": "该论文提出TACO（工具增强信用优化），一种面向代码工具智能体的GRPO变体。包含两个优势通道：差分答案探针奖励（DAPR）自监督地根据每次工具调用对正确回答的影响分配信用，无需外部裁判模型；另一个是结果奖励。该方法能精确区分有用、冗余或误导的工具调用，优化智能体的工具使用策略。适用于多轮工具使用场景，可支撑自进化智能体的策略学习。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on policy reinforcement learning and distillation for long horizon agent trajectories",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.01754v1",
+      "source": "arxiv",
+      "title": "Path-level Hindsight Instructions for Semantic Exploration in Vision-Language Navigation",
+      "abstract": "On-policy exploration is a crucial component for training robust Vision-Language Navigation agents, as it exposes the policy to a broader state distribution. However, such exploration inevitably leads to trajectories that deviate from expert demonstrations, resulting in a semantic mismatch between the executed visual stream and the original language instruction. In this work, we address this challenge by introducing Phi-Nav, a unified on-policy framework that leverages hindsight reasoning to align instructions with the agent's actual exploratory journey. Specifically, Phi-Nav operates through a three-stage dual-supervision cycle: 1) the agent performs oracle-guided on-policy exploration, sampling a trajectory while learning from expert action feedback, 2) a hindsight speaker synthesizes a path-level hindsight instruction grounded in the collected visual observations, and 3) the agent conducts a second imitation pass, treating the synthesized trajectory-instruction pair as an additional expert demonstration. Through this process, Phi-Nav bridges the critical semantic supervision gap inherent in on-policy methods, transforming semantically unlabeled movement into dense training signals. Evaluations on the R2R-CE and RxR-CE benchmarks show that Phi-Nav yields competitive performance while requiring only a fraction of the expert demonstrations used by current baselines. These results underscore the necessity of semantic exploration in VLN, positioning Phi-Nav as an effective solution for training embodied agents with limited data.",
+      "authors": [
+        "Sung June Kim",
+        "Sangpil Kim",
+        "Honglak Lee"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-02T06:11:07+00:00",
+      "link": "https://arxiv.org/pdf/2607.01754v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "on-policy hindsight reasoning for long-horizon VLN agents",
+      "llm_evidence_cn": "基于后见推理的在线策略探索用于长程视觉语言导航",
+      "llm_evidence": "基于后见推理的在线策略探索用于长程视觉语言导航",
+      "canonical_evidence": "基于后见推理的在线策略探索用于长程视觉语言导航",
+      "llm_tldr_en": "Introduces Phi-Nav, an on-policy framework using hindsight reasoning to align instructions with actual exploratory trajectories for vision-language navigation.",
+      "llm_tldr_cn": "针对视觉语言导航中探索轨迹与指令不匹配的问题，提出Phi-Nav框架，通过后见推理（hindsight reasoning）在在线策略探索后生成对齐的指令，实现双监督循环。实验表明该方法提升了导航鲁棒性。",
+      "llm_tldr": "针对视觉语言导航中探索轨迹与指令不匹配的问题，提出Phi-Nav框架，通过后见推理（hindsight reasoning）在在线策略探索后生成对齐的指令，实现双监督循环。实验表明该方法提升了导航鲁棒性。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
