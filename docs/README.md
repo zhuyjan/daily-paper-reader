@@ -6,38 +6,47 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-05
-- 运行时间：2026-07-05 21:27:35 UTC
+- 最新运行日期：2026-07-06
+- 运行时间：2026-07-06 21:51:50 UTC
 - 运行状态：成功
-- 本次总论文数：6
-- 精读区：3
-- 速读区：3
+- 本次总论文数：9
+- 精读区：1
+- 速读区：8
 
 ### 今日简报（AI）
-今天精读2篇高分论文，聚焦智能体轨迹高效合成与世界模型校准两大方向。最值得关注“Agentic-Ideation”通过样本高效轨迹辅助科学构思，以及“Ask the World Before Acting”以预算化探测校准世界模型。建议优先精读这两篇，学习如何提升智能体在长时任务中的样本效率与决策可靠性。
-- 详情：[/202607/05/README](/202607/05/README)
+今日分析9篇论文，精读聚焦图像生成工作流自我进化工具COMFYCLAW（8分），速读覆盖医疗智能体基准HealthAgentBench与多语言工具适应研究。最值得关注方向：自我进化技能工具箱可显著提升工作流效率，以及医疗智能体在复杂环境中的挑战性基准。建议下一步关注智能体在开放世界中的泛化能力，避免静态训练导致的脆弱性。
+- 详情：[/202607/06/README](/202607/06/README)
 
 ### 精读区论文标签
-1. [Agentic-Ideation: Sample Efficient Agentic Trajectories Synthesis for Scientific Ideation Agents](/202607/05/2606.31229v1-agentic-ideation-sample-efficient-agentic-trajectories-synthesis-for-scientific-ideation-agents)  
+1. [COMFYCLAW: Self-Evolving Skill Harnesses for Image Generation Workflows](/202607/06/2607.01709v1-comfyclaw-self-evolving-skill-harnesses-for-image-generation-workflows)  
    标签：评分：8.0/10、query:self-evolve
-   evidence：面向科学创意的样本高效智能体轨迹合成
-2. [Ask the World Before Acting: Budgeted Environment Probing for World-Model Calibration](/202607/05/2606.31422v1-ask-the-world-before-acting-budgeted-environment-probing-for-world-model-calibration)  
-   标签：评分：8.0/10、query:self-evolve
-   evidence：提出了在长程智能体中通过环境探测校准世界模型的预算约束方法
-3. [A-TMA: Decoupling State-Aware Memory Failures in Long-Term Agent Memory](/202607/05/2607.01935v1-a-tma-decoupling-state-aware-memory-failures-in-long-term-agent-memory)  
-   标签：评分：8.0/10、query:search-agent
-   evidence：面向智能体搜索的状态感知记忆与证据包
+   evidence：自进化技能框架用于智能体工作流
 
 ### 速读区论文标签
-1. [QVal: Cheaply Evaluating Dense Supervision Signals for Long-Horizon LLM Agents](/202607/05/2606.32034v1-qval-cheaply-evaluating-dense-supervision-signals-for-long-horizon-llm-agents)  
+1. [HealthAgentBench: A Unified Benchmark Suite of Realistic Agentic Healthcare Environments for Challenging Frontier AI Agents](/202607/06/2606.31179v1-healthagentbench-a-unified-benchmark-suite-of-realistic-agentic-healthcare-environments-for-challenging-frontier-ai-agents)  
    标签：评分：7.0/10、query:self-evolve
-   evidence：评估长视界LLM代理的密集监督信号
-2. [TACO: Tool-Augmented Credit Optimization for Agentic Tool Use](/202607/05/2606.30251v1-taco-tool-augmented-credit-optimization-for-agentic-tool-use)  
+   evidence：医疗代理领域的长程推理基准
+2. [Think in English, Answer in Korean: Efficient Adaptation of Multilingual Tool-Using Agents](/202607/06/2606.31648v1-think-in-english-answer-in-korean-efficient-adaptation-of-multilingual-tool-using-agents)  
+   标签：评分：7.0/10、query:search-agent
+   evidence：多步工具使用任务的强化学习与可验证奖励
+3. [Can Agents Generalize to the Open World? Unveiling the Fragility of Static Training in Tool Use](/202607/06/2607.01084v1-can-agents-generalize-to-the-open-world-unveiling-the-fragility-of-static-training-in-tool-use)  
+   标签：评分：7.0/10、query:self-evolve
+   evidence：静态训练工具使用智能体在开放世界中的失败分析
+4. [Episodic-to-Semantic Consolidation Without Identity Drift](/202607/06/2607.01988v1-episodic-to-semantic-consolidation-without-identity-drift)  
+   标签：评分：7.0/10、query:search-agent
+   evidence：长期运行智能体的无身份漂移记忆整合
+5. [RoamFlow: Reinforcement-Aligned One-Step Action MeanFlow Policy for Image-Goal Navigation](/202607/06/2606.29934v1-roamflow-reinforcement-aligned-one-step-action-meanflow-policy-for-image-goal-navigation)  
    标签：评分：6.0/10、query:self-evolve
-   evidence：工具使用智能体的信用分配GRPO变体，适用于强化学习训练
-3. [Path-level Hindsight Instructions for Semantic Exploration in Vision-Language Navigation](/202607/05/2607.01754v1-path-level-hindsight-instructions-for-semantic-exploration-in-vision-language-navigation)  
+   evidence：通过强化学习建模导航中的长程依赖
+6. [DAIN: Dynamic Agent-Based Interaction Network for Efficient and Collaborative Multimodal Reasoning](/202607/06/2606.30189v1-dain-dynamic-agent-based-interaction-network-for-efficient-and-collaborative-multimodal-reasoning)  
+   标签：评分：6.0/10、query:search-agent
+   evidence：多智能体协同多模态推理
+7. [Beyond expert users: agents should help users construct preferences, not just elicit them](/202607/06/2606.30863v1-beyond-expert-users-agents-should-help-users-construct-preferences-not-just-elicit-them)  
+   标签：评分：6.0/10、query:search-agent
+   evidence：智能体在搜索语境中帮助用户构建偏好
+8. [OPINE-World: Programmatic World Modeling with Ontology-error-Prioritized Interactive Exploration](/202607/06/2607.01531v1-opine-world-programmatic-world-modeling-with-ontology-error-prioritized-interactive-exploration)  
    标签：评分：6.0/10、query:self-evolve
-   evidence：基于后见推理的在线策略探索用于长程视觉语言导航
+   evidence：LLM代理通过交互探索学习世界模型
 
 
 <div class="dpr-home-promo-card">

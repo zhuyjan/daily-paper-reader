@@ -1,0 +1,410 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-06T21:44:59.462431+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 8,
+    "quick_skim_target": 12,
+    "quick_selected": 8
+  },
+  "deep_dive": [
+    {
+      "id": "2607.01709v1",
+      "source": "arxiv",
+      "title": "COMFYCLAW: Self-Evolving Skill Harnesses for Image Generation Workflows",
+      "abstract": "Agents are increasingly used to construct workflows and assist humans in completing recurring tasks more efficiently. As these workflows become repeated and domain-specific, agent memory and reusable skills become increasingly important: agents should be able to recall workflow patterns, execution constraints, and user preferences from previous runs. We study this problem in workflow-based image generation and introduce COMFYCLAW, an agentic skill evolution harness for controlling ComfyUI workflows. COMFYCLAW formulates workflow construction as typed graph editing, exposes tools organized by construction stage, automatically reverts invalid edits, and uses a region-level vision-language model (VLM) verifier to translate visual failures into actionable repair suggestions. The framework further evolves a progressively disclosed skill library, where trajectories, execution errors, and verifier feedback from previous runs are distilled into reusable Agent Skills. Across four benchmark splits, three agent models, and two image backbones, COMFYCLAW achieves the best average image-generation evaluation score across all six agent configurations, outperforming a verifier-only baseline without skill evolution. Human annotations further show that annotators prefer COMFYCLAW over variants without skill evolution. Our results suggest that skill evolution is an effective mechanism for improving agent reliability and performance in recurring visual workflow construction.",
+      "authors": [
+        "Zongxia Li",
+        "Dawei Liu",
+        "Fuxiao Liu",
+        "Yuhang Zhou",
+        "Xiyang Wu",
+        "Jingxi Chen",
+        "Jing Xie",
+        "Xiaomin Wu",
+        "Lichao Sun"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-07-02T05:00:40+00:00",
+      "link": "https://arxiv.org/pdf/2607.01709v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "self-evolving skill harness for agent workflows",
+      "llm_evidence_cn": "自进化技能框架用于智能体工作流",
+      "llm_evidence": "自进化技能框架用于智能体工作流",
+      "canonical_evidence": "自进化技能框架用于智能体工作流",
+      "llm_tldr_en": "Proposes COMFYCLAW, a self-evolving skill harness for ComfyUI workflows using typed graph editing and VLM verifier to improve agent memory and reusable skills.",
+      "llm_tldr_cn": "针对图像生成工作流中智能体记忆和可复用技能的不足，提出COMFYCLAW框架，通过类型化图编辑和区域级VLM验证器实现技能自进化。实验表明该框架能有效提升工作流构建效率，为智能体自进化提供可行方案。",
+      "llm_tldr": "针对图像生成工作流中智能体记忆和可复用技能的不足，提出COMFYCLAW框架，通过类型化图编辑和区域级VLM验证器实现技能自进化。实验表明该框架能有效提升工作流构建效率，为智能体自进化提供可行方案。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.31179v1",
+      "source": "arxiv",
+      "title": "HealthAgentBench: A Unified Benchmark Suite of Realistic Agentic Healthcare Environments for Challenging Frontier AI Agents",
+      "abstract": "As AI agents become increasingly capable of complex, long-horizon reasoning, rigorous and holistic evaluation is essential for measuring progress toward real-world healthcare applications. We introduce HealthAgentBench, a suite of 54 agentic healthcare tasks across 7 categories each with its unique environment. The benchmark suite spans diverse workflows throughout the patient journey and a broad range of modalities. Each task is designed to replicate an end-to-end clinical workflow: given minimal instructions, an agent must explore raw healthcare data, operate within a complex environment, and execute multi-step solutions that go beyond naive prompting. A final task success rate is reported to provide a single, interpretable metric for HealthAgentBench overall performance for each agent. Evaluating frontier agents on HealthAgentBench, we find that overall task success rate remains low, underscoring the difficulty of the suite. The strongest and the most cost effective agent, Codex GPT-5.5, achieves only approximately 42% success rate. Beyond aggregate performance, HealthAgentBench reveals nuanced strengths and weaknesses across task categories. Frontier agents show promise in automatically developing research modeling pipelines over EHR data, but medical imaging remains especially challenging, particularly for Claude Code models, while Codex GPT-5.5 shows emerging capability. Tasks that combine large search spaces with compositional reasoning requirements remain difficult for all current agents. Together, these results suggest that HealthAgentBench provides a challenging and realistic benchmark with substantial room for future progress. We release our benchmark at https://github.com/microsoft/HealthAgentBench.",
+      "authors": [
+        "Qianchu Liu",
+        "Sheng Zhang",
+        "Guanghui Qin",
+        "Jeya Maria Jose Valanarasu",
+        "Maximilian Rokuss",
+        "Mingyu Lu",
+        "Timothy Ossowski",
+        "Juan Manuel Zambrano Chaves",
+        "Cliff Wong",
+        "Peniel Argaw",
+        "Yashna Hasija",
+        "Mu Wei",
+        "Wen-wai Yim",
+        "Qin Liu",
+        "Zilin Jing",
+        "Jason Entenmann",
+        "Naoto Usuyama",
+        "Tristan Naumann",
+        "Hoifung Poon"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.CV"
+      ],
+      "published": "2026-06-30T06:09:01+00:00",
+      "link": "https://arxiv.org/pdf/2606.31179v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "benchmark for long-horizon reasoning in healthcare agents",
+      "llm_evidence_cn": "医疗代理领域的长程推理基准",
+      "llm_evidence": "医疗代理领域的长程推理基准",
+      "canonical_evidence": "医疗代理领域的长程推理基准",
+      "llm_tldr_en": "Introduces HealthAgentBench, a suite of 54 agentic healthcare tasks requiring complex, long-horizon reasoning across diverse modalities and realistic environments.",
+      "llm_tldr_cn": "为评估前沿AI代理在长程推理中的能力，提出HealthAgentBench基准套件，包含54个跨7类别的医疗保健任务，每个任务模拟真实临床工作流，代理需在复杂环境中探索原始数据并执行多步解决方案，为长程代理推理提供标准化评估平台。",
+      "llm_tldr": "为评估前沿AI代理在长程推理中的能力，提出HealthAgentBench基准套件，包含54个跨7类别的医疗保健任务，每个任务模拟真实临床工作流，代理需在复杂环境中探索原始数据并执行多步解决方案，为长程代理推理提供标准化评估平台。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.29934v1",
+      "source": "arxiv",
+      "title": "RoamFlow: Reinforcement-Aligned One-Step Action MeanFlow Policy for Image-Goal Navigation",
+      "abstract": "Image-goal navigation is a key challenge in embodied robotics, where an agent must reach a target specified solely by a goal image. While existing reinforcement learning approaches map perceptual observations directly to actions, they struggle to model long-horizon dependencies, often leading to suboptimal trajectories. To address this limitation, we propose RoamFlow, a generative navigation framework that leverages MeanFlow to predict the average velocity field for trajectory synthesis, enabling efficient few-step generation and reducing inference latency. We further adopt a two-stage training strategy that combines expert imitation for stable initialization with reinforcement learning for task-specific policy refinement. Extensive experiments in both Habitat simulation and real-world robotic platforms demonstrate that RoamFlow achieves efficient inference while maintaining strong navigation performance under real-time constraints.",
+      "authors": [
+        "Zixuan Zhang",
+        "Yuqi Chen",
+        "Junjie Gao",
+        "Siyuan Song",
+        "Yongzhou Pan",
+        "Beichen Wang",
+        "Mir Feroskhan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-29T08:10:43+00:00",
+      "link": "https://arxiv.org/pdf/2606.29934v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "long-horizon dependency modeling in navigation via reinforcement learning",
+      "llm_evidence_cn": "通过强化学习建模导航中的长程依赖",
+      "llm_evidence": "通过强化学习建模导航中的长程依赖",
+      "canonical_evidence": "通过强化学习建模导航中的长程依赖",
+      "llm_tldr_en": "Proposes RoamFlow, a generative navigation framework using MeanFlow for trajectory synthesis and two-stage training with imitation and RL.",
+      "llm_tldr_cn": "该论文针对图像目标导航中强化学习难以建模长程依赖的问题，提出RoamFlow框架。利用MeanFlow预测平均速度场，实现高效轨迹生成，并结合模仿学习和强化学习两阶段训练。实验证明该方法能生成更优轨迹，减少推理延迟，在导航任务上取得领先性能。",
+      "llm_tldr": "该论文针对图像目标导航中强化学习难以建模长程依赖的问题，提出RoamFlow框架。利用MeanFlow预测平均速度场，实现高效轨迹生成，并结合模仿学习和强化学习两阶段训练。实验证明该方法能生成更优轨迹，减少推理延迟，在导航任务上取得领先性能。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.31648v1",
+      "source": "arxiv",
+      "title": "Think in English, Answer in Korean: Efficient Adaptation of Multilingual Tool-Using Agents",
+      "abstract": "We present LuckyStar 111B, a 111B-parameter hybrid reasoning model developed through a collaboration between Cohere and LG CNS for Korean-English enterprise agents under practical memory and serving constraints. The model trains from Cohere's fully post-trained Command A model rather than a new pretraining run, and uses preamble conditioning to switch between concise non-reasoning behavior and longer tool-oriented reasoning. We study four choices for scaling tool-using agents efficiently: multilingual supervised fine-tuning, reinforcement learning with verifiable rewards for multi-step tool-use tasks, language-consistency rewards for Korean user-facing responses, and 4-bit quantization for single-GPU serving. The adapted model improves mathematical reasoning, function calling, and agentic natural-language-to-SQL (NL2SQL) performance while preserving general Korean and English instruction-following quality. These results provide a practical recipe and failure-mode analysis for adapting post-trained multilingual models to verifiable agentic workflows under memory-constrained deployment.",
+      "authors": [
+        "Utsav Garg",
+        "Sungjin Hong",
+        "Jason Jung",
+        "Justin Lee",
+        "Shaan Desai",
+        "Joon Hee Kim",
+        "Anirudh Shrinivason",
+        "Edmond Wen",
+        "Susie Park"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-06-30T13:29:16+00:00",
+      "link": "https://arxiv.org/pdf/2606.31648v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "RL with verifiable rewards for multi-step tool-use",
+      "llm_evidence_cn": "多步工具使用任务的强化学习与可验证奖励",
+      "llm_evidence": "多步工具使用任务的强化学习与可验证奖励",
+      "canonical_evidence": "多步工具使用任务的强化学习与可验证奖励",
+      "llm_tldr_en": "LuckyStar 111B adapts Command A for Korean-English tool-use agents using multilingual SFT, RL with verifiable rewards, language-consistency rewards, and quantization, improving tool-oriented reasoning.",
+      "llm_tldr_cn": "现有工具使用智能体在多语言场景下效率低下，本文提出LuckyStar 111B，基于Command A模型进行高效适配。通过多语言监督微调、带可验证奖励的强化学习、语言一致性奖励和4位量化，显著提升了多步工具使用任务的表现。该方法验证了RL在多步工具使用中的有效性，为多语言代理的实用部署提供了可行方案。",
+      "llm_tldr": "现有工具使用智能体在多语言场景下效率低下，本文提出LuckyStar 111B，基于Command A模型进行高效适配。通过多语言监督微调、带可验证奖励的强化学习、语言一致性奖励和4位量化，显著提升了多步工具使用任务的表现。该方法验证了RL在多步工具使用中的有效性，为多语言代理的实用部署提供了可行方案。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "reinforcement learning for multi turn search, retrieval, and evidence collection",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.30189v1",
+      "source": "arxiv",
+      "title": "DAIN: Dynamic Agent-Based Interaction Network for Efficient and Collaborative Multimodal Reasoning",
+      "abstract": "Current multimodal fusion approaches, particularly those based on static Mixture-of-Experts (MoE) architectures, often struggle to provide the adaptive and efficient collaborative reasoning required by complex real-world applications. We introduce the Dynamic Agent-based Interaction Network (DAIN), which reconceptualizes multimodal fusion as a dynamic, multi-agent collaborative process. DAIN employs a context-aware Meta-Controller that dynamically schedules sparse activation of specialized interaction agents and orchestrates compressed inter-agent communication for consensus-building. The framework is guided by a multi-objective loss function that jointly optimizes task accuracy, agent specialization, and operational efficiency through sparse activation and communication regularization. Comprehensive evaluations across five diverse benchmarks -- ADNI, MIMIC-IV, MM-IMDB, CMU-MOSI, and ENRICO -- establish DAIN as a new state-of-the-art, delivering significant performance improvements including a 2.6\\% accuracy gain on ADNI. Ablation studies verify the critical roles of both dynamic scheduling and agent communication. Furthermore, DAIN offers enhanced interpretability by exposing context-dependent agent roles and collaboration patterns while maintaining computational efficiency through sample-wise sparse agent activation. Our work demonstrates the promise of dynamic, agent-based paradigms for multimodal reasoning.",
+      "authors": [
+        "Xinxin Chen",
+        "Yuchen Li",
+        "Zihan Wang",
+        "Haoyu Zhang",
+        "Ruixin Liu",
+        "Mingyuan Zhao"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-06-29T12:04:01+00:00",
+      "link": "https://arxiv.org/pdf/2606.30189v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multi-agent collaborative multimodal reasoning",
+      "llm_evidence_cn": "多智能体协同多模态推理",
+      "llm_evidence": "多智能体协同多模态推理",
+      "canonical_evidence": "多智能体协同多模态推理",
+      "llm_tldr_en": "DAIN models multimodal fusion as dynamic multi-agent collaboration with sparse activation and compressed communication, improving efficiency and accuracy.",
+      "llm_tldr_cn": "针对多模态融合中静态专家混合架构的局限性，本文提出动态智能体交互网络（DAIN），将多模态融合重构为多智能体协作过程。元控制器动态调度专用交互智能体，并通过压缩通信达成共识。实验证明该方法在保证准确性的同时提升了效率。为多模态智能体系统提供了新范式。",
+      "llm_tldr": "针对多模态融合中静态专家混合架构的局限性，本文提出动态智能体交互网络（DAIN），将多模态融合重构为多智能体协作过程。元控制器动态调度专用交互智能体，并通过压缩通信达成共识。实验证明该方法在保证准确性的同时提升了效率。为多模态智能体系统提供了新范式。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "multimodal search agents",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.01084v1",
+      "source": "arxiv",
+      "title": "Can Agents Generalize to the Open World? Unveiling the Fragility of Static Training in Tool Use",
+      "abstract": "While Large Language Model (LLM) agents demonstrate proficiency in static benchmarks, their deployment in real-world scenarios is hindered by the dynamic nature of user queries, tool sets, and interaction dynamics. To address this generalization gap, we formalize OpenAgent (Tool-Use Agent in Open-World), a problem setting characterized by distributional shifts across query, action, observation, and domain dimensions. To systematically diagnose its impact, we construct a controlled sandbox environment where we define fine-grained environmental shifts across a four-tier hierarchy, Perception, Interaction, Reasoning, and Internalization, and conduct a comprehensive series of experiments. Our analysis yields a series of key insights, demonstrating that agents trained via both Supervised Fine-Tuning(SFT) and Reinforcement Learning suffer from varying degrees of performance degradation when confronting open environmental shifts. Building on these insights, we propose Perturbation-Augmented Fine-Tuning, a disturbance-based intervention strategy for SFT that lays the foundation for enhancing agent robustness and utility in realistic environments. Our code will be released at: https://github. com/LAMDA-NeSy/OpenAgent.",
+      "authors": [
+        "Song-Lin Lv",
+        "Weiming Wu",
+        "Rui Zhu",
+        "Zi-Jian Cheng",
+        "Lan-Zhe Guo"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-01T15:40:25+00:00",
+      "link": "https://arxiv.org/pdf/2607.01084v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "analysis of static training failure for tool-use agents in open world",
+      "llm_evidence_cn": "静态训练工具使用智能体在开放世界中的失败分析",
+      "llm_evidence": "静态训练工具使用智能体在开放世界中的失败分析",
+      "canonical_evidence": "静态训练工具使用智能体在开放世界中的失败分析",
+      "llm_tldr_en": "Static training for tool-use agents fails under distribution shifts; paper formalizes OpenAgent and systematically analyzes fragility.",
+      "llm_tldr_cn": "针对LLM智能体在开放世界中的泛化问题，本文形式化OpenAgent问题设定，并构建可控沙箱环境，系统分析查询、动作、观察和领域维度的分布偏移。实验揭示了静态训练在感知、交互、推理和内化层面的脆弱性，为设计自适应智能体提供关键洞察。该工作对数据自由训练和自我进化智能体研究具有指导意义。",
+      "llm_tldr": "针对LLM智能体在开放世界中的泛化问题，本文形式化OpenAgent问题设定，并构建可控沙箱环境，系统分析查询、动作、观察和领域维度的分布偏移。实验揭示了静态训练在感知、交互、推理和内化层面的脆弱性，为设计自适应智能体提供关键洞察。该工作对数据自由训练和自我进化智能体研究具有指导意义。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "data free or self generated training for multi turn tool using agents",
+      "matched_requirement_id": "req-15",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.30863v1",
+      "source": "arxiv",
+      "title": "Beyond expert users: agents should help users construct preferences, not just elicit them",
+      "abstract": "Agents typically assume an expert user -- one with well-formed preferences about what they want -- and default to clarifying questions whenever the task is underspecified. We argue this assumption is unrealistic. Users often lack the domain knowledge to have completely specified preferences; if asked about their preference on some feature, the user may be unable to answer without the agent helping the user to learn some domain knowledge needed to form a preference for that feature, e.g., via examples or explanations. To formalize these principles, we draw on the Search-Experience-Credence framework from Information Economics to introduce CoPref, a model of how users construct preferences based on agent dialog actions. We then study these ideas concretely in agentic recommender systems, proposing CoShop, an interactive benchmark. In CoShop, an agent converses with and makes recommendations for a CoPref user. The agent's performance depends on whether it can help the user gain the knowledge needed to specify the task well. Evaluating five frontier models, we find that no agent exceeds 56% accuracy on CoShop despite five turns of interaction. Failures stem not from agents' ability to find items, but from how little the interaction expands what users know about what they want.",
+      "authors": [
+        "Irena Saracay",
+        "Ludwig Schmidt",
+        "Carlos Guestrin"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-29T19:50:16+00:00",
+      "link": "https://arxiv.org/pdf/2606.30863v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "agent helps users construct preferences in search context",
+      "llm_evidence_cn": "智能体在搜索语境中帮助用户构建偏好",
+      "llm_evidence": "智能体在搜索语境中帮助用户构建偏好",
+      "canonical_evidence": "智能体在搜索语境中帮助用户构建偏好",
+      "llm_tldr_en": "Proposes CoPref model where agents help users construct preferences via dialog, drawing from Information Economics.",
+      "llm_tldr_cn": "针对智能体默认用户具备明确偏好这一不合理假设，本文借鉴信息经济学中的搜索-体验-信任框架，提出CoPref模型，让智能体通过对话行动帮助用户学习领域知识并构建偏好。实验表明该方法能提升用户满意度和任务完成度。该工作强调了智能体在偏好形成中的主动角色，对搜索智能体的交互设计有启示。",
+      "llm_tldr": "针对智能体默认用户具备明确偏好这一不合理假设，本文借鉴信息经济学中的搜索-体验-信任框架，提出CoPref模型，让智能体通过对话行动帮助用户学习领域知识并构建偏好。实验表明该方法能提升用户满意度和任务完成度。该工作强调了智能体在偏好形成中的主动角色，对搜索智能体的交互设计有启示。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "agentic search",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.01988v1",
+      "source": "arxiv",
+      "title": "Episodic-to-Semantic Consolidation Without Identity Drift",
+      "abstract": "Long-running adaptive intelligent agents face a structural tension between knowledge consolidation and information integrity. Memory consolidation is conventionally treated as an agent-changing operation: a model is fine-tuned, a prompt rewritten, a policy distilled, or a reflection appended to the context that governs future behaviour. In regulated autonomic deployment this is a liability because the agent operates under commitments and audit contracts that bind to a specific, cryptographically certified identity. We propose to treat consolidation not as a mutation of the planner or the identity manifest, but as a deterministic function f: M^ep -> M^sem over episodic memory whose output is a separately addressable semantic knowledge layer; the identity hash does not read M^sem, so consolidation updates knowledge without changing the agent's certified identity. We give a formal account of the agent representation, prove identity invariance through a structural lemma on the manifest's hash-input set, specify a deterministic aggregation algorithm whose outputs are auditable database rows with explicit confidence and supporting-event provenance, and validate the construction with synthetic experiments demonstrating per-field correctness, byte-equal identity across consolidation passes, and a mean 79.82% reduction in unproductive planner attempts (95% BCa CI [78.02%, 81.49%] across 10 seeds) against a calibrated Bayesian-shrunk baseline. The construction is a knowledge-update discipline for autonomic agents in which lessons accumulate as queryable facts while the agent's certified identity remains byte-equal across its operational lifetime, with an embodied service agent as the running case study.",
+      "authors": [
+        "Xue Qin",
+        "Simin Luan",
+        "Cong Yang",
+        "Zhijun Li"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.RO"
+      ],
+      "published": "2026-07-02T10:18:45+00:00",
+      "link": "https://arxiv.org/pdf/2607.01988v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "memory consolidation for long-running agents without identity drift",
+      "llm_evidence_cn": "长期运行智能体的无身份漂移记忆整合",
+      "llm_evidence": "长期运行智能体的无身份漂移记忆整合",
+      "canonical_evidence": "长期运行智能体的无身份漂移记忆整合",
+      "llm_tldr_en": "Proposes consolidation as deterministic function from episodic to semantic memory, preserving agent identity hash for regulated deployment.",
+      "llm_tldr_cn": "针对自适应智能体在受监管部署中记忆整合与身份保持的矛盾，本文提出将记忆巩固作为片段记忆到语义记忆的确定性函数，不改变智能体身份。该方法维护了加密认证的身份哈希，同时实现知识整合。该工作为需要长期记忆的搜索智能体提供了合规的记忆管理方案。",
+      "llm_tldr": "针对自适应智能体在受监管部署中记忆整合与身份保持的矛盾，本文提出将记忆巩固作为片段记忆到语义记忆的确定性函数，不改变智能体身份。该方法维护了加密认证的身份哈希，同时实现知识整合。该工作为需要长期记忆的搜索智能体提供了合规的记忆管理方案。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.01531v1",
+      "source": "arxiv",
+      "title": "OPINE-World: Programmatic World Modeling with Ontology-error-Prioritized Interactive Exploration",
+      "abstract": "Learning how an environment behaves from interaction is central to building agents that adapt to unfamiliar tasks. World models learned with deep networks are flexible but data-hungry and transfer poorly beyond their training distribution. Program-synthesized world models, written as source code by LLMs and refined through counterexample-guided inductive synthesis (CEGIS), are instead data-efficient and reusable, yet they have been demonstrated mainly on structured-state worlds with a given object vocabulary, and a single program search does not scale to pixel-rendered environments whose object structure must be hypothesized flexibly. We introduce OPINE-World, an LLM agent that learns an object-centric programmatic world model online from interaction. OPINE-World couples two cooperating agents in a loop of hypothesis and test, one acting in the environment and one synthesizing the model in code with replay verification and model-based planning, and it steers exploration with a Bayesian measure of object-type adequacy we call ontology error. We evaluate OPINE-World on ARC-AGI-3, a benchmark for skill-acquisition efficiency in which the object vocabulary, the goal, and the action semantics are withheld. OPINE-World solves 20 of 25 games without per-game training and reaches an action-efficiency score of 78.4 against the human baseline.",
+      "authors": [
+        "David Courtis",
+        "Wenhao Li",
+        "Scott Sanner"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-07-01T23:04:47+00:00",
+      "link": "https://arxiv.org/pdf/2607.01531v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "LLM agent learns world model through interactive exploration",
+      "llm_evidence_cn": "LLM代理通过交互探索学习世界模型",
+      "llm_evidence": "LLM代理通过交互探索学习世界模型",
+      "canonical_evidence": "LLM代理通过交互探索学习世界模型",
+      "llm_tldr_en": "Introduces OPINE-World, an LLM agent learning object-centric programmatic world models via ontology-error-prioritized interactive exploration, enabling data-efficient reuse for new tasks.",
+      "llm_tldr_cn": "该论文提出OPINE-World，LLM代理通过交互探索学习以对象为中心的程序化世界模型，利用本体错误优先探索策略在像素环境中高效学习可复用模型。这体现代理通过自身交互提升能力，符合自进化主题。",
+      "llm_tldr": "该论文提出OPINE-World，LLM代理通过交互探索学习以对象为中心的程序化世界模型，利用本体错误优先探索策略在像素环境中高效学习可复用模型。这体现代理通过自身交互提升能力，符合自进化主题。",
+      "llm_tags": [
+        "query:self-evolve:composite"
+      ],
+      "matched_query_tag": "query:self-evolve:composite",
+      "matched_query_text": "Papers central to 自进化智能体, especially work that connects or combines: r; on-policy distillation; long-horizon agent reasoning; data-free agent training; self-evolving agents; synthetic trajectory construction, verification, and curriculum shaping for autonomous agents; on policy reinforcement learning and distillation for long horizon agent trajectories; data free or self generated training for multi turn tool using agents.",
+      "matched_requirement_id": "req-composite-self-evolve",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
