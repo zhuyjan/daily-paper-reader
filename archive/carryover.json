@@ -1,17 +1,184 @@
 {
-  "generated_at": "2026-07-06T21:44:59.463427+00:00",
-  "updated_date": "20260706",
+  "generated_at": "2026-07-07T22:05:00.842809+00:00",
+  "updated_date": "20260707",
   "carryover_days": 9,
   "tag_states": {
     "search-agent": {
-      "updated_date": "20260706",
+      "updated_date": "20260707",
       "carryover_days": 9,
-      "items": []
+      "items": [
+        {
+          "id": "2607.04718v1",
+          "source": "arxiv",
+          "title": "FORGE: Research-Trajectory Hijacking Attacks on Deep Research Agents",
+          "abstract": "Deep research agents decompose open-ended queries into subtasks, retrieve web evidence over multiple rounds, and synthesize long-form reports. This workflow creates a planning-layer poisoning surface: adversarial documents that enter the retrieval pool can steer follow-up questions and turn a local injection into report-level contamination. We present FORGE (Fabricated Orchestrated Reasoning chain for aGent Exploitation), a two-level attack that combines intra-document reasoning fabrication with inter-document chain coordination to hijack subtask planning. We further introduce the PRISM metric, which weights infected report claims by cognitive type, and Root Query Anchoring, a lightweight defense that ties recursive follow-up generation to the root query. Across 25 queries, Network FORGE reaches 26.4% PRISM with five injected documents and exhibits depth migration, in which recursive synthesis shifts poisoned content from overt framing into factual premises. On the 10-query defense subset, RQA (Root Query Anchoring) reduces PRISM from 38.5% to 18.3%.",
+          "authors": [
+            "Yue Pan",
+            "Ziheng Zhang",
+            "Junxiang Lei",
+            "Changhao Jia",
+            "Qingyi Si",
+            "Hongcheng Guo"
+          ],
+          "primary_category": "cs.AI",
+          "categories": [
+            "cs.AI"
+          ],
+          "published": "2026-07-06T06:43:21+00:00",
+          "link": "https://arxiv.org/pdf/2607.04718v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "attack on deep research agents revealing planning-layer vulnerabilities",
+          "llm_evidence_cn": "针对深度研究智能体的攻击，揭示规划层漏洞",
+          "llm_evidence": "针对深度研究智能体的攻击，揭示规划层漏洞",
+          "canonical_evidence": "针对深度研究智能体的攻击，揭示规划层漏洞",
+          "llm_tldr_en": "FORGE attacks deep research agents by injecting adversarial documents that hijack subtask planning, demonstrating serious security risks.",
+          "llm_tldr_cn": "深度研究智能体将开放查询分解为子任务并多轮检索证据，本文揭示其规划层存在攻击面：敌对文档可劫持后续子任务规划导致报告污染。作者提出FORGE攻击，结合文档内推理伪造和文档间协调链，并设计PRISM指标量化污染。同时提出根查询锚定防御，有效提升深度研究智能体的鲁棒性。",
+          "llm_tldr": "深度研究智能体将开放查询分解为子任务并多轮检索证据，本文揭示其规划层存在攻击面：敌对文档可劫持后续子任务规划导致报告污染。作者提出FORGE攻击，结合文档内推理伪造和文档间协调链，并设计PRISM指标量化污染。同时提出根查询锚定防御，有效提升深度研究智能体的鲁棒性。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "deep research agents",
+          "matched_requirement_id": "req-3",
+          "selection_source": "carryover_cache",
+          "paper_id": "2607.04718v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2607.04391v1",
+          "source": "arxiv",
+          "title": "Memory-Orchestrated Semantic System (MOSS): An Auditable Agentic Memory Architecture",
+          "abstract": "Long-term memory remains a structural weakness of AI agents. The dominant approach, retrieval-augmented generation (RAG), relies on embedding-based similarity search, which is opaque by construction, difficult to audit, and bounded by the theoretical limits of vector representations. We present the Memory-Orchestrated Semantic System (MOSS), an agentic memory architecture in which the agent drives retrieval over a structured relational database. MOSS is model-agnostic, storage-agnostic, and API-agnostic: it runs on any relational engine, connects to any LLM provider (or to deterministic non-LLM processes), and deploys on any infrastructure, local or cloud. Its retrieval execution is symbolic and reproducible (once a query is formulated, no LLM participates in the retrieval loop) and every step of the system, from indexing to answer formulation, is logged and inspectable, making MOSS auditable by construction. Rather than imposing an external ontology, MOSS derives its conceptual vocabulary from the corpus itself. We report on a longitudinal deployment unique in the agentic-memory literature: a year of continuous production over an individual scholar's working corpus--a conversational corpus reaching back to October 2024 (some 44 million tokens, retroactively indexed) comprising 110,183 segments, alongside 163,494 catalogued documents, 569 inductively derived concepts, 322,662 concept annotations, and eleven metadata graphs totaling approximately five million relations--across four successive infrastructure generations. While the present case is that of a single researcher, the architecture is in no way specific to one person: it serves a team, an institution, or any entity that accumulates knowledge over time. We argue that auditable, sovereign, structurally unbounded memory is a precondition for AI agents intended to accompany a person or an organization over years rather than sessions.",
+          "authors": [
+            "Serge Lacasse",
+            "Jérémie Hatier",
+            "Alex Baker"
+          ],
+          "primary_category": "cs.CL",
+          "categories": [
+            "cs.CL"
+          ],
+          "published": "2026-07-05T16:35:19+00:00",
+          "link": "https://arxiv.org/pdf/2607.04391v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "agentic memory architecture with structured relational database for auditable retrieval",
+          "llm_evidence_cn": "基于结构化关系数据库的可审计智能体记忆架构",
+          "llm_evidence": "基于结构化关系数据库的可审计智能体记忆架构",
+          "canonical_evidence": "基于结构化关系数据库的可审计智能体记忆架构",
+          "llm_tldr_en": "MOSS presents an auditable agentic memory architecture where agents drive retrieval over a structured relational database, enabling symbolic, reproducible search without embedding opacity.",
+          "llm_tldr_cn": "现有RAG记忆架构基于向量检索，不透明且难以审计，限制了搜索智能体的可解释性。本文提出MOSS，一种基于结构化关系数据库的智能体记忆架构，智能体自主驱动符号化检索。该系统支持任意关系引擎和LLM，检索过程可审计、可复现。MOSS为需要显式工作记忆和证据管理的搜索智能体提供了透明且高效的记忆方案。",
+          "llm_tldr": "现有RAG记忆架构基于向量检索，不透明且难以审计，限制了搜索智能体的可解释性。本文提出MOSS，一种基于结构化关系数据库的智能体记忆架构，智能体自主驱动符号化检索。该系统支持任意关系引擎和LLM，检索过程可审计、可复现。MOSS为需要显式工作记忆和证据管理的搜索智能体提供了透明且高效的记忆方案。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+          "matched_requirement_id": "req-7",
+          "selection_source": "carryover_cache",
+          "paper_id": "2607.04391v1",
+          "carry_days": 1
+        }
+      ]
     },
     "self-evolve": {
-      "updated_date": "20260706",
+      "updated_date": "20260707",
       "carryover_days": 9,
-      "items": []
+      "items": [
+        {
+          "id": "2607.04235v1",
+          "source": "arxiv",
+          "title": "Spinning Straw into Gold: Relabeling LLM Agent Trajectories in Hindsight for Successful Demonstrations",
+          "abstract": "Large language model agents operate in partially observable, long-horizon settings where obtaining supervision remains a major bottleneck. We address this by utilizing a source of supervision overlooked in existing post-training methods: unintended yet successful goals embedded within agent rollouts. Specifically, we introduce Hindsight Supervised Learning (HSL), where an auxiliary LLM reviews each completed trajectory and relabels it with all of the natural-language goals the agent actually achieved. HSL then pairs the trajectory with its relabeled goals and uses these pairs for additional fine-tuning. To mitigate suboptimality in the relabeled data, we propose two learning techniques for HSL, irrelevant-action masking and sample reweighting. Our experiments show that HSL is flexible and compatible with existing post-training pipelines. It improves both SFT and DPO, with larger gains on long-horizon tasks with more diverse goal spaces. Moreover, HSL is sample-efficient: on ALFWorld, it surpasses baselines trained on the full dataset while using only one quarter of the ground-truth demonstrations.",
+          "authors": [
+            "Zichao Li",
+            "Gang Wu",
+            "Zichao Wang",
+            "Ruiyi Zhang",
+            "Wanrong Zhu",
+            "Ryan A. Rossi",
+            "Vlad I Morariu",
+            "Jihyung Kil"
+          ],
+          "primary_category": "cs.CL",
+          "categories": [
+            "cs.CL"
+          ],
+          "published": "2026-07-05T11:21:26+00:00",
+          "link": "https://arxiv.org/pdf/2607.04235v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "synthetic trajectory construction via hindsight relabeling",
+          "llm_evidence_cn": "通过事后重标记构建合成轨迹",
+          "llm_evidence": "通过事后重标记构建合成轨迹",
+          "canonical_evidence": "通过事后重标记构建合成轨迹",
+          "llm_tldr_en": "HSL relabels LLM agent trajectories with goals actually achieved, creating synthetic demonstrations for fine-tuning, addressing supervision bottleneck in long-horizon settings.",
+          "llm_tldr_cn": "针对长程智能体训练中监督信号稀缺的问题，本文提出事后监督学习（HSL），利用辅助LLM审查已完成轨迹，将其实际达成的自然语言目标重新标注，生成合成成功演示用于微调。同时提出无关动作掩码等学习技术以缓解次优数据问题。该方法有效利用原本被忽视的未预期成功轨迹，为数据匮乏的长程智能体训练提供了新的自生成数据方案。",
+          "llm_tldr": "针对长程智能体训练中监督信号稀缺的问题，本文提出事后监督学习（HSL），利用辅助LLM审查已完成轨迹，将其实际达成的自然语言目标重新标注，生成合成成功演示用于微调。同时提出无关动作掩码等学习技术以缓解次优数据问题。该方法有效利用原本被忽视的未预期成功轨迹，为数据匮乏的长程智能体训练提供了新的自生成数据方案。",
+          "llm_tags": [
+            "query:self-evolve"
+          ],
+          "matched_query_tag": "query:self-evolve",
+          "matched_query_text": "synthetic trajectory construction, verification, and curriculum shaping for autonomous agents",
+          "matched_requirement_id": "req-13",
+          "selection_source": "carryover_cache",
+          "paper_id": "2607.04235v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2607.04242v1",
+          "source": "arxiv",
+          "title": "Progress- and Reliability-Oriented Group Policy Optimization for Agentic Reinforcement Learning",
+          "abstract": "Group-based reinforcement learning (RL) has become an effective paradigm for improving large language model agents on long-horizon interactive tasks. To obtain finer-grained policy updates than trajectory-level optimization, recent work has moved toward step-level group-based RL, where intermediate steps are grouped and compared within a rollout batch. However, step-level advantage estimation is sensitive to how groups are formed: grouping by broad state keys improves coverage but may compare actions taken under different histories, while enforcing historical consistency yields fairer comparisons at the cost of fragmented groups and missing peer-comparison signal. In this paper, we propose ProGPO (Progress- and Reliability-Oriented Group Policy Optimization), a learned-critic-free method for context-consistent step-level learning. ProGPO keeps exact-prefix action comparison, and complements sparse peer comparisons with transition credit derived from rollout-based state potentials. To estimate these potentials reliably, ProGPO combines semantic expansion with inverse-variance fusion across history depths. We evaluate ProGPO on two challenging agentic tasks, ALFWorld and WebShop, with Qwen2.5-1.5B-Instruct. Results show that ProGPO improves over matched agentic RL baselines under comparable computational overhead, and additional Qwen2.5-3B-Instruct experiments further test the scalability of the proposed method.",
+          "authors": [
+            "Mingxuan Fan",
+            "Peiyang Liu"
+          ],
+          "primary_category": "cs.AI",
+          "categories": [
+            "cs.AI"
+          ],
+          "published": "2026-07-05T11:41:46+00:00",
+          "link": "https://arxiv.org/pdf/2607.04242v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "group-based RL for long-horizon agent tasks with progress and reliability orientation",
+          "llm_evidence_cn": "面向长程智能体任务的渐进与可靠性导向分组强化学习",
+          "llm_evidence": "面向长程智能体任务的渐进与可靠性导向分组强化学习",
+          "canonical_evidence": "面向长程智能体任务的渐进与可靠性导向分组强化学习",
+          "llm_tldr_en": "Proposes ProGPO, a progress- and reliability-oriented group policy optimization for step-level group-based RL, improving LLM agents on long-horizon interactive tasks.",
+          "llm_tldr_cn": "分组强化学习在长程交互任务中有效，但步骤级优势估计对分组方式敏感。本文提出ProGPO，通过渐进和可靠性导向的分组策略，在保持历史一致性的同时扩大比较信号。在多个具身和网络任务上，ProGPO优于基于轨迹和现有步骤级方法，为长程智能体训练提供了更细粒度的优化方法。",
+          "llm_tldr": "分组强化学习在长程交互任务中有效，但步骤级优势估计对分组方式敏感。本文提出ProGPO，通过渐进和可靠性导向的分组策略，在保持历史一致性的同时扩大比较信号。在多个具身和网络任务上，ProGPO优于基于轨迹和现有步骤级方法，为长程智能体训练提供了更细粒度的优化方法。",
+          "llm_tags": [
+            "query:self-evolve"
+          ],
+          "matched_query_tag": "query:self-evolve",
+          "matched_query_text": "long-horizon agent reasoning",
+          "matched_requirement_id": "req-10",
+          "selection_source": "carryover_cache",
+          "paper_id": "2607.04242v1",
+          "carry_days": 1
+        }
+      ]
     }
   }
 }
