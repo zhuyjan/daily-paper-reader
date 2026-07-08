@@ -6,88 +6,77 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-07
-- 运行时间：2026-07-07 22:18:40 UTC
+- 最新运行日期：2026-07-08
+- 运行时间：2026-07-08 20:54:26 UTC
 - 运行状态：成功
-- 本次总论文数：22
-- 精读区：10
+- 本次总论文数：19
+- 精读区：7
 - 速读区：12
 
 ### 今日简报（AI）
-今日聚焦智能体训练与评估，精读10篇，满分推荐奖励门控策略蒸馏与智能体自进化基准测试。  
-最值得关注的方向是“奖励门控在线策略蒸馏”提升训练效率，以及“EvoAgentBench”标准化智能体能力迁移评估。  
-建议优先精读两篇满分论文，并关注智能体世界模型校准和环境探测方法。
-- 详情：[/202607/07/README](/202607/07/README)
+今日共推荐19篇论文，其中精读7篇、速读12篇，以9.0高分领跑的两篇聚焦智能体强化学习与多工具视频深度研究。最值得关注的是《VideoSearcher》用强化学习实现多工具智能体推理，以及《Progress- and Reliability-Oriented Group Policy Optimization》提出的可靠性优先组策略优化。建议普通读者优先了解强化学习驱动智能体与可审计记忆架构（如MOSS）的交叉方向，这是当前效率与安全并重的热点。
+- 详情：[/202607/08/README](/202607/08/README)
 
 ### 精读区论文标签
-1. [Reward-Gated On-Policy Distillation](/202607/07/2607.04037v1-reward-gated-on-policy-distillation)  
-   标签：评分：10.0/10、query:self-evolve
-   evidence：奖励门控的在线策略蒸馏
-2. [EvoAgentBench: Benchmarking Agent Self-Evolution via Ability Transfer](/202607/07/2607.05202v1-evoagentbench-benchmarking-agent-self-evolution-via-ability-transfer)  
-   标签：评分：10.0/10、query:self-evolve
-   evidence：通过能力迁移实现智能体自我进化的基准
-3. [Multi-Turn Agentic Scientific Literature Search via Workflow Induction](/202607/07/2607.00597v2-multi-turn-agentic-scientific-literature-search-via-workflow-induction)  
+1. [VideoSearcher: Empowering Video Deep Research with Multi-Tool Agentic Reasoning via Reinforcement Learning](/202607/08/2607.02927v1-videosearcher-empowering-video-deep-research-with-multi-tool-agentic-reasoning-via-reinforcement-learning)  
    标签：评分：9.0/10、query:search-agent
-   evidence：多轮科学搜索代理结合工作流归纳与证据提取
-4. [VideoSearcher: Empowering Video Deep Research with Multi-Tool Agentic Reasoning via Reinforcement Learning](/202607/07/2607.02927v1-videosearcher-empowering-video-deep-research-with-multi-tool-agentic-reasoning-via-reinforcement-learning)  
+   evidence：用于视频深度研究的多模态搜索代理，结合强化学习
+2. [Progress- and Reliability-Oriented Group Policy Optimization for Agentic Reinforcement Learning](/202607/08/2607.04242v1-progress--and-reliability-oriented-group-policy-optimization-for-agentic-reinforcement-learning)  
+   标签：评分：9.0/10、query:self-evolve
+   evidence：面向长时程智能体轨迹的在策略强化学习
+3. [When Should LLMs Search? Counterfactual Supervision for Search Routing](/202607/08/2607.05752v1-when-should-llms-search-counterfactual-supervision-for-search-routing)  
    标签：评分：9.0/10、query:search-agent
-   evidence：多模态深度研究智能体，使用强化学习
-5. [Incentivizing Vision Language Models to Search for Long Video Question Answering](/202607/07/2607.02959v1-incentivizing-vision-language-models-to-search-for-long-video-question-answering)  
+   evidence：使用反事实监督解决LLM的搜索路由问题，直接相关于智能体搜索
+4. [TurnOPD: Making On-Policy Distillation Turn-Aware for Efficient Long-Horizon Agent Training](/202607/08/2607.05804v1-turnopd-making-on-policy-distillation-turn-aware-for-efficient-long-horizon-agent-training)  
+   标签：评分：9.0/10、query:self-evolve
+   evidence：面向长周期智能体的在线策略蒸馏，带有回合级预算策略
+5. [SearchEyes: Towards Frontier Multimodal Deep Search Intelligence via Search World Simulation](/202607/08/2607.05943v1-searcheyes-towards-frontier-multimodal-deep-search-intelligence-via-search-world-simulation)  
    标签：评分：9.0/10、query:search-agent
-   evidence：使用强化学习进行多轮检索和证据收集
-6. [SelfMem: Self-Optimizing Memory for AI Agents](/202607/07/2607.03726v1-selfmem-self-optimizing-memory-for-ai-agents)  
+   evidence：多模态搜索智能体，模拟搜索世界，多跳推理
+6. [CurateEvo: Data-Curation Evolving for Agentic Post-Training](/202607/08/2607.06140v1-curateevo-data-curation-evolving-for-agentic-post-training)  
    标签：评分：9.0/10、query:self-evolve
-   evidence：自优化记忆框架
-7. [Harness-Aware Self-Evolving: Co-Evolving Model Weights, Harness, and Task Solutions](/202607/07/2607.03935v1-harness-aware-self-evolving-co-evolving-model-weights-harness-and-task-solutions)  
-   标签：评分：9.0/10、query:self-evolve
-   evidence：自进化框架，通过强化学习协同进化模型、框架与解决方案
-8. [Multi-Turn On-Policy Distillation with Prefix Replay](/202607/07/2607.04763v1-multi-turn-on-policy-distillation-with-prefix-replay)  
-   标签：评分：9.0/10、query:self-evolve
-   evidence：多轮在线策略蒸馏与前缀回放
-9. [MetaSkill-Evolve: Recursive Self-Improvement of LLM Agents via Two-Timescale Meta-Skill Evolution](/202607/07/2607.05297v1-metaskill-evolve-recursive-self-improvement-of-llm-agents-via-two-timescale-meta-skill-evolution)  
-   标签：评分：9.0/10、query:self-evolve
-   evidence：通过元技能进化实现智能体递归自改进
-10. [CompactionRL: Reinforcement Learning with Context Compaction for Long-Horizon Agents](/202607/07/2607.05378v1-compactionrl-reinforcement-learning-with-context-compaction-for-long-horizon-agents)  
-   标签：评分：9.0/10、query:self-evolve
-   evidence：用于长视野智能体的上下文压缩强化学习
+   evidence：失败驱动的数据策展进化用于智能体后训练
+7. [Information Gain-based Rollout Policy Optimization: An Adaptive Tree-Structured Rollout Approach for Multi-Turn LLM Agents](/202607/08/2607.06223v1-information-gain-based-rollout-policy-optimization-an-adaptive-tree-structured-rollout-approach-for-multi-turn-llm-agents)  
+   标签：评分：9.0/10、query:search-agent
+   evidence：多轮搜索的强化学习
 
 ### 速读区论文标签
-1. [Ask the World Before Acting: Environment Probing for Calibrated Agent World Models](/202607/07/2606.31422v2-ask-the-world-before-acting-environment-probing-for-calibrated-agent-world-models)  
+1. [Spinning Straw into Gold: Relabeling LLM Agent Trajectories in Hindsight for Successful Demonstrations](/202607/08/2607.04235v1-spinning-straw-into-gold-relabeling-llm-agent-trajectories-in-hindsight-for-successful-demonstrations)  
    标签：评分：8.0/10、query:self-evolve
-   evidence：环境探测用于长程智能体世界模型
-2. [Agentic and Generative AI for Open-Source Intelligence and Cyber Investigations: Taxonomy, Evaluation, Challenges, and Future Directions](/202607/07/2607.03233v1-agentic-and-generative-ai-for-open-source-intelligence-and-cyber-investigations-taxonomy-evaluation-challenges-and-future-directions)  
+   evidence：后验标记代理轨迹用于自我改进
+2. [Memory-Orchestrated Semantic System (MOSS): An Auditable Agentic Memory Architecture](/202607/08/2607.04391v1-memory-orchestrated-semantic-system-moss-an-auditable-agentic-memory-architecture)  
    标签：评分：8.0/10、query:search-agent
-   evidence：开放源代码情报中的智能体AI综述，直接与搜索智能体相关
-3. [No Time Like the Present: Agentic Test-Time Training for LLM Agents](/202607/07/2607.03441v1-no-time-like-the-present-agentic-test-time-training-for-llm-agents)  
-   标签：评分：8.0/10、query:self-evolve
-   evidence：持续测试时训练加词元级重加权，用于LLM智能体的在线策略自训练
-4. [SkillOpt-Lite: Better and Faster Agent Self-evolution via One Line of Vibe](/202607/07/2607.03451v1-skillopt-lite-better-and-faster-agent-self-evolution-via-one-line-of-vibe)  
-   标签：评分：8.0/10、query:self-evolve
-   evidence：基于零阶技能优化的极简智能体自进化流水线
-5. [Agent Reinforcement Learning via Pivotal-Aware Self-Feedback Retry](/202607/07/2607.03702v1-agent-reinforcement-learning-via-pivotal-aware-self-feedback-retry)  
-   标签：评分：8.0/10、query:self-evolve
-   evidence：自我反馈重试框架，提升长程推理智能体性能
-6. [Bridging Interleaved Multi-Modal Reasoning as a Unified Decision Process](/202607/07/2607.03748v1-bridging-interleaved-multi-modal-reasoning-as-a-unified-decision-process)  
+   evidence：可审计的智能体记忆架构，基于结构化检索
+3. [FORGE: Research-Trajectory Hijacking Attacks on Deep Research Agents](/202607/08/2607.04718v1-forge-research-trajectory-hijacking-attacks-on-deep-research-agents)  
    标签：评分：8.0/10、query:search-agent
-   evidence：用于多轮交错多模态推理的强化学习
-7. [Learning Generalizable Skill Policy with Data-Efficient Unsupervised RL](/202607/07/2607.00392v1-learning-generalizable-skill-policy-with-data-efficient-unsupervised-rl)  
+   evidence：针对深度研究智能体的攻击方法
+4. [CHARLIE: An On-Premise Multi-Agent Retrieval-Augmented Generation System for Evidential Reasoning in Forensic Science](/202607/08/2607.05428v1-charlie-an-on-premise-multi-agent-retrieval-augmented-generation-system-for-evidential-reasoning-in-forensic-science)  
+   标签：评分：8.0/10、query:search-agent
+   evidence：多智能体RAG，具备证据推理与验证机制
+5. [Retrieving a Set, Not Independent Passages: Set-Level Compatibility Learning for Efficient Set Exploration](/202607/08/2607.05712v1-retrieving-a-set-not-independent-passages-set-level-compatibility-learning-for-efficient-set-exploration)  
+   标签：评分：8.0/10、query:search-agent
+   evidence：面向多跳证据收集的集合级检索
+6. [From Passive Retrieval to Active Memory Navigation: Learning to Use Memory as a Structured Action Space](/202607/08/2607.05794v1-from-passive-retrieval-to-active-memory-navigation-learning-to-use-memory-as-a-structured-action-space)  
+   标签：评分：8.0/10、query:search-agent
+   evidence：主动记忆导航用于证据整理
+7. [Demonstrating TOFFEE: A Learned System for Synthesizing Data Agent Trajectories at Scale](/202607/08/2607.06233v1-demonstrating-toffee-a-learned-system-for-synthesizing-data-agent-trajectories-at-scale)  
+   标签：评分：8.0/10、query:self-evolve
+   evidence：数据智能体轨迹的合成构建
+8. [APeB: Benchmarking Personalization Ability of Large Language Model Agents](/202607/08/2607.03162v1-apeb-benchmarking-personalization-ability-of-large-language-model-agents)  
+   标签：评分：7.0/10、query:search-agent
+   evidence：搜索智能体个性化基准
+9. [PLACEMEM: Toward a Compute-Aware Memory Plane for Lifelong Agents](/202607/08/2607.04089v1-placemem-toward-a-compute-aware-memory-plane-for-lifelong-agents)  
+   标签：评分：7.0/10、query:search-agent
+   evidence：面向终身智能体的版本化内存胶囊
+10. [Learning to Control LLM Agent Harnesses with Offline Reinforcement Learning](/202607/08/2607.05458v1-learning-to-control-llm-agent-harnesses-with-offline-reinforcement-learning)  
    标签：评分：7.0/10、query:self-evolve
-   evidence：无监督强化学习技能策略，数据高效且无需奖励
-8. [Object-Centric Environment Modeling for Agentic Tasks](/202607/07/2607.02846v1-object-centric-environment-modeling-for-agentic-tasks)  
-   标签：评分：7.0/10、query:self-evolve
-   evidence：面向智能体自进化的目标中心环境建模
-9. [STAPO: Selective Trajectory-Aware Policy Optimization for LLM Agent Training](/202607/07/2607.04963v1-stapo-selective-trajectory-aware-policy-optimization-for-llm-agent-training)  
-   标签：评分：7.0/10、query:self-evolve
-   evidence：用于长时程LLM智能体训练的强化学习策略优化
-10. [Sparse Sensor Placement in Multi-Agent Reinforcement Learning Control of Rayleigh-Bénard Convection](/202607/07/2606.30238v1-sparse-sensor-placement-in-multi-agent-reinforcement-learning-control-of-rayleigh-bnard-convection)  
-   标签：评分：6.0/10、query:self-evolve
-   evidence：从专家策略在线蒸馏到稀疏学徒策略
-11. [PLACEMEM: Toward a Compute-Aware Memory Plane for Lifelong Agents](/202607/07/2607.04089v1-placemem-toward-a-compute-aware-memory-plane-for-lifelong-agents)  
+   evidence：使用离线强化学习训练LLM智能体框架控制器，类似于智能体轨迹的在线策略蒸馏
+11. [StateFuse: Deterministic Conflict-Preserving Memory for Multi-Agent Systems](/202607/08/2607.05844v1-statefuse-deterministic-conflict-preserving-memory-for-multi-agent-systems)  
+   标签：评分：7.0/10、query:search-agent
+   evidence：用于智能体证据整理和声明追踪的冲突感知复制记忆
+12. [Akashic: A Low-Overhead LLM Inference Service with MemAttention](/202607/08/2607.05708v1-akashic-a-low-overhead-llm-inference-service-with-memattention)  
    标签：评分：6.0/10、query:search-agent
-   evidence：面向终身智能体的版本化记忆胶囊
-12. [MRMS: A Multi-Resolution Memory Substrate for Long-Lived AI Agents](/202607/07/2607.04617v1-mrms-a-multi-resolution-memory-substrate-for-long-lived-ai-agents)  
-   标签：评分：6.0/10、query:search-agent
-   evidence：多分辨率记忆基底支持证据区分
+   evidence：LLM智能体记忆的上下文分块和语义关系建模
 
 
 <div class="dpr-home-promo-card">

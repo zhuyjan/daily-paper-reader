@@ -1,0 +1,252 @@
+Title: CHARLIE: An On-Premise Multi-Agent Retrieval-Augmented Generation System for Evidential Reasoning in Forensic Science
+
+URL Source: https://arxiv.org/pdf/2607.05428v1
+
+Published Time: Wed, 08 Jul 2026 00:01:17 GMT
+
+Number of Pages: 14
+
+Markdown Content:
+# CHARLIE: An On-Premise Multi-Agent Retrieval-Augmented Generation System for Evidential Reasoning in Forensic Science 
+
+Presented at the 1st Workshop on Reasoning with Evidence in Law Enforcement and Forensics (RELAF 2026), co-located with the 21st International Conference on Artificial Intelligence and Law (ICAIL 2026), Singapore, June 2026. This manuscript is the archival version of the work. Leandro D. Carneiro 1,2 , André L. S. Meirelles 1, Juliano de A. Gomes 1 and Rafael C. A. Cabral 1,2 
+
+> 1
+
+Forensic Institute, Civil Police of Federal District, Brazil 
+
+> 2
+
+University of Brasília, Brazil 
+
+Abstract 
+
+We present Charlie, an on-premise multi-agent Retrieval-Augmented Generation (RAG) system for structured evidential processing in digital forensic environments. Contemporary forensic workflows must handle large volumes of heterogeneous and unstructured documents under strict requirements of traceability, confidentiality, and legal compliance. Charlie addresses this challenge through a controlled agent architecture that combines local retrieval, task decomposition, structured memory, and verification mechanisms. Unlike cloud-based systems, it operates entirely within institutional infrastructure, preserving data sovereignty and evidential integrity. We describe the system’s architecture, including its transition from classical RAG to agent-based orchestration, and demonstrate its application in real-world forensic scenarios. Case studies show that Charlie enables scalable multi-document data extraction and supports longitudinal forensic intelligence generation while maintaining traceability and auditability. Our results indicate that agent-orchestrated, on-premise RAG architectures can effectively support evidential workflows without compromising legal and institutional constraints. Charlie provides a practical and reproducible blueprint for deploying AI systems in high-stakes forensic environments. This manuscript is an archival version of a paper presented at the RELAF 2026 Workshop. 
+
+# 1. Introduction 
+
+Contemporary digital forensics operates under conditions of increasing data saturation. Modern criminal investigations generate large volumes of heterogeneous and predominantly unstructured information, including crime scene reports, laboratory analyses, digital extractions, and geospatial data. These materials are distributed across multiple formats and repositories, often lacking standardized structure and machine-readable organization. As a result, forensic institutions face a growing mismatch between evidential data volume and the bounded cognitive capacity of human analysts. Forensic analysis requires not only interpretation of individual documents but also structured ex-traction, cross-document correlation, and identification of recurring entities and patterns, all under strict requirements of traceability, reproducibility, and chain-of-custody compliance. The challenge is therefore to scale evidential processing while preserving procedural integrity. Recent advances in Large Language Models (LLMs) have demonstrated strong capabilities in natural language understanding, information extraction, and contextual reasoning [ 1 , 2 , 3 ]. These capabilities suggest potential for supporting large-scale evidential processing. However, naive deployment of LLMs in forensic contexts introduces significant risks. LLMs are probabilistic systems that may produce hallucinated outputs under incomplete context [4]. In addition, context-window limitations constrain multi-document analysis, cloud-based inference raises data sovereignty and confidentiality concerns, and opaque reasoning processes hinder auditability and legal scrutiny. 
+
+RELAF 2026: 1st Workshop on Reasoning with Evidence in Law Enforcement and Forensics, co-located with ICAIL 2026, Singapore, June 2026  
+
+> ©2026 Copyright for this paper by its authors. Use permitted under Creative Commons License Attribution 4.0 International (CC BY 4.0).
+
+These constraints are particularly critical in forensic environments, where sensitive data and evidential materials are subject to strict legal and institutional controls. AI systems in such contexts must therefore ensure data sovereignty, traceability, explainability, and human oversight – a blueprint for high-stakes public security institutions worldwide. To address these requirements, we developed Charlie, an on-premise AI system designed for evidential processing within the Forensic Institute of the Civil Police of the Federal District (Brazil). Charlie is not a general-purpose conversational system but a domain-specific analytical infrastructure supporting structured information extraction, multi-document analysis, and evidential consolidation. The system operates entirely within institutional infrastructure, ensuring that no data are transmitted externally. It is built on open-source components and open-weight models, promoting transparency and long-term autonomy. Architecturally, Charlie integrates large language models within a multi-agent, retrieval-augmented framework that supports task decomposition, structured memory, and traceable synthesis [5, 6, 7]. This paper presents the design, architecture, and operational evaluation of Charlie. We describe its evolution from classical RAG to agent-based orchestration, demonstrate its application in real-world forensic scenarios, and analyze its legal and ethical implications. The results indicate that agent-orchestrated, on-premise RAG systems can support scalable evidential processing while preserving institutional control and procedural guarantees. Charlie contributes to the AI & Law literature by demonstrating that advanced language models can be integrated into forensic workflows through architectures explicitly aligned with sovereignty, auditability, and human-in-the-loop oversight. An earlier version of this work was presented at the RELAF 2026 Workshop, held in conjunction with ICAIL 2026. The present manuscript constitutes the archival version and includes minor revisions for clarity. 
+
+# 2. Related Work 
+
+Charlie lies at the intersection of five research fields: (i) computational models of evidential reasoning, (ii) probabilistic approaches to legal proof, (iii) knowledge representation in forensic domains, (iv) retrieval-augmented and agent-based architectures for grounded reasoning, and (v) agent architectures. 
+
+2.1. Computational Models of Evidential Reasoning 
+
+AI and Law research have extensively studied formal models of evidential reasoning, particularly argumentation frameworks and hybrid approaches combining logical and probabilistic elements [ 8 ]. These models capture the adversarial and defeasible nature of legal reasoning. However, they typically assume that evidential elements are already structured. In practice, forensic workflows face an upstream bottleneck: processing massive unstructured document volumes. Charlie addresses this preparatory layer by enabling scalable extraction and structuring of evidential data, supporting downstream reasoning models. 
+
+2.2. Probabilistic Legal Modeling 
+
+Bayesian networks have been widely applied to represent evidential dependencies and hypothesis evaluation in legal contexts [ 9 ]. While effective for modeling uncertainty, their construction requires manual identification of relevant variables and relationships. Charlie complements these approaches by automating large-scale extraction of candidate variables and attributes from forensic documents, facilitating subsequent probabilistic modeling. 2.3. Knowledge Representation in Forensic Domains 
+
+Knowledge representation efforts, such as CASE [ 10 ], aim to formalize investigative data through structured schemas capturing entities, relationships, and provenance. Charlie aligns with this perspective by producing structured, traceable outputs. Although not an ontology itself, its architecture supports transformation of unstructured narratives into machine-readable representations suitable for interoperability and further analysis. 
+
+2.4. Retrieval-Augmented Generation 
+
+Retrieval-Augmented Generation (RAG) improves factual grounding by conditioning LLM outputs on retrieved documents [ 5, 11 ]. While widely used in open-domain and enterprise applications, these systems typically operate without constraints related to confidentiality, auditability, or evidential integrity. Charlie adapts RAG to forensic environments by combining local retrieval, structured memory, and controlled execution, ensuring that all processing remains traceable and institutionally bounded. 
+
+2.5. Agent Architectures 
+
+Recent work on LLM-based agents highlights the role of planning, memory, and tool use in complex task execution [ 7 , 12 , 13 ]. Frameworks such as ReAct [ 6 ] enable dynamic interaction with external tools. However, many agent systems assume open access to external APIs, which is incompatible with forensic constraints. Charlie adopts an agentic approach but restricts actions to controlled internal operations, ensuring reproducibility and compliance with evidential requirements. 
+
+2.6. Positioning 
+
+Charlie contributes by integrating RAG and agent orchestration within a fully on-premise, sovereignty-preserving architecture. It addresses the upstream challenge of transforming unstructured forensic documents into structured, traceable representations, enabling scalable multi-document analysis under evidential constraints. Rather than replacing formal reasoning models, the system supports their application by bridging document processing and structured evidential representation. 
+
+# 3. Design Principles 
+
+Charlie’s architecture embeds forensic constraints (data sovereignty, auditability, and procedural in-tegrity) directly into its core design. Charlie was designed under normative, institutional, and procedural constraints intrinsic to forensic practice. Unlike general-purpose AI systems, forensic applications operate within regulated evidential environments where technical architecture must align with legal doctrine, procedural integrity, and institutional governance. Accordingly, the system is structured around five design principles: (i) data sovereignty, (ii) infras-tructural autonomy, (iii) evidential transparency, (iv) structured multi-document reasoning, and (v) modular scalability [7, 12]. 
+
+3.1. Data Sovereignty 
+
+Forensic datasets contain sensitive and legally protected information subject to strict regulatory frame-works. Charlie therefore operates entirely on-premise, ensuring that no documents, embeddings, or intermediate outputs are transmitted to external services. All components, including model inference, retrieval, and storage, are executed within institutional infrastructure. This design preserves confidentiality, reduces exposure to data leakage, and maintains alignment between computational processes and institutional jurisdiction. Data sovereignty is thus treated as an architectural constraint rather than an implementation choice. 
+
+3.2. Open-Source Autonomy 
+
+Charlie is built exclusively on open-source and open-weight technologies, including Qwen3:32B, vLLM [ 14 ], LangGraph, and local vector databases. This approach avoids vendor lock-in, enhances transparency, and supports long-term institutional sustainability. Open infrastructure enables inspection of system behavior and ensures that deployment, maintenance, and evolution remain under institutional control, aligning technological autonomy with governance requirements. 
+
+3.3. Evidential Transparency 
+
+Forensic outputs must be traceable and reproducible. Charlie incorporates transparency at the workflow level by logging query classification, task decomposition, retrieval results, intermediate outputs, and final synthesis steps. All generated outputs maintain explicit linkage to source documents, preserving the distinction between primary evidence and analytical artifacts. This design supports auditability and aligns with procedural requirements for evidential accountability [4]. 
+
+3.4. Structured Multi-Document Reasoning 
+
+Forensic analysis requires reasoning across document collections rather than isolated texts. Charlie ad-dresses this through task decomposition and structured aggregation, transforming complex instructions into atomic subqueries executed across document sets. Results are stored in structured memory representations before synthesis, enabling consistent format-ting, reducing cross-document contamination, and preserving traceability. This approach circumvents context-window limitations and supports scalable corpus-level analysis [5]. 
+
+3.5. Scalability and Modularity 
+
+Charlie supports both computational scalability, through parallel execution and optimized inference, and architectural extensibility. The system is designed as a modular framework in which additional components, such as probabilistic reasoning or knowledge representation modules, can be integrated without redesign. This modularity ensures adaptability to evolving forensic requirements and regulatory environments. 
+
+3.6. Summary 
+
+These principles embed legal and institutional constraints directly into system architecture. Charlie is therefore not a generic LLM application, but a governance-aligned evidential processing system in which technical design is subordinated to procedural legitimacy. 
+
+# 4. System Architecture 
+
+Charlie evolved from a classical Retrieval-Augmented Generation (RAG) configuration into a structured multi-agent evidential processing framework [ 5, 7, 12 ]. This transition reflects a shift from single-query response generation to orchestrated evidential workflows. 4.1. Controlled RAG Foundation 
+
+The system employs a secure, on-premise Retrieval-Augmented Generation (RAG) architecture [ 5 , 11 ]. Documents are preprocessed through text normalization, semantic chunking, and metadata association. Chunks are embedded using the nomic-embed-text model [ 15 ] executed locally via the Ollama framework [ 16 ]. The resulting embeddings are indexed in a local vector database, enabling efficient similarity-based retrieval while preserving full data sovereignty. Retrieval follows a two-stage pipeline: 
+
+• Dense retrieval: cosine similarity, top-𝑘 = 100 
+
+• Reranking: cross-encoder/ms-marco-MiniLM-L-6-v2 , top-𝑘 = 25 
+
+Retrieved fragments are incorporated into structured prompts, grounding generation in evidential context and reducing hallucination risk [4]. However, single-pass RAG exhibited limitations in multi-document extraction, lack of persistent aggregation, and inability to decompose complex tasks. 
+
+4.2. Agent-Orchestrated Processing 
+
+To address the limitations of traditional RAG pipelines in multi-document forensic contexts, Charlie introduces an agent-based orchestration layer [ 7, 13 ], as shown in Figure 1. This layer transforms the system from a passive question-answering interface into an active evidential workflow engine capable of structured reasoning over large document corpora. Incoming queries are first classified into task categories (e.g., direct query, structured extraction, aggregation, or complex analysis), determining the execution strategy. Complex instructions are then decomposed into atomic subqueries, enabling fine-grained processing. For a corpus of 𝑁 documents and 𝑀 target attributes, the system generates 𝑁 × 𝑀 subqueries, allowing scalable and systematic extraction across all sources. Each subquery is executed independently through the RAG pipeline, enabling parallel processing and avoiding the constraints of limited context windows. Retrieved information is stored in structured memory representations, such as tables or key-value mappings, with explicit provenance links to the originating documents. This ensures that all extracted data remains traceable and auditable. A final synthesis stage consolidates the structured memory into coherent outputs, including tables, JSON objects, or grounded summaries. By separating extraction from synthesis, the architecture improves robustness, reduces error propagation, and enables consistent handling of large-scale evidential datasets. Overall, this agent-orchestrated architecture integrates classification, decomposition, parallel exe-cution, structured memory, and synthesis into a unified pipeline. This design enables scalable multi-document processing, independence from context-window limitations, consistent structured extraction, and full document-level traceability, making it suitable for operational forensic environments. Figure 1: Charlie agent architecture and evidential workflow graph implemented using LangGraph. 
+
+4.3. Implementation Details 
+
+Documents are segmented into chunks of approximately 1,000 tokens with an overlap of 100 tokens, balancing contextual coherence with retrieval precision. This configuration was empirically chosen to preserve semantic continuity across segments while minimizing redundancy in the vector index. Embeddings are generated using the nomic-embed-text model executed locally via the Ollama framework, selected for its multilingual performance and compatibility with on-premise deployment constraints. This choice enables high-quality semantic representations without requiring external API calls, thereby preserving data sovereignty. Retrieval follows a two-stage pipeline combining dense vector search and cross-encoder reranking. Initially, the system retrieves the top-𝑘 = 100 most relevant chunks based on embedding similarity. These candidates are then reranked using a cross-encoder model ( ms-marco-MiniLM-L-6-v2 ) [ 17 ] , reducing the set to the top-𝑘 = 25 passages. This approach improves precision by incorporating deeper semantic matching during the reranking stage. Prompting strategies are tailored to each stage of the agent workflow, with state-specific prompts en-forcing structured outputs such as JSON objects, key-value pairs, and explicit null representations. This design ensures consistency across subqueries and facilitates downstream aggregation and validation. Orchestration is implemented using LangGraph as a directed execution graph, with nodes correspond-ing to classification, planning, decomposition, execution, memory update, validation, and synthesis. Transitions between nodes are deterministic and auditable, enabling full traceability of the processing pipeline. Inference is performed using the Qwen3-32B model deployed via vLLM on a cluster of four NVIDIA A40 GPUs with tensor parallelism. This configuration supports large-context processing (up to 131k tokens) and enables high-throughput parallel execution, which is essential for handling multi-document workloads in forensic scenarios. 4.4. Reproducibility 
+
+The system is fully specified in terms of segmentation, embedding, retrieval, prompting, orchestration, and inference configuration. While datasets are confidential, the architecture is reproducible under equivalent infrastructure. 
+
+# 5. Agent Architecture 
+
+Charlie implements an agent-based architecture grounded in the perception–reasoning–action paradigm [ 7 ,12 ]. Modern LLM agents extend this model by integrating probabilistic reasoning with retrieval, memory, and tool use [7, 12, 13]. In Charlie, this paradigm is adapted to a controlled evidential environment. The architecture is structured around five components: (i) Brain, (ii) Perception, (iii) Action, (iv) Memory, and (v) Self-Reflection. 
+
+5.1. Brain 
+
+The Brain is an open-weight LLM (Qwen3:32B) deployed locally via vLLM [ 14 ]. It performs instruction interpretation, subquery generation, contextual reasoning, and output synthesis. Charlie supports two inference modes: (i) a reasoning mode for complex, multi-step tasks, and (ii) a fast mode for simple grounded queries. This allows dynamic allocation of computational resources. All reasoning is strictly grounded in retrieved documents. The model does not access external resources, and all inputs are mediated by the Perception layer. 
+
+5.2. Perception 
+
+The Perception layer provides controlled access to evidential data through: 
+
+• Vector-based retrieval 
+
+• Chunk indexing and metadata 
+
+• Structured memory querying For each subquery, relevant document fragments are retrieved from the local corpus [ 5 , 11 ]. This ensures grounding, reduces hallucination risk, and preserves traceability through logged retrieval operations. Perception also enables access to previously stored structured memory, supporting cross-subquery consistency without requiring full corpus concatenation. 
+
+5.3. Action 
+
+The Action component defines the set of allowed operations. Unlike open-ended agent systems, Charlie restricts actions to predefined internal processes, including subquery generation, retrieval, parallel execution, structured output construction, and memory updates [6, 7]. This constraint ensures reproducibility, prevents uncontrolled behavior, and maintains compliance with evidential requirements. 
+
+5.4. Memory 
+
+Charlie implements both short-term working memory and structured persistent memory [ 7 , 13 ]. Struc-tured memory stores extracted attributes in tabular or key-value formats, maintaining explicit links to source documents. This enables accumulation of results across documents, avoids redundant processing, and supports grounded synthesis. Memory thus functions as an intermediate layer between raw text and higher-level analysis. 5.5. Self-Reflection 
+
+A validation layer performs completeness and consistency checks before final synthesis [ 7 , 13 ]. These include detection of missing fields, structural inconsistencies, ambiguous outputs, and potential halluci-nation signals [4]. If issues are identified, the pipeline can be re-executed. This mechanism reduces silent failures and improves robustness in structured extraction tasks. 
+
+5.6. Summary 
+
+By integrating Brain, Perception, Action, Memory, and Self-Reflection, Charlie implements a controlled agent architecture aligned with evidential constraints. The system operates on institutionally bounded data, executes predefined operations, preserves provenance, and validates outputs prior to synthesis. Rather than acting as an autonomous decision-maker, the agent functions as a structured reasoning component within a governed evidential workflow. 
+
+# 6. Operational Evaluation 
+
+Charlie was evaluated through deployment in real-world forensic scenarios within the Forensic Institute. Rather than using open-domain benchmarks, the system was assessed via operational case studies reflecting institutional workflows. The evaluation focused on (i) structured multi-document extraction, (ii) scalability, and (iii) longitudinal intelligence generation. The objective is not automated adjudication, but architectural support for scalable workflows. 
+
+6.1. Case Study I: Traffic Accident Intelligence 
+
+Dataset. A yearly corpus of approximately 2,000 forensic reports related to traffic accidents, including narrative descriptions, victim data, expert analysis, and geospatial information. 
+
+Task. Extraction of structured variables (e.g., incident ID, location, date, collision type, vehicle categories, injury severity) to generate datasets for geospatial and statistical analysis. 
+
+Processing. The system decomposed tasks into document-level subqueries, performed retrieval-grounded extraction, and aggregated results into a consolidated dataset [5, 11]. 
+
+Outcome. The resulting dataset enabled identification of accident clusters, visualization of high-risk segments, and temporal analysis. The system has supported four consecutive years of annual reporting, enabling longitudinal monitoring of traffic patterns. 
+
+6.2. Case Study II: Femicide Pattern Analysis 
+
+Dataset. Forensic reports from femicide investigations in the Federal District, containing heterogeneous narrative descriptions of crime scenes, victim profiles, and offender behavior. 
+
+Task. Extraction and aggregation of semantic patterns across five dimensions: instruments used, modus operandi, victim profiles, offender profiles, and substance involvement. 
+
+Processing. The agent architecture performed structured subquery-based extraction across docu-ments, followed by corpus-level aggregation [7, 12, 13]. 
+
+Outcome. The system identified recurring patterns, including dominant instrument categories, behavioral dynamics, victim-offender relationships, and contextual factors such as substance use. All outputs maintained traceability to source documents. 
+
+Impact. Results supported forensic intelligence generation, investigative prioritization, and evidence-based policy discussions. The system enabled transformation of unstructured reports into structured datasets suitable for population-level analysis. 6.3. Discussion 
+
+These case studies highlight the distinction between traditional RAG pipelines and agentic architectures. While conventional systems focus on retrieval and summarization, Charlie enables structured multi-document reasoning with aggregation and traceability. Key properties observed include: 
+
+• Scalability through parallel subquery execution 
+
+• Grounding via retrieval-based generation 
+
+• Traceability through structured memory and provenance linkage 
+
+• Robustness via completeness verification 
+
+• Operational compatibility with institutional workflows Although qualitative, these results demonstrate that agent-orchestrated, on-premise RAG architec-tures can support evidential processing at institutional scale. Future work will incorporate quantitative evaluation metrics and benchmarking protocols. 
+
+# 7. Legal and Ethical Considerations 
+
+The deployment of artificial intelligence systems in forensic and law enforcement contexts raises distinct legal and ethical challenges [ 4 ]. Unlike many commercial or enterprise AI applications, forensic systems operate within judicial ecosystems where outputs may influence investigative decisions, prosecutorial strategies, or courtroom proceedings. Consequently, technical design choices must be evaluated not only for performance but also for compliance with procedural guarantees, evidential integrity standards, and fundamental rights protections. Charlie was developed under the premise that AI systems in evidential contexts must remain sub-ordinate to legal doctrine and human expertise. This section outlines the primary legal and ethical considerations informing its architecture. 
+
+7.1. Preservation of Chain-of-Custody and Evidential Integrity 
+
+Chain-of-custody principles require that evidential materials remain traceable from acquisition through analysis and presentation. Any transformation or processing step must be reconstructable and at-tributable. Charlie does not modify original forensic documents. Instead, it operates as an analytical layer that produces derived outputs (structured tables, summaries, or extracted attributes) while preserving explicit references to source documents. All retrieval steps, subqueries, and intermediate outputs are logged, enabling reconstruction of how a given structured result was obtained. Importantly, Charlie’s outputs are not themselves evidentiary artifacts but analytical aids. The author-itative evidential material remains the original document, which can always be consulted for verification. This distinction preserves procedural integrity and prevents conflation between AI-generated synthesis and primary evidence. 
+
+7.2. Data Protection and Confidentiality 
+
+Forensic datasets frequently contain sensitive personal data, including identifying information, medical details, and protected investigative content. Data protection regimes in many jurisdictions impose strict constraints on processing, transfer, and storage of such data. Charlie addresses these concerns through complete on-premise execution. No data are transmitted to external cloud services, and no third-party APIs are invoked during inference. By confining processing to secure institutional infrastructure, the system reduces risks associated with cross-border data flows, external vendor access, or unauthorized retention. Furthermore, embedding generation and vector indexing are performed locally, ensuring that even intermediate semantic representations remain under institutional control. From a data governance perspective, the architecture maintains alignment between technical processing boundaries and institu-tional jurisdictional authority. 
+
+7.3. Human-in-the-Loop Oversight 
+
+A central ethical principle in forensic AI deployment is that automated systems must not replace expert judgment [ 7 , 12 ]. Forensic analysis involves interpretative reasoning, contextual evaluation, and normative assessment that cannot be delegated to probabilistic models. Charlie was explicitly designed as a decision-support tool rather than an autonomous decision-maker. The system: 
+
+• Performs structured extraction and consolidation 
+
+• Does not issue conclusions regarding guilt, liability, or legal responsibility 
+
+• Does not automatically generate binding determinations Human analysts review all outputs before incorporation into official workflows. In this sense, Charlie operationalizes a human-in-the-loop paradigm in which AI augments cognitive capacity without supplanting professional accountability. 
+
+7.4. Transparency and Explainability 
+
+Explainability in LLM systems is a complex and unresolved research challenge [ 4]. However, procedural transparency can be strengthened even when internal neural representations remain opaque. Charlie enhances explainability at the workflow level by: 
+
+• Logging retrieval decisions 
+
+• Recording subquery generation 
+
+• Preserving structured intermediate outputs 
+
+• Maintaining explicit linkage between extracted values and source fragments This approach does not claim full interpretability of the model’s internal token-level reasoning. Instead, it provides practical traceability sufficient for forensic audit and judicial scrutiny. Analysts can verify which textual fragments supported each extracted attribute and assess whether contextual nuance was appropriately captured. Transparency is therefore achieved through architectural design rather than model introspection. 
+
+7.5. Risk Mitigation: Hallucination and Over-Reliance 
+
+LLMs are known to produce plausible but fabricated outputs under certain conditions [ 4 ]. In eviden-tial contexts, hallucinated information poses serious risks, including contamination of investigative narratives or distortion of structured datasets. Charlie mitigates hallucination risk through multiple mechanisms: 1. Retrieval-grounded generation limits outputs to semantically retrieved fragments [5] 2. Structured decomposition reduces ambiguity in complex tasks [7] 3. Explicit null reporting prevents silent fabrication of missing values 4. Human verification ensures final oversight Nevertheless, the system cannot eliminate probabilistic error entirely. Ethical deployment therefore requires ongoing evaluation, conservative integration into workflows, and continuous user training to prevent over-reliance on automated outputs. 7.6. Normative Positioning 
+
+From a normative standpoint, Charlie embodies a governance-aligned approach to forensic AI. It rejects the model of opaque, cloud-hosted AI systems operating beyond institutional oversight. Instead, it integrates advanced generative capabilities within a bounded, auditable, and sovereignty-preserving architecture. The system’s legal and ethical posture can be summarized as follows: 
+
+• AI augments, but does not replace, expert reasoning 
+
+• Analytical outputs remain subordinate to primary evidence 
+
+• All processing remains within institutional jurisdiction 
+
+• Procedural traceability is embedded into technical architecture By aligning technological design with evidential doctrine, Charlie seeks to demonstrate that generative AI can be responsibly integrated into forensic practice without compromising legality, transparency, or human accountability. 
+
+# 8. Limitations 
+
+Despite its operational effectiveness, Charlie presents technical, methodological, and normative limita-tions that must be acknowledged for responsible deployment. The system relies heavily on semantic retrieval to ground generation, which reduces hallucination risk but introduces sensitivity to retrieval quality [ 5 , 11 ]. Missing or poorly ranked fragments may lead to incomplete or null extractions, even when relevant information exists in the corpus. The use of chunk-based segmentation further introduces challenges related to retrieval noise and context fragmentation. Semantically dependent information may be distributed across multiple seg-ments, while similarity-based retrieval can surface contextually irrelevant passages. Balancing chunk size, overlap, and retrieval depth ( 𝑘 ) remains an open optimization problem [11]. At the modeling level, the reasoning core is a probabilistic language model rather than a formally verified reasoning system [ 4 ]. Consequently, linguistic ambiguity, domain-specific terminology, and implicit context may not always be correctly interpreted. While self-reflection mechanisms improve structural consistency, they do not eliminate epistemic uncertainty. From an infrastructure perspective, the fully on-premise deployment model requires substantial computational resources, particularly for large-scale models such as Qwen3:32B [ 14 ]. Although this design ensures data sovereignty and compliance with evidential constraints, it shifts the burden of infrastructure provisioning, maintenance, and optimization to the institution. In addition, Charlie currently focuses on structured extraction and does not yet incorporate formal evidential reasoning mechanisms such as Bayesian inference or argumentation frameworks. As such, it supports evidential preparation rather than formal proof modeling [ 7 , 13 ]. Finally, the present evaluation is based on operational case studies rather than controlled benchmarks, which reflects real-world applicability but limits quantitative comparison across methods. Overall, Charlie remains dependent on retrieval quality, constrained by probabilistic modeling, computationally demanding, and primarily oriented toward evidential preparation. These limitations define the boundaries of its application while highlighting directions for future improvement. 
+
+# 9. Future Work 
+
+Charlie was designed as a modular research infrastructure for advancing evidential reasoning systems. While its current implementation focuses on structured extraction and consolidation, future work aims to extend its capabilities toward formal reasoning, improved retrieval, enhanced interpretability, and broader operational deployment. A central direction involves the integration of formal evidential reasoning mechanisms operating on structured outputs. Bayesian models could leverage extracted attributes as variables to support probabilistic inference, hypothesis evaluation, and sensitivity analysis [ 9 ]. In parallel, argumentation frameworks may enable the automatic construction of argument graphs, identification of evidential conflicts, and structured comparison of competing narratives [ 8 ]. Together, these approaches would elevate the system from structured information extraction to formal decision-support. Although Charlie already provides workflow-level transparency through its multi-agent architecture, further improvements in explainability are required for operational adoption. Future interfaces will focus on retrieval trace visualization, explicit source highlighting, confidence indicators, and completeness diagnostics, improving both usability and trustworthiness [4]. Finally, as regulatory frameworks for artificial intelligence continue to evolve, Charlie will incorporate governance-aligned features such as automated documentation, risk assessment modules, and model auditing capabilities, ensuring compliance with emerging legal and ethical requirements. Overall, future development will focus on integrating formal reasoning, improving retrieval robustness, enhancing explainability, and establishing standardized evaluation methodologies. Charlie thus serves not only as an operational system but also as a research platform for advancing responsible AI in forensic contexts [7, 13]. 
+
+# 10. Conclusion 
+
+This paper introduced Charlie, an on-premise, multi-agent Retrieval-Augmented Generation system designed to support structured evidential processing within forensic institutions [ 5 , 7 ]. Developed and deployed at Brazil’s Forensic Institute, Charlie addresses a fundamental operational challenge: the exponential growth of heterogeneous forensic documentation under stringent procedural and legal constraints. Unlike generic conversational AI systems, Charlie was architected under explicit normative and institutional design principles. Its fully local deployment ensures data sovereignty and confidentiality preservation. Its open-source stack enhances infrastructural autonomy and long-term sustainability. Its structured agent architecture integrates controlled retrieval, task decomposition, parallel execution, per-sistent memory, and self-reflection mechanisms, transforming large language models into components of a traceable evidential workflow [7, 13]. Operational case studies demonstrated the system’s capacity to perform structured multi-document extraction and longitudinal forensic intelligence consolidation across large corpora. These results illustrate that agent-orchestrated RAG architectures can scale beyond isolated question answering to support systematic evidential consolidation [ 5 , 11 ]. Importantly, Charlie does not replace expert reasoning. Instead, it augments forensic workflows while preserving human-in-the-loop oversight, chain-of-custody integrity, and document-level traceability. Currently, there are no widely available solutions capable of processing thousands of forensic documents to automatically construct structured evidential datasets under strict institutional and legal constraints. In this sense, Charlie fills a critical technological and operational gap. From a broader AI & Law perspective, Charlie contributes to ongoing discussions about how gen-erative AI can be responsibly integrated into judicial and law enforcement contexts [ 4 ]. Rather than pursuing unconstrained automation, the system embodies a governance-aligned approach in which technical architecture is subordinated to legal doctrine and institutional sovereignty. By embedding auditability, constrained action, and structured reasoning into its design, Charlie demonstrates that advanced language models can be deployed in high-stakes evidential environments without sacrificing procedural legitimacy. At the same time, the system’s current scope remains bounded to evidential preparation and structured extraction. Future integration with formal probabilistic reasoning frameworks, argumentation models, and knowledge representation standards will further align the architecture with computational models of legal proof [9, 8]. Charlie thus represents both an operational system and a research platform. It provides a replicable blueprint for forensic institutions seeking to adopt AI technologies responsibly, demonstrating that sovereignty-preserving, transparent, and scalable multi-agent architectures are viable within law enforcement environments. In doing so, it advances the interdisciplinary dialogue on how artificial intelligence can support evidential reasoning while respecting the legal and ethical foundations of forensic practice. 
+
+# 11. Availability 
+
+This manuscript is available as an arXiv preprint to provide a permanent, citable archival version of the work presented at RELAF 2026. 
+
+# 12. Acknowledgements 
+
+The authors thank the organizers of the RELAF 2026 Workshop for providing an interdisciplinary forum for discussing AI applications in law enforcement and forensic science. 
+
+# References 
+
+[1] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, I. Polosukhin, Attention is all you need, in: Advances in Neural Information Processing Systems (NeurIPS), 2017. [2] T. B. Brown, B. Mann, N. Ryder, M. Subbiah, J. Kaplan, P. Dhariwal, A. Neelakantan, P. Shyam, G. Sastry, A. Askell, S. Agarwal, A. Herbert-Voss, G. Krueger, T. Henighan, R. Child, A. Ramesh, D. M. Ziegler, J. Wu, C. Winter, C. Hesse, M. Chen, E. Sigler, M. Litwin, S. Gray, B. Chess, J. Clark, C. Berner, S. McCandlish, A. Radford, I. Sutskever, D. Amodei, Language models are few-shot learners, in: Advances in Neural Information Processing Systems (NeurIPS), 2020. [3] H. Touvron, L. Martin, K. Stone, P. Albert, A. Almahairi, Y. Babaei, N. Bashlykov, S. Batra, P. Bhar-gava, S. Bhosale, D. Bikel, L. Blecher, C. Canton Ferrer, M. Chen, G. Cucurull, D. Esiobu, J. Fernandes, J. Fu, W. Fu, B. Fuller, C. Gao, V. Goswami, N. Goyal, A. Hartshorn, S. Hosseini, R. Hou, H. Inan, M. Kardas, V. Kerkez, M. Khabsa, I. Kloumann, A. Korenev, P. S. Koura, M.-A. Lachaux, T. Lavril, J. Lee, D. Liskovich, Y. Lu, Y. Mao, X. Martinet, T. Mihaylov, P. Mishra, I. Molybog, Y. Nie, A. Poulton, J. Reizenstein, R. Rungta, K. Saladi, A. Schelten, R. Silva, E. M. Smith, R. Subramanian, X. E. Tan, B. Tang, R. Taylor, A. Williams, J. X. Kuan, P. Xu, Z. Yan, I. Zarov, Y. Zhang, A. Fan, M. Kambadur, S. Narang, A. Rodriguez, R. Stojnic, S. Edunov, T. Scialom, Llama 2: Open foundation and fine-tuned chat models, arXiv preprint arXiv:2307.09288 (2023). [4] Z. Ji, et al., Survey of hallucination in natural language generation, ACM Computing Surveys (2023). [5] P. Lewis, E. Perez, A. Piktus, F. Petroni, V. Karpukhin, N. Goyal, H. Küttler, M. Lewis, W.-t. Yih, T. Rocktäschel, S. Riedel, D. Kiela, Retrieval-augmented generation for knowledge-intensive nlp tasks, in: Advances in Neural Information Processing Systems (NeurIPS), 2020. [6] S. Yao, J. Zhao, D. Yu, N. Du, I. Shafran, K. Narasimhan, Y. Cao, React: Synergizing reasoning and acting in language models, in: International Conference on Learning Representations (ICLR), 2023. [7] W. X. Zhao, et al., A survey of large language model based autonomous agents, arXiv preprint arXiv:2308.11432 (2023). [8] H. Prakken, On the problem of making structured argumentation systems applicable to legal reasoning, Artificial Intelligence and Law (2018). [9] N. Fenton, M. Neil, Risk Assessment and Decision Analysis with Bayesian Networks, CRC Press, 2016. [10] UCO Project, Case: Cyber-investigation analysis standard expression, 2020. URL: https:// caseontology.org. [11] Y. Gao, Y. Xiong, X. Gao, K. Jia, J. Pan, Y. Bi, Y. Dai, J. Sun, M. Wang, H. Wang, Retrieval-augmented generation for large language models: A survey, arXiv preprint arXiv:2312.10997 (2023). [12] Z. Xi, et al., The rise and potential of large language model based agents, arXiv preprint arXiv:2309.07864 (2023). [13] G. Li, et al., Large language model-based multi-agent systems: A survey, arXiv preprint arXiv:2402.01680 (2024). [14] W. Kwon, et al., Efficient memory management for large language model serving with pagedatten-tion, arXiv preprint arXiv:2309.06180 (2023). [15] Nomic AI, nomic-embed-text: Open embedding model, https://www.nomic.ai/blog/posts/ nomic-embed-text, 2024. Accessed: 2026-03. [16] Ollama, Ollama: Run large language models locally, https://ollama.com, 2024. Accessed: 2026-03. [17] N. Reimers, I. Gurevych, Sentence-bert: Sentence embeddings using siamese bert-networks, in: Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing (EMNLP), 2019.
