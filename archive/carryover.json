@@ -1,65 +1,15 @@
 {
-  "generated_at": "2026-07-08T20:43:52.503628+00:00",
-  "updated_date": "20260708",
+  "generated_at": "2026-07-11T21:16:59.258070+00:00",
+  "updated_date": "20260711",
   "carryover_days": 9,
   "tag_states": {
     "search-agent": {
-      "updated_date": "20260708",
+      "updated_date": "20260711",
       "carryover_days": 9,
-      "items": [
-        {
-          "id": "2607.06447v1",
-          "source": "arxiv",
-          "title": "Danus: Orchestrating Mathematical Reasoning Agents with Fact-Graph Memory",
-          "abstract": "Recent LLM-based mathematical reasoning agents have begun to tackle research-level problems and, in several cases, have contributed to the resolution of open problems. However, scaling and orchestrating such agents effectively remains challenging, due to the difficulty of coordinating parallel proof search while keeping intermediate claims organized and reliable. In this paper, we propose Danus, an orchestration system for research-level mathematical reasoning centered on a shared fact graph as a global memory-management mechanism. Danus consists of a main agent that performs planning and coordination, multiple worker agents that carry out proof search in parallel, and a stateless verifier that checks proposed mathematical claims before they are admitted into the fact graph. Each verified fact is stored together with its proof and logical dependencies, allowing the system to build long arguments incrementally while keeping the shared proof state organized. The main agent periodically summarizes the evolving proof state, redirects workers across promising directions, and supports interaction with human mathematicians through progress reports. We evaluate Danus through six research-level case studies in algebraic geometry, singularity theory, and combinatorics, illustrating how the fact-graph memory mechanism enables Danus to construct long, detailed mathematical proofs. Our results suggest that fact-graph-based orchestration provides an effective route toward scaling mathematical reasoning agents for long-horizon research problems. Danus is open source at https://github.com/frenzymath/Danus.",
-          "authors": [
-            "Jihao Liu",
-            "Guoxiong Gao",
-            "Zeming Sun",
-            "Bin Wu",
-            "Shurui Liu",
-            "Jiedong Jiang",
-            "Haocheng Ju",
-            "Leheng Chen",
-            "Ronnie Cheng",
-            "Xiping Zhang",
-            "Bin Dong"
-          ],
-          "primary_category": "cs.AI",
-          "categories": [
-            "cs.AI",
-            "cs.CL",
-            "cs.MA"
-          ],
-          "published": "2026-07-07T16:11:30+00:00",
-          "link": "https://arxiv.org/pdf/2607.06447v1",
-          "tags": [
-            "keyword:search-agent",
-            "keyword:self-evolve",
-            "query:search-agent"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "search agents with fact-graph memory, evidence verification",
-          "llm_evidence_cn": "带事实验证记忆的搜索智能体",
-          "llm_evidence": "带事实验证记忆的搜索智能体",
-          "canonical_evidence": "带事实验证记忆的搜索智能体",
-          "llm_tldr_en": "Danus orchestrates mathematical reasoning agents with a shared fact-graph memory and verifier for reliable proof search.",
-          "llm_tldr_cn": "数学推理智能体在并行证明搜索中面临中间声明组织与可靠性挑战。本文提出Danus，以共享事实图作为全局记忆进行协调，包含主智能体规划、工作智能体并行搜索、无状态验真器检查声明。该系统有效组织了多智能体推理过程，提高了证明搜索的可靠性和可扩展性。",
-          "llm_tldr": "数学推理智能体在并行证明搜索中面临中间声明组织与可靠性挑战。本文提出Danus，以共享事实图作为全局记忆进行协调，包含主智能体规划、工作智能体并行搜索、无状态验真器检查声明。该系统有效组织了多智能体推理过程，提高了证明搜索的可靠性和可扩展性。",
-          "llm_tags": [
-            "query:search-agent"
-          ],
-          "matched_query_tag": "query:search-agent",
-          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
-          "matched_requirement_id": "req-7",
-          "selection_source": "carryover_cache",
-          "paper_id": "2607.06447v1",
-          "carry_days": 1
-        }
-      ]
+      "items": []
     },
     "self-evolve": {
-      "updated_date": "20260708",
+      "updated_date": "20260711",
       "carryover_days": 9,
       "items": []
     }
