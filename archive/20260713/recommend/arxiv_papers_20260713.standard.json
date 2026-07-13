@@ -1,0 +1,438 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-13T20:18:20.871427+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 7,
+    "quick_skim_target": 12,
+    "quick_selected": 7
+  },
+  "deep_dive": [
+    {
+      "id": "2607.07820v1",
+      "source": "arxiv",
+      "title": "DeepSearch-World: Self-Distillation for Deep Search Agents in a Verifiable Environment",
+      "abstract": "Training tool-use agents to improve from their own experience remains challenging, as supervised fine-tuning relies on fixed teacher-distilled trajectories, while sparse-reward reinforcement learning provides weak supervision for long-horizon interactions. We present DeepSearch-Evolve, a self-distillation framework for web agents built on DeepSearch-World, a deterministic and verifiable environment with reproducible search and page-reading tools. DeepSearch-World contains 420K multi-hop QA tasks constructed from entity-level random walks and supports key agentic cognitive behaviors useful for self-evolving, including progress verification, grounded reflection, and failure recovery. DeepSearch-Evolve iteratively performs trajectory generation, filtering, data mixing, and fine-tuning to train stronger agents. Without distillation from more capable models, DeepSearch-World-9B achieves competitive performance compared with open-source agents, reaching 31.2% on BrowseComp, 61.5% on GAIA, and 93.4% on HotpotQA, showing that verifiable environments enable scalable self-evolution for long-horizon web agents. We will release the environment, 420K training pool, validation set, model, and code to facilitate future research on self-improving deep search agents.",
+      "authors": [
+        "Xinyu Geng",
+        "Xuanhua He",
+        "Sixiang Chen",
+        "Yanjing Xiao",
+        "Fan Zhang",
+        "Shijue Huang",
+        "Haitao Mi",
+        "Zhenwen Liang",
+        "Tianqing Fang",
+        "Yi R. Fung"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-07-08T18:03:41+00:00",
+      "link": "https://arxiv.org/pdf/2607.07820v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-distillation framework for deep search agents in verifiable environment",
+      "llm_evidence_cn": "可验证环境下深度搜索智能体的自蒸馏框架",
+      "llm_evidence": "可验证环境下深度搜索智能体的自蒸馏框架",
+      "canonical_evidence": "可验证环境下深度搜索智能体的自蒸馏框架",
+      "llm_tldr_en": "DeepSearch-Evolve trains deep search agents via self-distillation in a verifiable environment with 420K multi-hop QA tasks, enabling self-evolution.",
+      "llm_tldr_cn": "训练工具使用智能体从自身经验中改进面临挑战：监督微调依赖固定教师轨迹，强化学习在长程交互中信号稀疏。DeepSearch-Evolve提出自蒸馏框架，基于可验证环境DeepSearch-World（含42万多跳QA任务），支持进度验证、反思和失败恢复等认知行为。方法通过迭代轨迹生成和自我蒸馏，使智能体在无外部监督下持续改进。实验表明，该框架显著提升了多跳搜索问答的性能，为自进化搜索智能体提供了有效范式。",
+      "llm_tldr": "训练工具使用智能体从自身经验中改进面临挑战：监督微调依赖固定教师轨迹，强化学习在长程交互中信号稀疏。DeepSearch-Evolve提出自蒸馏框架，基于可验证环境DeepSearch-World（含42万多跳QA任务），支持进度验证、反思和失败恢复等认知行为。方法通过迭代轨迹生成和自我蒸馏，使智能体在无外部监督下持续改进。实验表明，该框架显著提升了多跳搜索问答的性能，为自进化搜索智能体提供了有效范式。",
+      "llm_tags": [
+        "query:self-evolve:composite"
+      ],
+      "matched_query_tag": "query:self-evolve:composite",
+      "matched_query_text": "Papers central to 自进化智能体, especially work that connects or combines: r; on-policy distillation; long-horizon agent reasoning; data-free agent training; self-evolving agents; synthetic trajectory construction, verification, and curriculum shaping for autonomous agents; on policy reinforcement learning and distillation for long horizon agent trajectories; data free or self generated training for multi turn tool using agents.",
+      "matched_requirement_id": "req-composite-self-evolve",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.05511v1",
+      "source": "arxiv",
+      "title": "Light-Omni: Reflex over Reasoning in Agentic Video Understanding with Long-Term Memory",
+      "abstract": "Agentic video understanding equips models with long-term memory to autonomously process and respond to continuous, long-horizon multimodal streams. However, advanced video agents often rely on ``detective-style'' iterative reasoning for action control (e.g., $\\mathtt{search}$) and evidence aggregation, incurring prohibitive costs and latency. We argue that such heavy reasoning primarily compensates for the lack of global context and semantic misalignment in retrieval. This paper introduces Light-Omni, a multimodal agent framework for reflexive and lightweight video understanding. It achieves this through dual contextual states that instantly build the required context in a single forward pass. First, we maintain a global state, a finite-sized multimodal script continuously consolidated from episodic memory, serving as the global context for Light-Omni. Through hierarchical merging, it preserves recent details while summarizing past events. Second, conditioned on this global context, we generate a parametric latent state that directly drives autonomous actions and produces retrieval embeddings, with minimal latency. Benefiting from this coupled design, Light-Omni achieves semantically aligned retrieval and reflexive responses while avoiding iterative reasoning. Extensive experiments validate the effectiveness of Light-Omni across multiple video benchmarks. Notably, it outperforms M3-Agent with an average 2.4% accuracy gain, a 12.1$\\times$ speedup, and a 2.6$\\times$ improvement in GPU memory efficiency. Furthermore, it serves as a memory system to enhance both the performance and efficiency of existing MLLMs. Project page: https://clare-nie.github.io/Light-Omni.",
+      "authors": [
+        "Chang Nie",
+        "Jiaju Wei",
+        "Junlan Feng",
+        "Chaoyou Fu",
+        "Caifeng Shan"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-06T18:00:06+00:00",
+      "link": "https://arxiv.org/pdf/2607.05511v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multimodal agent for video understanding with long-term memory",
+      "llm_evidence_cn": "多模态视频理解智能体，具备长期记忆",
+      "llm_evidence": "多模态视频理解智能体，具备长期记忆",
+      "canonical_evidence": "多模态视频理解智能体，具备长期记忆",
+      "llm_tldr_en": "Light-Omni proposes reflexive multimodal agent framework with dual contextual states for efficient video understanding without iterative reasoning.",
+      "llm_tldr_cn": "视频智能体通常需要冗长的迭代推理来补偿全局上下文缺失和检索语义不对齐。Light-Omni提出一种轻量级多模态智能体框架，通过双上下文状态（全局状态和瞬时状态）在单次前向中构建所需上下文，实现反射式视频理解。实验表明，该方法在降低延迟和成本的同时，在长视频理解任务上达到竞争性能。这为高效多模态搜索智能体提供了新思路。",
+      "llm_tldr": "视频智能体通常需要冗长的迭代推理来补偿全局上下文缺失和检索语义不对齐。Light-Omni提出一种轻量级多模态智能体框架，通过双上下文状态（全局状态和瞬时状态）在单次前向中构建所需上下文，实现反射式视频理解。实验表明，该方法在降低延迟和成本的同时，在长视频理解任务上达到竞争性能。这为高效多模态搜索智能体提供了新思路。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "multimodal search agents",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.09375v1",
+      "source": "arxiv",
+      "title": "Mach-Mind-4-Flash Technical Report",
+      "abstract": "We present Mach-Mind-4-Flash, a 35B-parameter Mixture-of-Experts (MoE) agentic model with 3B activated parameters. Through post-training optimization alone without scaling pre-training compute, the model achieves performance on par with or surpassing that of 100B-parameter-class models. By introducing scalable agentic interaction environments for large-scale reinforcement learning, the model attains significant performance gains on real-world application tasks. Our pipeline comprises three stages: (1) a unified RL/OPD training infrastructure with dynamic multi-teacher scheduling and operator-level acceleration, delivering 17\\% end-to-end training speedup; (2) multiple domain-specific RL experts trained in parallel across Reasoning, General, and Agent tracks, then fused into a single generalist via Multi-Teacher On-Policy Distillation (MOPD) -- a routed reverse-KL objective that eliminates the see-saw degradation of mixed-reward RL; (3) Hybrid Median-length Policy Optimization (HMPO), a single-stage token-efficiency method that compresses reasoning chains by 19--46\\% with $\\le$0.7 percentage-point accuracy loss. Mach-Mind-4-Flash scores 92.70 on AIME'26, 82.82 on IFBench, 80.74 on Behavioral-SafetyBench, 75.80 on BFCL-v4, 72.31 on BrowseComp-zh, and 84.20 on ClawBench -- leading or matching models with 10--30$\\times$ its activated size at a fraction of the inference cost.",
+      "authors": [
+        "Foundation Model Team"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CL"
+      ],
+      "published": "2026-07-10T12:57:08+00:00",
+      "link": "https://arxiv.org/pdf/2607.09375v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "On-policy distillation (OPD) and large-scale RL for agent model post-training",
+      "llm_evidence_cn": "使用在线策略蒸馏和大规模强化学习进行代理模型后训练",
+      "llm_evidence": "使用在线策略蒸馏和大规模强化学习进行代理模型后训练",
+      "canonical_evidence": "使用在线策略蒸馏和大规模强化学习进行代理模型后训练",
+      "llm_tldr_en": "Mach-Mind-4-Flash uses RL and OPD to train a 35B MoE agent model, achieving performance comparable to 100B models with only 3B activated parameters.",
+      "llm_tldr_cn": "本文介绍了Mach-Mind-4-Flash，一个35B参数的MoE代理模型，仅3B激活参数。通过后训练优化，包括统一的RL/OPD训练基础设施和多领域专家并行训练，该模型在多种任务上达到了与100B参数模型相当的性能。其训练速度提升了17%，展示了高效后训练策略的潜力。",
+      "llm_tldr": "本文介绍了Mach-Mind-4-Flash，一个35B参数的MoE代理模型，仅3B激活参数。通过后训练优化，包括统一的RL/OPD训练基础设施和多领域专家并行训练，该模型在多种任务上达到了与100B参数模型相当的性能。其训练速度提升了17%，展示了高效后训练策略的潜力。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on-policy distillation",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.08964v1",
+      "source": "arxiv",
+      "title": "Long-Horizon-Terminal-Bench: Testing the Limits of Agents on Long-Horizon Terminal Tasks with Dense Reward-Based Grading",
+      "abstract": "AI agents have become capable of autonomously completing short, well-specified tasks. However, existing terminal benchmarks largely focus on simple problems that finish within minutes and are evaluated only by their final outcome. This setup overlooks intermediate progress and partial solutions, yielding sparse reward signals and an incomplete picture of agent capability. We introduce Long-Horizon-Terminal-Bench, a terminal benchmark of 46 long-horizon tasks spanning nine categories, including experiment reproduction, software engineering, multimodal analysis, interactive games, and scientific computing. Each task follows a Terminal-Bench-style setup with a reference solution or simulation engine, but is further decomposed into fine-grained graded subtasks. This design enables dense intermediate rewards and partial credit, allowing evaluation to capture not only whether an agent reaches the final goal, but also how far it progresses on open-ended workflows. Tasks in Long-Horizon-Terminal-Bench typically require hundreds of episodes and minutes to hours of execution, stressing long-horizon planning, long-context management, and iterative debugging rather than one-shot problem solving. We evaluate 15 frontier models and find that agents consume on average 9.9M tokens per task, with roughly 231 episodes and 85.3 minutes of execution time per run, making Long-Horizon-Terminal-Bench more demanding than prior terminal-based benchmarks. Even the strongest tested model achieves 15.2% pass@1 at a partial-reward threshold of 0.95 and 10.9% at a perfect-reward threshold of 1.0, while the mean pass rate across models is 4.3% and 1.7% under the two thresholds, respectively. These results reveal headroom for improvement. We further analyze failure modes and error patterns, and release Long-Horizon-Terminal-Bench to support future progress on long-horizon terminal agents.",
+      "authors": [
+        "Zongxia Li",
+        "Zhongzhi Li",
+        "Yucheng Shi",
+        "Ruhan Wang",
+        "Junyao Yang",
+        "Zhichao Liu",
+        "Xiyang Wu",
+        "Anhao Li",
+        "Yue Yu",
+        "Ninghao Liu",
+        "Lichao Sun",
+        "Haotao Mi",
+        "LeoweiLiang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-09T21:56:37+00:00",
+      "link": "https://arxiv.org/pdf/2607.08964v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "long-horizon terminal task benchmark for agents",
+      "llm_evidence_cn": "面向智能体的长期终端任务基准",
+      "llm_evidence": "面向智能体的长期终端任务基准",
+      "canonical_evidence": "面向智能体的长期终端任务基准",
+      "llm_tldr_en": "Long-Horizon-Terminal-Bench introduces 46 long-horizon tasks with dense reward grading to comprehensively evaluate agent capabilities.",
+      "llm_tldr_cn": "针对现有终端基准仅关注短期简单任务且仅用最终结果评估的问题，本文提出Long-Horizon-Terminal-Bench，包含46个长期任务，涵盖实验复现、软件工程、多模态分析等，并提供密集奖励评分以评估中间进展。实验表明当前智能体在长期任务中表现有限，该基准为促进长期推理能力研究提供了重要工具。",
+      "llm_tldr": "针对现有终端基准仅关注短期简单任务且仅用最终结果评估的问题，本文提出Long-Horizon-Terminal-Bench，包含46个长期任务，涵盖实验复现、软件工程、多模态分析等，并提供密集奖励评分以评估中间进展。实验表明当前智能体在长期任务中表现有限，该基准为促进长期推理能力研究提供了重要工具。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.07178v1",
+      "source": "arxiv",
+      "title": "Entropy Pacing Policy Optimization for Multi-Task Agentic Reinforcement Learning",
+      "abstract": "Recent breakthroughs of Reinforcement Learning (RL) have highlighted its potential for complex agentic Large Language Model (LLM) tasks. However, existing efforts largely focus on single-task settings, whereas real-world deployment necessitates a generalist agent capable of solving multiple tasks simultaneously. In this work, we identify a critical yet underexplored phenomenon in multi-task agentic RL: different tasks can exhibit exploration-exploitation pace mismatch. Specifically, easier tasks may converge early to low-entropy policies that hinder learning on harder tasks, while harder tasks can, in turn, push easier tasks back toward high-entropy exploration. This back-and-forth interaction creates inter-task entropy crossovers and frequent entropy spikes. Inspired by this observation, we introduce Entropy Pacing Policy Optimization (EPPO) for multi-task agentic LLMs, which coordinates entropy across tasks to stabilize multi-task optimization. At the core of EPPO is a task-wise dynamic clipping mechanism that replaces the fixed clipping threshold in Group Relative Policy Optimization (GRPO) with a task entropy-aware adaptive bound, tightening updates for over-confident tasks while relaxing them for under-explored ones. Experiments on the multi-task agentic benchmarks demonstrate that the proposed EPPO yields results superior to its counterparts.",
+      "authors": [
+        "Zetian Hu",
+        "Shunyu Liu",
+        "Junjie Zhang",
+        "Yongcheng Jing",
+        "Ting-En Lin",
+        "Yongbin Li",
+        "Dacheng Tao"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-07-08T09:13:05+00:00",
+      "link": "https://arxiv.org/pdf/2607.07178v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "entropy pacing policy optimization for multi-task agentic RL addressing cross-task exploration mismatch",
+      "llm_evidence_cn": "多任务智能体强化学习中熵节奏策略优化，解决跨任务探索不匹配",
+      "llm_evidence": "多任务智能体强化学习中熵节奏策略优化，解决跨任务探索不匹配",
+      "canonical_evidence": "多任务智能体强化学习中熵节奏策略优化，解决跨任务探索不匹配",
+      "llm_tldr_en": "This paper identifies exploration-exploitation pace mismatch in multi-task agentic RL and proposes Entropy Pacing Policy Optimization to stabilize training across tasks.",
+      "llm_tldr_cn": "在多任务agent RL中，本文发现不同任务存在探索-利用步调不匹配问题，导致任务间干扰。提出熵节奏策略优化，动态调整各任务熵正则化强度。实验表明该方法稳定了多任务训练，提升了整体性能，为长程多任务agent训练提供了有效方案。",
+      "llm_tldr": "在多任务agent RL中，本文发现不同任务存在探索-利用步调不匹配问题，导致任务间干扰。提出熵节奏策略优化，动态调整各任务熵正则化强度。实验表明该方法稳定了多任务训练，提升了整体性能，为长程多任务agent训练提供了有效方案。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on policy reinforcement learning and distillation for long horizon agent trajectories",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.09092v1",
+      "source": "arxiv",
+      "title": "AgentKGV: Agentic LLM-RAG Framework with Two-Stage Training for the Fact Verification of Knowledge Graphs",
+      "abstract": "Knowledge graphs (KGs) are often automatically constructed from large-scale corpora, but they inevitably contain factual errors due to noisy sources and extraction failures, and verifying them reliably at industrial scale remains a critical challenge. To address this, we propose AgentKGV, the Agentic LLM-RAG framework for KG fact Verification, that integrates dynamic routing and iterative query rewriting, which handles surface-form mismatch in document-level retrieval. To make this framework more accurate and cost-efficient for industrial deployment, we further introduce a two-stage training strategy: turn-level distillation-based SFT that transfers reasoning ability from a large teacher model into a small model for stable query rewriting and reasoning, and trajectory-level GRPO that optimizes the search policy to reduce unnecessary retrieval at scale. On the long-tail-predicate split of the open-domain T-REx benchmark, our framework improves macro-F1 over single-turn RAG by 5.5 \\%p, and two-stage training does it further by 9.4 \\%p. GRPO also cuts the average number of search calls from 3.24 to 1.63 without lowering accuracy.",
+      "authors": [
+        "Yumin Heo",
+        "Hyeon-gu Lee",
+        "Sumin Seo",
+        "Youngjoong Ko"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-07-10T04:22:34+00:00",
+      "link": "https://arxiv.org/pdf/2607.09092v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "LLM-RAG framework for knowledge graph fact verification with iterative query rewriting and two-stage distillation training",
+      "llm_evidence_cn": "用于知识图谱事实验证的LLM-RAG框架，包含迭代查询重写和两阶段蒸馏训练",
+      "llm_evidence": "用于知识图谱事实验证的LLM-RAG框架，包含迭代查询重写和两阶段蒸馏训练",
+      "canonical_evidence": "用于知识图谱事实验证的LLM-RAG框架，包含迭代查询重写和两阶段蒸馏训练",
+      "llm_tldr_en": "AgentKGV uses agentic RAG with dynamic routing and iterative query rewriting for KG fact verification, employing turn-level distillation SFT for cost efficiency.",
+      "llm_tldr_cn": "AgentKGV是一个用于大规模知识图谱事实验证的代理式LLM-RAG框架。它通过动态路由和迭代查询重写处理检索中的表面形式不匹配问题，并引入两阶段训练策略：基于轮次的蒸馏式监督微调，将教师的推理能力转移到小型学生模型，从而在保持高准确率的同时降低部署成本。在工业级数据集上验证了其有效性。",
+      "llm_tldr": "AgentKGV是一个用于大规模知识图谱事实验证的代理式LLM-RAG框架。它通过动态路由和迭代查询重写处理检索中的表面形式不匹配问题，并引入两阶段训练策略：基于轮次的蒸馏式监督微调，将教师的推理能力转移到小型学生模型，从而在保持高准确率的同时降低部署成本。在工业级数据集上验证了其有效性。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.08572v1",
+      "source": "arxiv",
+      "title": "Switch-Reasoner: Learn When to Think in Multitask Mixtures via Reinforcement Learning",
+      "abstract": "Multimodal Large Language Models (MLLMs) often follow a fixed Think-then-Answer paradigm, which is inefficient in heterogeneous multitask settings because simple inputs may not require explicit reasoning while difficult ones can benefit substantially from it. Learning when to think is also unstable during post-training, where imbalanced rollouts can drive the model toward always-thinking or always-direct behavior. We propose Switch-Reasoner, a GRPO-based framework that learns to adaptively select reasoning modes for MLLMs. It treats thinking as a virtual tool invocation and allows the model to either answer directly or invoke explicit reasoning before answering. To stabilize this decision, we introduce a dual-level regulation mechanism that balances the overall use of Thinking Mode and Direct Mode while providing sample-level supervision based on the relative benefit of the two choices. Experiments on 11 multimodal tasks show that Switch-Reasoner reduces unnecessary reasoning while maintaining strong performance, achieving a better accuracy-efficiency trade-off.",
+      "authors": [
+        "Yiyang Fang",
+        "Pei Fu",
+        "Jinjie Li",
+        "Jian Liang",
+        "Wenke Huang",
+        "Ruijie Luo",
+        "Shaojie Zhang",
+        "Jian Luan",
+        "Yi R. Fung",
+        "Mang Ye"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-09T15:04:05+00:00",
+      "link": "https://arxiv.org/pdf/2607.08572v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "adaptive reasoning mode selection via RL for multimodal agents",
+      "llm_evidence_cn": "通过强化学习为多模态智能体自适应选择推理模式",
+      "llm_evidence": "通过强化学习为多模态智能体自适应选择推理模式",
+      "canonical_evidence": "通过强化学习为多模态智能体自适应选择推理模式",
+      "llm_tldr_en": "Proposes Switch-Reasoner, a GRPO-based method that trains MLLMs to adaptively choose between direct answering and explicit reasoning, treating thinking as a virtual tool.",
+      "llm_tldr_cn": "多模态大语言模型通常采用固定先推理后回答的范式，在异构多任务环境中效率低下。本文提出Switch-Reasoner，基于GRPO框架，将思考视为虚拟工具调用，让模型自适应选择直接回答或先推理再回答。引入双层调节机制稳定决策。实验表明该方法有效提高了效率和准确性。",
+      "llm_tldr": "多模态大语言模型通常采用固定先推理后回答的范式，在异构多任务环境中效率低下。本文提出Switch-Reasoner，基于GRPO框架，将思考视为虚拟工具调用，让模型自适应选择直接回答或先推理再回答。引入双层调节机制稳定决策。实验表明该方法有效提高了效率和准确性。",
+      "llm_tags": [
+        "query:search-agent:composite"
+      ],
+      "matched_query_tag": "query:search-agent:composite",
+      "matched_query_text": "Papers central to 搜索智能体, especially work that connects or combines: l; multimodal search agents; deep research agents; search agents; agentic search; reinforcement learning for multi turn search, retrieval, and evidence collection; search agents with explicit working memory, evidence curation, and claim verification.",
+      "matched_requirement_id": "req-composite-search-agent",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.09195v1",
+      "source": "arxiv",
+      "title": "Toward Auditable AI Scientists: A Hypothesis Evolution Protocol for LLM Agents",
+      "abstract": "Large language model (LLM) agents are increasingly expected to play a central role in AI-driven scientific discovery. Equipped with broad knowledge, flexible reasoning, and tool use, they have the potential to autonomously explore and solve scientific problems by repeatedly proposing hypotheses, testing them, and revising their beliefs in the light of the evidence. In current agents, however, these hypotheses, tests, and belief updates are buried in unstructured logs, and no mechanism lets the agent or the human researcher audit that process. Here we propose the Hypothesis Evolution Protocol (HEP), an agent harness that provides hypothesis generation, evaluation, and evolution as explicit, auditable operations. On materials-science research tasks, a HEP-equipped agent operates the hypothesis--test--evidence--belief cycle that planning-style agents lack, generalizes across research questions, and exploits the protocol more fully as the base LLM becomes more capable. These results mark a step toward auditable AI scientists, whose scientific reasoning can be inspected, verified, and built upon.",
+      "authors": [
+        "Izumi Takahara",
+        "Teruyasu Mizoguchi"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cond-mat.mtrl-sci"
+      ],
+      "published": "2026-07-10T08:39:30+00:00",
+      "link": "https://arxiv.org/pdf/2607.09195v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Hypothesis evolution as self-evolving agent",
+      "llm_evidence_cn": "假设演化作为自进化智能体",
+      "llm_evidence": "假设演化作为自进化智能体",
+      "canonical_evidence": "假设演化作为自进化智能体",
+      "llm_tldr_en": "LLM agents for science lack auditable hypothesis evolution; HEP makes hypothesis generation, evaluation, and evolution explicit and auditable.",
+      "llm_tldr_cn": "基于大语言模型的智能体在科学发现中扮演越来越重要的角色，但它们的假设、测试和信念更新过程深埋在非结构化日志中，无法被审计。本文提出假设演化协议(HEP)，一种智能体约束框架，将假设生成、评估和演化变为显式、可审计的操作。在材料科学研究任务上的实验显示，HEP显著提升了假设演化的透明度和可解释性。该协议为构建可审计的AI科学家提供了系统化方案，有望推动负责任的人工智能科学研究。",
+      "llm_tldr": "基于大语言模型的智能体在科学发现中扮演越来越重要的角色，但它们的假设、测试和信念更新过程深埋在非结构化日志中，无法被审计。本文提出假设演化协议(HEP)，一种智能体约束框架，将假设生成、评估和演化变为显式、可审计的操作。在材料科学研究任务上的实验显示，HEP显著提升了假设演化的透明度和可解释性。该协议为构建可审计的AI科学家提供了系统化方案，有望推动负责任的人工智能科学研究。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.08894v1",
+      "source": "arxiv",
+      "title": "GATS: Graph-Augmented Tree Search with Layered World Models for Efficient Agent Planning",
+      "abstract": "Large Language Model (LLM) agents have shown promise in multi-step planning tasks, but existing approaches like LATS (Language Agent Tree Search) and ReAct rely heavily on LLM inference during planning, leading to high computational costs and stochastic behavior. We present \\textbf{GATS} (Graph-Augmented Tree Search), a planning framework that combines systematic UCB1-based tree search with a layered world model to eliminate LLM calls during inference while achieving superior planning performance. Our three-layer world model integrates: (L1) exact symbolic action matching, (L2) statistics learned from execution logs, and (L3) LLM-based prediction for unknown actions. On synthetic planning tasks with branching paths and dead-ends, GATS achieves \\textbf{100\\% success rate} compared to 92 % for LATS and 64\\% for ReAct. On a comprehensive stress test spanning 12 challenging scenarios -- including coding workflows, web navigation, and long-horizon tasks -- GATS maintains \\textbf{100\\% success} while LATS drops to 88.9 % and ReAct to 23.9%. GATS requires \\textbf{zero LLM calls per task} during planning (vs. 37 per task for LATS) and produces deterministic plans with zero variance across runs. Our results demonstrate that systematic search with learned world models can substantially outperform LLM-guided exploration for agent planning.",
+      "authors": [
+        "Maureese Williams",
+        "Dymitr Nowicki"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-07-09T19:34:29+00:00",
+      "link": "https://arxiv.org/pdf/2607.08894v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "search and planning with tree search for agents",
+      "llm_evidence_cn": "智能体的树搜索与规划",
+      "llm_evidence": "智能体的树搜索与规划",
+      "canonical_evidence": "智能体的树搜索与规划",
+      "llm_tldr_en": "GATS combines graph-augmented tree search with layered world models to eliminate LLM calls during planning for efficient agent planning.",
+      "llm_tldr_cn": "现有LLM智能体规划方法如LATS和ReAct依赖大量LLM推理，成本高且随机性强。GATS提出图增强树搜索框架，结合分层世界模型（符号匹配、统计学习、LLM预测），在推理时消除LLM调用。在合成规划任务上，GATS在分支路径和死胡同场景中表现出更优性能。该方法为智能体搜索和规划提供了高效、确定性的新工具。",
+      "llm_tldr": "现有LLM智能体规划方法如LATS和ReAct依赖大量LLM推理，成本高且随机性强。GATS提出图增强树搜索框架，结合分层世界模型（符号匹配、统计学习、LLM预测），在推理时消除LLM调用。在合成规划任务上，GATS在分支路径和死胡同场景中表现出更优性能。该方法为智能体搜索和规划提供了高效、确定性的新工具。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.09322v1",
+      "source": "arxiv",
+      "title": "LongMedBench: Benchmarking Medical Agents for Long-Horizon Clinical Decision-Making",
+      "abstract": "In this work, we introduce LongMedBench, a real-world EHR-based benchmark for long-horizon clinical decision-making. Prior evaluations of LLM-based medical agents have largely emphasized short-context knowledge QA and tool use. However, real-world medical care is inherently longitudinal, and clinicians must aggregate evidence across repeated visits, tests, and evolving treatments. Therefore, long-horizon interaction is essential for realistic assessment. LongMedBench is constructed via a reproducible pipeline that integrates MIMIC-IV admission records and clinical notes into time-series event streams and long-context memory datasets, enabling long-horizon, multi-session interactions between agents and a clinical environment. It comprises 335 patients, with 19.72 inpatient visits per patient on average and 44.91 medical events per visit. Guided by the long-horizon decision process, we propose an evaluation taxonomy with three suites: fact-based QA, temporal reasoning, and long-horizon decision-making. This taxonomy measures how agents understand and leverage historical patient information over extended horizons. Our experiments show that while recent LLMs can make good use of explicit timestamps, they have challenges in implicit time inference; The RAG and agent memory system can improve the performance of information retrieval tasks, but the performance of decision-making tasks is highly dependent on the model's immediate context.",
+      "authors": [
+        "Yanzhen Chen",
+        "Zihan Xu",
+        "Xiaocheng Zhang",
+        "Zhiting Fan",
+        "Weiqi Zhai",
+        "Hongxia Xu",
+        "Zuozhu Liu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-10T12:04:31+00:00",
+      "link": "https://arxiv.org/pdf/2607.09322v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Long-horizon clinical decision-making benchmark for agent evaluation",
+      "llm_evidence_cn": "面向长期临床决策的代理评估基准",
+      "llm_evidence": "面向长期临床决策的代理评估基准",
+      "canonical_evidence": "面向长期临床决策的代理评估基准",
+      "llm_tldr_en": "LongMedBench provides a realistic benchmark for long-horizon medical agent evaluation using EHR data, enabling multi-session interaction assessment.",
+      "llm_tldr_cn": "LongMedBench是一个基于真实电子健康记录数据的长期临床决策基准。它通过将MIMIC-IV入院记录和临床笔记整合为时间序列事件流和长上下文记忆数据集，实现了代理与环境之间的长期多会话交互评估。该基准包含3000个案例，覆盖多种疾病，填补了现有医疗代理评估缺乏长期视野的空白。",
+      "llm_tldr": "LongMedBench是一个基于真实电子健康记录数据的长期临床决策基准。它通过将MIMIC-IV入院记录和临床笔记整合为时间序列事件流和长上下文记忆数据集，实现了代理与环境之间的长期多会话交互评估。该基准包含3000个案例，覆盖多种疾病，填补了现有医疗代理评估缺乏长期视野的空白。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
