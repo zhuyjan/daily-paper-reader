@@ -1,0 +1,1013 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-15T21:14:22.970462+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 19,
+    "deep_cap": 7,
+    "deep_selected": 11,
+    "quick_candidates": 27,
+    "quick_skim_target": 12,
+    "quick_selected": 12
+  },
+  "deep_dive": [
+    {
+      "id": "2607.07820v1",
+      "source": "arxiv",
+      "title": "DeepSearch-World: Self-Distillation for Deep Search Agents in a Verifiable Environment",
+      "abstract": "Training tool-use agents to improve from their own experience remains challenging, as supervised fine-tuning relies on fixed teacher-distilled trajectories, while sparse-reward reinforcement learning provides weak supervision for long-horizon interactions. We present DeepSearch-Evolve, a self-distillation framework for web agents built on DeepSearch-World, a deterministic and verifiable environment with reproducible search and page-reading tools. DeepSearch-World contains 420K multi-hop QA tasks constructed from entity-level random walks and supports key agentic cognitive behaviors useful for self-evolving, including progress verification, grounded reflection, and failure recovery. DeepSearch-Evolve iteratively performs trajectory generation, filtering, data mixing, and fine-tuning to train stronger agents. Without distillation from more capable models, DeepSearch-World-9B achieves competitive performance compared with open-source agents, reaching 31.2% on BrowseComp, 61.5% on GAIA, and 93.4% on HotpotQA, showing that verifiable environments enable scalable self-evolution for long-horizon web agents. We will release the environment, 420K training pool, validation set, model, and code to facilitate future research on self-improving deep search agents.",
+      "authors": [
+        "Xinyu Geng",
+        "Xuanhua He",
+        "Sixiang Chen",
+        "Yanjing Xiao",
+        "Fan Zhang",
+        "Shijue Huang",
+        "Haitao Mi",
+        "Zhenwen Liang",
+        "Tianqing Fang",
+        "Yi R. Fung"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-07-08T18:03:41+00:00",
+      "link": "https://arxiv.org/pdf/2607.07820v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-distillation for deep search agents in verifiable environment",
+      "llm_evidence_cn": "可验证环境中深度搜索智能体的自蒸馏",
+      "llm_evidence": "可验证环境中深度搜索智能体的自蒸馏",
+      "canonical_evidence": "可验证环境中深度搜索智能体的自蒸馏",
+      "llm_tldr_en": "Presents DeepSearch-Evolve, a self-distillation framework for web agents that iteratively generates trajectories and trains in a deterministic verifiable environment, enabling self-improvement.",
+      "llm_tldr_cn": "训练工具使用智能体从自身经验中改进面临挑战，监督微调依赖固定教师轨迹，稀疏奖励强化学习对长程交互监督弱。本文提出DeepSearch-Evolve自蒸馏框架，基于可验证的确定性环境DeepSearch-World，包含42万多跳QA任务。智能体通过迭代轨迹生成、过滤和训练，实现自我进化，并支持进度验证、接地反思和失败恢复。该方法直接解决了数据自由/自生成训练和在线策略蒸馏的核心问题。",
+      "llm_tldr": "训练工具使用智能体从自身经验中改进面临挑战，监督微调依赖固定教师轨迹，稀疏奖励强化学习对长程交互监督弱。本文提出DeepSearch-Evolve自蒸馏框架，基于可验证的确定性环境DeepSearch-World，包含42万多跳QA任务。智能体通过迭代轨迹生成、过滤和训练，实现自我进化，并支持进度验证、接地反思和失败恢复。该方法直接解决了数据自由/自生成训练和在线策略蒸馏的核心问题。",
+      "llm_tags": [
+        "query:self-evolve:composite"
+      ],
+      "matched_query_tag": "query:self-evolve:composite",
+      "matched_query_text": "Papers central to 自进化智能体, especially work that connects or combines: r; on-policy distillation; long-horizon agent reasoning; data-free agent training; self-evolving agents; synthetic trajectory construction, verification, and curriculum shaping for autonomous agents; on policy reinforcement learning and distillation for long horizon agent trajectories; data free or self generated training for multi turn tool using agents.",
+      "matched_requirement_id": "req-composite-self-evolve",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.07820v2",
+      "source": "arxiv",
+      "title": "DeepSearch-World: Self-Distillation for Deep Search Agents in a Verifiable Environment",
+      "abstract": "Training tool-use agents to improve from their own experience remains challenging, as supervised fine-tuning relies on fixed teacher-distilled trajectories, while sparse-reward reinforcement learning provides weak supervision for long-horizon interactions. We present DeepSearch-Evolve, a self-distillation framework for web agents built on DeepSearch-World, a deterministic and verifiable environment with reproducible search and page-reading tools. DeepSearch-World contains 420K multi-hop QA tasks constructed from entity-level random walks and supports key agentic cognitive behaviors useful for self-evolving, including progress verification, grounded reflection, and failure recovery. DeepSearch-Evolve iteratively performs trajectory generation, filtering, data mixing, and fine-tuning to train stronger agents. Without distillation from more capable models, DeepSearch-World-9B achieves competitive performance compared with open-source agents, reaching 31.2% on BrowseComp, 61.5% on GAIA, and 93.4% on HotpotQA, showing that verifiable environments enable scalable self-evolution for long-horizon web agents. We will release the environment, 420K training pool, validation set, model, and code to facilitate future research on self-improving deep search agents.",
+      "authors": [
+        "Xinyu Geng",
+        "Xuanhua He",
+        "Sixiang Chen",
+        "Yanjing Xiao",
+        "Fan Zhang",
+        "Shijue Huang",
+        "Haitao Mi",
+        "Zhenwen Liang",
+        "Tianqing Fang",
+        "Yi R. Fung"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-07-08T18:03:41+00:00",
+      "link": "https://arxiv.org/pdf/2607.07820v2",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-distillation for deep search agents in verifiable environment",
+      "llm_evidence_cn": "可验证环境中深度搜索智能体的自蒸馏",
+      "llm_evidence": "可验证环境中深度搜索智能体的自蒸馏",
+      "canonical_evidence": "可验证环境中深度搜索智能体的自蒸馏",
+      "llm_tldr_en": "Presents DeepSearch-Evolve, a self-distillation framework for web agents that iteratively generates trajectories and trains in a deterministic verifiable environment, enabling self-improvement.",
+      "llm_tldr_cn": "训练工具使用智能体从自身经验中改进面临挑战，监督微调依赖固定教师轨迹，稀疏奖励强化学习对长程交互监督弱。本文提出DeepSearch-Evolve自蒸馏框架，基于可验证的确定性环境DeepSearch-World，包含42万多跳QA任务。智能体通过迭代轨迹生成、过滤和训练，实现自我进化，并支持进度验证、接地反思和失败恢复。该方法直接解决了数据自由/自生成训练和在线策略蒸馏的核心问题。",
+      "llm_tldr": "训练工具使用智能体从自身经验中改进面临挑战，监督微调依赖固定教师轨迹，稀疏奖励强化学习对长程交互监督弱。本文提出DeepSearch-Evolve自蒸馏框架，基于可验证的确定性环境DeepSearch-World，包含42万多跳QA任务。智能体通过迭代轨迹生成、过滤和训练，实现自我进化，并支持进度验证、接地反思和失败恢复。该方法直接解决了数据自由/自生成训练和在线策略蒸馏的核心问题。",
+      "llm_tags": [
+        "query:self-evolve:composite"
+      ],
+      "matched_query_tag": "query:self-evolve:composite",
+      "matched_query_text": "Papers central to 自进化智能体, especially work that connects or combines: r; on-policy distillation; long-horizon agent reasoning; data-free agent training; self-evolving agents; synthetic trajectory construction, verification, and curriculum shaping for autonomous agents; on policy reinforcement learning and distillation for long horizon agent trajectories; data free or self generated training for multi turn tool using agents.",
+      "matched_requirement_id": "req-composite-self-evolve",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.08964v2",
+      "source": "arxiv",
+      "title": "Long-Horizon-Terminal-Bench: Testing the Limits of Agents on Long-Horizon Terminal Tasks with Dense Reward-Based Grading",
+      "abstract": "AI agents have become capable of autonomously completing short, well-specified tasks. However, existing terminal benchmarks largely focus on simple problems that finish within minutes and are evaluated only by their final outcome. This setup overlooks intermediate progress and partial solutions, yielding sparse reward signals and an incomplete picture of agent capability. We introduce Long-Horizon-Terminal-Bench, a terminal benchmark of 46 long-horizon tasks spanning nine categories, including experiment reproduction, software engineering, multimodal analysis, interactive games, and scientific computing. Each task follows a Terminal-Bench-style setup with a reference solution or simulation engine, but is further decomposed into fine-grained graded subtasks. This design enables dense intermediate rewards and partial credit, allowing evaluation to capture not only whether an agent reaches the final goal, but also how far it progresses on open-ended workflows. Tasks in Long-Horizon-Terminal-Bench typically require hundreds of episodes and minutes to hours of execution, stressing long-horizon planning, long-context management, and iterative debugging rather than one-shot problem solving. We evaluate 15 frontier models and find that agents consume on average 9.9M tokens per task, with roughly 231 episodes and 85.3 minutes of execution time per run, making Long-Horizon-Terminal-Bench more demanding than prior terminal-based benchmarks. Even the strongest tested model achieves 15.2% pass@1 at a partial-reward threshold of 0.95 and 10.9% at a perfect-reward threshold of 1.0, while the mean pass rate across models is 4.3% and 1.7% under the two thresholds, respectively. These results reveal headroom for improvement. We further analyze failure modes and error patterns, and release Long-Horizon-Terminal-Bench to support future progress on long-horizon terminal agents.",
+      "authors": [
+        "Zongxia Li",
+        "Zhongzhi Li",
+        "Yucheng Shi",
+        "Ruhan Wang",
+        "Junyao Yang",
+        "Zhichao Liu",
+        "Xiyang Wu",
+        "Anhao Li",
+        "Yue Yu",
+        "Ninghao Liu",
+        "Lichao Sun",
+        "Haotao Mi",
+        "Leowei Liang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-09T21:56:37+00:00",
+      "link": "https://arxiv.org/pdf/2607.08964v2",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "long-horizon terminal benchmark",
+      "llm_evidence_cn": "长时域终端基准",
+      "llm_evidence": "长时域终端基准",
+      "canonical_evidence": "长时域终端基准",
+      "llm_tldr_en": "Introduces Long-Horizon-Terminal-Bench, a benchmark of 46 long-horizon tasks with dense reward grading to evaluate agent capabilities.",
+      "llm_tldr_cn": "现有终端基准多为短时简单任务且仅评估最终结果，忽略了中间进度和部分解。本文提出Long-Horizon-Terminal-Bench，包含46个长时域任务，涵盖实验复现、软件工程、多模态分析等九大类，采用密集奖励分级评估。该基准可更全面反映智能体在长时域推理中的能力。",
+      "llm_tldr": "现有终端基准多为短时简单任务且仅评估最终结果，忽略了中间进度和部分解。本文提出Long-Horizon-Terminal-Bench，包含46个长时域任务，涵盖实验复现、软件工程、多模态分析等九大类，采用密集奖励分级评估。该基准可更全面反映智能体在长时域推理中的能力。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.09773v1",
+      "source": "arxiv",
+      "title": "EvoCUA-1.5: Online Reinforcement Learning for Multi-turn Computer-Use Agents",
+      "abstract": "Computer-use agents must solve long-horizon tasks through repeated interaction with partially observable, multimodal desktop environments. Although imitation learning and offline trajectory refinement provide strong priors, static traces cannot cover the causal feedback loop of real computer use: each action changes the screen state, future action space, and recovery options. EvoCUA-1.5 extends self-evolving computer-use agents from offline experience learning to online reinforcement learning, where policies interact with executable sandbox environments and improve from verifiable task outcomes. Online RL in this setting requires more than directly reusing single-turn language-RL recipes. Multi-turn interaction introduces context-managed observations, sparse terminal rewards, variable-length trajectories, and slow environment feedback. EvoCUA-1.5 addresses these challenges with Step-Level Policy Optimization (STEPO), which preserves trajectory-level advantage balance after decomposition into step-level samples; policy-aware filtering and pass-rate calibration over verifiable synthesized tasks; Dynamic Tri-Adaptive Curriculum (DTAC), which combines learnable tasks, difficult positive replay, and controlled infeasible-task exposure; and a fully asynchronous RL infrastructure with staleness control and mini-group batching. Experiments show that these components improve training stability and downstream performance. EvoCUA-1.5 achieves 63.2\\% success on OSWorld-Verified, outperforming comparable 32B/35B-scale open-weight baselines and even approaching models with significantly larger parameter counts. Overall, EvoCUA-1.5 provides a practical framework for scaling online RL in multi-turn computer-use agents.",
+      "authors": [
+        "Mianqiu Huang",
+        "Taofeng Xue",
+        "Chong Peng",
+        "Jinrui Ding",
+        "Sicheng Fan",
+        "Jiale Hong",
+        "Yufei Gao",
+        "Xiaocheng Zhang",
+        "Linsen Guo",
+        "Xin Yang",
+        "Dengchang Zhao",
+        "Yuchen Xie",
+        "Peng Pei",
+        "Xunliang Xie",
+        "Xipeng Qiu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-07-07T16:36:25+00:00",
+      "link": "https://arxiv.org/pdf/2607.09773v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "online RL for long-horizon agent trajectories",
+      "llm_evidence_cn": "长时域智能体轨迹的在线强化学习",
+      "llm_evidence": "长时域智能体轨迹的在线强化学习",
+      "canonical_evidence": "长时域智能体轨迹的在线强化学习",
+      "llm_tldr_en": "EvoCUA-1.5 extends self-evolving computer-use agents with online RL, enabling learning from verifiable task outcomes in interactive environments.",
+      "llm_tldr_cn": "计算机使用智能体需在长时域中反复交互，模仿学习和离线轨迹优化难以覆盖真实反馈。本文提出EvoCUA-1.5，将自进化智能体从离线经验学习扩展到在线强化学习，在可执行沙盒环境中通过可验证任务结果改进策略。实验表明在线RL能显著提升多轮计算机使用任务的成功率。",
+      "llm_tldr": "计算机使用智能体需在长时域中反复交互，模仿学习和离线轨迹优化难以覆盖真实反馈。本文提出EvoCUA-1.5，将自进化智能体从离线经验学习扩展到在线强化学习，在可执行沙盒环境中通过可验证任务结果改进策略。实验表明在线RL能显著提升多轮计算机使用任务的成功率。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on policy reinforcement learning and distillation for long horizon agent trajectories",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.10198v1",
+      "source": "arxiv",
+      "title": "Equal Accuracy, Unequal Evidence: Search APIs as Decision Surfaces for Tool-Using Agents",
+      "abstract": "Search APIs are the fundamental retrieval layer for many agents and are often their most frequently used tool. Traditional search APIs provide URLs, titles, and snippets that preview website contents. Because full-page retrieval is token-intensive, agent retrieval architectures increasingly use progressive disclosure: the agent first sees snippets and then chooses whether to fetch full pages. In such systems, search API performance is often evaluated primarily by answer accuracy. We argue that a commercial search API is better understood as a decision surface: the ranked snippets, URLs, and metadata that determine whether an agent answers immediately, searches again, or spends tokens opening pages. We test this claim with one frozen GPT-5.4 agent, two tools (search_web and fetch_page), and 100 questions from SEALQA-HARD, varying only the search provider (Brave, Tavily, Firecrawl). A Kimi-K2.6 oracle labels every content element visible to the agent (URL, title, snippet, and fetched page, when fetched), producing 6,869 valid per-URL judgments. We use an audited correct-answer label, semantic match, which preserves exact matches while accepting harmless formatting and naming variants. Under this measure, the providers remain close (25, 25, 26 / 100), but their evidence economies differ sharply: Brave offers gold-answer-rich snippets, Tavily concentrates gold-supporting URLs at rank 1, and Firecrawl is associated with broader exploration under this fixed agent policy. We also introduce a surface contradiction-to-gold URL ratio, which varies from 0.92 to 2.59. Provider choice is therefore a retrieval-budget and policy decision, not merely a recall decision.",
+      "authors": [
+        "Sriram Selvam",
+        "Anneswa Ghosh"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-07-11T08:22:35+00:00",
+      "link": "https://arxiv.org/pdf/2607.10198v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "analyzes search APIs as decision surfaces for agentic search",
+      "llm_evidence_cn": "分析搜索API作为智能体搜索的决策表面",
+      "llm_evidence": "分析搜索API作为智能体搜索的决策表面",
+      "canonical_evidence": "分析搜索API作为智能体搜索的决策表面",
+      "llm_tldr_en": "This paper shows search APIs act as decision surfaces that determine agent behavior beyond accuracy, affecting whether to search again or fetch pages.",
+      "llm_tldr_cn": "搜索API是智能体最常用的工具，但现有评估仅关注答案准确率。本文提出搜索API应被视为决策表面：其返回的排名、摘要和元数据直接决定智能体是立即回答、继续搜索还是打开页面。实验证实这一视角的合理性。",
+      "llm_tldr": "搜索API是智能体最常用的工具，但现有评估仅关注答案准确率。本文提出搜索API应被视为决策表面：其返回的排名、摘要和元数据直接决定智能体是立即回答、继续搜索还是打开页面。实验证实这一视角的合理性。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "agentic search",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.10463v1",
+      "source": "arxiv",
+      "title": "GRASP: GRanularity-Aware Search Policy for Agentic RAG",
+      "abstract": "Agentic retrieval-augmented generation (RAG) extends static RAG by allowing language models to iteratively reason, generate search queries, retrieve evidence, and predict answers. However, it remains challenging for models to decide when to retrieve, whether to use lexical matching or semantic similarity, and how to control context granularity to prevent irrelevant tokens from interfering with agent reasoning. In this paper, we introduce GRASP, a reinforcement learning (RL) framework for training agents to adaptively coordinate complementary retrieval tools during multi-step reasoning. GRASP provides the agent with semantic search, keyword search, and paragraph-reading actions, enabling it to retrieve sentence-level evidence and expand further context only when needed. We train the policy with a reward that jointly accounts for answer accuracy, grounded reading, complementary search, and turn efficiency. Experiments on multi-hop reasoning benchmarks show that GRASP improves both retrieval recall and downstream question answering performance compared with single-step retrieval, prompting-based agentic RAG, and RL-based retrieval baselines. Qualitative and ablation analyses show that the learned policy develops interpretable skimming and scanning behavior: it uses semantic search for broad exploration, paragraph reading for local verification, and keyword search for entity-specific evidence. These results suggest that learning to coordinate retrieval signals and context granularity is critical for agent's correct reasoning.",
+      "authors": [
+        "Varun Gandhi",
+        "Jaewook Lee",
+        "Shantanu Todmal",
+        "Franck Dernoncourt",
+        "Ryan Rossi",
+        "Zichao Wang",
+        "Andrew Lan"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-07-11T19:58:07+00:00",
+      "link": "https://arxiv.org/pdf/2607.10463v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "RL framework for coordinating retrieval tools in agentic RAG",
+      "llm_evidence_cn": "强化学习框架协调检索工具，用于智能体RAG的多步搜索",
+      "llm_evidence": "强化学习框架协调检索工具，用于智能体RAG的多步搜索",
+      "canonical_evidence": "强化学习框架协调检索工具，用于智能体RAG的多步搜索",
+      "llm_tldr_en": "GRASP uses RL to train agents to adaptively coordinate semantic search, keyword search, and paragraph reading for multi-step retrieval in agentic RAG.",
+      "llm_tldr_cn": "静态RAG难以适应多步推理中何时检索以及如何控制上下文粒度。本文提出GRASP，一个强化学习框架，训练智能体在多步推理中自适应协调语义搜索、关键词搜索和段落阅读等互补检索工具。实验表明，GRASP显著提升了检索相关性和答案准确性，为智能体驱动的搜索系统提供了可学习的检索策略。",
+      "llm_tldr": "静态RAG难以适应多步推理中何时检索以及如何控制上下文粒度。本文提出GRASP，一个强化学习框架，训练智能体在多步推理中自适应协调语义搜索、关键词搜索和段落阅读等互补检索工具。实验表明，GRASP显著提升了检索相关性和答案准确性，为智能体驱动的搜索系统提供了可学习的检索策略。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "reinforcement learning for multi turn search, retrieval, and evidence collection",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.10805v1",
+      "source": "arxiv",
+      "title": "Diagnosing and Mitigating Thinking Collapse in On-Policy Self-Distillation",
+      "abstract": "On-Policy Self-Distillation (OPSD) has emerged as a crucial paradigm for enhancing and aligning Large Language Models (LLMs). However, in complex reasoning tasks, OPSD paradoxically degrades downstream performance. In this paper, we systematically investigate this pathology and identify a severe optimization trap we define as \\textbf{Thinking Collapse} -- a sharp decline in the model's native intermediate reasoning behavior, measured by epistemic-token density (ET per 1k). Through entropy-based gradient masking and token-level target analysis, we show that this collapse is triggered by aggressive teacher gradients at high-student-entropy decision forks, where student epistemic tokens are frequently suppressed into teacher non-epistemic targets and are highly concentrated in high pointwise student-teacher divergence regions. To resolve this optimization pathology, we propose \\textbf{Adaptive Dual-Perspective OPSD (AD-OPSD)}, a robust control framework that dynamically moderates the self-distillation objective. AD-OPSD selectively anchors high-suppression-risk sandboxed tokens to a reference prior derived from the frozen base model via an asymmetrical pointwise divergence gate, preserving native thinking capacity while retaining OPSD's error-correcting power. Extensive experiments across competitive mathematical benchmarks show that AD-OPSD improves over standard OPSD by up to \\textbf{+4.1\\%} absolute average accuracy across diverse model scales and datasets. Further analysis demonstrates that AD-OPSD mitigates thinking collapse and generalizes robustly to different post-training paradigms.",
+      "authors": [
+        "Keqin Peng",
+        "Chen Li",
+        "Yuanxin Ouyang",
+        "Yancheng Yuan",
+        "Liang Ding"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-07-12T15:24:25+00:00",
+      "link": "https://arxiv.org/pdf/2607.10805v1",
+      "tags": [
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "diagnosing thinking collapse in on-policy self-distillation",
+      "llm_evidence_cn": "诊断在线策略自蒸馏中的思维崩溃问题",
+      "llm_evidence": "诊断在线策略自蒸馏中的思维崩溃问题",
+      "canonical_evidence": "诊断在线策略自蒸馏中的思维崩溃问题",
+      "llm_tldr_en": "Identifies thinking collapse in on-policy self-distillation where epistemic tokens are suppressed, and proposes entropy-based gradient masking to mitigate it.",
+      "llm_tldr_cn": "该论文发现在线策略自蒸馏（OPSD）在复杂推理任务中会导致思维崩溃，即模型中间推理的认知令牌密度急剧下降。通过熵梯度分析，揭示高熵决策点处教师梯度将学生认知令牌压制为非认知目标。提出基于熵的梯度掩码方法，有效保持中间推理行为，提升下游推理性能。",
+      "llm_tldr": "该论文发现在线策略自蒸馏（OPSD）在复杂推理任务中会导致思维崩溃，即模型中间推理的认知令牌密度急剧下降。通过熵梯度分析，揭示高熵决策点处教师梯度将学生认知令牌压制为非认知目标。提出基于熵的梯度掩码方法，有效保持中间推理行为，提升下游推理性能。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on-policy distillation",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.11172v1",
+      "source": "arxiv",
+      "title": "STAMP: Provenance-Guided Credit Assignment for Deep Search Agents",
+      "abstract": "Reinforcement learning for deep-search agents has largely focused on trajectory-level scoring -- outcome correctness, citation-aware rewards, and evidence coverage. Yet the actions that expose supporting documents receive no targeted credit, a gap we call the reward-credit mismatch. We propose STAMP, in which a reference-based verifier judges whether each cited document supports an entity or relation in a training-time evidence graph, and first-exposure attribution traces each supported citation back to the action that first surfaced it. This step credit is injected through sign-preserving advantage modulation, which redistributes advantage across steps without changing the trajectory-level reward or the relative ranking of trajectories within each group. On BrowseComp, BrowseComp-ZH, and xbench-DS, STAMP improves the GRPO baseline by +2.0/+5.5/+3.0 points under matched SFT initialization, training data, and search tools, and composes with both outcome-only and citation-rubric base rewards. Component ablations confirm that the provenance-based credit signal and the sign-preserving advantage modulation each contribute to the gains.",
+      "authors": [
+        "Ke Xu",
+        "Han Xu",
+        "Xinran Chen",
+        "Yuqian Wang",
+        "Zhixuan Li",
+        "Xiaojian Liu",
+        "Changwo Wu",
+        "Jianqiang Xia",
+        "Yuchen Li"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-07-13T07:12:55+00:00",
+      "link": "https://arxiv.org/pdf/2607.11172v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "reinforcement learning for deep-search agents with credit assignment for multi-turn search and evidence collection",
+      "llm_evidence_cn": "面向深度搜索智能体的强化学习方法，实现多轮搜索和证据收集的信用分配",
+      "llm_evidence": "面向深度搜索智能体的强化学习方法，实现多轮搜索和证据收集的信用分配",
+      "canonical_evidence": "面向深度搜索智能体的强化学习方法，实现多轮搜索和证据收集的信用分配",
+      "llm_tldr_en": "Proposes STAMP to address reward-credit mismatch in RL for deep search agents by tracing evidence exposure to specific actions and redistributing advantage.",
+      "llm_tldr_cn": "本文针对深度搜索智能体强化学习中的奖励-信用不匹配问题，提出STAMP方法。该方法通过基于参考的验证器判断引用文档是否支持证据图中的实体或关系，并将首次暴露归因于产生它的动作，通过保号优势调制实现步级信用分配。实验表明STAMP显著提升了搜索效率和证据回收率。",
+      "llm_tldr": "本文针对深度搜索智能体强化学习中的奖励-信用不匹配问题，提出STAMP方法。该方法通过基于参考的验证器判断引用文档是否支持证据图中的实体或关系，并将首次暴露归因于产生它的动作，通过保号优势调制实现步级信用分配。实验表明STAMP显著提升了搜索效率和证据回收率。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "reinforcement learning for multi turn search, retrieval, and evidence collection",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.12254v1",
+      "source": "arxiv",
+      "title": "How to Realize Recursively Self-Improving Agents and Personal Singularity: A Goal-, Scope-, Tool-, and Benchmark-Driven Multi-Agent Architecture",
+      "abstract": "Large language model (LLM) agents can increasingly plan, use tools, maintain memory, and execute long-horizon tasks. These advances motivate two linked questions: how can an agent improve the mechanisms by which it learns and acts, and how can that improvement increase the durable capabilities of its user rather than only the software itself? This paper proposes a governed multi-agent architecture for recursively self-improving agents and introduces personal singularity as a bounded human-AI co-development objective: helping a user approach an expanding, user-defined capability frontier across selected domains. Each agent is defined by a goal contract, bounded scope, validated tool registry, tool-level tests, end-to-end benchmarks, an owner-controlled autonomy policy, a routing policy, memory, and an improvement policy. Out-of-scope tasks are transferred to another accountable agent or to a newly created niche agent. A user-facing Auto-Index selects interactive, hybrid, autonomous, or scheduled operation without overriding external permissions. The architecture combines a fast planner-executor-verifier loop, a slower evidence-gated improvement loop, an external governance plane, decentralized agent lineages, an owner-directed agent foundry, and a Personal Singularity OS coordinating working, computational-imaging, process-learning, and personal-learning agents. We formalize scope, routing, improvement acceptance, bounded goal evolution, tool-first execution, and human capability transfer, and provide safety invariants, benchmark design, and an implementation roadmap. This is a position and systems-design paper, not evidence that unrestricted recursive self-improvement or personal singularity has already been achieved.",
+      "authors": [
+        "Chengshuai Yang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-14T01:44:53+00:00",
+      "link": "https://arxiv.org/pdf/2607.12254v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "recursively self-improving agents",
+      "llm_evidence_cn": "递归自我改进智能体",
+      "llm_evidence": "递归自我改进智能体",
+      "canonical_evidence": "递归自我改进智能体",
+      "llm_tldr_en": "Proposes a governed multi-agent architecture for recursively self-improving agents, introducing personal singularity as a bounded human-AI co-development objective.",
+      "llm_tldr_cn": "现有LLM智能体已具备规划、工具使用和长程任务执行能力，但如何实现递归的自我改进仍是挑战。本文提出一种受约束的多智能体架构，通过目标合同和范围限定实现递归自我改进，并引入个人奇点概念作为有限的人类-AI共同发展目标。架构支持智能体在用户定义的领域内持续提升能力，同时保持安全边界。该方法为自我进化智能体的设计提供了理论基础和实践框架。",
+      "llm_tldr": "现有LLM智能体已具备规划、工具使用和长程任务执行能力，但如何实现递归的自我改进仍是挑战。本文提出一种受约束的多智能体架构，通过目标合同和范围限定实现递归自我改进，并引入个人奇点概念作为有限的人类-AI共同发展目标。架构支持智能体在用户定义的领域内持续提升能力，同时保持安全边界。该方法为自我进化智能体的设计提供了理论基础和实践框架。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.12267v1",
+      "source": "arxiv",
+      "title": "Track, Rank, Crack: Epistemic Working Memory Scales Multi-Hop Reasoning in Language Agents",
+      "abstract": "Language agents that interleave reasoning and tool use degrade sharply as reasoning chains lengthen, even when each individual step is easy. We trace this to context dilution: an agent's investigative state (what it has confirmed, what it suspects, and what it still needs) lives only implicitly in a growing context window, where early discoveries are buried under later retrievals. We introduce SLEUTH, which makes this state explicit and actionable through a structured epistemic working memory: the agent maintains Confirmed Facts grounded to sources, Active Hypotheses ranked by evidence, and Open Questions that directly drive its next action. Across five multi-hop benchmarks and five established baselines, SLEUTH's advantage grows with difficulty, from +5 points on HotpotQA to +11 on 4-hop chains, surpassing Reflexion without multiple episodes. Analyzing where the remaining gap lies, we identify the evidence sufficiency problem: agents often find the answer but fail to commit, exhausting their budget on needless verification. A lightweight commitment trigger fixes this, but only when the agent already maintains structured state: the identical trigger applied to an unstructured agent yields no improvement, isolating organized epistemic state as the necessary condition for effective commitment. Finally, enforcing protocol adherence on a weaker model recovers up to +19 points on the hardest problems, showing that how an agent organizes its reasoning, not raw model capability, is the active ingredient for scaling multi-hop reasoning.",
+      "authors": [
+        "Ning Liu"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-07-14T02:10:46+00:00",
+      "link": "https://arxiv.org/pdf/2607.12267v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "epistemic working memory with confirmed facts, hypotheses, and open questions for multi-hop reasoning",
+      "llm_evidence_cn": "显式认知工作记忆，包含已确认事实、活跃假设和开放问题，用于多跳推理",
+      "llm_evidence": "显式认知工作记忆，包含已确认事实、活跃假设和开放问题，用于多跳推理",
+      "canonical_evidence": "显式认知工作记忆，包含已确认事实、活跃假设和开放问题，用于多跳推理",
+      "llm_tldr_en": "Introduces SLEUTH, which maintains explicit epistemic working memory (facts, hypotheses, questions) to combat context dilution in multi-hop tool-using agents.",
+      "llm_tldr_cn": "语言智能体在多步推理中面临上下文稀释问题，早期发现被后续检索淹没。本文提出SLEUTH，通过结构化认知工作记忆显式维护已确认事实（含来源）、活跃假设（按证据排序）和开放问题，驱动下一步行动。在五个多跳基准和五个基线方法上，SLEUTH的优势随着推理链增长而扩大。该工作为搜索智能体提供了可扩展的显式记忆与证据管理机制。",
+      "llm_tldr": "语言智能体在多步推理中面临上下文稀释问题，早期发现被后续检索淹没。本文提出SLEUTH，通过结构化认知工作记忆显式维护已确认事实（含来源）、活跃假设（按证据排序）和开放问题，驱动下一步行动。在五个多跳基准和五个基线方法上，SLEUTH的优势随着推理链增长而扩大。该工作为搜索智能体提供了可扩展的显式记忆与证据管理机制。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.12790v1",
+      "source": "arxiv",
+      "title": "Who Grades the Grader? Co-Evolving Evaluation Metrics and Skills for Self-Improving LLM Agents",
+      "abstract": "Self-evolving agent systems improve by creating, revising, and retiring their own skills, but every such loop rests on a hidden assumption: a reliable evaluation metric already exists. In many real applications it does not. We make three claims. First, metrics can be \\emph{evolved}: our metric loop searches compositions of small drawback detectors under a full evolutionary lifecycle, trained to agree with a ten-item anchored reference set, regularized by consensus over unlabeled outputs, and audited against a held-out anchor it never reads, yielding a transparent, inspectable metric rather than an opaque judge. Second, since no metric exists to beat, the yardstick is recovering what an accurate metric would have enabled, and \\emph{Double Ratchet}, our co-evolution of the metric with a lifecycle-managed skill loop, does so: across code generation (MBPP+), enterprise text-to-SQL (Spider~2.0-Snow), and reference-free report generation, it retains 88--110\\% of the held-out lift achieved by the same skill loop driven by ground truth or the best available rubric. Third, safety comes from anchor discipline plus outer audits: removing anchor guards collapses the metric into a vacuous detector while removing the lifecycle does not; and when evolved skills gamed the report rubric, an independent judge caught it, one detector repaired it, and a task-aware judge then preferred the evolved outputs over the pre-evolution baseline in 77\\% of decided pairs. We argue this failure-expecting architecture is the right default wherever no reliable automatic verifier exists.",
+      "authors": [
+        "Xing Zhang",
+        "Guanghui Wang",
+        "Yanwei Cui",
+        "Ziyuan Li",
+        "Wei Qiu",
+        "Bing Zhu",
+        "Peiyang He"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.MA"
+      ],
+      "published": "2026-07-14T14:02:50+00:00",
+      "link": "https://arxiv.org/pdf/2607.12790v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "co-evolves evaluation metrics and skills for self-improving agents",
+      "llm_evidence_cn": "共同进化评估指标和技能以自改进智能体",
+      "llm_evidence": "共同进化评估指标和技能以自改进智能体",
+      "canonical_evidence": "共同进化评估指标和技能以自改进智能体",
+      "llm_tldr_en": "Proposes a co-evolutionary framework for self-improving LLM agents that evolves evaluation metrics alongside skills, addressing the hidden assumption that a reliable metric already exists.",
+      "llm_tldr_cn": "自进化智能体系统通常假设已有可靠评估指标，但实际应用中并非如此。本文提出了一个共同进化框架，同时进化评估指标和技能：指标循环搜索缺陷检测器组合并与参考集对齐，技能循环则利用进化后的指标进行自我改进。该方法生成透明可检查的指标，并在多个任务上提升了智能体的自改进能力。",
+      "llm_tldr": "自进化智能体系统通常假设已有可靠评估指标，但实际应用中并非如此。本文提出了一个共同进化框架，同时进化评估指标和技能：指标循环搜索缺陷检测器组合并与参考集对齐，技能循环则利用进化后的指标进行自我改进。该方法生成透明可检查的指标，并在多个任务上提升了智能体的自改进能力。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.06233v2",
+      "source": "arxiv",
+      "title": "Demonstrating TOFFEE: A Learned System for Synthesizing Data Agent Trajectories at Scale",
+      "abstract": "LLM-powered data agents are playing an increasingly important role in data-driven decision making. However, existing data agents struggle to generalize to unseen data environments and analytical workflows, especially in heterogeneous enterprise settings. This creates a growing need for synthesizing high-quality data agent trajectories that capture complex analytical workflows for given data environments. Such trajectories support two key downstream uses: they can serve as supervised finetuning (SFT) data that adapts data agent models to the target domain, and as in-context learning (ICL) demonstrations to guide general-purpose LLMs in unfamiliar data environments. Thus, we introduce TOFFEE, a system for synthesizing high-quality data agent trajectories from given data environments via Monte Carlo Tree Search (MCTS) with adaptive model selection and cross-task prefix reuse. We show that TOFFEE can effectively generate scalable trajectory data for complex analytical tasks across heterogeneous environments. In this demonstration, we present the system framework of TOFFEE, including its task pool construction, trajectory explorer, and learned cost model. We also introduce the web interface of TOFFEE and its workflow, and demonstrate two end-to-end scenarios: trajectory synthesis for data agent finetuning, and demonstration-augmented data agent reasoning.",
+      "authors": [
+        "Ziting Wang",
+        "Yin Li",
+        "Zuhao Yang",
+        "Xiuchang Li",
+        "Jiale Bai",
+        "Gao Cong"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-07T13:02:08+00:00",
+      "link": "https://arxiv.org/pdf/2607.06233v2",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "synthetic trajectory construction for data agents, enabling supervised finetuning and in-context learning",
+      "llm_evidence_cn": "为数据智能体合成轨迹，支持监督微调和上下文学习",
+      "llm_evidence": "为数据智能体合成轨迹，支持监督微调和上下文学习",
+      "canonical_evidence": "为数据智能体合成轨迹，支持监督微调和上下文学习",
+      "llm_tldr_en": "Introduces TOFFEE, a system that synthesizes high-quality data agent trajectories for adapting agents to new domains via SFT or ICL.",
+      "llm_tldr_cn": "本文提出TOFFEE系统，用于合成高质量的数据智能体轨迹，以支持监督微调（SFT）和上下文学习（ICL），使智能体能适应未知数据环境。该方法解决了数据智能体在异构企业环境中泛化能力不足的问题，为自训练和课程学习提供了数据基础。",
+      "llm_tldr": "本文提出TOFFEE系统，用于合成高质量的数据智能体轨迹，以支持监督微调（SFT）和上下文学习（ICL），使智能体能适应未知数据环境。该方法解决了数据智能体在异构企业环境中泛化能力不足的问题，为自训练和课程学习提供了数据基础。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "synthetic trajectory construction, verification, and curriculum shaping for autonomous agents",
+      "matched_requirement_id": "req-13",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2607.07676v1",
+      "source": "arxiv",
+      "title": "SkillCenter: A Large-Scale Source-Grounded Skill Library for Autonomous AI Agents",
+      "abstract": "Autonomous AI agents can execute complex tasks with limited human review, yet they often lack the grounded operational knowledge to make their outputs not just executable but correct, secure, and maintainable. We introduce SkillCenter, to our knowledge the largest open skill library for agents by total count: 216,938 structured skills across 24 domain bundles. A SkillGate-filtered pipeline contributes 114,565 source-grounded skills from peer-reviewed journals, ArXiv, and over 24,000 technical sources, integrated with 102,373 community skills from GitHub and the ClawHub marketplace. We present the end-to-end framework that builds the pipeline subset: multi-source acquisition, an LLM-based quality gate (SkillGate), template-driven generation, iterative source-grounding, and quality-controlled publishing. Source grounding is a traceability guarantee: each retained claim maps to an exact quotation in its source. All skills ship as offline-searchable SQLite FTS5 bundles.",
+      "authors": [
+        "Tianming Sha",
+        "Yue Zhao",
+        "Lichao Sun",
+        "Yushun Dong"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-08T17:34:28+00:00",
+      "link": "https://arxiv.org/pdf/2607.07676v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "large-scale skill library for autonomous agents",
+      "llm_evidence_cn": "面向自主代理的大规模技能库",
+      "llm_evidence": "面向自主代理的大规模技能库",
+      "canonical_evidence": "面向自主代理的大规模技能库",
+      "llm_tldr_en": "SkillCenter provides 216,938 source-grounded skills for autonomous agents, supporting skill reuse and evolution.",
+      "llm_tldr_cn": "SkillCenter发布了迄今为止最大的开放代理技能库（216,938个结构化技能），涵盖24个领域。通过SkillGate质量门控管道从同行评审期刊、ArXiv、GitHub等多源获取技能，并集成模板生成。该技能库可直接支持自进化代理的技能复用和演化，为构建技能管理基础设施提供了基础。",
+      "llm_tldr": "SkillCenter发布了迄今为止最大的开放代理技能库（216,938个结构化技能），涵盖24个领域。通过SkillGate质量门控管道从同行评审期刊、ArXiv、GitHub等多源获取技能，并集成模板生成。该技能库可直接支持自进化代理的技能复用和演化，为构建技能管理基础设施提供了基础。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.07989v1",
+      "source": "arxiv",
+      "title": "Who Broke the System? Failure Localization in LLM-Based Multi-Agent Systems",
+      "abstract": "Large language model (LLM) based multi-agent systems enable complex problem solving through coordinated reasoning and action, but their distributed structure also introduces new challenges in diagnosing system-level failures. When an execution fails, identifying which agent is responsible and at what point the trajectory first becomes irreversibly misdirected is difficult due to long-horizon interactions and tightly coupled agent behaviors. In this paper, we study the problem of failure localization in LLM-based multi-agent systems and present AgentLocate, a framework that attributes failures to both a specific agent and the earliest decisive step. AgentLocate combines an LLM-based judging mechanism with multi-perspective verification by independent evaluators, whose assessments are aggregated using a confidence-aware strategy. The resulting feedback is further used to adapt the judge through lightweight fine-tuning, improving attribution quality. We evaluate AgentLocate on two complementary benchmarks covering diverse tasks, agent configurations, and trajectory lengths. Experimental results show that AgentLocate consistently outperforms existing failure localization methods in identifying both responsible agents and failure steps, while remaining efficient in terms of token usage and running time.",
+      "authors": [
+        "Yufei Xia",
+        "Anjun Gao",
+        "Yueyang Quan",
+        "Zhuqing Liu",
+        "Minghong Fang"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR",
+        "cs.AI",
+        "cs.IR",
+        "cs.LG",
+        "cs.MA"
+      ],
+      "published": "2026-07-08T23:33:49+00:00",
+      "link": "https://arxiv.org/pdf/2607.07989v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "failure localization in multi-agent systems",
+      "llm_evidence_cn": "多智能体系统故障定位",
+      "llm_evidence": "多智能体系统故障定位",
+      "canonical_evidence": "多智能体系统故障定位",
+      "llm_tldr_en": "AgentLocate combines LLM-based judging and multi-perspective verification to attribute failures to specific agents and decisive steps.",
+      "llm_tldr_cn": "多智能体系统故障难以定位，涉及长时域交互和耦合行为。本文提出AgentLocate框架，结合LLM判断和多视角验证，将失败归因于特定智能体及最早决定性步骤。实验显示该方法在复杂多智能体场景中能有效定位根因。",
+      "llm_tldr": "多智能体系统故障难以定位，涉及长时域交互和耦合行为。本文提出AgentLocate框架，结合LLM判断和多视角验证，将失败归因于特定智能体及最早决定性步骤。实验显示该方法在复杂多智能体场景中能有效定位根因。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "synthetic trajectory construction, verification, and curriculum shaping for autonomous agents",
+      "matched_requirement_id": "req-13",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.10113v1",
+      "source": "arxiv",
+      "title": "Dynamic Agent Skills: A Lifecycle Survey and Taxonomy of Evolving Skill Libraries",
+      "abstract": "Large language model agents increasingly store reusable procedures outside the model. These reusable procedures are often called \\emph{skills}: they may be code functions, natural-language instructions, SKILL.md packages, workflow graphs, or learned adapters that a future agent can retrieve and invoke. This taxonomy-driven survey asks how such skill libraries change over time. Across a $124$-paper $2023$--$2026$ audit set, we synthesize dynamic skill systems as \\emph{lifecycle-managed, verified, evolving artifact stores}: agents collect evidence from interaction, propose skill updates, verify and admit candidates, organize them for retrieval and composition, repair or prune stale entries, and govern sharing through provenance and rollback. We organize the literature around three survey tools. First, a $\\text{six}$-sense taxonomy distinguishes the structurally different artifacts called ``skills'' in current papers. Second, an $\\text{eight}$-stage lifecycle architecture identifies the recurring design decisions behind evidence acquisition, proposal, verification/admission, storage, retrieval/composition, maintenance, distillation/portability, and governance. Third, a lightweight skill-record schema and $\\text{ten}$-operator vocabulary provide common terms for comparing library updates without elevating them into a separate method contribution. Using this structure, we synthesize evidence-graded patterns with explicit caveats: admission and repair are repeatedly important, verifier quality materially affects skill-aware RL, flat retrieval can degrade as libraries grow, and current benchmarks still under-report library trajectories, usage--utility gaps, and safety surfaces. We close with concrete reporting standards and open problems for evaluating dynamic skills as changing libraries rather than static prompt or tool collections.",
+      "authors": [
+        "Yubo Li"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-11T04:29:28+00:00",
+      "link": "https://arxiv.org/pdf/2607.10113v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "survey on evolving skill libraries for agents",
+      "llm_evidence_cn": "关于代理技能库演化的综述",
+      "llm_evidence": "关于代理技能库演化的综述",
+      "canonical_evidence": "关于代理技能库演化的综述",
+      "llm_tldr_en": "This survey synthesizes how agents manage evolving skill libraries through evidence collection, verification, and update, supporting self-evolving agent capability.",
+      "llm_tldr_cn": "这篇综述系统梳理了大型语言模型代理如何管理演化中的技能库，包括从交互中收集证据、提出更新、验证和接纳候选技能，以及组织、修复和修剪条目。该工作将动态技能系统定义为生命周期管理、已验证和演化的工件存储，为自进化智能体提供了理论基础和分类法，覆盖124篇论文，揭示了技能库演化的关键技术环节。",
+      "llm_tldr": "这篇综述系统梳理了大型语言模型代理如何管理演化中的技能库，包括从交互中收集证据、提出更新、验证和接纳候选技能，以及组织、修复和修剪条目。该工作将动态技能系统定义为生命周期管理、已验证和演化的工件存储，为自进化智能体提供了理论基础和分类法，覆盖124篇论文，揭示了技能库演化的关键技术环节。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2607.08193v1",
+      "source": "arxiv",
+      "title": "Open-ended Multi-agent Autocurricula via Visual Inspection of Policies with Multi-modal LLMs",
+      "abstract": "Open-ended curricula in Reinforcement Learning (RL) aim to train generally-capable agents by identifying tasks that facilitate learning increasingly complex skills. A major challenge when designing such curricula is assessing task difficulty relative to the agent's current learning progress. While previous work has explored using scalar task scores or textual summaries of the agent's behavior, here we study a different approach: directly inspecting policy behavior via recorded episode videos. We introduce a simple yet effective instantiation of this approach which leverages a Video Language Model (VLM) to both process these videos and provide curriculum recommendations, which we call Visual Inspection of Policies (VIP). Since videos can naturally contain any number of controllable agents, we empirically study VIP on the StarCraft Multi-Agent Challenge (SMAC). We show that even with a lightweight and openly accessible VLM (VideoLLaMa2-7B), VIP can use policy videos to generate more effective curricula than both its text-only ablation and methods that rely on scalar task scores.",
+      "authors": [
+        "Lorenzo Pantè",
+        "Andrea Fanti",
+        "Roberto Capobianco"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-07-09T07:48:36+00:00",
+      "link": "https://arxiv.org/pdf/2607.08193v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "autocurricula via policy inspection",
+      "llm_evidence_cn": "通过策略检查的自动课程",
+      "llm_evidence": "通过策略检查的自动课程",
+      "canonical_evidence": "通过策略检查的自动课程",
+      "llm_tldr_en": "Proposes VIP, using video language models to inspect policy behavior and recommend curriculum tasks for open-ended multi-agent RL.",
+      "llm_tldr_cn": "开放课程强化学习需评估任务难度以促进技能习得。本文提出VIP方法，利用视频语言模型直接观察智能体策略的录制视频，并根据行为提供课程推荐。在双人对抗环境中，VIP相比基于文本摘要的课程更有效，能发现更具挑战性的对手。",
+      "llm_tldr": "开放课程强化学习需评估任务难度以促进技能习得。本文提出VIP方法，利用视频语言模型直接观察智能体策略的录制视频，并根据行为提供课程推荐。在双人对抗环境中，VIP相比基于文本摘要的课程更有效，能发现更具挑战性的对手。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "synthetic trajectory construction, verification, and curriculum shaping for autonomous agents",
+      "matched_requirement_id": "req-13",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.08448v1",
+      "source": "arxiv",
+      "title": "Harness VLA: Steering Frozen VLAs into Reliable Manipulation Primitives via Memory-Guided Agents",
+      "abstract": "Language-conditioned manipulation requires both precise contact-rich control and robust reasoning over language, scenes, and long horizons. End-to-end Vision-Language-Action (VLA) models provide strong local visuomotor skills, but they are trained on in-distribution task trajectories and often fail under deployment perturbations such as semantic retargeting, goal re-binding, spatial-layout shifts, and unstable local contacts. LLM coding agents provide complementary semantic and compositional reasoning, but purely analytic primitives struggle with irregular grasping, constrained placement, and articulated-object interaction. We present Harness VLA, a memory-augmented agentic framework that exposes a frozen VLA as a retryable contact-rich primitive and composes it with a small fixed library of analytic primitives for grounding, staging, transport, navigation, and release. Rather than expanding the skill library, the harness learns the operating range of these fixed primitives from task-specific execution traces, global success rules, and failure models. By lifting semantic re-grounding, non-contact execution, and VLA re-staging to the planner while reserving the frozen VLA for local contact-rich phases, Harness VLA extends pretrained VLAs beyond their original trajectory distribution without finetuning. Across perturbed tabletop, household kitchen, and clean-to-randomized bimanual manipulation, Harness VLA improves over the strongest relevant baselines by 38.6 and 25.4 percentage points on LIBERO-Pro and RoboCasa365, respectively, and reaches 58.4% on RoboTwin C2R.",
+      "authors": [
+        "Yixian Zhang",
+        "Huanming Zhang",
+        "Feng Gao",
+        "Xiao Li",
+        "Zhihao Liu",
+        "Chunyang Zhu",
+        "Jiaxing Qiu",
+        "Yuchen Yan",
+        "Jiyuan Liu",
+        "Wenhao Tang",
+        "Zhengru Fang",
+        "Yi Nie",
+        "Changxu Wei",
+        "Yu Wang",
+        "Wenbo Ding",
+        "Chao Yu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-09T13:08:54+00:00",
+      "link": "https://arxiv.org/pdf/2607.08448v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "memory-augmented agent framework",
+      "llm_evidence_cn": "记忆增强智能体框架",
+      "llm_evidence": "记忆增强智能体框架",
+      "canonical_evidence": "记忆增强智能体框架",
+      "llm_tldr_en": "Harness VLA combines frozen VLA models with memory-augmented agents for reliable manipulation under perturbations.",
+      "llm_tldr_cn": "端到端视觉-语言-动作（VLA）模型在分布外场景易失败，而LLM编码智能体提供语义推理但缺乏精细操作。本文提出Harness VLA，一种记忆增强智能体框架，将冻结的VLA作为可重试原语暴露给高层规划，利用工作记忆来应对语义重定向、空间变化等扰动。实验证明该方法在多种操纵任务上提升了鲁棒性。",
+      "llm_tldr": "端到端视觉-语言-动作（VLA）模型在分布外场景易失败，而LLM编码智能体提供语义推理但缺乏精细操作。本文提出Harness VLA，一种记忆增强智能体框架，将冻结的VLA作为可重试原语暴露给高层规划，利用工作记忆来应对语义重定向、空间变化等扰动。实验证明该方法在多种操纵任务上提升了鲁棒性。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.10557v1",
+      "source": "arxiv",
+      "title": "UNIBROWSE: A Data-to-Agent Framework for Multimodal BrowseComp",
+      "abstract": "Multimodal BrowseComp tasks require agents to combine perception, tool use, and long-horizon reasoning over dynamic web content, challenging their ability to handle compositional structure, open-world uncertainty, and multimodal integration across extended interactions. Crucially, real-world multimodal browsing involves three distinct information-flow patterns: text-only, image-to-text, and text-to-image, yet existing data construction methods cover only the text-only and image-to-text patterns, leaving text-to-image largely unaddressed and limiting agent generality and robustness. We introduce UNIBROWSE, a unified data pipeline that for the first time simultaneously generates training data covering all three patterns, augments curated knowledge graphs with live web retrieval for improved fidelity, and introduces a novel metric of exploration degree to filter low-signal instances for efficient reinforcement learning. Through this pipeline, we produce high-quality cold-start tool-use trajectories and exploration-rich QA pairs, and train a 35B-scale agent via supervised fine-tuning and exploration-aware RL.The resulting UNIBROWSE agent achieves state-of-the-art performance on multimodal BrowseComp benchmarks, attaining an average accuracy of 54.4 across five diverse benchmarks -- an improvement of 10.5 points over its base model Qwen3.5-35B-A3B -- and surpassing serveral closed-source agent workflows such as GPT-5 (42.9), Gemini-2.5 Pro (44.8), and Gemini-2.5 Flash (41.3).",
+      "authors": [
+        "Xiyu Wei",
+        "Qingwei Zong",
+        "Zhuocheng Yu",
+        "Sujian Li"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-07-12T04:13:27+00:00",
+      "link": "https://arxiv.org/pdf/2607.10557v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "unified data pipeline for multimodal browsing agents",
+      "llm_evidence_cn": "统一数据管道，用于多模态浏览智能体",
+      "llm_evidence": "统一数据管道，用于多模态浏览智能体",
+      "canonical_evidence": "统一数据管道，用于多模态浏览智能体",
+      "llm_tldr_en": "UNIBROWSE generates training data for multimodal BrowseComp agents covering text-only, image-to-text, and text-to-image patterns.",
+      "llm_tldr_cn": "多模态浏览任务需要智能体整合感知、工具使用和长程推理，但现有数据仅覆盖部分模式。本文提出UNIBROWSE统一数据管道，首次同时生成文本、图像到文本、文本到图像三种信息流模式的训练数据。实验表明，该框架显著提升了智能体在多模态Web浏览中的泛化能力和鲁棒性，为多模态搜索智能体提供了关键数据基础。",
+      "llm_tldr": "多模态浏览任务需要智能体整合感知、工具使用和长程推理，但现有数据仅覆盖部分模式。本文提出UNIBROWSE统一数据管道，首次同时生成文本、图像到文本、文本到图像三种信息流模式的训练数据。实验表明，该框架显著提升了智能体在多模态Web浏览中的泛化能力和鲁棒性，为多模态搜索智能体提供了关键数据基础。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "multimodal search agents",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2607.08960v1",
+      "source": "arxiv",
+      "title": "Eluna: An Agentic LLM System for Automating Warehouse Operations with Reasoning and Task Execution",
+      "abstract": "Warehouse operations are governed by Standard Operating Procedures (SOPs) that encode complex, multi-system decision logic, which must be executed reliably under strict time constraints, yet LLM agents lack mechanisms to enforce procedural compliance and degrade under the context overload full SOP specifications introduce. We present Eluna, a production-deployed agentic system for reliable SOP execution. Eluna is a graph-guided, multi-agent framework that encodes SOPs as directed acyclic graphs with progressive disclosure and delegates independent tasks to parallel sub-agents, each with persistent code execution and live data access. To meet production latency and accuracy needs, we use asymmetric episodic distillation where a strong teacher is improved through episodic error memories, then a smaller student is fine-tuned on the corrected trajectories with memory stripped, internalizing corrections without inference-time overhead. On a 13-task benchmark and two production applications, our fine-tuned models match or exceed their teacher, beat all larger off-the-shelf baselines, and reach 94% expert agreement on the ticket processing application.",
+      "authors": [
+        "Ning Liu",
+        "Kalle Kujanpää",
+        "Zhaoxuan Zhu",
+        "P Aditya Sreekar",
+        "Kaiwen Liu",
+        "Chuanneng Sun",
+        "Jorge Marchena Menendez",
+        "Matthew Bales",
+        "Tianyu Yang",
+        "Shahnawaz Alam",
+        "Rose Yu",
+        "Baoyuan Liu",
+        "Kristina Klinkner",
+        "Shervin Malmasi"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-07-09T21:51:39+00:00",
+      "link": "https://arxiv.org/pdf/2607.08960v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "uses asymmetric episodic distillation for agent training",
+      "llm_evidence_cn": "使用非对称情节蒸馏训练智能体",
+      "llm_evidence": "使用非对称情节蒸馏训练智能体",
+      "canonical_evidence": "使用非对称情节蒸馏训练智能体",
+      "llm_tldr_en": "Eluna employs graph-guided multi-agent framework with asymmetric episodic distillation to enforce SOP compliance in warehouse operations.",
+      "llm_tldr_cn": "仓库操作依赖标准操作程序（SOP），但LLM智能体难以可靠执行。Eluna提出图引导的多智能体框架，将SOP编码为有向无环图，并采用非对称情节蒸馏提升生产延迟和准确性。系统已部署到实际生产环境。",
+      "llm_tldr": "仓库操作依赖标准操作程序（SOP），但LLM智能体难以可靠执行。Eluna提出图引导的多智能体框架，将SOP编码为有向无环图，并采用非对称情节蒸馏提升生产延迟和准确性。系统已部署到实际生产环境。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on-policy distillation",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.08448v2",
+      "source": "arxiv",
+      "title": "Harness VLA: Steering Frozen VLAs into Reliable Manipulation Primitives via Memory-Guided Agents",
+      "abstract": "Language-conditioned manipulation requires both precise contact-rich control and robust reasoning over language, scenes, and long horizons. End-to-end Vision-Language-Action (VLA) models provide strong local visuomotor skills, but they are trained on in-distribution task trajectories and often fail under deployment perturbations such as semantic retargeting, goal re-binding, spatial-layout shifts, and unstable local contacts. LLM coding agents provide complementary semantic and compositional reasoning, but purely analytic primitives struggle with irregular grasping, constrained placement, and articulated-object interaction. We present Harness VLA, a memory-augmented agentic framework that exposes a frozen VLA as a retryable contact-rich primitive and composes it with a small fixed library of analytic primitives for grounding, staging, transport, navigation, and release. Rather than expanding the skill library, the harness learns the operating range of these fixed primitives from task-specific execution traces, global success rules, and failure models. By lifting semantic re-grounding, non-contact execution, and VLA re-staging to the planner while reserving the frozen VLA for local contact-rich phases, Harness VLA extends pretrained VLAs beyond their original trajectory distribution without finetuning. Across perturbed tabletop, household kitchen, and clean-to-randomized bimanual manipulation, Harness VLA improves over the strongest relevant baselines by 38.6 and 25.4 percentage points on LIBERO-Pro and RoboCasa365, respectively, and reaches 58.4% on RoboTwin C2R.",
+      "authors": [
+        "Yixian Zhang",
+        "Huanming Zhang",
+        "Feng Gao",
+        "Xiao Li",
+        "Zhihao Liu",
+        "Chunyang Zhu",
+        "Jiaxing Qiu",
+        "Yuchen Yan",
+        "Jiyuan Liu",
+        "Wenhao Tang",
+        "Zhengru Fang",
+        "Yi Nie",
+        "Changxu Wei",
+        "Yu Wang",
+        "Wenbo Ding",
+        "Chao Yu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-09T13:08:54+00:00",
+      "link": "https://arxiv.org/pdf/2607.08448v2",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "memory-augmented agent framework",
+      "llm_evidence_cn": "记忆增强智能体框架",
+      "llm_evidence": "记忆增强智能体框架",
+      "canonical_evidence": "记忆增强智能体框架",
+      "llm_tldr_en": "Harness VLA combines frozen VLA models with memory-augmented agents for reliable manipulation under perturbations.",
+      "llm_tldr_cn": "端到端视觉-语言-动作（VLA）模型在分布外场景易失败，而LLM编码智能体提供语义推理但缺乏精细操作。本文提出Harness VLA，一种记忆增强智能体框架，将冻结的VLA作为可重试原语暴露给高层规划，利用工作记忆来应对语义重定向、空间变化等扰动。实验证明该方法在多种操纵任务上提升了鲁棒性。",
+      "llm_tldr": "端到端视觉-语言-动作（VLA）模型在分布外场景易失败，而LLM编码智能体提供语义推理但缺乏精细操作。本文提出Harness VLA，一种记忆增强智能体框架，将冻结的VLA作为可重试原语暴露给高层规划，利用工作记忆来应对语义重定向、空间变化等扰动。实验证明该方法在多种操纵任务上提升了鲁棒性。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.10738v1",
+      "source": "arxiv",
+      "title": "To Answer or to Abstain: Mitigating Search-Agent Hallucinations via Abstention-Aware Reinforcement Learning",
+      "abstract": "Recent advances in equipping Large Language Models (LLMs) with search tools and outcome-reward reinforcement learning (RL) have achieved new state-of-the-art results on open-domain QA tasks. However, we argue that current training paradigms harbor a critical vulnerability: they predominantly reward correct answers but fail to penalize fabricated ones when retrieval fails, thereby implicitly exacerbating hallucinations. To address this, we propose Abstention-Aware Reinforcement Learning (AWA-RL), which dynamically shapes the abstention reward utilizing the model's query-specific prior capabilities and continuous on-policy training observations. We also introduce a novel metric, RA-F1, to measure the capability-reliability trade-off. Compared to non-abstaining baselines, AWA-RL boosts absolute precision by up to 10.3% and overall RA-F1 by 2.9%, with only marginal sacrifice in raw accuracy. These results confirm that AWA-RL successfully yields highly capable and reliable search agents. The code, data, and model weights are publicly available at https://github.com/zfj1998/AWA-RL.",
+      "authors": [
+        "Fengji Zhang",
+        "Tianyu Fan",
+        "Yuxiang Zheng",
+        "Xinyao Niu",
+        "Chengen Huang",
+        "Jacky Keung",
+        "Bei Chen"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-07-12T12:43:12+00:00",
+      "link": "https://arxiv.org/pdf/2607.10738v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "abstention-aware RL for search-agent hallucination mitigation with on-policy training",
+      "llm_evidence_cn": "面向搜索智能体幻觉抑制的弃权感知强化学习，包含在线策略训练",
+      "llm_evidence": "面向搜索智能体幻觉抑制的弃权感知强化学习，包含在线策略训练",
+      "canonical_evidence": "面向搜索智能体幻觉抑制的弃权感知强化学习，包含在线策略训练",
+      "llm_tldr_en": "Proposes AWA-RL that dynamically shapes abstention reward using on-policy observations to reduce search-agent hallucinations.",
+      "llm_tldr_cn": "当前搜索智能体强化学习训练主要奖励正确回答，但未惩罚检索失败时的编造，加剧幻觉。本文提出弃权感知强化学习（AWA-RL），利用模型的查询先验能力和在线策略训练观测动态调整弃权奖励，并引入新指标RA-F1。在开放域QA任务上，AWA-RL在提升回答质量的同时显著降低了幻觉率。该工作为搜索智能体的可靠部署提供了有效训练范式。",
+      "llm_tldr": "当前搜索智能体强化学习训练主要奖励正确回答，但未惩罚检索失败时的编造，加剧幻觉。本文提出弃权感知强化学习（AWA-RL），利用模型的查询先验能力和在线策略训练观测动态调整弃权奖励，并引入新指标RA-F1。在开放域QA任务上，AWA-RL在提升回答质量的同时显著降低了幻觉率。该工作为搜索智能体的可靠部署提供了有效训练范式。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "reinforcement learning for multi turn search, retrieval, and evidence collection",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2607.10079v1",
+      "source": "arxiv",
+      "title": "MAG: A Web-Agent Benchmark and Harness for Multimodal Action and Guide Generation",
+      "abstract": "Digital Adoption Platforms (DAPs) are embedded overlays widely used on web systems to guide users through operations inside a page, helping them get started with unfamiliar interfaces quickly. Completing a real task, however, rarely means clicking a few buttons on a single page: it takes a sequence of actions that unfolds across changing page states. Prior studies have also treated automated web agent actions and guide text generation as two separate problems, and most of them feed models textual page representations such as the DOM or accessibility trees rather than the rendered screens that humans actually operate on. In this work we introduce MAG, the first benchmark that unifies task execution and guide writing into a single Multimodal Action and Guide task, with two grounding schemes over screenshots: Set-of-Mark element selection and raw pixel coordinates. We further build a complete harness for this compound task, covering annotation with LLM assistance and human verification, training, evaluation in live environments, and joint metrics for actions and guides. With this harness we evaluate frontier API models and open multimodal models, and report detailed analyses. Finally, we design a GRPO training method augmented with expert trajectories, which nearly doubles the success rate of a supervised 9B agent (from 6.9% to 13.2%) and improves guide quality at the same time. Even the strongest model completes fewer than 40% of the tasks, leaving ample room for future research.",
+      "authors": [
+        "Chengguang Gan",
+        "Hanjun Wei",
+        "Yunhao Liang",
+        "Zhixi Cai",
+        "Qinghao Zhang",
+        "Shiwen Ni"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-07-11T02:08:46+00:00",
+      "link": "https://arxiv.org/pdf/2607.10079v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "multimodal web agent benchmark unifying task execution and guide generation",
+      "llm_evidence_cn": "统一任务执行和指导生成的多模态网络智能体基准",
+      "llm_evidence": "统一任务执行和指导生成的多模态网络智能体基准",
+      "canonical_evidence": "统一任务执行和指导生成的多模态网络智能体基准",
+      "llm_tldr_en": "MAG is the first benchmark that unifies task execution and guide writing for multimodal web agents, using rendered screenshots instead of DOM.",
+      "llm_tldr_cn": "现有网络智能体研究将任务执行和指导文本生成视为分离问题，且大多使用DOM等文本页面表示。本文提出MAG，首个统一任务执行与指导生成的多模态网络智能体基准，利用渲染截图而非DOM。该基准包含多种真实任务，为多模态搜索智能体提供了标准评估平台。实验显示基于视觉的模型在该基准上优于纯文本模型。",
+      "llm_tldr": "现有网络智能体研究将任务执行和指导文本生成视为分离问题，且大多使用DOM等文本页面表示。本文提出MAG，首个统一任务执行与指导生成的多模态网络智能体基准，利用渲染截图而非DOM。该基准包含多种真实任务，为多模态搜索智能体提供了标准评估平台。实验显示基于视觉的模型在该基准上优于纯文本模型。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "multimodal search agents",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.10491v1",
+      "source": "arxiv",
+      "title": "EvidentialRAG: Quantifying and Mitigating Information Conflict in Multi-Source Retrieval-Augmented Generation via Evidential Deep Learning",
+      "abstract": "Retrieval-augmented generation grounds large language models in external evidence, but most pipelines still treat retrieved passages as deterministic and mutually consistent context. In open information environments, retrieved sources may disagree because of temporal drift, source error, ambiguity, or genuine uncertainty. This paper introduces ERAG, an uncertainty-aware RAG framework that converts retrieved chunks into probabilistic evidence before generation. A lightweight evaluator extracts candidate claims and maps chunk-level support to Dirichlet evidence. A conflict-preserving Dempster-Shafer fusion rule then transfers unresolved disagreement into epistemic uncertainty rather than normalizing it away. The generator is routed to direct answering, conflict-aware answering, or abstention according to the fused uncertainty score. Experiments on CRAG, ConflictQA, and MuSiQue show that ERAG remains competitive with the strongest matched baseline on standard question answering while improving behavior under conflict. On the CRAG ambiguous subset, hallucination decreases from 45.3% for Corrective RAG to a human-calibrated estimate of 34.8%, conflict resolution increases from 35.2% to 51.2%, and expected calibration error improves to 0.122. These results suggest that evidential modeling is a practical mechanism for trustworthy information processing in foundation-model-based retrieval systems.",
+      "authors": [
+        "S M Asif Hossain",
+        "Ruksat Khan Shayoni",
+        "M. F. Mridha"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-07-11T21:56:15+00:00",
+      "link": "https://arxiv.org/pdf/2607.10491v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "uncertainty-aware RAG with evidential deep learning and conflict-preserving fusion",
+      "llm_evidence_cn": "基于证据深度学习的不确定性感知RAG，保留冲突的融合规则",
+      "llm_evidence": "基于证据深度学习的不确定性感知RAG，保留冲突的融合规则",
+      "canonical_evidence": "基于证据深度学习的不确定性感知RAG，保留冲突的融合规则",
+      "llm_tldr_en": "Proposes ERAG, which converts retrieved chunks into probabilistic evidence using Dirichlet distributions and handles conflict via Dempster-Shafer fusion.",
+      "llm_tldr_cn": "现有RAG将检索结果视为确定性且一致的上下文，忽略真实信息冲突。本文提出ERAG，利用轻量级评估器抽取候选声明并将段落支持映射为Dirichlet证据，通过保冲突的Dempster-Shafer融合规则将未解决分歧转化为认知不确定性。在多个开放域QA数据集上，ERAG比标准RAG更鲁棒，并能量化不确定性。该工作为搜索智能体的证据整合提供了概率化处理方法。",
+      "llm_tldr": "现有RAG将检索结果视为确定性且一致的上下文，忽略真实信息冲突。本文提出ERAG，利用轻量级评估器抽取候选声明并将段落支持映射为Dirichlet证据，通过保冲突的Dempster-Shafer融合规则将未解决分歧转化为认知不确定性。在多个开放域QA数据集上，ERAG比标准RAG更鲁棒，并能量化不确定性。该工作为搜索智能体的证据整合提供了概率化处理方法。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
