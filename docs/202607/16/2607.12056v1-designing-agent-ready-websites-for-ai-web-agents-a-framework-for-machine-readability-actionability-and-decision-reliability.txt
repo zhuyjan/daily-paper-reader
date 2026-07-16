@@ -1,0 +1,218 @@
+Title: Designing Agent-Ready Websites for AI Web Agents: A Framework for Machine Readability, Actionability, and Decision Reliability
+
+URL Source: https://arxiv.org/pdf/2607.12056v1
+
+Published Time: Wed, 15 Jul 2026 11:59:53 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+Agent-Ready Websites for AI Web Agents 
+
+> Accepted and presented at the ICEME 2026.
+
+# Designing Agent-Ready Websites for AI Web Agents: A Framework for Machine Readability, Actionability, and Decision Reliability 1
+
+Said Elnaffar PhD †
+
+Independent Researcher London, ON, Canada 
+
+said.elnaffar@gmail.com 
+
+Farzad Rashidi 
+
+UFR Informatique Université Paris Cité F-75013 Paris, France 
+
+farzad.rashidi@etu.u-paris.fr 
+
+July 13, 2026 
+
+Abstract 
+
+Online shopping is increasingly shifting toward a model in which AI agents independently search for products, compare options, evaluate constraints, and carry out parts of the purchasing process for users. Website design must now support both human and agent-mediated interaction. This paper introduces the agent-ready website, a design framework for enhancing the readability, interpretability, verifiability, and actionability of e-commerce platforms for AI agents. Existing web design, SEO, and generative engine optimization (GEO) metrics do not fully assess a website’s capacity for agent-mediated interaction. The proposed framework is structured around three dimensions agent interpretability, agent executability, and agent decision reliability supported by features such as machine readability, semantic clarity, agent actionability, and contextual decision-reliability signals. The framework is evaluated through a controlled experiment comparing a human-oriented baseline and an agent-ready version of an identical website prototype, with identical catalogs, pricing, stock, and shopping workflows. The evaluation involved five tasks, three browser-agent models (GPT-4.1, Gemini-2.5 Flash, and Grok-4 Fast), and 300 runs, measuring PASS/PARTIAL/FAIL outcomes, strict and functional success rates, error patterns, step counts, and token consumption. The agent-ready website achieved 134 PASS runs out of 150 versus 74 out of 150 for the baseline (strict success rates of 89.3% vs. 49.3%), with the largest gains in product detail extraction, comparison, and multi-constraint selection. It also reduced PARTIAL outcomes from 43 to 3 and lowered the average step count from 9.31 to 6.49. These results provide preliminary evidence that enhanced structural clarity, action cues, evidence signals, and temporal validity indicators can substantially improve the reliability and efficiency of AI browser agents. 
+
+CCS CONCEPTS • Intelligent agents • Web-based interaction • Electronic commerce 
+
+Keywords: AI web agents, AI-enhanced e-commerce, smart commerce systems 
+
+1 Introduction 
+
+With the rise of AI agents, user interaction with websites is shifting from direct human–website engagement to AI agent–website interaction. In this paradigm, AI agents handle tasks such as searching, comparing, decision-making, and executing actions on websites, effectively replacing human users. To date, website developers have primarily designed for human users, emphasizing graphical user interfaces, page clarity, and SEO-optimized, fast-loading sites. Consequently, professionals in web business and commerce have prioritized SEO rankings, visibility, and site traffic. However, discoverability for human visitors does not inherently ensure that a website is readable, interpretable, or actionable for AI agents. Currently, users delegate activities such as searching, comparing, verifying, and executing online actions to AI agents [ 1– 6]. This shift indicates that traditional web development standards, previously centered on human-friendliness and SEO, are no longer adequate for AI agents. Therefore, developers must modify their websites to accommodate AI agents in the same way they align them with human users [7–9]. Recent studies suggest that the performance of AI agents in web environments depends not only on the capabilities of the underlying AI model but also on the characteristics of the website itself. To accomplish web-based tasks, a website must have an interpretable structure, transparent information, identifiable interactive  
+
+> 1Replication Packages: §
+> †Corresponding author.
+
+1arXiv:2607.12056v1 [cs.AI] 13 Jul 2026 Agent-Ready Websites for AI Web Agents 
+
+> Accepted and presented at the ICEME 2026.
+
+elements, and well-defined execution pathways. Nonetheless, research indicates that AI agents continue to face significant challenges in understanding page structure, identifying user interface elements, and executing multi-step interactions across diverse websites [ 2, 4, 10 – 12 ]. The following section reviews the relevant literature on web agent architectures, failure modes, and the limitations of existing web design paradigms that motivate the proposed framework. 
+
+2 Background and Conceptual Foundations 2.1 Web Agents and Interaction Paradigms 
+
+Web AI agents operate in live web environments by sequentially executing actions such as clicking, submitting forms, and navigating to accomplish user-defined tasks, thereby eliminating the need for direct human interaction with websites. AI agents in web environments follow a perception-reasoning-action cycle: they capture the current page state, analyze content and interactive elements, then select the next action most likely to advance the task objective [ 2 , 13 –15 ]. Since each action can affect subsequent steps, completing a web task involves multiple decisions. The variability in website design, dynamic content, multi-step forms, and interactive elements make web environments complex for AI. Success requires combining understanding of page content with precise action execution across diverse scenarios [16–20]. 
+
+2.2 Failure Modes of Web Agents 
+
+Web agents do not fail due to a single cause but through compounded failures across four distinct pipeline stages. Observational failures occur when agents encounter incomplete or structurally inconsistent representations of webpages, because websites are primarily engineered for human perception rather than machine processing. Grounding failures occur when the correct semantic intent is incorrectly associated with an inappropriate user interface element due to interface ambiguity and structural inconsistencies among interactive regions. Execution failures originate from unstable interactions, missed clicks, navigation errors, and authentication interruptions, thereby reflecting the discrepancy between rigid agent actions and the event-driven behavior characteristic of live web applications [ 2 , 11 , 12 , 17 , 21 ]. Decision failures, in contrast, result in incorrect action selection despite sufficient information being available. This is attributable to the challenges associated with multi-step planning and the limited capacity for recovery over extended task horizons [10, 18, 20, 22]. 
+
+2.3 Limitations of Existing Web Design 
+
+Existing web optimization paradigms, which include visibility-driven search enhancements, interpretability-focused structured data, usability-oriented accessibility standards, and interoperability-based application programming interfaces (APIs), are intrinsically fragmented owing to their emphasis on isolated, human-centered objectives [ 23 –27 ]. Consequently, they do not collectively provide the cohesive foundation necessary for the comprehensive execution of AI agent tasks. This demands that websites support multimodal content observation, clear visual structure, reliable action execution, and sustained decision-making across multi-step interactions. This limitation reflects a structural mismatch: the conventions of traditional web design were not developed with programmatic observation or automated action in mind, and existing interfaces often lack the properties needed [ 12 , 21 , 28 , 29 ]. This misalignment makes current interfaces fragile for agent-mediated interaction and limits the reliability, verifiability, and safety of web-based agent tasks. 
+
+3 Research Problem and Approach 3.1 Research Problem 
+
+As established in Section 2.3, existing web design paradigms are structured around human-centric objectives and therefore cannot provide the integrated architectural support required to operate autonomous AI agents. A website may satisfy all conventional design criteria yet still fail to provide an appropriate and transparent environment for AI agents to complete tasks. Previous studies have given limited attention to developing a coherent framework for determining whether a website is adapted to work with an AI agent. To address this gap, this research presents a conceptual framework for agent-ready websites. 2Agent-Ready Websites for AI Web Agents 
+
+> Accepted and presented at the ICEME 2026.
+
+3.2 Research Aim and Research Questions 
+
+This study examines whether an agent-ready website design improves the effectiveness of AI browser agents at executing tasks on a website. The study compares two versions of a website: a baseline human-centered variant and an agent-ready version. The primary research questions are: 
+
+• RQ1. What website characteristics indicate readiness for effective AI-agent interaction? 
+
+• RQ2. How does an agent-ready website affect AI browser-agent performance compared with a baseline website? 
+
+• RQ3. Across which categories of web tasks does agent-ready design yield the greatest performance improvements? 
+
+4 Proposed Conceptual Framework: Agent-Ready Website 
+
+Building on the failure modes identified above, this section links recurrent web-agent failures to the core dimensions of an agent-ready website. Across web-agent benchmarks and real-world studies, failures commonly manifest as observation, grounding, execution, and decision failures. 
+
+4.1 Agent Interpretability 
+
+Agent interpretability refers to the degree to which an AI agent can accurately parse and comprehend a website’s content, encompassing not only visible text but also page structure, HTML and Document Object Model (DOM) composition, element roles, and the organized representation of information. Within this framework, interpretability is supported by two operational sub-components: machine readability and semantic clarity. Machine Readability: Machine readability pertains to the degree to which a website encodes its content and structure in formats that machines can interpret and utilize, rather than exclusively in formats designed for human visual perception. Schema markup and Schema.org vocabularies provide structured descriptions of page content and entities, helping agents identify the entities, attributes, and relationships represented on a page [ 23 , 30 ]. Google’s structured data guidelines similarly emphasize that structured data helps search systems understand and categorize page content. In practice, machine readability can be improved through the use of JavaScript Object Notation for Linked Data (JSON-LD), metadata, sitemaps, semantic HTML, and structured data concerning products or services [31–34]. For automated agents, these mechanisms help reduce ambiguity about a website’s offerings and the locations of essential information. In this context, schema markup, JSON-LD, metadata, and semantic HTML should be treated not only as SEO mechanisms but also as signals that improve machine interpretability. Semantic Clarity: Semantic clarity is how well a website conveys information, particularly in the context of agent-driven interactions. Key pages should clearly state their purpose and describe the services, products, or actions they support, as agents depend heavily on web text, HTML, and interactive components, which may be dispersed, thereby diminishing accuracy [ 21 , 35 –37 ]. Employing clear headings and comprehensive descriptions facilitates agents in accurately extracting information. Recent advancements in AI research demonstrate that HTML, DOM, accessibility features, page text, and interactive elements collectively enable agents to comprehend and engage effectively. These factors are critical in determining whether an agent can interpret content reliably. 
+
+4.2 Agent Executability 
+
+Agent executability refers to the degree to which an agent can reliably complete its intended actions after understanding the page, such as selecting a product, adding it to a cart, filling out a form, or navigating to the next step. Agent Actionability assesses whether a website provides transparent and reliable pathways to complete tasks. Even if the content and structure are comprehensible, tasks may prove challenging if the pathways are unclear, intricate, or misaligned with the objectives [ 38 ]. Websites should feature identifiable buttons, links, and forms with explicit relationships, enabling agents to follow procedures without confusion. Clear button labels, form fields, headings, and step-by-step workflows make these pathways easier for agents to follow. Additionally, websites can support agents through APIs or data services that provide access to up-to-date information, such as MCP, which uses standardized communication pathways [ 24 , 39 ]. Ultimately, 3Agent-Ready Websites for AI Web Agents 
+
+> Accepted and presented at the ICEME 2026.
+
+Agent Executability concerns how effectively a website enables AI agents to perform tasks in a manner that is simple, transparent, and dependable. 
+
+4.3 Agent Decision Reliability 
+
+Agent decision reliability refers to the degree to which a website provides signals that support dependable, up-to-date, and user-aligned decisions. Even if a site is interpretable and offers clear pathways, missing valid information can lead an agent to make recommendations, compare options, or act on incomplete or outdated data. Reliable decision-making depends on signals that help agents assess the credibility, relevance, and appropriateness of available options [ 40 – 43 ]. A key factor in this dimension is the availability of evidence and information that facilitate the verification and validation of claims made on the website. References, user reviews, case studies, third-party certifications, details about the organization providing the information, and similar documentation can help agents distinguish advertising claims from verifiable data. Furthermore, information must be temporally valid, as a significant portion of the data agents use on websites is subject to change over time [ 44 – 48 ]. Updating the timestamps of information on websites and ensuring its temporal validity can mitigate the risk of decisions being based on outdated information. The three dimensions agent interpretability, agent executability, and agent decision reliability are interconnected, with deficiencies in any affecting performance [ 39 , 41 , 49 ]. For example, a website might present information clearly, but unclear interaction pathways can hinder task completion. Similarly, even when actions are straightforward to execute, outdated or incomplete evidence can still lead to incorrect decisions. A website’s capacity to interact with AI agents is evaluated across these three dimensions, as illustrated in Figure 1, which presents the proposed conceptual framework. 
+
+Figure 1: Conceptual structure of the agent-ready website framework 
+
+5 Methodology 
+
+To evaluate the practical application of the proposed framework, this study undertakes a controlled proof-of-concept experiment comparing two versions of an e-commerce website. The design, catalog, pricing, inventory conditions, tasks, and runtime conditions were held constant, with the only variation being the integration of additional features outlined in the framework into the agent-ready version. 
+
+5.1 Experimental Task Set and Website Variants 
+
+This experiment used two versions of an e-commerce platform: Website A as the baseline and Website B as the agent-ready variant. Both shared the same structure, products, pages, pricing, inventory, ratings, and checkout procedures, differing only in Website B’s agent readiness criteria, as specified in Table 1. Five web tasks were conducted to evaluate components of the framework, including actions, information retrieval, and decision-making. Task 5 was designed as a lower-complexity policy-retrieval task to test whether agent-ready 4Agent-Ready Websites for AI Web Agents 
+
+> Accepted and presented at the ICEME 2026.
+
+features also affect routine information-access scenarios. All tasks used the same prompts and parameters, and results are available on GitHub to ensure reproducibility. Table 1: Comparison of the baseline and agent-ready website variants                   
+
+> Design Aspect Baseline (Website A) Agent-Ready (Website B)
+> Product data exposure Product data embedded in JavaScript Product data also exposed via JSON files and JSON-LD Semantic labels Some controls include basic labels or at-tributes More elements include aria-label ,
+> data-* attributes, and explicit identifiers Action controls Cart and product actions rely on visible button text and handlers Actions include explicit data-* at-tributes, product IDs, names, stock, and availability fields Decision reliability signals Reviews, stock text, and basic policy in-formation visible on page Evidence files/pages, temporal fields, and clearer product/use-case information added
+
+5.2 Experiment Setup and Run Protocol 
+
+The experiments were conducted using the open-source agentic web framework browser-use 3. Three models, GPT-4.1, Gemini 2.5 Flash, and Grok 4 Fast, were evaluated with temperature set to 0 and top p set to 1. Each session was limited to thirty steps and up to three errors. To ensure independence between runs, the local server was restarted before each trial, and a temporary browser profile was created at the outset and deleted upon completion. Each of the five tasks was performed ten times per model across both website versions, resulting in three hundred independent runs. Interaction history, token consumption (where available), errors, and execution outputs were recorded in the test logs for each run. 
+
+5.3 Evaluation Scoring and Analysis 
+
+Agent performance was evaluated by two annotators who reviewed the agent’s outputs, including terminal logs and the model’s JSON output, and classified each run as PASS, PARTIAL, or FAIL. A PASS label was assigned when all primary task requirements were fully met; this was counted as both a Strict Success and a Functional Success. A PARTIAL label was assigned when the main task objective was achieved but a non-critical or moderate issue remained; this was considered a Functional Success but not a Strict Success. A FAIL label was assigned when the main task objective was not achieved, or an important instruction was violated. In addition to the outcome, a separate error field was recorded for runs that contained errors. Step count and token consumption were also recorded. Results were then aggregated and reviewed at the per-task level. 
+
+6 Results and Analysis 6.1 Overall Task Success 
+
+Table 2 demonstrates that the agent-ready website surpassed the baseline across all models, with 134 successful passes out of 150 (89.3%) compared to 74 (49.3%). The difference amounted to 40 percentage points. A chi-square test confirmed a significant association between website type and outcome ( χ2(2 , N = 300) = 60 .79 , p < 0.001 ), with Cramer’s V at 0.45 indicating a moderate effect. The agent-ready version generally outperformed the baseline, although improvements varied. Nevertheless, the baseline condition still produced functional outcomes in several runs. However, agents often achieved only a broadly correct answer while failing to extract complete information, provide sufficient evidence, or fully adhere to constraints. This was common in information extraction, product comparison, and multi-constraint tasks. The agent-ready website did not eliminate all errors; these were primarily observed in complex tasks and resulted from incorrect product choices, overlooked constraints, or incorrect conclusions. Overall, the agent-ready system enhances task reliability and quality and reduces partial outcomes, but it cannot entirely rectify reasoning errors or model limitations. 
+
+> 3https://github.com/browser-use/browser-use
+
+5Agent-Ready Websites for AI Web Agents 
+
+> Accepted and presented at the ICEME 2026.
+
+Table 2: Model-level task outcomes across website variants                                                       
+
+> Model Website PASS PARTIAL FAIL Strict success Functional success
+> GPT-4.1 Agent-ready 43 0786% 86% GPT-4.1 Baseline 16 18 16 32% 68% Gemini-2.5 Flash Agent-ready 44 2488% 92% Gemini-2.5 Flash Baseline 26 11 13 52% 74% Grok-4 Fast Agent-ready 47 1294% 96% Grok-4 Fast Baseline 32 14 464% 92% Total Agent-ready 134 313 89.3% 91.3% Total Baseline 74 43 33 49.3% 78%
+
+6.2 Task Results and Main Failure Patterns 
+
+Table 3 presents the differences in PASS rates across all three models for each task. The results show that the agent-ready website increased the success rate on all five tasks. However, the improvement was smaller for Task 5, as the baseline version also performed relatively well on this task. The greatest improvements were observed in Tasks 1, 2, and 3, which require precise information extraction, comparison, and selection under multiple constraints. Model-level PASS, PARTIAL, and FAIL outcomes are provided in Table 2, while task-level PASS rate comparisons and Fisher’s exact test results are summarized in Table 3. Qualitative error patterns are discussed below. Task 4 was challenging for both versions because it required satisfying multiple constraints simultaneously; nevertheless, the agent-ready version increased the PASS rate by 16.7 percentage points. Task 5 showed a smaller difference, consistent with its simpler, policy-based nature. To assess per-task statistical significance, we conducted Fisher’s exact tests comparing PASS versus non-PASS outcomes (PARTIAL and FAIL combined) for each task. Results showed statistically significant improvements for Tasks 1, 2, and 3 (all p < 0.05 ), whereas Tasks 4 and 5 did not reach significance (Table 3). Table 3: Compact task-level PASS rate comparison                         
+
+> Task Baseline PASS rate Agent-ready PASS rate Difference P
+> Task 1 73.3% 96.7% +23.4 pp 0.026 Task 2 23.3% 100% +76.7 pp <0.001 Task 3 16.7% 93.3% +76.6 pp <0.001 Task 4 60.0% 76.7% +16.7 pp 0.267 Task 5 73.3% 80.0% +6.7 pp 0.761
+
+6.3 Error Pattern Analysis 
+
+Table 2 summarizes model-level task outcomes across website variants. Detailed task-level error patterns are discussed qualitatively below. The baseline exhibited common errors, including incomplete data extraction (Task 2), partial comparisons (Task 3), incorrect product selections, unmet constraints (Task 4), and incomplete interpretations of store policies (Task 5). Errors in Task 1 were more model-dependent, involving inventory assessment errors, incorrect product selections, or shopping cart issues. The agent-ready version reduced both error rates and diversity, particularly in complex tasks, indicating its effectiveness in reducing access and extraction errors. Some failures in reasoning and integration persisted. The reduction in PARTIAL outcomes was significant: in the baseline condition, agents frequently identified the correct page or product but failed to extract complete information or draw fully supported conclusions. Conversely, the agent-ready version exhibited fewer partial outcomes, attributable to clearer fields, explicit labels, structured data, and unambiguous information, which helped the agent better fulfill the task requirements. 
+
+6.4 Step Count and Token Usage 
+
+Average step count served as a secondary indicator of execution effort, not a primary success criterion. The average decreased from 9.31 steps in the baseline condition to 6.49 in the agent-ready condition, a 30.4% reduction. The reduction was observed across all three models, with the largest absolute decrease for Gemini 2.5 Flash; model-level details are reported in Table 4. The largest reductions occurred in Tasks 3 and 4, 6Agent-Ready Websites for AI Web Agents 
+
+> Accepted and presented at the ICEME 2026.
+
+while Task 5 showed almost no change, supporting the interpretation that the agent-ready design primarily reduced interaction effort in extraction and comparison. Prompt token consumption followed a consistent pattern, decreasing across all three models: by 18.72% for Gemini 2.5 Flash, 40.47% for Grok 4 Fast, and 37.43% for GPT-4.1. Full model-level token totals are also provided in Table 4. Table 4: Model-level step count and token consumption across website variants                 
+
+> Model Avg. Steps Agent-ready Avg. Steps Baseline Token Usage Agent-ready Token Usage Baseline
+> GPT-4.1 3.70 5.96 1,770,532 2,829,720 Gemini-2.5 Flash 11.56 15.02 4,958,307 6,099,907 Grok-4 Fast 4.20 6.96 2,189,279 3,677,702
+
+7 Discussion 7.1 Response to Research Question 1: Defining agent readiness 
+
+A website is better equipped to interact with AI agents when it presents information, action pathways, evidence, and relevant conditions in a way that allows agents to identify, interpret, validate, and utilize them easily. As detailed in Section 4, agent-readiness is defined across three dimensions: agent interpretability, agent executability, and agent decision reliability. While these dimensions do not cover every aspect of agent-readiness, the evidence supports the view that clearer website-level signals reduce ambiguity for browser agents, particularly in tasks that require complete information extraction, option comparison, or selection under multiple constraints. 
+
+7.2 Response to Research Question 2: Effect on AI agent performance 
+
+Consistent with the experimental results reported above, this study demonstrated that, under the controlled conditions of this experiment, implementing the agent-ready framework improved browser agent performance across all three models. The improvement was consistent across all three models. As shown in Table 2, the agent-ready design not only increased the strict success rate but also substantially improved the quality and completeness of previously incomplete outputs. A similar pattern was observed in efficiency measures (see Table 4): agents required fewer redundant actions, less error-recovery effort, and fewer repeated attempts at information extraction. 
+
+7.3 Response to Research Question 3: Variation across tasks and models 
+
+The effect of agent-ready design was most pronounced in more complex, multi-step tasks. In tasks requiring repeated navigation, option comparison, simultaneous satisfaction of multiple constraints, or execution of operations on the website, the agent-ready version consistently produced more complete outcomes. This suggests that clearer structure, task-relevant fields, and more explicit action cues reduced ambiguity and helped agents follow more complex paths with fewer errors. Agent-ready design did not, however, eliminate all errors. Some failures occurred even when the required information was available, and the page structure was clearly presented, indicating that these errors were attributable to the agent’s own reasoning process, selection strategy, or final interpretation rather than to missing information or poor website structure. This highlights that while agent-ready design can support agents, it cannot compensate for all errors arising from model-level limitations. Task 5 further supports this finding: adding agent-ready capabilities did not introduce additional complexity for agents, and its primary value was apparent in tasks requiring structured information extraction, option comparison, or multi-step execution. 
+
+8 Conclusion 
+
+The findings suggest that agent readiness should be treated as a website-level design capability, distinct from but complementary to human usability, SEO, structured data, and accessibility. To operationalize this capability, the paper introduces a conceptual framework structured around three dimensions: agent interpretability, agent executability, and agent decision reliability. A controlled proof-of-concept experiment provides preliminary evidence of the practical significance of these design choices: the agent-ready website achieved an 89.3% success rate, compared with 49.3% for the baseline, with the most notable improvements observed in tasks involving 7Agent-Ready Websites for AI Web Agents 
+
+> Accepted and presented at the ICEME 2026.
+
+structured extraction, option comparison, and multi-constraint selection. Furthermore, the agent-ready version reduced the number of PARTIAL outcomes from 43 to 3. It decreased the average number of steps by 30.4%, indicating that clearer structural organization and explicit action cues mitigate both incompleteness and interaction effort. It is important to note that the framework does not guarantee correct agent behavior, as some errors persisted, particularly in tasks requiring multi-step reasoning rather than mere information access. Its primary contribution lies in identifying website-level characteristics that enhance the reliability and efficiency of agent interactions. For e-commerce managers and platform designers, these findings imply that as AI-mediated traffic expands, agent readiness should be considered alongside human usability and SEO as a fundamental aspect of design and quality management. Future research should aim to extend this framework to real-world websites, encompass broader domains, and incorporate a wider spectrum of agent systems. 
+
+9 Limitations 
+
+This study is a controlled proof of concept rather than a full validation of the proposed framework, and the results should not be generalized to all domains, websites, or agent systems. Future work should evaluate the framework on real-world websites across broader domains, with a wider range of agent systems, and through ablation studies that isolate the contribution of individual agent-ready features. 
+
+Acknowledgments 
+
+This research received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors. 
+
+References 
+
+[1] Florence Jeannot, Eline Jongmans, and Maud Dampérat. Visual design and online shopping experiences: When expertise allows consumers to refocus on website attractiveness. Recherche et Applications En Marketing (English Edition) , 37(1):59–81, 2022. doi: https://doi.org/10.1177/20515707221087627. [2] Xiang Deng, Yu Gu, Boyuan Zheng, Shijie Chen, Samuel Stevens, Boshi Wang, Huan Sun, and Yu Su. Mind2web: towards a generalist agent for the web. In Proceedings of the 37th International Conference on Neural Information Processing Systems , NIPS ’23, Red Hook, NY, USA, 2023. Curran Associates Inc. doi: https://doi.org/10.48550/arXiv.2306.06070. [3] Renee Garett, Jason Chiu, Ly Zhang, and Sean D Young. A literature review: website design and user engagement. Online journal of communication and media technologies , 6(3):1, 2016. doi: https: //doi.org/10.29333/ojcmt/2556. [4] Hongliang He, Wenlin Yao, Kaixin Ma, Wenhao Yu, Yong Dai, Hongming Zhang, Zhenzhong Lan, and Dong Yu. Webvoyager: Building an end-to-end web agent with large multimodal models, 2024. URL 
+
+https://arxiv.org/abs/2401.13919 .[5] Anika Nissen, René Riedl, and Reinhard Schütte. Users’ reactions to website designs: A neuroimaging study based on evolutionary psychology with a focus on color and button shape. Computers in Human Behavior , 155:108168, 2024. ISSN 0747-5632. doi: https://doi.org/10.1016/j.chb.2024.108168. URL 
+
+https://www.sciencedirect.com/science/article/pii/S0747563224000359 .[6] Jonathan W Palmer. Web site usability, design, and performance metrics. Information systems research ,13(2):151–167, 2002. doi: https://doi.org/10.1287/isre.13.2.151.88. [7] Ron Berman and Zsolt Katona. The role of search engine optimization in search marketing. Marketing Science , 32(4):644–651, 2013. doi: https://doi.org/10.1287/mksc.2013.0783. [8] Anett Erdmann, Ramón Arilla, and José M. Ponzoa. Search engine optimization: The long-term strategy of keyword choice. Journal of Business Research , 144:650–662, 2022. ISSN 0148-2963. doi: https://doi.org/10.1016/j.jbusres.2022.01.065. 8Agent-Ready Websites for AI Web Agents 
+
+> Accepted and presented at the ICEME 2026.
+
+[9] Eline Jongmans, Florence Jeannot, Lan Liang, and Maud Dampérat. Impact of website visual design on user experience and website evaluation: the sequential mediating roles of usability and pleasure. Journal of Marketing Management , 38(17-18):2078–2113, Nov 2022. doi: 10.1080/0267257X.2022.2085315. [10] Shunyu Yao, Howard Chen, John Yang, and Karthik Narasimhan. Webshop: Towards scalable real-world web interaction with grounded language agents, 2023. URL https://arxiv.org/abs/2207.01206 .[11] Boyuan Zheng, Boyu Gou, Jihyung Kil, Huan Sun, and Yu Su. Gpt-4v(ision) is a generalist web agent, if grounded, 2024. URL https://arxiv.org/abs/2401.01614 .[12] Shuyan Zhou, Frank F. Xu, Hao Zhu, Xuhui Zhou, Robert Lo, Abishek Sridhar, Xianyi Cheng, Tianyue Ou, Yonatan Bisk, Daniel Fried, Uri Alon, and Graham Neubig. Webarena: A realistic web environment for building autonomous agents, 2024. URL https://arxiv.org/abs/2307.13854 .[13] Hyungjoo Chae, Namyoung Kim, Kai Tzu-iunn Ong, Minju Gwak, Gwanwoo Song, Jihoon Kim, Sunghwan Kim, Dongha Lee, and Jinyoung Yeo. Web agents with world models: Learning and leveraging environment dynamics in web navigation, 10 2025. URL https://doi.org/10.48550/arXiv.2410.13232 .[14] Reiichiro Nakano, Jacob Hilton, Suchir Balaji, Jeff Wu, Long Ouyang, Christina Kim, Christopher Hesse, Shantanu Jain, Vineet Kosaraju, William Saunders, Xu Jiang, Karl Cobbe, Tyna Eloundou, Gretchen Krueger, Kevin Button, Matthew Knight, Benjamin Chess, and John Schulman. Webgpt: Browser-assisted question-answering with human feedback, 12 2022. URL https://doi.org/10.48550/ arXiv.2112.09332 .[15] Tianlin Shi, Andrej Karpathy, Linxi Fan, Jonathan Hernandez, and Percy Liang. World of bits: An open-domain platform for web-based agents. In Doina Precup and Yee Whye Teh, editors, Proceedings of the 34th International Conference on Machine Learning , volume 70 of Proceedings of Machine Learning Research , pages 3135–3144. PMLR, 06–11 Aug 2017. URL https://proceedings.mlr.press/v70/ shi17a.html .[16] Alexandre Drouin, Maxime Gasse, Massimo Caccia, Issam H. Laradji, Manuel Del Verme, Tom Marty, Léo Boisvert, Megh Thakkar, Quentin Cappart, David Vazquez, Nicolas Chapados, and Alexandre Lacoste. Workarena: how capable are web agents at solving common knowledge work tasks? In 
+
+Proceedings of the 41st International Conference on Machine Learning , ICML’24. JMLR.org, 2024. doi: 10.48550/arXiv.2403.07718. URL https://doi.org/10.48550/arXiv.2403.07718 .[17] Izzeddin Gur, Hiroki Furuta, Austin Huang, Mustafa Safdari, Yutaka Matsuo, Douglas Eck, and Aleksandra Faust. A real-world webagent with planning, long context understanding, and program synthesis, 07 2024. URL https://doi.org/10.48550/arXiv.2307.12856 .[18] Wenyi Hong, Weihan Wang, Qingsong Lv, Jiazheng Xu, Wenmeng Yu, Junhui Ji, Yan Wang, Zihan Wang, Yuxuan Zhang, Juanzi Li, Bin Xu, Yuxiao Dong, Ming Ding, and Jie Tang. Cogagent: A visual language model for gui agents, 2024. URL https://arxiv.org/abs/2312.08914 .[19] Evan Zheran Liu, Kelvin Guu, Panupong Pasupat, Tianlin Shi, and Percy Liang. Reinforcement learning on web interfaces using workflow-guided exploration, 2018. URL https://arxiv.org/abs/1802.08802 .[20] Xiao Liu, Hao Yu, Hanchen Zhang, Yifan Xu, Xuanyu Lei, Hanyu Lai, Yu Gu, Hangliang Ding, Kaiwen Men, Kejuan Yang, Shudan Zhang, Xiang Deng, Aohan Zeng, Zhengxiao Du, Chenhui Zhang, Sheng Shen, Tianjun Zhang, Yu Su, Huan Sun, Minlie Huang, Yuxiao Dong, and Jie Tang. Agentbench: Evaluating llms as agents, 2025. URL https://arxiv.org/abs/2308.03688 .[21] Jing Yu Koh, Robert Lo, Lawrence Jang, Vikram Duvvur, Ming Chong Lim, Po-Yu Huang, Graham Neubig, Shuyan Zhou, Ruslan Salakhutdinov, and Daniel Fried. Visualwebarena: Evaluating multimodal agents on realistic visual web tasks, 2024. URL https://arxiv.org/abs/2401.13649 .[22] Tianbao Xie, Danyang Zhang, Jixuan Chen, Xiaochuan Li, Siheng Zhao, Ruisheng Cao, Toh Jing Hua, Zhoujun Cheng, Dongchan Shin, Fangyu Lei, Yitao Liu, Yiheng Xu, Shuyan Zhou, Silvio Savarese, Caiming Xiong, Victor Zhong, and Tao Yu. Osworld: Benchmarking multimodal agents for open-ended tasks in real computer environments, 2024. URL https://arxiv.org/abs/2404.07972 .9Agent-Ready Websites for AI Web Agents 
+
+> Accepted and presented at the ICEME 2026.
+
+[23] R. V. Guha, Dan Brickley, and Steve Macbeth. Schema.org: evolution of structured data on the web. Commun. ACM , 59(2):44–51, January 2016. ISSN 0001-0782. doi: 10.1145/2844544. URL 
+
+https://doi.org/10.1145/2844544 .[24] Xinyi Hou, Yanjie Zhao, Shenao Wang, and Haoyu Wang. Model context protocol (mcp): Landscape, security threats, and future research directions. ACM Trans. Softw. Eng. Methodol. , February 2026. ISSN 1049-331X. doi: 10.1145/3796519. URL https://doi.org/10.1145/3796519 . Just Accepted. [25] Lei Wang, Chen Ma, Xueyang Feng, Zeyu Zhang, Hao Yang, Jingsen Zhang, Zhiyuan Chen, Jiakai Tang, Xu Chen, Yankai Lin, Wayne Xin Zhao, Zhewei Wei, and Jirong Wen. A survey on large language model based autonomous agents. Frontiers of Computer Science , 18(6):186345, December 2024. ISSN 2095-2236. doi: 10.1007/s11704-024-40231-1. URL http://dx.doi.org/10.1007/s11704-024-40231-1 .[26] Jianwei Yang, Hao Zhang, Feng Li, Xueyan Zou, Chunyuan Li, and Jianfeng Gao. Set-of-mark prompting unleashes extraordinary visual grounding in gpt-4v, 2023. URL https://arxiv.org/abs/2310.11441 .[27] Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, and Yuan Cao. React: Synergizing reasoning and acting in language models, 2023. URL https://arxiv.org/abs/2210.03629 .[28] Gabriel Dulac-Arnold, Daniel Mankowitz, and Todd Hester. Challenges of real-world reinforcement learning, 2019. URL https://arxiv.org/abs/1904.12901 .[29] Timo Schick, Jane Dwivedi-Yu, Roberto Dessì, Roberta Raileanu, Maria Lomeli, Luke Zettlemoyer, Nicola Cancedda, and Thomas Scialom. Toolformer: Language models can teach themselves to use tools, 2023. URL https://arxiv.org/abs/2302.04761 .[30] Andrew Iliadis, Amelia Acker, Wesley Stevens, and Sezgi Başak Kavakli. One schema to rule them all: How schema.org models the world of search. Journal of the Association for Information Science and Technology , 76(2):460–523, 2025. doi: https://doi.org/10.1002/asi.24744. URL https://asistdl. onlinelibrary.wiley.com/doi/abs/10.1002/asi.24744 .[31] R. Navarrete and S. Luján-Mora. Metadata in open educational resources websites: A review from the perspective of disabled users’ requirements. In EDULEARN14 Proceedings , 6th International Conference on Education and New Learning Technologies, pages 0111–0120. IATED, 7-9 July, 2014 2014. ISBN 978-84-617-0557-3. URL https://library.iated.org/view/NAVARRETE2014MET .[32] Jiwen Xin, Cyrus Afrasiabi, Sebastien Lelong, Julee Adesara, Ginger Tsueng, Andrew I Su, and Chunlei Wu. Cross-linking biothings apis through json-ld to facilitate knowledge exploration. BMC bioinformatics ,19(1):30, 2018. doi: https://doi.org/10.1186/s12859-018-2041-5. [33] Google. Introduction to structured data markup in google search. https://developers.google.com/ search/docs/appearance/structured-data/intro-structured-data , 2026. Accessed: 2026-05-26. [34] Google. Structured data markup that google search supports. https://developers.google.com/ search/docs/appearance/structured-data/search-gallery , 2026. Accessed: 2026-05-25. [35] Sam Johnson, Viet Pham, and Thai Le. Manipulating llm web agents with indirect prompt injection attack via html accessibility tree, 2025. URL https://arxiv.org/abs/2507.14799 .[36] Xing Han Lù, Zdeněk Kasner, and Siva Reddy. Weblinx: Real-world website navigation with multi-turn dialogue, 2024. URL https://arxiv.org/abs/2402.05930 .[37] Ke Yang, Yao Liu, Sapana Chaudhary, Rasool Fakoor, Pratik Chaudhari, George Karypis, and Huzefa Rangwala. Agentoccam: A simple yet strong baseline for llm-based web agents, 2025. URL https: //arxiv.org/abs/2410.13825 .[38] Yueqi Song, Frank Xu, Shuyan Zhou, and Graham Neubig. Beyond browsing: Api-based web agents, 2025. URL https://arxiv.org/abs/2410.16464 .10 Agent-Ready Websites for AI Web Agents 
+
+> Accepted and presented at the ICEME 2026.
+
+[39] Aaron Steiner, Ralph Peeters, and Christian Bizer. Mcp vs rag vs nlweb vs html: A comparison of the effectiveness and efficiency of different agent interfaces to the web (technical report), 11 2025. URL 
+
+https://doi.org/10.48550/arXiv.2511.23281 .[40] Aditya Gautam. Multi-agent systems for misinformation lifecycle : Detection, correction and source identification, 2025. URL https://arxiv.org/abs/2505.17511 .[41] Ido Levy, Ben Wiesel, Sami Marreed, Alon Oved, Avi Yaeli, Nir Mashkif, and Segev Shlomov. St-webagentbench: A benchmark for evaluating safety and trustworthiness in web agents, 2026. URL 
+
+https://arxiv.org/abs/2410.06703 .[42] Renan Souza, Amal Gueroudji, Stephen DeWitt, Daniel Rosendo, Tirthankar Ghosal, Robert Ross, Prasanna Balaprakash, and Rafael Ferreira da Silva. Prov-agent: Unified provenance for tracking ai agent interactions in agentic workflows. In 2025 IEEE Int. Conf. on eScience , pages 467–473, 2025. doi: 10.1109/eScience65000.2025.00093. [43] Kevin Wu, Eric Wu, Kevin Wei, Angela Zhang, Allison Casasola, Teresa Nguyen, Sith Riantawan, Patricia Shi, Daniel Ho, and James Zou. An automated framework for assessing how well llms cite relevant medical references. Nature Communications , 16(1):3615, 2025. doi: https://doi.org/10.1038/s41467-025-58551-6. [44] Bektemyssova Gulnara and Aidos Sabdenov. Building a semantic knowledge graph search model for finding a causal answer. Revue d’Intelligence Artificielle , 38:243–250, 02 2024. doi: 10.18280/ria.380125. [45] Na Dai, Milad Shokouhi, and Brian D. Davison. Learning to rank for freshness and relevance. In Proceed-ings of the 34th International ACM SIGIR Conference on Research and Development in Information Re-trieval , SIGIR ’11, page 95–104, New York, NY, USA, 2011. Association for Computing Machinery. ISBN 9781450307574. doi: 10.1145/2009916.2009933. URL https://doi.org/10.1145/2009916.2009933 .[46] Raúl A del Águila Escobar, María del Carmen Suárez-Figueroa, Mariano Fernández López, and Boris Villazón Terrazas. Bridging text and knowledge: Explainable ai for knowledge graph classification and concept map-based semantic domain discovery with oboe framework. Applied Sciences , 15(22):12231, 2025. doi: 10.3390/app152212231. [47] Lukas Hägele, Mathias Klier, Lars Moestue, and Andreas Obermeier. Aspect-based currency of customer reviews: A novel probability-based metric to pave the way for data quality-aware decision-making. 
+
+Electronic Markets , 35(1):10, 2025. doi: https://doi.org/10.1007/s12525-025-00760-4. [48] Agada Joseph Oche, Ademola Glory Folashade, Tirthankar Ghosal, and Arpan Biswas. A systematic review of key retrieval-augmented generation (rag) systems: Progress, gaps, and future directions, 2025. URL https://arxiv.org/abs/2507.18910 .[49] Tianci Xue, Weijian Qi, Tianneng Shi, Chan Hee Song, Boyu Gou, Dawn Song, Huan Sun, and Yu Su. An illusion of progress? assessing the current state of web agents, 2025. URL https://arxiv.org/abs/ 2504.01382 .11

@@ -6,91 +6,83 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-15
-- 运行时间：2026-07-15 21:31:17 UTC
+- 最新运行日期：2026-07-16
+- 运行时间：2026-07-16 20:26:54 UTC
 - 运行状态：成功
-- 本次总论文数：23
-- 精读区：11
+- 本次总论文数：21
+- 精读区：9
 - 速读区：12
 
 ### 今日简报（AI）
-今日Top论文《DeepSearch-World》评分9.0，聚焦可验证环境下深度搜索智能体的自蒸馏方法。  
-值得关注方向：深度搜索智能体自蒸馏机制、以及大规模智能体轨迹合成（TOFFEE）与多模态浏览（UNIBROWSE）的突破。  
-建议优先精读《DeepSearch-World》并延伸速读中的动态技能库综述，以构建智能体进化视角。
-- 详情：[/202607/15/README](/202607/15/README)
+今日精读2篇DeepSearch-World深度搜索代理自我蒸馏研究，速读9篇聚焦机器人代理系统、代理策略优化及多跳推理证据压缩。最值得关注DeepSearch-World在可验证环境中的自我蒸馏方法，以及Agentic-DPO从模仿到策略优化的跃升。建议优先精读DeepSearch-World与Agentic-DPO，理解搜索代理训练的前沿范式。
+- 详情：[/202607/16/README](/202607/16/README)
 
 ### 精读区论文标签
-1. [DeepSearch-World: Self-Distillation for Deep Search Agents in a Verifiable Environment](/202607/15/2607.07820v1-deepsearch-world-self-distillation-for-deep-search-agents-in-a-verifiable-environment)  
-   标签：评分：9.0/10、query:self-evolve
+1. [DeepSearch-World: Self-Distillation for Deep Search Agents in a Verifiable Environment](/202607/16/2607.07820v2-deepsearch-world-self-distillation-for-deep-search-agents-in-a-verifiable-environment)  
+   标签：评分：10.0/10、query:self-evolve
    evidence：可验证环境中深度搜索智能体的自蒸馏
-2. [DeepSearch-World: Self-Distillation for Deep Search Agents in a Verifiable Environment](/202607/15/2607.07820v2-deepsearch-world-self-distillation-for-deep-search-agents-in-a-verifiable-environment)  
-   标签：评分：9.0/10、query:self-evolve
-   evidence：可验证环境中深度搜索智能体的自蒸馏
-3. [Long-Horizon-Terminal-Bench: Testing the Limits of Agents on Long-Horizon Terminal Tasks with Dense Reward-Based Grading](/202607/15/2607.08964v2-long-horizon-terminal-bench-testing-the-limits-of-agents-on-long-horizon-terminal-tasks-with-dense-reward-based-grading)  
-   标签：评分：9.0/10、query:self-evolve
-   evidence：长时域终端基准
-4. [EvoCUA-1.5: Online Reinforcement Learning for Multi-turn Computer-Use Agents](/202607/15/2607.09773v1-evocua-15-online-reinforcement-learning-for-multi-turn-computer-use-agents)  
-   标签：评分：9.0/10、query:self-evolve
-   evidence：长时域智能体轨迹的在线强化学习
-5. [Equal Accuracy, Unequal Evidence: Search APIs as Decision Surfaces for Tool-Using Agents](/202607/15/2607.10198v1-equal-accuracy-unequal-evidence-search-apis-as-decision-surfaces-for-tool-using-agents)  
+2. [DeepSearch-World: Self-Distillation for Deep Search Agents in a Verifiable Environment](/202607/16/2607.07820v1-deepsearch-world-self-distillation-for-deep-search-agents-in-a-verifiable-environment)  
    标签：评分：9.0/10、query:search-agent
-   evidence：分析搜索API作为智能体搜索的决策表面
-6. [GRASP: GRanularity-Aware Search Policy for Agentic RAG](/202607/15/2607.10463v1-grasp-granularity-aware-search-policy-for-agentic-rag)  
-   标签：评分：9.0/10、query:search-agent
-   evidence：强化学习框架协调检索工具，用于智能体RAG的多步搜索
-7. [Diagnosing and Mitigating Thinking Collapse in On-Policy Self-Distillation](/202607/15/2607.10805v1-diagnosing-and-mitigating-thinking-collapse-in-on-policy-self-distillation)  
+   evidence：具有自蒸馏的深度搜索智能体
+3. [LOGOS: A Living Logic for AI Agent Teams That Evolve With Humans](/202607/16/2607.10878v1-logos-a-living-logic-for-ai-agent-teams-that-evolve-with-humans)  
    标签：评分：9.0/10、query:self-evolve
-   evidence：诊断在线策略自蒸馏中的思维崩溃问题
-8. [STAMP: Provenance-Guided Credit Assignment for Deep Search Agents](/202607/15/2607.11172v1-stamp-provenance-guided-credit-assignment-for-deep-search-agents)  
+   evidence：自进化智能体团队与治理机制
+4. [SCALECUA: Scaling Computer Use Agents with Verifiable Task Synthesis and Efficient Online RL](/202607/16/2607.11185v1-scalecua-scaling-computer-use-agents-with-verifiable-task-synthesis-and-efficient-online-rl)  
    标签：评分：9.0/10、query:search-agent
-   evidence：面向深度搜索智能体的强化学习方法，实现多轮搜索和证据收集的信用分配
-9. [How to Realize Recursively Self-Improving Agents and Personal Singularity: A Goal-, Scope-, Tool-, and Benchmark-Driven Multi-Agent Architecture](/202607/15/2607.12254v1-how-to-realize-recursively-self-improving-agents-and-personal-singularity-a-goal--scope--tool--and-benchmark-driven-multi-agent-architecture)  
+   evidence：面向计算机使用代理的可验证奖励在线强化学习
+5. [Self-Improvements in Modern Agentic Systems: A Survey](/202607/16/2607.13104v1-self-improvements-in-modern-agentic-systems-a-survey)  
    标签：评分：9.0/10、query:self-evolve
-   evidence：递归自我改进智能体
-10. [Track, Rank, Crack: Epistemic Working Memory Scales Multi-Hop Reasoning in Language Agents](/202607/15/2607.12267v1-track-rank-crack-epistemic-working-memory-scales-multi-hop-reasoning-in-language-agents)  
+   evidence：自我改进自主智能体综述
+6. [Demystifying On-Policy Distillation: Roles, Pathologies, and Regulations](/202607/16/2607.13399v1-demystifying-on-policy-distillation-roles-pathologies-and-regulations)  
+   标签：评分：9.0/10、query:self-evolve
+   evidence：关于在线策略蒸馏的研究
+7. [LAPO: Leave-One-Turn Attribution for Self-Generated Process Rewards in Multi-Turn Search Reasoning](/202607/16/2607.13501v1-lapo-leave-one-turn-attribution-for-self-generated-process-rewards-in-multi-turn-search-reasoning)  
    标签：评分：9.0/10、query:search-agent
-   evidence：显式认知工作记忆，包含已确认事实、活跃假设和开放问题，用于多跳推理
-11. [Who Grades the Grader? Co-Evolving Evaluation Metrics and Skills for Self-Improving LLM Agents](/202607/15/2607.12790v1-who-grades-the-grader-co-evolving-evaluation-metrics-and-skills-for-self-improving-llm-agents)  
+   evidence：多轮搜索推理的自监督过程奖励
+8. [DeepStress: Stress-Testing Deep Search Agents](/202607/16/2607.13920v1-deepstress-stress-testing-deep-search-agents)  
+   标签：评分：9.0/10、query:search-agent
+   evidence：对深度搜索智能体进行压力测试以评估其对劣质证据的鲁棒性
+9. [TRACE: Turn-level Reward Assignment via Credit Estimation for Long-Horizon Agents](/202607/16/2607.13988v1-trace-turn-level-reward-assignment-via-credit-estimation-for-long-horizon-agents)  
    标签：评分：9.0/10、query:self-evolve
-   evidence：共同进化评估指标和技能以自改进智能体
+   evidence：长周期智能体强化学习的信用分配
 
 ### 速读区论文标签
-1. [Demonstrating TOFFEE: A Learned System for Synthesizing Data Agent Trajectories at Scale](/202607/15/2607.06233v2-demonstrating-toffee-a-learned-system-for-synthesizing-data-agent-trajectories-at-scale)  
+1. [ABot-AgentOS: A General Robotic Agent OS with Lifelong Multi-modal Memory](/202607/16/2607.10350v1-abot-agentos-a-general-robotic-agent-os-with-lifelong-multi-modal-memory)  
    标签：评分：8.0/10、query:self-evolve
-   evidence：为数据智能体合成轨迹，支持监督微调和上下文学习
-2. [Dynamic Agent Skills: A Lifecycle Survey and Taxonomy of Evolving Skill Libraries](/202607/15/2607.10113v1-dynamic-agent-skills-a-lifecycle-survey-and-taxonomy-of-evolving-skill-libraries)  
+   evidence：面向长期具体智能体的记忆与推理系统
+2. [Agentic-DPO: From Imitation to Agentic Policy Optimization on Expert Trajectories](/202607/16/2607.10601v1-agentic-dpo-from-imitation-to-agentic-policy-optimization-on-expert-trajectories)  
    标签：评分：8.0/10、query:self-evolve
-   evidence：关于代理技能库演化的综述
-3. [UNIBROWSE: A Data-to-Agent Framework for Multimodal BrowseComp](/202607/15/2607.10557v1-unibrowse-a-data-to-agent-framework-for-multimodal-browsecomp)  
+   evidence：基于偏好学习从专家轨迹进行在策略蒸馏
+3. [STEC: Evidence Compression for Deep Search in Open-domain Multi-Hop QA](/202607/16/2607.10795v1-stec-evidence-compression-for-deep-search-in-open-domain-multi-hop-qa)  
    标签：评分：8.0/10、query:search-agent
-   evidence：统一数据管道，用于多模态浏览智能体
-4. [To Answer or to Abstain: Mitigating Search-Agent Hallucinations via Abstention-Aware Reinforcement Learning](/202607/15/2607.10738v1-to-answer-or-to-abstain-mitigating-search-agent-hallucinations-via-abstention-aware-reinforcement-learning)  
+   evidence：面向多跳问答深度搜索的证据压缩
+4. [Designing Agent-Ready Websites for AI Web Agents: A Framework for Machine Readability, Actionability, and Decision Reliability](/202607/16/2607.12056v1-designing-agent-ready-websites-for-ai-web-agents-a-framework-for-machine-readability-actionability-and-decision-reliability)  
    标签：评分：8.0/10、query:search-agent
-   evidence：面向搜索智能体幻觉抑制的弃权感知强化学习，包含在线策略训练
-5. [SkillCenter: A Large-Scale Source-Grounded Skill Library for Autonomous AI Agents](/202607/15/2607.07676v1-skillcenter-a-large-scale-source-grounded-skill-library-for-autonomous-ai-agents)  
-   标签：评分：7.0/10、query:self-evolve
-   evidence：面向自主代理的大规模技能库
-6. [Open-ended Multi-agent Autocurricula via Visual Inspection of Policies with Multi-modal LLMs](/202607/15/2607.08193v1-open-ended-multi-agent-autocurricula-via-visual-inspection-of-policies-with-multi-modal-llms)  
-   标签：评分：7.0/10、query:self-evolve
-   evidence：通过策略检查的自动课程
-7. [Eluna: An Agentic LLM System for Automating Warehouse Operations with Reasoning and Task Execution](/202607/15/2607.08960v1-eluna-an-agentic-llm-system-for-automating-warehouse-operations-with-reasoning-and-task-execution)  
-   标签：评分：7.0/10、query:self-evolve
-   evidence：使用非对称情节蒸馏训练智能体
-8. [MAG: A Web-Agent Benchmark and Harness for Multimodal Action and Guide Generation](/202607/15/2607.10079v1-mag-a-web-agent-benchmark-and-harness-for-multimodal-action-and-guide-generation)  
+   evidence：设计Agent就绪网站以支持AI网页智能体的代理搜索
+5. [Harness VLA: Steering Frozen VLAs into Reliable Manipulation Primitives via Memory-Guided Agents](/202607/16/2607.08448v3-harness-vla-steering-frozen-vlas-into-reliable-manipulation-primitives-via-memory-guided-agents)  
    标签：评分：7.0/10、query:search-agent
-   evidence：统一任务执行和指导生成的多模态网络智能体基准
-9. [Who Broke the System? Failure Localization in LLM-Based Multi-Agent Systems](/202607/15/2607.07989v1-who-broke-the-system-failure-localization-in-llm-based-multi-agent-systems)  
+   evidence：记忆增强的智能体框架，用于冻结VLA的可靠操作
+6. [GRAFT: Graph-Matched Retrieval and Fusion of Tables in Data Lakes](/202607/16/2607.12717v1-graft-graph-matched-retrieval-and-fusion-of-tables-in-data-lakes)  
+   标签：评分：7.0/10、query:search-agent
+   evidence：基于图匹配的检索与强化学习证据收集在数据湖中的应用
+7. [Self-Improving AI Coding Agents Through Accumulated Behavioral Rules: A Closed-Loop Framework](/202607/16/2607.13091v1-self-improving-ai-coding-agents-through-accumulated-behavioral-rules-a-closed-loop-framework)  
+   标签：评分：7.0/10、query:self-evolve
+   evidence：通过累积行为规则自我改进的编码智能体
+8. [Oracle Agent Memory as an Enterprise Memory Substrate for Long-Horizon AI Agents](/202607/16/2607.13157v1-oracle-agent-memory-as-an-enterprise-memory-substrate-for-long-horizon-ai-agents)  
+   标签：评分：7.0/10、query:search-agent
+   evidence：面向长期智能体的企业级记忆基板及生命周期管理
+9. [Tool-Adaptive LLM Reranker](/202607/16/2607.10555v1-tool-adaptive-llm-reranker)  
+   标签：评分：6.0/10、query:search-agent
+   evidence：基于智能体马尔可夫决策过程的相关性评分与工具自适应训练
+10. [The Compliance Trap: Diagnosing How AI Agents Consume Conflicting Memory](/202607/16/2607.10608v1-the-compliance-trap-diagnosing-how-ai-agents-consume-conflicting-memory)  
    标签：评分：6.0/10、query:self-evolve
-   evidence：多智能体系统故障定位
-10. [Harness VLA: Steering Frozen VLAs into Reliable Manipulation Primitives via Memory-Guided Agents](/202607/15/2607.08448v1-harness-vla-steering-frozen-vlas-into-reliable-manipulation-primitives-via-memory-guided-agents)  
-   标签：评分：6.0/10、query:search-agent
-   evidence：记忆增强智能体框架
-11. [Harness VLA: Steering Frozen VLAs into Reliable Manipulation Primitives via Memory-Guided Agents](/202607/15/2607.08448v2-harness-vla-steering-frozen-vlas-into-reliable-manipulation-primitives-via-memory-guided-agents)  
-   标签：评分：6.0/10、query:search-agent
-   evidence：记忆增强智能体框架
-12. [EvidentialRAG: Quantifying and Mitigating Information Conflict in Multi-Source Retrieval-Augmented Generation via Evidential Deep Learning](/202607/15/2607.10491v1-evidentialrag-quantifying-and-mitigating-information-conflict-in-multi-source-retrieval-augmented-generation-via-evidential-deep-learning)  
-   标签：评分：6.0/10、query:search-agent
-   evidence：基于证据深度学习的不确定性感知RAG，保留冲突的融合规则
+   evidence：长程智能体记忆消费诊断；E-P-R框架
+11. [ReflectVLN: Training Vision-Language Navigation Agents with Reflective Reasoning](/202607/16/2607.12680v1-reflectvln-training-vision-language-navigation-agents-with-reflective-reasoning)  
+   标签：评分：6.0/10、query:self-evolve
+   evidence：具有反射推理和错误恢复的长程导航
+12. [Learning Robust Execution in Robotic Manipulation with Agentic Reinforcement Learning](/202607/16/2607.13818v1-learning-robust-execution-in-robotic-manipulation-with-agentic-reinforcement-learning)  
+   标签：评分：6.0/10、query:self-evolve
+   evidence：长期执行与智能体强化学习框架
 
 
 <div class="dpr-home-promo-card">

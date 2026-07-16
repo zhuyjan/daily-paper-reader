@@ -1,27 +1,40 @@
 {
-  "generated_at": "2026-07-15T21:14:22.972200+00:00",
-  "updated_date": "20260715",
+  "generated_at": "2026-07-16T20:11:52.425052+00:00",
+  "updated_date": "20260716",
   "carryover_days": 9,
   "tag_states": {
     "search-agent": {
-      "updated_date": "20260715",
+      "updated_date": "20260716",
       "carryover_days": 9,
       "items": [
         {
-          "id": "2607.12385v1",
+          "id": "2607.13591v1",
           "source": "arxiv",
-          "title": "PM-Bench: Evaluating Prospective Memory in LLM Agents",
-          "abstract": "A significant challenge in agentic AI is prospective memory: the ability to execute an intention at a specific future cue or state while other activities are ongoing. We introduce PM-Bench, a text-based benchmark for measuring prospective memory capabilities in modern LLM agents. Inspired by the Virtual Week paradigm from cognitive science, PM-Bench evaluates how well LLM agents maintain user intentions, execute delayed intentions, and monitor latent environment changes. Over the course of a simulated seven-day week, agents must continue an ongoing activity while deciding whether any deferred task is due. We compare eight state-of-the-art LLMs on PM-Bench under eight different agent configurations. PM-Bench proves challenging across all settings: the best method, a GPT-5.4 agent, reaches only 65.1\\% F1 score under our evaluation. Furthermore, no single strategy for improving prospective memory dominates across models. We release PM-Bench as a controlled testbed for diagnosing these failures and developing training or inference-time interventions that support reliable prospective behavior.",
+          "title": "Memory as a Controlled Process: Learned Adaptive Memory Management for LLM Agents",
+          "abstract": "Large Language Model (LLM) agents increasingly rely on external memory systems to accumulate experience across tasks. Yet nearly all existing approaches, from graph-structured memories to reflective insight stores, access memory through fixed, hand-designed heuristics. We argue that this static view of memory is a core bottleneck for agentic learning because optimal memory behavior is fundamentally context-dependent. The early stages of the tasks, benefit from minimal retrieval because memory is sparse; recurring goal types benefit from plan reuse rather than generic nearest-neighbor lookup; stuck agents benefit from re-retrieval with alternative queries; and across long task streams, the memory store itself must be consolidated and pruned to remain useful. We present Memory as a Controlled Process (MemCon), a framework that models memory operations as a Markov Decision Process and learns an online policy that adaptively decides when, what, and how much to retrieve, when to inject a distilled plan, and when to consolidate or forget. MemCon is backend-agnostic: it wraps any existing memory implementation, learns from task-by-task binary feedback with no pretraining and no additional LLM calls, and uses a lightweight tabular contextual bandit with UCB exploration that converges within tens of tasks. Across 6 benchmarks, 3 agent frameworks, and 3 LLM backbones, MemCon consistently outperforms multiple memory baselines by up to 15.2 points in task success while reducing token consumption by 5--20%.",
           "authors": [
-            "Genglin Liu",
-            "Saadia Gabriel"
+            "Eric Hanchen Jiang",
+            "Zhi Zhang",
+            "Yuchen Wu",
+            "Levina Li",
+            "Dong Liu",
+            "Xiao Liang",
+            "Rui Sun",
+            "Yubei Li",
+            "Edward Sun",
+            "Haozheng Luo",
+            "Zhaolu Kang",
+            "Aylin Caliskan",
+            "Kai-Wei Chang",
+            "Ying Nian Wu"
           ],
-          "primary_category": "cs.AI",
+          "primary_category": "cs.CL",
           "categories": [
+            "cs.CL",
             "cs.AI"
           ],
-          "published": "2026-07-14T05:57:32+00:00",
-          "link": "https://arxiv.org/pdf/2607.12385v1",
+          "published": "2026-07-15T08:32:40+00:00",
+          "link": "https://arxiv.org/pdf/2607.13591v1",
           "tags": [
             "keyword:search-agent",
             "keyword:self-evolve",
@@ -29,13 +42,13 @@
             "query:self-evolve"
           ],
           "llm_score": 8.0,
-          "llm_evidence_en": "prospective memory for agents",
-          "llm_evidence_cn": "智能体前瞻记忆",
-          "llm_evidence": "智能体前瞻记忆",
-          "canonical_evidence": "智能体前瞻记忆",
-          "llm_tldr_en": "Introduces PM-Bench, a text-based benchmark for evaluating prospective memory in LLM agents, requiring delayed intention execution over simulated seven-day week.",
-          "llm_tldr_cn": "智能体需要前瞻性记忆——在持续活动中按未来线索执行意图。本文受认知科学启发，提出PM-Bench基准，模拟一周七天环境，要求智能体在维持当前活动同时判断是否执行延期任务。实验表明所有配置下该基准均有挑战，最佳方法（GPT-4）也表现有限。",
-          "llm_tldr": "智能体需要前瞻性记忆——在持续活动中按未来线索执行意图。本文受认知科学启发，提出PM-Bench基准，模拟一周七天环境，要求智能体在维持当前活动同时判断是否执行延期任务。实验表明所有配置下该基准均有挑战，最佳方法（GPT-4）也表现有限。",
+          "llm_evidence_en": "learned adaptive memory management for LLM agents, relevant to search agents with working memory",
+          "llm_evidence_cn": "学习型自适应内存管理，与具有工作记忆的搜索智能体相关",
+          "llm_evidence": "学习型自适应内存管理，与具有工作记忆的搜索智能体相关",
+          "canonical_evidence": "学习型自适应内存管理，与具有工作记忆的搜索智能体相关",
+          "llm_tldr_en": "Proposes learned adaptive memory management that adjusts retrieval and consolidation strategies based on context, improving LLM agent performance across tasks.",
+          "llm_tldr_cn": "该论文指出LLM智能体依赖固定启发式访问内存是瓶颈，提出学习自适应的内存管理策略，根据任务阶段动态调整检索方式。在多种agent任务上验证了有效性，为具有显式工作记忆的搜索智能体提供了可学习和可优化的内存机制，提升长期任务表现。",
+          "llm_tldr": "该论文指出LLM智能体依赖固定启发式访问内存是瓶颈，提出学习自适应的内存管理策略，根据任务阶段动态调整检索方式。在多种agent任务上验证了有效性，为具有显式工作记忆的搜索智能体提供了可学习和可优化的内存机制，提升长期任务表现。",
           "llm_tags": [
             "query:search-agent"
           ],
@@ -43,86 +56,30 @@
           "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
           "matched_requirement_id": "req-7",
           "selection_source": "carryover_cache",
-          "paper_id": "2607.12385v1",
-          "carry_days": 1
-        },
-        {
-          "id": "2607.10795v1",
-          "source": "arxiv",
-          "title": "STEC: Evidence Compression for Deep Search in Open-domain Multi-Hop QA",
-          "abstract": "In open-domain multi-hop question answering (QA), LLM-based search agents offer a promising approach to knowledge-intensive QA by combining retrieval with reasoning. Existing methods mainly improve open-domain multi-hop QA through reasoning paradigms, retrieval interaction, and search strategy optimization. However, using multiple search trajectories introduces a challenging final answer selection problem. Different trajectories may support different candidates, and the retrieved information can be heterogeneous, redundant, incomplete, or conflicting. Directly comparing raw trajectories exposes the verifier to noisy and unaligned content, while comparing answer strings ignores the evidence supporting each candidate, making reliable final selection difficult. To address this challenge, we propose STEC, an evidence compression framework for final answer selection in multi-hop QA. STEC selects the final answer from the existing candidate set through two mechanisms: (1) Answer-Level Evidence Compression, which groups trajectories by normalized answer identity and converts each answer group into a candidate-specific evidence representation; and (2) Evidence-Guided Answer Verification, which compares these representations and selects the final answer from the candidate set. The design shifts final selection from raw trajectory comparison to candidate-level evidence comparison. We evaluate STEC on four open-domain multi-hop QA benchmarks against representative baselines. Experimental results show that STEC performs best overall among the compared methods, and ablation results provide evidence that answer-level evidence compression contributes to final answer selection.",
-          "authors": [
-            "Xinkang Li",
-            "Rong Jiang",
-            "Xin Song",
-            "Ye Wang",
-            "Yue Han",
-            "Changjian Li"
-          ],
-          "primary_category": "cs.AI",
-          "categories": [
-            "cs.AI",
-            "cs.CL"
-          ],
-          "published": "2026-07-12T15:06:11+00:00",
-          "link": "https://arxiv.org/pdf/2607.10795v1",
-          "tags": [
-            "keyword:search-agent",
-            "keyword:self-evolve",
-            "query:search-agent"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "evidence compression for deep search in multi-hop QA with search agents",
-          "llm_evidence_cn": "面向多跳问答中深度搜索的证据压缩方法",
-          "llm_evidence": "面向多跳问答中深度搜索的证据压缩方法",
-          "canonical_evidence": "面向多跳问答中深度搜索的证据压缩方法",
-          "llm_tldr_en": "Proposes STEC, an evidence compression method for deep search in open-domain multi-hop QA that addresses the final answer selection problem by compressing multiple search trajectories into aligned evidence.",
-          "llm_tldr_cn": "在开放域多跳问答中，基于LLM的搜索智能体通过检索与推理结合取得了进展，但多搜索轨迹带来最终答案选择困难。STEC提出证据压缩方法，将多条搜索轨迹中的异构、冗余、冲突信息压缩为对齐证据，使验证器能基于可靠证据选择答案，有效提升了多跳问答的准确性。",
-          "llm_tldr": "在开放域多跳问答中，基于LLM的搜索智能体通过检索与推理结合取得了进展，但多搜索轨迹带来最终答案选择困难。STEC提出证据压缩方法，将多条搜索轨迹中的异构、冗余、冲突信息压缩为对齐证据，使验证器能基于可靠证据选择答案，有效提升了多跳问答的准确性。",
-          "llm_tags": [
-            "query:search-agent"
-          ],
-          "matched_query_tag": "query:search-agent",
-          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
-          "matched_requirement_id": "req-7",
-          "selection_source": "carryover_cache",
-          "paper_id": "2607.10795v1",
+          "paper_id": "2607.13591v1",
           "carry_days": 1
         }
       ]
     },
     "self-evolve": {
-      "updated_date": "20260715",
+      "updated_date": "20260716",
       "carryover_days": 9,
       "items": [
         {
-          "id": "2607.12764v1",
+          "id": "2607.13854v1",
           "source": "arxiv",
-          "title": "EvoGraph-R1: Self-Evolving Multimodal Knowledge Hypergraphs for Agentic Retrieval",
-          "abstract": "Retrieval-augmented generation (RAG) has emerged as a critical paradigm for grounding Multimodal Large Language Models (MLLMs) in external knowledge. Recent GraphRAG methods introduce structured entity-relation graphs to improve retrieval and reasoning. However, they remain limited by treating knowledge graphs as static data structures built offline and queried in a single pass. This static paradigm misaligns with the interactive, iterative nature of knowledge-intensive reasoning, creating three bottlenecks: (i) text-centric fragmentation that impedes cross-modal reasoning, (ii) frozen structures unable to incorporate new evidence or correct errors, and (iii) rigid single-pass retrieval without adaptive refinement. To overcome these limitations, we introduce EvoGraph-R1, a self-evolving GraphRAG framework that reconceptualizes knowledge graphs as dynamic environments shaped through agent interactions. We formulate retrieval as a Markov Decision Process (MDP) where the agent observes the graph state and executes actions to query (GraphRetrieve), expand (WebSearch), refine (GraphEdit), or terminate (Answer) the reasoning. These actions reshape the hypergraph structure and generate feedback signals that guide subsequent evolution. Through this closed loop, the hypergraph evolves by integrating new evidence, correcting errors, and refining structure to support multi-hop reasoning. Experiments on multimodal VQA and text QA benchmarks demonstrate substantial improvements over existing RAG baselines in accuracy, coverage, and traceability, establishing self-evolving knowledge graphs as a fundamental paradigm across modalities.",
+          "title": "SPyCE: Skill-Policy Co-evolution for Multimodal Agents",
+          "abstract": "Multimodal agents that think with images iteratively manipulate visual evidence and invoke tools across many steps. Existing reinforcement learning methods reduce trajectories to scalar rewards, forcing the policy to discover reusable tool-use patterns from scratch on every new task; memory-based alternatives retain past experience, yet they rely on test-time retrieval, without updating the policy to absorb reusable patterns from that experience. Our key insight is that multimodal reasoning trajectories should be distilled into reusable skills that co-evolve with the policy during training, rather than being consumed as rewards or retrieved from a static store. To this end, we propose SPyCE (Skill-Policy Co-evolution), a framework that distills trajectories into a hierarchical skill library and updates it throughout reinforcement learning. Execution skills capture local visual operations, while workflow skills encode high-level priors that orchestrate tool use. During training, the policy model conditions on retrieved skills to guide its rollouts, while the skill library evolves using valuable rollouts generated by the policy. This creates a closed loop in which improved policies yield better skills, and the evolving skill library, in turn, provides stronger priors for policy rollouts. Experiments across eight benchmarks demonstrate that SPyCE consistently outperforms both RL-based and memory-based baselines. Further analysis reveals that both the hierarchical skill design and the co-evolution mechanism are critical to our design. These results suggest joint skill-policy optimization as a promising paradigm for building capable multimodal agents.",
           "authors": [
-            "Jiashi Lin",
-            "Changhong Jiang",
-            "Xiangru Lin",
-            "Ruifei Zhang",
-            "Xinyi Zhu",
-            "Jiyao Liu",
-            "Cheng Tang",
-            "Ye Du",
-            "Shujian Gao",
-            "Junzhi Ning",
-            "Lihao Liu",
-            "Ziyan Huang",
-            "Tianbin Li",
-            "Jin Ye",
-            "Junjun He"
+            "Ru Zhang",
+            "Weijie Qiu"
           ],
-          "primary_category": "cs.CV",
+          "primary_category": "cs.CL",
           "categories": [
-            "cs.CV"
+            "cs.CL"
           ],
-          "published": "2026-07-14T13:34:07+00:00",
-          "link": "https://arxiv.org/pdf/2607.12764v1",
+          "published": "2026-07-15T14:01:48+00:00",
+          "link": "https://arxiv.org/pdf/2607.13854v1",
           "tags": [
             "keyword:search-agent",
             "keyword:self-evolve",
@@ -130,21 +87,21 @@
             "query:self-evolve"
           ],
           "llm_score": 8.0,
-          "llm_evidence_en": "self-evolving multimodal knowledge hypergraphs for agentic retrieval",
-          "llm_evidence_cn": "面向智能体检索的自演化多模态知识超图",
-          "llm_evidence": "面向智能体检索的自演化多模态知识超图",
-          "canonical_evidence": "面向智能体检索的自演化多模态知识超图",
-          "llm_tldr_en": "Proposes EvoGraph-R1, self-evolving multimodal knowledge hypergraphs that adaptively incorporate evidence and refine retrieval for agentic tasks.",
-          "llm_tldr_cn": "现有GraphRAG方法将知识图视为静态结构，无法融入新证据或修正错误，且仅支持单次检索。本文提出EvoGraph-R1，构建自演化的多模态知识超图，能够根据交互反馈在线更新图结构、融入跨模态证据，并支持自适应检索优化。在多种知识密集型任务上，EvoGraph-R1显著优于静态GraphRAG和标准RAG。该工作为自演化智能体检索提供了动态知识基础设施。",
-          "llm_tldr": "现有GraphRAG方法将知识图视为静态结构，无法融入新证据或修正错误，且仅支持单次检索。本文提出EvoGraph-R1，构建自演化的多模态知识超图，能够根据交互反馈在线更新图结构、融入跨模态证据，并支持自适应检索优化。在多种知识密集型任务上，EvoGraph-R1显著优于静态GraphRAG和标准RAG。该工作为自演化智能体检索提供了动态知识基础设施。",
+          "llm_evidence_en": "on-policy distillation of trajectories into reusable skills for multimodal agents",
+          "llm_evidence_cn": "将多模态轨迹在线蒸馏为可重用技能",
+          "llm_evidence": "将多模态轨迹在线蒸馏为可重用技能",
+          "canonical_evidence": "将多模态轨迹在线蒸馏为可重用技能",
+          "llm_tldr_en": "SPyCE proposes a framework that distills multimodal reasoning trajectories into reusable skills that co-evolve with the policy during training, improving tool-use efficiency.",
+          "llm_tldr_cn": "现有方法将多模态推理轨迹简化为标量奖励或静态记忆，导致策略从零开始发现工具模式。SPyCE提出技能-策略共同进化框架，在训练过程中将轨迹蒸馏为层次化可重用技能，并与策略同步更新。实验表明该方法显著提升了工具使用效率和任务成功率，超越了基于奖励或记忆的基线。",
+          "llm_tldr": "现有方法将多模态推理轨迹简化为标量奖励或静态记忆，导致策略从零开始发现工具模式。SPyCE提出技能-策略共同进化框架，在训练过程中将轨迹蒸馏为层次化可重用技能，并与策略同步更新。实验表明该方法显著提升了工具使用效率和任务成功率，超越了基于奖励或记忆的基线。",
           "llm_tags": [
             "query:self-evolve"
           ],
           "matched_query_tag": "query:self-evolve",
-          "matched_query_text": "self-evolving agents",
-          "matched_requirement_id": "req-12",
+          "matched_query_text": "on-policy distillation",
+          "matched_requirement_id": "req-9",
           "selection_source": "carryover_cache",
-          "paper_id": "2607.12764v1",
+          "paper_id": "2607.13854v1",
           "carry_days": 1
         }
       ]
