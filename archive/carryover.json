@@ -1,110 +1,17 @@
 {
-  "generated_at": "2026-07-16T20:11:52.425052+00:00",
-  "updated_date": "20260716",
+  "generated_at": "2026-07-17T20:56:04.196731+00:00",
+  "updated_date": "20260717",
   "carryover_days": 9,
   "tag_states": {
     "search-agent": {
-      "updated_date": "20260716",
+      "updated_date": "20260717",
       "carryover_days": 9,
-      "items": [
-        {
-          "id": "2607.13591v1",
-          "source": "arxiv",
-          "title": "Memory as a Controlled Process: Learned Adaptive Memory Management for LLM Agents",
-          "abstract": "Large Language Model (LLM) agents increasingly rely on external memory systems to accumulate experience across tasks. Yet nearly all existing approaches, from graph-structured memories to reflective insight stores, access memory through fixed, hand-designed heuristics. We argue that this static view of memory is a core bottleneck for agentic learning because optimal memory behavior is fundamentally context-dependent. The early stages of the tasks, benefit from minimal retrieval because memory is sparse; recurring goal types benefit from plan reuse rather than generic nearest-neighbor lookup; stuck agents benefit from re-retrieval with alternative queries; and across long task streams, the memory store itself must be consolidated and pruned to remain useful. We present Memory as a Controlled Process (MemCon), a framework that models memory operations as a Markov Decision Process and learns an online policy that adaptively decides when, what, and how much to retrieve, when to inject a distilled plan, and when to consolidate or forget. MemCon is backend-agnostic: it wraps any existing memory implementation, learns from task-by-task binary feedback with no pretraining and no additional LLM calls, and uses a lightweight tabular contextual bandit with UCB exploration that converges within tens of tasks. Across 6 benchmarks, 3 agent frameworks, and 3 LLM backbones, MemCon consistently outperforms multiple memory baselines by up to 15.2 points in task success while reducing token consumption by 5--20%.",
-          "authors": [
-            "Eric Hanchen Jiang",
-            "Zhi Zhang",
-            "Yuchen Wu",
-            "Levina Li",
-            "Dong Liu",
-            "Xiao Liang",
-            "Rui Sun",
-            "Yubei Li",
-            "Edward Sun",
-            "Haozheng Luo",
-            "Zhaolu Kang",
-            "Aylin Caliskan",
-            "Kai-Wei Chang",
-            "Ying Nian Wu"
-          ],
-          "primary_category": "cs.CL",
-          "categories": [
-            "cs.CL",
-            "cs.AI"
-          ],
-          "published": "2026-07-15T08:32:40+00:00",
-          "link": "https://arxiv.org/pdf/2607.13591v1",
-          "tags": [
-            "keyword:search-agent",
-            "keyword:self-evolve",
-            "query:search-agent",
-            "query:self-evolve"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "learned adaptive memory management for LLM agents, relevant to search agents with working memory",
-          "llm_evidence_cn": "学习型自适应内存管理，与具有工作记忆的搜索智能体相关",
-          "llm_evidence": "学习型自适应内存管理，与具有工作记忆的搜索智能体相关",
-          "canonical_evidence": "学习型自适应内存管理，与具有工作记忆的搜索智能体相关",
-          "llm_tldr_en": "Proposes learned adaptive memory management that adjusts retrieval and consolidation strategies based on context, improving LLM agent performance across tasks.",
-          "llm_tldr_cn": "该论文指出LLM智能体依赖固定启发式访问内存是瓶颈，提出学习自适应的内存管理策略，根据任务阶段动态调整检索方式。在多种agent任务上验证了有效性，为具有显式工作记忆的搜索智能体提供了可学习和可优化的内存机制，提升长期任务表现。",
-          "llm_tldr": "该论文指出LLM智能体依赖固定启发式访问内存是瓶颈，提出学习自适应的内存管理策略，根据任务阶段动态调整检索方式。在多种agent任务上验证了有效性，为具有显式工作记忆的搜索智能体提供了可学习和可优化的内存机制，提升长期任务表现。",
-          "llm_tags": [
-            "query:search-agent"
-          ],
-          "matched_query_tag": "query:search-agent",
-          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
-          "matched_requirement_id": "req-7",
-          "selection_source": "carryover_cache",
-          "paper_id": "2607.13591v1",
-          "carry_days": 1
-        }
-      ]
+      "items": []
     },
     "self-evolve": {
-      "updated_date": "20260716",
+      "updated_date": "20260717",
       "carryover_days": 9,
-      "items": [
-        {
-          "id": "2607.13854v1",
-          "source": "arxiv",
-          "title": "SPyCE: Skill-Policy Co-evolution for Multimodal Agents",
-          "abstract": "Multimodal agents that think with images iteratively manipulate visual evidence and invoke tools across many steps. Existing reinforcement learning methods reduce trajectories to scalar rewards, forcing the policy to discover reusable tool-use patterns from scratch on every new task; memory-based alternatives retain past experience, yet they rely on test-time retrieval, without updating the policy to absorb reusable patterns from that experience. Our key insight is that multimodal reasoning trajectories should be distilled into reusable skills that co-evolve with the policy during training, rather than being consumed as rewards or retrieved from a static store. To this end, we propose SPyCE (Skill-Policy Co-evolution), a framework that distills trajectories into a hierarchical skill library and updates it throughout reinforcement learning. Execution skills capture local visual operations, while workflow skills encode high-level priors that orchestrate tool use. During training, the policy model conditions on retrieved skills to guide its rollouts, while the skill library evolves using valuable rollouts generated by the policy. This creates a closed loop in which improved policies yield better skills, and the evolving skill library, in turn, provides stronger priors for policy rollouts. Experiments across eight benchmarks demonstrate that SPyCE consistently outperforms both RL-based and memory-based baselines. Further analysis reveals that both the hierarchical skill design and the co-evolution mechanism are critical to our design. These results suggest joint skill-policy optimization as a promising paradigm for building capable multimodal agents.",
-          "authors": [
-            "Ru Zhang",
-            "Weijie Qiu"
-          ],
-          "primary_category": "cs.CL",
-          "categories": [
-            "cs.CL"
-          ],
-          "published": "2026-07-15T14:01:48+00:00",
-          "link": "https://arxiv.org/pdf/2607.13854v1",
-          "tags": [
-            "keyword:search-agent",
-            "keyword:self-evolve",
-            "query:search-agent",
-            "query:self-evolve"
-          ],
-          "llm_score": 8.0,
-          "llm_evidence_en": "on-policy distillation of trajectories into reusable skills for multimodal agents",
-          "llm_evidence_cn": "将多模态轨迹在线蒸馏为可重用技能",
-          "llm_evidence": "将多模态轨迹在线蒸馏为可重用技能",
-          "canonical_evidence": "将多模态轨迹在线蒸馏为可重用技能",
-          "llm_tldr_en": "SPyCE proposes a framework that distills multimodal reasoning trajectories into reusable skills that co-evolve with the policy during training, improving tool-use efficiency.",
-          "llm_tldr_cn": "现有方法将多模态推理轨迹简化为标量奖励或静态记忆，导致策略从零开始发现工具模式。SPyCE提出技能-策略共同进化框架，在训练过程中将轨迹蒸馏为层次化可重用技能，并与策略同步更新。实验表明该方法显著提升了工具使用效率和任务成功率，超越了基于奖励或记忆的基线。",
-          "llm_tldr": "现有方法将多模态推理轨迹简化为标量奖励或静态记忆，导致策略从零开始发现工具模式。SPyCE提出技能-策略共同进化框架，在训练过程中将轨迹蒸馏为层次化可重用技能，并与策略同步更新。实验表明该方法显著提升了工具使用效率和任务成功率，超越了基于奖励或记忆的基线。",
-          "llm_tags": [
-            "query:self-evolve"
-          ],
-          "matched_query_tag": "query:self-evolve",
-          "matched_query_text": "on-policy distillation",
-          "matched_requirement_id": "req-9",
-          "selection_source": "carryover_cache",
-          "paper_id": "2607.13854v1",
-          "carry_days": 1
-        }
-      ]
+      "items": []
     }
   }
 }
