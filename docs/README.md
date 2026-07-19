@@ -6,47 +6,38 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-18
-- 运行时间：2026-07-18 21:09:23 UTC
+- 最新运行日期：2026-07-19
+- 运行时间：2026-07-19 21:16:21 UTC
 - 运行状态：成功
-- 本次总论文数：9
-- 精读区：4
-- 速读区：5
+- 本次总论文数：6
+- 精读区：2
+- 速读区：4
 
 ### 今日简报（AI）
-今日9篇论文中，两篇9分精读聚焦智能体经验学习与自进化策略。最值得看《MemoHarness》和《SEED》，分别用经验记忆与策略蒸馏强化智能体。建议优先精读这两篇，并关注速读中《Tool-Adaptive LLM Reranker》的实用工具适配思路。
-- 详情：[/202607/18/README](/202607/18/README)
+今日聚焦多智能体推理与自改进代理的风险控制，其中《Route, Communicate, and Reason》以门控路由与自适应深度提升推理效率，《Phantom Guardrails》揭示自改进代理可能修复未发生错误导致新问题。建议重点关注这两篇精读论文，从推理架构优化和安全机制平衡两方面获取启发。
+- 详情：[/202607/19/README](/202607/19/README)
 
 ### 精读区论文标签
-1. [MemoHarness: Agent Harnesses That Learn from Experience](/202607/18/2607.14159v1-memoharness-agent-harnesses-that-learn-from-experience)  
-   标签：评分：9.0/10、query:self-evolve
-   evidence：自适应智能体框架优化，从自身执行中学习
-2. [SEED: Self-Evolving On-Policy Distillation for Agentic Reinforcement Learning](/202607/18/2607.14777v1-seed-self-evolving-on-policy-distillation-for-agentic-reinforcement-learning)  
-   标签：评分：9.0/10、query:self-evolve
-   evidence：自演化在线策略蒸馏框架，将轨迹转化为事后技能用于智能体强化学习
-3. [Bridge Evidence: Static Retrieval Utility Does Not Predict Causal Utility in Multi-Step Agentic Search](/202607/18/2607.15253v1-bridge-evidence-static-retrieval-utility-does-not-predict-causal-utility-in-multi-step-agentic-search)  
-   标签：评分：9.0/10、query:search-agent
-   evidence：多步智能体搜索与检索效用
-4. [IdeaTrail: Full-Process Agent Trajectories for Scientific Ideation](/202607/18/2607.10144v2-ideatrail-full-process-agent-trajectories-for-scientific-ideation)  
-   标签：评分：8.0/10、query:search-agent
-   evidence：包含文献搜索和证据收集的科学构思多轮智能体轨迹
+1. [Route, Communicate, and Reason: Gated Routing and Adaptive Depth for Efficient Multi-Agent Reasoning](/202607/19/2607.10836v1-route-communicate-and-reason-gated-routing-and-adaptive-depth-for-efficient-multi-agent-reasoning)  
+   标签：评分：8.0/10、query:self-evolve
+   evidence：多代理层次推理，学习深度控制，长时推理
+2. [Phantom Guardrails: When Self-Improving Agent Harnesses Fix Failures That Never Happened](/202607/19/2607.13083v1-phantom-guardrails-when-self-improving-agent-harnesses-fix-failures-that-never-happened)  
+   标签：评分：8.0/10、query:self-evolve
+   evidence：自改进智能体框架直接关联自进化智能体
 
 ### 速读区论文标签
-1. [Tool-Adaptive LLM Reranker](/202607/18/2607.10555v1-tool-adaptive-llm-reranker)  
-   标签：评分：7.0/10、query:search-agent
-   evidence：将相关性评分建模为带工具调用的智能体马尔可夫决策过程
-2. [Step-Level Preference Learning for Generative Agents in Social Simulations](/202607/18/2607.14485v1-step-level-preference-learning-for-generative-agents-in-social-simulations)  
+1. [Automatic Hard Example Synthesis with Multi-Level Agentic Data Curation](/202607/19/2607.14256v1-automatic-hard-example-synthesis-with-multi-level-agentic-data-curation)  
    标签：评分：7.0/10、query:self-evolve
-   evidence：长视界智能体推理与步骤级偏好学习
-3. [ARMOR: Stabilizing On-Policy LLM RL with Off-Policy Anchor Samples](/202607/18/2607.10481v1-armor-stabilizing-on-policy-llm-rl-with-off-policy-anchor-samples)  
-   标签：评分：6.0/10、query:self-evolve
-   evidence：在线策略强化学习稳定方法
-4. [Route, Communicate, and Reason: Gated Routing and Adaptive Depth for Efficient Multi-Agent Reasoning](/202607/18/2607.10836v1-route-communicate-and-reason-gated-routing-and-adaptive-depth-for-efficient-multi-agent-reasoning)  
+   evidence：通过多级智能体数据策划自动合成困难示例
+2. [Robo-Reporters: Evaluating Autonomous AI Agents as Algorithmic Gatekeepers in Computational Journalism](/202607/19/2607.10736v1-robo-reporters-evaluating-autonomous-ai-agents-as-algorithmic-gatekeepers-in-computational-journalism)  
    标签：评分：6.0/10、query:search-agent
-   evidence：基于门控路由和自适应深度的层次化多智能体系统，使用强化学习训练
-5. [QUBO-Optimized Evidence Selection for Retrieval-Augmented Question Answering with Unconventional Solvers](/202607/18/2607.12334v1-qubo-optimized-evidence-selection-for-retrieval-augmented-question-answering-with-unconventional-solvers)  
+   evidence：自主代理搜索来源并评估可信度
+3. [QwenPaw-Data: Bridging Facts, Methodology, and Execution for Autonomous Enterprise Data Analytics](/202607/19/2607.11019v1-qwenpaw-data-bridging-facts-methodology-and-execution-for-autonomous-enterprise-data-analytics)  
    标签：评分：6.0/10、query:search-agent
-   evidence：基于优化的检索增强问答证据选择
+   evidence：自主企业数据代理，将自然语言请求桥接到异构资产的分析执行
+4. [Speculate with Memory: Lossless Acceleration for LLM Agents](/202607/19/2607.12236v1-speculate-with-memory-lossless-acceleration-for-llm-agents)  
+   标签：评分：6.0/10、query:search-agent
+   evidence：用于代理的增强记忆投机执行
 
 
 <div class="dpr-home-promo-card">

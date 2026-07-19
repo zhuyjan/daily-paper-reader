@@ -1,0 +1,282 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-19T21:12:23.134156+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2607.10836v1",
+      "source": "arxiv",
+      "title": "Route, Communicate, and Reason: Gated Routing and Adaptive Depth for Efficient Multi-Agent Reasoning",
+      "abstract": "Multi-agent ensembling multiplies active parameters and inference cost without answering three basic questions: which agents to consult, how deeply a query should traverse a hierarchy of agents, and when inter-agent communication is worth its cost. We present GRADE (Gated Routing and Adaptive Depth for Efficient Reasoning), a hierarchical multi-agent system in which four lightweight learned gates jointly govern agent selection, hierarchy depth, inter-agent communication, and branch pruning. Training uses CoGRPO (Collaborative Group-Relative Policy Optimization), a novel critic-free recipe that adapts GRPO to multi-agent hierarchies and assigns a shared advantage signal to every gate and agent that participated in a rollout. Agent models are drawn from a hot-swappable Expert Registry; per-agent calibration maps allow experts to be replaced at inference time without retraining. At $\\sim$17B average active parameters, GRADE outperforms all baselines on GSM8K, MMLUPro, and GPQA, surpassing the strongest baseline by 4.8 points on MMLUPro at half the active compute. On AIME-2025, where model depth dominates, GRADE remains competitive to existing frameworks. Ablations isolate the hierarchy and masked cross-attention as the largest contributors to accuracy, and show that per-agent calibration is necessary for safe hot-swapping.",
+      "authors": [
+        "Sudipto Ghosh",
+        "Tanmoy Chakraborty"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-07-12T16:58:21+00:00",
+      "link": "https://arxiv.org/pdf/2607.10836v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multi-agent hierarchical reasoning with learned depth, long-horizon inference",
+      "llm_evidence_cn": "多代理层次推理，学习深度控制，长时推理",
+      "llm_evidence": "多代理层次推理，学习深度控制，长时推理",
+      "canonical_evidence": "多代理层次推理，学习深度控制，长时推理",
+      "llm_tldr_en": "Proposes GRADE, a hierarchical multi-agent system with gated routing and adaptive depth, trained via CoGRPO for efficient multi-step reasoning.",
+      "llm_tldr_cn": "现有多代理推理系统在路由选择、层次深度和通信开销上缺乏自适应能力。本文提出GRADE系统，通过四个轻量级学习门控控制代理选择、层次深度、通信和分支修剪，并使用CoGRPO（一种无评论家的在线策略优化方法）进行训练。实验表明该方法在保持推理质量的同时显著降低计算成本，适用于长程代理推理场景。",
+      "llm_tldr": "现有多代理推理系统在路由选择、层次深度和通信开销上缺乏自适应能力。本文提出GRADE系统，通过四个轻量级学习门控控制代理选择、层次深度、通信和分支修剪，并使用CoGRPO（一种无评论家的在线策略优化方法）进行训练。实验表明该方法在保持推理质量的同时显著降低计算成本，适用于长程代理推理场景。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.13083v1",
+      "source": "arxiv",
+      "title": "Phantom Guardrails: When Self-Improving Agent Harnesses Fix Failures That Never Happened",
+      "abstract": "Self-improving AI agents are designed to learn from their mistakes. We show they can also hallucinate mistakes that never happened. We study this failure mode in automated harness optimization, where an LLM-based proposer edits an agent's scaffold, including prompts, parsers, filters, validators and guardrails, to eliminate observed failures. But this process rarely asks first: was there a real failure to fix? We introduce the Counterfactual Fabrication Lab, a deterministic micro-lab where the correct action is known: do nothing. The lab plants a candidate guardrail for a failure class that provably never occurs, presents only legal episodes, and uses a byte-exact oracle to check every cited violation. The proposer behaves as expected on real violations and abstains on featureless legal input. Yet when the legal input contains a harmless pattern resembling a familiar game rule, it invents a failure: in 15/60 runs, versus 0/60 on featureless input, it enables the nonexistent-rule guardrail and cites a violation the oracle refutes. The effect is structured, not indiscriminate. In single-shot proposals it appears only when three conditions coincide: a rule-shaped pattern, an open-ended rule set and an instruction that presupposes failures. Removing any of these conditions eliminates the fabrication. Because the invented guardrail changes no true outcome and cannot improve an already-perfect suppression score, the phenomenon is neither reward hacking nor over-refusal. It is a phantom guardrail: a fix for a failure that never happened, invisible to suppression-only acceptance. Inside an add-only accept loop it re-enters even without the failure-presupposing instruction, the loop's keep-adding role supplying the demand the instruction supplied in single shot, and once in it stays. We present the Counterfactual Fabrication Lab for measuring fabricated failures in self-improving agent harnesses.",
+      "authors": [
+        "Su Wang",
+        "Pin Qian",
+        "Yifan Lin",
+        "Jingzhou Xu",
+        "Yihang Chen",
+        "Xiaochong Jiang",
+        "Lifei Liu",
+        "Haoran Yu"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR",
+        "cs.SE"
+      ],
+      "published": "2026-07-13T10:14:15+00:00",
+      "link": "https://arxiv.org/pdf/2607.13083v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "self-improving agent harnesses directly relates to self-evolving agents",
+      "llm_evidence_cn": "自改进智能体框架直接关联自进化智能体",
+      "llm_evidence": "自改进智能体框架直接关联自进化智能体",
+      "canonical_evidence": "自改进智能体框架直接关联自进化智能体",
+      "llm_tldr_en": "Phantom Guardrails studies a failure mode in self-improving agents where they hallucinate mistakes and propose unnecessary fixes, introducing a micro-lab to detect such cases.",
+      "llm_tldr_cn": "该论文研究了自改进智能体中的一种失败模式：智能体会幻觉出从未发生的错误，并尝试修复它们。作者提出了一个确定性微实验室（Counterfactual Fabrication Lab），在该实验室中，正确的行为是不做任何修改，从而检测智能体是否产生不必要的修复。实验表明，即使在没有真实失败的情况下，智能体仍会提出幻影护栏，这揭示了自改进过程中的一个关键缺陷，提醒我们在自动优化中应谨慎验证失败的真实性。",
+      "llm_tldr": "该论文研究了自改进智能体中的一种失败模式：智能体会幻觉出从未发生的错误，并尝试修复它们。作者提出了一个确定性微实验室（Counterfactual Fabrication Lab），在该实验室中，正确的行为是不做任何修改，从而检测智能体是否产生不必要的修复。实验表明，即使在没有真实失败的情况下，智能体仍会提出幻影护栏，这揭示了自改进过程中的一个关键缺陷，提醒我们在自动优化中应谨慎验证失败的真实性。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.14256v1",
+      "source": "arxiv",
+      "title": "Automatic Hard Example Synthesis with Multi-Level Agentic Data Curation",
+      "abstract": "Multimodal Large Language Models (MLLMs) are increasingly deployed for nuanced content safety and moderation tasks, yet they remain vulnerable to adversarial attacks and out-of-distribution edge cases. Traditional active learning and manual annotation fail to scale against the complexity and volume of novel multimodal threats. In this paper, we propose an automated, agentic red-teaming framework that systematically synthesizes difficult examples using an iterative strategy that proposes novel hypotheses as well as mutating on past attempts. Leveraging a multi-agent architecture that consists of a high-reasoning Architect agent, an advanced image generator, and a multi-level verification committee of LLM raters, our system autonomously uncovers boundary-pushing violations and ambiguous policy edge cases without any human intervention. By employing these carefully synthesized adversarial examples as in-context demonstrations via test-time Retrieval, we substantially improve the target model's robustness, reducing the False Negative Rate (FNR) from 41.2% to 24.5% in a public image safety benchmark without relying on any human labeling.",
+      "authors": [
+        "Genglin Liu",
+        "Muye Zhang",
+        "Krishnamurthy Viswanathan",
+        "Nichole J. Hansen",
+        "Blaž Bratanič",
+        "Nathan L Clement",
+        "Shalini Ghosh",
+        "Ariel Fuxman"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.MA"
+      ],
+      "published": "2026-07-15T18:13:05+00:00",
+      "link": "https://arxiv.org/pdf/2607.14256v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "automated hard example synthesis via multi-level agentic data curation",
+      "llm_evidence_cn": "通过多级智能体数据策划自动合成困难示例",
+      "llm_evidence": "通过多级智能体数据策划自动合成困难示例",
+      "canonical_evidence": "通过多级智能体数据策划自动合成困难示例",
+      "llm_tldr_en": "This paper proposes an automated red-teaming framework that leverages multi-agent architecture to synthesize hard examples for multimodal LLMs, using iterative mutation and verification.",
+      "llm_tldr_cn": "论文提出一种自动红队框架，通过多智能体架构（推理架构师、图像生成器、多级验证委员会）迭代合成多模态LLM的困难示例。系统自主发现并生成对抗性样本，用于模型安全性测试。尽管目标为多模态安全，但其自生成训练数据的方法可迁移至工具使用智能体的数据自训练，符合数据自由/自生成训练的理念。",
+      "llm_tldr": "论文提出一种自动红队框架，通过多智能体架构（推理架构师、图像生成器、多级验证委员会）迭代合成多模态LLM的困难示例。系统自主发现并生成对抗性样本，用于模型安全性测试。尽管目标为多模态安全，但其自生成训练数据的方法可迁移至工具使用智能体的数据自训练，符合数据自由/自生成训练的理念。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "data free or self generated training for multi turn tool using agents",
+      "matched_requirement_id": "req-15",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.10736v1",
+      "source": "arxiv",
+      "title": "Robo-Reporters: Evaluating Autonomous AI Agents as Algorithmic Gatekeepers in Computational Journalism",
+      "abstract": "Artificial intelligence agents increasingly perform journalism tasks autonomously, searching for sources, evaluating credibility, and producing news content with minimal human oversight. Yet research has largely treated AI as a monolithic category, leaving the effects of architectural design unexamined. Drawing on gatekeeping theory, this study presents the first systematic comparison of four agent architectures, monolithic (Claude), chain-based (LangChain), multi-agent collaborative (CrewAI), and autonomous iterative (AutoGPT), across 200 controlled experiments spanning 50 journalism tasks of graduated difficulty. All architectures used the same underlying language model and identical tools, isolating architectural effects. Results revealed significant effects on task duration (F(3, 196) = 24.54, p < .001, eta-squared = .27) and computational strategy (F(3, 196) = 305.63, p < .001, eta-squared = .82), with architecture explaining 82% of the variance in processing behavior. Multi-agent collaboration achieved the highest accuracy (84.7%) at roughly twice the time cost of other designs. Multistage analysis of the monolithic architecture documented a 71.7% source rejection rate, a quantitative parallel to classic human gatekeeping, while framework-based systems obscured their filtering inside abstraction layers. Transparency emerged as an architectural choice: framework designs excelled at structured attribution, whereas monolithic and iterative designs produced superior methodological documentation. Findings position architecture as a new structural level of gatekeeping and offer evidence-based guidance for newsrooms: chain-based designs for speed, multi-agent for accuracy, monolithic for versatility, and iterative for auditability.",
+      "authors": [
+        "Obada Kraishan",
+        "Kulsawasd Jitkajornwanich",
+        "Kerk Kee"
+      ],
+      "primary_category": "cs.CY",
+      "categories": [
+        "cs.CY"
+      ],
+      "published": "2026-07-12T12:40:59+00:00",
+      "link": "https://arxiv.org/pdf/2607.10736v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "autonomous agents searching for sources, evaluating credibility",
+      "llm_evidence_cn": "自主代理搜索来源并评估可信度",
+      "llm_evidence": "自主代理搜索来源并评估可信度",
+      "canonical_evidence": "自主代理搜索来源并评估可信度",
+      "llm_tldr_en": "Compares four agent architectures on journalism tasks requiring search and source evaluation, relevant to search agents.",
+      "llm_tldr_cn": "该论文系统比较了四种智能体架构在新闻任务中的表现，这些任务要求代理自主搜索来源、评估可信度并生成内容。通过200次实验发现架构设计显著影响性能，为搜索型代理的设计提供了参考。此工作突出了自主搜索代理在信息检索和评估中的应用。",
+      "llm_tldr": "该论文系统比较了四种智能体架构在新闻任务中的表现，这些任务要求代理自主搜索来源、评估可信度并生成内容。通过200次实验发现架构设计显著影响性能，为搜索型代理的设计提供了参考。此工作突出了自主搜索代理在信息检索和评估中的应用。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.11019v1",
+      "source": "arxiv",
+      "title": "QwenPaw-Data: Bridging Facts, Methodology, and Execution for Autonomous Enterprise Data Analytics",
+      "abstract": "Enterprise data analysis is emerging as a distinct frontier for autonomous agents. Compared with general-purpose interaction and software engineering, it operates in an open, ambiguous, and continuously evolving environment. These characteristics call for a data-agent architecture that treats semantics, methodology, execution, and evolution as first-class system concerns. To this end, we introduce QwenPaw-Data, an agentic data system designed for enterprise intelligent data analysis. QwenPaw-Data consolidates heterogeneous assets from warehouses, dashboards, documents, interaction logs, and historical tasks into reusable, governable, and evolvable analysis assets, then turns natural-language requests into end-to-end analytical workflows spanning data understanding, retrieval, analysis, report generation, and decision support. Its architecture decomposes the problem into three collaborative subsystems: DataBridge provides trustworthy semantic grounding through interconnected metadata, knowledge, and trace graphs; Skill-Hub codifies expert analytical methodology into reusable and verifiable skills; and Host materializes these evidence and method assets into controllable, artifact-centric runtime execution. Across these subsystems, semantics, methods, traces, and feedback are continuously deposited back into the system, forming a self-evolving asset flywheel. Experiments on public benchmarks and real-world industrial BI workloads show that QwenPaw-Data improves both verifiable data access capability and higher-level analytical quality, offering a practical foundation for reliable, traceable, and continuously improving enterprise data agents.",
+      "authors": [
+        "Tianjing Zeng",
+        "Yuntao Hong",
+        "Zhongjun Ding",
+        "Dandan Liu",
+        "Yinan Mei",
+        "Yunxiang Su",
+        "Yiming Wang",
+        "Xiaojian Zhang",
+        "Jingyu Zhu",
+        "Junhao Zhu",
+        "Zhuowen Liang",
+        "Jiazhen Peng",
+        "Lianggui Weng",
+        "Zhihao Ding",
+        "Kerui Yi",
+        "Qifeng Wang",
+        "Rong Zhu",
+        "Bolin Ding",
+        "Liyu Mou",
+        "Jingren Zhou"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-13T02:38:00+00:00",
+      "link": "https://arxiv.org/pdf/2607.11019v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "autonomous enterprise data agent that bridges natural-language requests to analytic execution over heterogeneous assets",
+      "llm_evidence_cn": "自主企业数据代理，将自然语言请求桥接到异构资产的分析执行",
+      "llm_evidence": "自主企业数据代理，将自然语言请求桥接到异构资产的分析执行",
+      "canonical_evidence": "自主企业数据代理，将自然语言请求桥接到异构资产的分析执行",
+      "llm_tldr_en": "QwenPaw-Data is an agentic data system for enterprise analytics that consolidates heterogeneous assets and turns NL requests into end-to-end analysis.",
+      "llm_tldr_cn": "企业数据分析需要自主代理处理开放、模糊和不断变化的环境。本文提出QwenPaw-Data，一种用于企业智能数据分析的代理数据系统，整合仓库、仪表盘、文档、交互日志和历史任务等异构资产为可重用、可治理和可演化的分析资产，并将自然语言请求转化为端到端分析流程。",
+      "llm_tldr": "企业数据分析需要自主代理处理开放、模糊和不断变化的环境。本文提出QwenPaw-Data，一种用于企业智能数据分析的代理数据系统，整合仓库、仪表盘、文档、交互日志和历史任务等异构资产为可重用、可治理和可演化的分析资产，并将自然语言请求转化为端到端分析流程。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.12236v1",
+      "source": "arxiv",
+      "title": "Speculate with Memory: Lossless Acceleration for LLM Agents",
+      "abstract": "Speculative execution accelerates LLM agents by using a smaller, cheaper model to predict and pre-launch the next step while the environment is idle. However, existing speculators are stateless and discard all information between tasks, preventing prediction quality from improving with experience. We equip the speculator with three online memory systems that learn from past agent trajectories: a contrastive transition table tracking action-sequence statistics, an episodic memory retrieving contextually similar segments, and a confusion tracker suppressing recurring errors. We evaluate this approach on six benchmarks spanning three speculation types: action prediction, observation prediction, and chained prediction. Memory-augmented speculation yields a 19--39\\% relative accuracy improvement on action prediction and up to a $2.5\\times$ increase on observation prediction tasks with repetitive action spaces. These gains grow continuously as memory accumulates and generalize across speculator models of varying cost. All speculation is lossless because it runs during idle time at zero added wall-clock cost, and the actor's trajectory is identical to non-speculative execution.",
+      "authors": [
+        "Yu Li",
+        "Qinyuan Ye",
+        "Prafulla Kumar Choubey",
+        "Jiaxin Zhang",
+        "Chien-Sheng Wu"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CL"
+      ],
+      "published": "2026-07-14T00:36:31+00:00",
+      "link": "https://arxiv.org/pdf/2607.12236v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "memory-augmented speculative execution for agents",
+      "llm_evidence_cn": "用于代理的增强记忆投机执行",
+      "llm_evidence": "用于代理的增强记忆投机执行",
+      "canonical_evidence": "用于代理的增强记忆投机执行",
+      "llm_tldr_en": "Adds three memory systems to speculative execution for LLM agents, improving acceleration via experience.",
+      "llm_tldr_cn": "该论文为LLM代理的投机执行配备了三种在线记忆系统：对比转换表、情景记忆和混淆追踪器，使投机者能从过去轨迹中学习，从而提升预测质量。在六个基准上实现19-39%的加速，体现了显式工作记忆对代理执行的价值。",
+      "llm_tldr": "该论文为LLM代理的投机执行配备了三种在线记忆系统：对比转换表、情景记忆和混淆追踪器，使投机者能从过去轨迹中学习，从而提升预测质量。在六个基准上实现19-39%的加速，体现了显式工作记忆对代理执行的价值。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
