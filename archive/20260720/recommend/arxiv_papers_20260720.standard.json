@@ -1,0 +1,535 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-20T20:21:58.594321+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 4,
+    "deep_cap": 7,
+    "deep_selected": 4,
+    "quick_candidates": 8,
+    "quick_skim_target": 12,
+    "quick_selected": 8
+  },
+  "deep_dive": [
+    {
+      "id": "2607.15524v1",
+      "source": "arxiv",
+      "title": "Recursive Harness Self-Improvement",
+      "abstract": "Under model--harness co-evolution, harnesses are not merely inference-time scaffolds but data-generating components whose execution traces can shape future foundation models. This motivates harness-in-the-loop learning: optimizing harnesses for both immediate agent performance and the quality of traces used for future model training. However, continually updating provider-built scaffolds is costly and labor-intensive. We therefore investigate whether optimizing user-constructed harnesses in a task-specific manner can improve execution-trace quality while remaining computationally lightweight and requiring only a few update iterations. To this end, we introduce Recursive Harness Self-Improvement (RHI), which represents the harness as a prompt-level specification of the agent loop and iteratively refines it using pairwise feedback over its own revision history. Across 30 synthetic machine-learning research tasks spanning quantitative finance, robotics, and pharmacy, a few RHI iterations suffice to substantially raise the performance ceiling of low-reasoning-effort agents, exceeding the corresponding maximum-reasoning-effort setting while reducing inference cost by up to 60%. We show that these gains arise primarily from improved task-specific context management through more effective inter-agent information flow rather than longer reasoning traces. Finally, we formalize this behavior as an information-theoretic hypothesis for RHI's implicit optimization objective, suggesting RHI as a practical algorithm for continual learning within the paradigm of model--harness co-evolution.",
+      "authors": [
+        "Hyunin Lee",
+        "Jinglue Xu",
+        "Jeffrey Seely",
+        "Donghyun Lee",
+        "Matei Zaharia",
+        "Yujin Tang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-07-17T00:21:19+00:00",
+      "link": "https://arxiv.org/pdf/2607.15524v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "recursive harness self-improvement for agent trajectories",
+      "llm_evidence_cn": "通过递归优化脚手架实现代理轨迹自改进",
+      "llm_evidence": "通过递归优化脚手架实现代理轨迹自改进",
+      "canonical_evidence": "通过递归优化脚手架实现代理轨迹自改进",
+      "llm_tldr_en": "RHI optimizes user-constructed harnesses in a task-specific manner to improve execution-trace quality for future model training, enabling self-evolution with minimal updates.",
+      "llm_tldr_cn": "当前代理系统的脚手架不仅用于推理，还生成用于训练未来模型的数据。但人工更新脚手架成本高昂。本文提出递归自改进（RHI），将脚手架表示为代理循环的提示级规范，通过少量迭代优化提升轨迹质量。实验表明，RHI能在计算轻量下显著改善轨迹质量，使代理在后续训练中表现更好。该方法为自进化代理提供了低成本、高效的数据生成机制。",
+      "llm_tldr": "当前代理系统的脚手架不仅用于推理，还生成用于训练未来模型的数据。但人工更新脚手架成本高昂。本文提出递归自改进（RHI），将脚手架表示为代理循环的提示级规范，通过少量迭代优化提升轨迹质量。实验表明，RHI能在计算轻量下显著改善轨迹质量，使代理在后续训练中表现更好。该方法为自进化代理提供了低成本、高效的数据生成机制。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.15610v1",
+      "source": "arxiv",
+      "title": "Process Reward Informed Tree Rollout for Effective Multi-Turn RL",
+      "abstract": "Reinforcement learning (RL) has become a key approach for training LLM agents, yet popular methods such as GRPO/RLOO rely on multiple independently sampled complete trajectories for advantage estimation. In long-horizon agentic tasks, such a uniform rollout strategy can waste budget on uninformative dead-end attempts, while promising intermediate states do not receive sufficient exploration. The multi-turn structure of agentic trajectories, with interleaved actions and observations, naturally supports organizing a trajectory group as a tree, where each turn serves as a decision point for exploration. This perspective reframes effective exploration as the problem of deciding where to branch. We propose Process-Scorer Guided Adaptive Tree Rollout (PATR), a quality-aware rollout framework for multi-turn agent RL. PATR uses task-appropriate process feedback to score partial trajectories, selectively branches from promising states, reuses shared prefixes, and conservatively stops degenerate paths to reduce wasted sampling. The resulting rollout groups remain compatible with standard policy optimization while providing more efficient exploration under the same training budget. We evaluate PATR on FrozenLake and the challenging SWE-Bench, which is largely unexplored by prior tree-rollout agent RL methods. Experiments show that PATR improves performance by up to +5.0 points on SWE-Bench and +9.3 points on FrozenLake, highlighting process-guided tree rollouts as an effective strategy for scalable multi-turn RL.",
+      "authors": [
+        "Xintong Li",
+        "Sha Li",
+        "Yuwei Zhang",
+        "Changlong Yu",
+        "Rongmei Lin",
+        "Hongye Jin",
+        "Shuyi Guan",
+        "Xin Liu",
+        "Linwei Li",
+        "Qingyu Yin",
+        "Jingbo Shang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-07-17T04:16:58+00:00",
+      "link": "https://arxiv.org/pdf/2607.15610v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "on-policy RL with tree rollout for long-horizon agent trajectories",
+      "llm_evidence_cn": "在线策略强化学习结合树展开优化长程代理轨迹",
+      "llm_evidence": "在线策略强化学习结合树展开优化长程代理轨迹",
+      "canonical_evidence": "在线策略强化学习结合树展开优化长程代理轨迹",
+      "llm_tldr_en": "PATR uses a process reward informed adaptive tree rollout to improve exploration in multi-turn RL for long-horizon agentic tasks, outperforming uniform rollout.",
+      "llm_tldr_cn": "现有基于GRPO/RLOO的多轮RL方法对所有轨迹均匀采样，浪费预算在无信息死胡同。本文提出过程奖励引导的自适应树展开（PATR），将多轮轨迹组织成树，利用过程奖励决定分支方向。实验表明，PATR在多种长程代理任务中显著提升了样本效率和最终性能，为搜索代理等复杂多轮任务提供了更有效的在线策略RL训练方法。",
+      "llm_tldr": "现有基于GRPO/RLOO的多轮RL方法对所有轨迹均匀采样，浪费预算在无信息死胡同。本文提出过程奖励引导的自适应树展开（PATR），将多轮轨迹组织成树，利用过程奖励决定分支方向。实验表明，PATR在多种长程代理任务中显著提升了样本效率和最终性能，为搜索代理等复杂多轮任务提供了更有效的在线策略RL训练方法。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on policy reinforcement learning and distillation for long horizon agent trajectories",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.15736v1",
+      "source": "arxiv",
+      "title": "Better Starts, Better Ends: Bootstrapped Iterative Self-Reasoning Distillation for Compressed Reasoning",
+      "abstract": "Large reasoning models often solve problems through long chain-of-thought (CoT) traces, yet much of this computation is spent on redundant derivations, repeated self-verification, and detours that do not improve the final answer. Existing on-policy self-distillation methods reduce this cost by matching a student model to a concise copy of itself on prefixes sampled from the student's own rollouts. We show that this objective has an initialization bottleneck. Since supervision is applied only to visited prefixes, training from a verbose base model places the KL loss on contexts that are often noisy, redundant, or already off track. In such regions, a concise teacher can provide only local corrections, while the student continues to explore trajectories that an efficient reasoner should avoid. In this paper, we propose BIRD(Bootstrapped Iterative Self-Reasoning Distillation), a two-stage self-reasoning distillation method that improves the rollout distribution before on-policy training. BIRD first samples concise solutions from the base model under a brevity instruction, keeps only answer-correct traces, and performs a lightweight prompt-switch SFT step. The traces are generated with the brevity instruction but learned under the original task prompt, turning instruction-induced conciseness into a default reasoning behavior. Starting from this warm model, BIRD then applies on-policy reverse-KL distillation with a concise self-teacher, now on cleaner and more informative prefixes. Across Qwen3 series models, BIRD achieves a stronger accuracy-efficiency trade-off than prompting and cold-start on-policy distillation on MATH-500 and AIME benchmarks. On Qwen3-8B, it improves MATH-500 accuracy from 86.2% to 92.0% while reducing the average response length from 3,099 to 1,115 tokens. These results highlight prefix support as a central factor in efficient reasoning distillation.",
+      "authors": [
+        "Leichao Dong",
+        "Dongxu Zhang",
+        "Yiding Sun",
+        "Qirui Wang",
+        "Yuhan Wang",
+        "Lin Chen",
+        "Jihua Zhu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-07-17T08:15:35+00:00",
+      "link": "https://arxiv.org/pdf/2607.15736v1",
+      "tags": [
+        "keyword:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "on-policy self-distillation for compressed reasoning",
+      "llm_evidence_cn": "基于策略的自蒸馏用于压缩推理",
+      "llm_evidence": "基于策略的自蒸馏用于压缩推理",
+      "canonical_evidence": "基于策略的自蒸馏用于压缩推理",
+      "llm_tldr_en": "Proposes bootstrapped iterative self-reasoning distillation to overcome initialization bottleneck in on-policy distillation for compressed reasoning.",
+      "llm_tldr_cn": "现有在线自蒸馏压缩推理存在初始化瓶颈，导致在噪声区域只能局部修正。本文提出自举迭代自推理蒸馏，通过逐步初始化改善蒸馏质量。实验表明该方法在保持推理准确率的同时显著减少轨迹长度，为在线蒸馏提供了更稳定的训练方案。",
+      "llm_tldr": "现有在线自蒸馏压缩推理存在初始化瓶颈，导致在噪声区域只能局部修正。本文提出自举迭代自推理蒸馏，通过逐步初始化改善蒸馏质量。实验表明该方法在保持推理准确率的同时显著减少轨迹长度，为在线蒸馏提供了更稳定的训练方案。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on-policy distillation",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.15660v1",
+      "source": "arxiv",
+      "title": "ToolVerse: Unlocking Massive Environments and Long-Horizon Tasks for Agentic Reinforcement Learning",
+      "abstract": "While LLM agents demonstrate strong reasoning abilities in compact and well-defined scenarios, they struggle to maintain robustness and effectiveness when faced with large-scale, diverse, and dynamic real-world environments that demand seamless tool integration. To address this gap, we introduce ToolVerse, a comprehensive framework that scales up agentic RL environments and enables agents to perform complex long-horizon reasoning in Tool-Integrated Reasoning (TIR) tasks. First, ToolVerse automatically builds the massive executable agent training environments from nearly 400 real-world Model Context Protocols (MCPs) that contain about 4500 tools. Second, we propose a task design strategy based on a tool dependency graph, utilizing Dynamic Unlocking Sampling Algorithm to generate long-horizon tasks, and produce GUST (Graph Unlocking Sampling Tasks) dataset. Third, to alleviate the credit assigment problem in long-horizon agentic RL, we propose a fine-grained Turn-Aware Relative Advantage algorithm. We conduct extensive Agentic RL training using ToolVerse and evaluate our framework on serveral agentic benchmarks. Experimental results demonstrate that our framework significantly strengthens LLMs' capabilities in long-horizon tool use, achieving a marked performance boost and showcasing robust reasoning within dynamic environments.",
+      "authors": [
+        "Shuaiyu Zhou",
+        "Fengpeng Yue",
+        "Zengjie Hu",
+        "Yuanzhe Shen",
+        "Chenyang Zhang",
+        "feng hong",
+        "Cao Liu",
+        "Ke Zeng"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-17T06:12:04+00:00",
+      "link": "https://arxiv.org/pdf/2607.15660v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "long-horizon agent reasoning via massive tool environments",
+      "llm_evidence_cn": "通过大规模工具环境支持长时域智能体推理",
+      "llm_evidence": "通过大规模工具环境支持长时域智能体推理",
+      "canonical_evidence": "通过大规模工具环境支持长时域智能体推理",
+      "llm_tldr_en": "Introduces ToolVerse, a framework that automatically builds massive executable agent training environments from real MCPs with 4500 tools, enabling complex long-horizon reasoning in tool-integrated tasks.",
+      "llm_tldr_cn": "ToolVerse是一个构建大规模可执行智能体训练环境的框架。它从近400个真实MCP协议自动集成约4500个工具，并基于工具依赖图设计任务生成策略，使智能体能够进行复杂的长期推理。该框架为强化学习提供了丰富、动态的环境，有效填补了智能体在真实世界多工具场景中的能力空白。这直接支持长时域智能体推理和数据生成任务，与自进化智能体的训练需求密切相关。",
+      "llm_tldr": "ToolVerse是一个构建大规模可执行智能体训练环境的框架。它从近400个真实MCP协议自动集成约4500个工具，并基于工具依赖图设计任务生成策略，使智能体能够进行复杂的长期推理。该框架为强化学习提供了丰富、动态的环境，有效填补了智能体在真实世界多工具场景中的能力空白。这直接支持长时域智能体推理和数据生成任务，与自进化智能体的训练需求密切相关。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.10966v1",
+      "source": "arxiv",
+      "title": "SVR-R1: Bootstrapping Multi-modal Reasoning with Self-verification in Reinforcement Learning",
+      "abstract": "We introduce Self-Verified Reasoner (SVR-R1), a multi-turn RL framework that turns a model's own verification into a learning signal for multimodal reasoning. For each query, the model proposes an answer using the same weights, and issues a binary self-verdict (Yes/No). A 'No' triggers a second-chance rethink; a 'Yes,' or a turn cap, finalizes the output for computing the outcome-based reward. SVR-R1 is implemented with GRPO and an asynchronous multi-turn rollout framework and needs no external supervision or auxiliary critics. We evaluate SVR-R1 on vision-language reasoning benchmarks and show that it improves accuracy by a large margin over strong standard GRPO baselines. Training dynamics show decreasing reliance on verification-fewer verification turns, yet higher test accuracy-indicating that the gap between verification and generation narrows as the policy internalizes self-correction and chooses the most confident answer via our framework. SVR-R1 bridges the less explored intersection of inference-time self-refinement and RL training for VLMs, offering a simple yet effective recipe for bootstrapping multimodal reasoning. We will open-source \\textbf{SVR-R1} to facilitate future research in VLMs.",
+      "authors": [
+        "Mingyuan Wu",
+        "Jingcheng Yang",
+        "Shengyi Qian",
+        "Xudong Wang",
+        "Jize Jiang",
+        "Qifan Wang",
+        "Aashu Singh",
+        "Khoi Pham",
+        "Fei Liu",
+        "Zhaolun Su",
+        "Zhuokai Zhao",
+        "Klara Nahrstedt",
+        "Jianyu Wang",
+        "Hanchao Yu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-13T00:21:30+00:00",
+      "link": "https://arxiv.org/pdf/2607.10966v1",
+      "tags": [
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "self-verification and RL for multi-turn reasoning, self-evolving agents",
+      "llm_evidence_cn": "自验证和强化学习用于多轮推理，自演化智能体",
+      "llm_evidence": "自验证和强化学习用于多轮推理，自演化智能体",
+      "canonical_evidence": "自验证和强化学习用于多轮推理，自演化智能体",
+      "llm_tldr_en": "SVR-R1 introduces a multi-turn RL framework where a model self-verifies its answers, triggering rethinking upon failure. Uses GRPO with asynchronous rollout, improving multimodal reasoning accuracy. Reflects self-evolving agent paradigm.",
+      "llm_tldr_cn": "该论文提出SVR-R1，一个多轮强化学习框架，让模型对自己的答案进行二元自验证，若验证失败则触发重思考，以此将验证信号转化为学习信号。实现基于GRPO和异步多轮展开，无需外部监督。在多模态推理基准上大幅优于标准GRPO基线，体现了自演化智能体的核心思想。",
+      "llm_tldr": "该论文提出SVR-R1，一个多轮强化学习框架，让模型对自己的答案进行二元自验证，若验证失败则触发重思考，以此将验证信号转化为学习信号。实现基于GRPO和异步多轮展开，无需外部监督。在多模态推理基准上大幅优于标准GRPO基线，体现了自演化智能体的核心思想。",
+      "llm_tags": [
+        "query:self-evolve:composite"
+      ],
+      "matched_query_tag": "query:self-evolve:composite",
+      "matched_query_text": "Papers central to 自进化智能体, especially work that connects or combines: r; on-policy distillation; long-horizon agent reasoning; data-free agent training; self-evolving agents; synthetic trajectory construction, verification, and curriculum shaping for autonomous agents; on policy reinforcement learning and distillation for long horizon agent trajectories; data free or self generated training for multi turn tool using agents.",
+      "matched_requirement_id": "req-composite-self-evolve",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.11399v1",
+      "source": "arxiv",
+      "title": "Agentic Routing: The Harness-Native Data Flywheel",
+      "abstract": "Large language model agents are increasingly executed not by a single model call, but by an execution harness that manages observation, context, control, action, state, and verification. At the same time, frontier and open models are becoming structurally specialized: a model that is strong at code editing, long-context recovery, tool use, mathematical reasoning, or low-latency response may not dominate on the other axes. This makes model selection inside an agent a core systems problem rather than a per-query serving trick. Existing routing methods mostly optimize single-turn cost-quality trade-offs and therefore miss the execution state, intermediate failures, and feedback loops that make agents different from chat completion. We propose Harness-Native agentic routing, a step-level routing paradigm that selects either a single best-fit model for cost-effective execution or multiple complementary models for ensemble-style accuracy improvement, conditioned on the full harness state. The key insight is that every routing decision naturally produces a structured data record -- consisting of the query, harness state, model choice or model set, execution trace, outcome, and cost -- whose labels are supplied by the environment rather than by the router itself. These records form a harness-native data flywheel: execution traces train better routers and harness-native models, which improve cost-quality trade-offs and generate more traces under the same budget. We instantiate this idea in OpenSquilla with a four-layer routing stack, an open LightGBM cold-start ranker, and a staged router-model path that turns logged arena records into progressively stronger routing policies. The report studies singleton and multi-model routing on agentic benchmarks including DRACO and PinchBench, and argues that agentic routing is not merely cost control, but a data engine for agent-native training.",
+      "authors": [
+        "Xinchen Liu",
+        "Hang Zhou",
+        "Yingjie Zong",
+        "Yuchuan Tian",
+        "Liuyang Song",
+        "Shuo Zhang",
+        "Yulong Li",
+        "Wei He",
+        "Mengyu Zheng",
+        "Runke Liu",
+        "Siyang Cheng",
+        "Xiang Kuang",
+        "Hailin Hu",
+        "Kai Han",
+        "Yunhe Wang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-07-13T11:05:55+00:00",
+      "link": "https://arxiv.org/pdf/2607.11399v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "harness-native routing with execution state, supports search agent system optimization",
+      "llm_evidence_cn": "基于执行框架的路由考虑状态，支持搜索智能体系统优化",
+      "llm_evidence": "基于执行框架的路由考虑状态，支持搜索智能体系统优化",
+      "canonical_evidence": "基于执行框架的路由考虑状态，支持搜索智能体系统优化",
+      "llm_tldr_en": "Proposes Harness-Native agentic routing that leverages execution state and feedback loops for model selection within agent harnesses.",
+      "llm_tldr_cn": "论文指出随着模型专业化，智能体执行框架中的模型选择成为核心系统问题。提出Harness-Native智能体路由方法，不同于仅优化单轮成本-质量，而是利用执行框架中的状态、中间失败和反馈循环进行动态模型选择。该方法在多个智能体任务中提升了整体效率和质量，为搜索智能体的系统级优化提供新思路。",
+      "llm_tldr": "论文指出随着模型专业化，智能体执行框架中的模型选择成为核心系统问题。提出Harness-Native智能体路由方法，不同于仅优化单轮成本-质量，而是利用执行框架中的状态、中间失败和反馈循环进行动态模型选择。该方法在多个智能体任务中提升了整体效率和质量，为搜索智能体的系统级优化提供新思路。",
+      "llm_tags": [
+        "query:search-agent:composite"
+      ],
+      "matched_query_tag": "query:search-agent:composite",
+      "matched_query_text": "Papers central to 搜索智能体, especially work that connects or combines: l; multimodal search agents; deep research agents; search agents; agentic search; reinforcement learning for multi turn search, retrieval, and evidence collection; search agents with explicit working memory, evidence curation, and claim verification.",
+      "matched_requirement_id": "req-composite-search-agent",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.11126v1",
+      "source": "arxiv",
+      "title": "ToolAtlas: Learning Once, Reusing Everywhere with Tool-Side Memory",
+      "abstract": "Large language model (LLM) agents increasingly rely on external tools served by shared providers and accessed by heterogeneous downstream agents. Existing approaches improve tool use on the agent side through parameter updates, prompt refinement, or agent-side memory, making tool knowledge difficult to share and limited to behaviors observed in past tasks. We argue that reusable tool knowledge should instead be maintained by the tool provider. We introduce ToolAtlas, a graph-based framework that builds a persistent provider-side tool memory of tool capabilities, failure boundaries, and cross-tool compositions through execution-verified probing. At inference time, agents query the tool memory via adaptive graph traversal. Across two MCP-based benchmarks spanning eight services, ToolAtlas outperforms existing tool-side optimization and agent-side memory baselines by up to 21.61% in pass@1 and 18.61% in pass@4. The same tool memory also transfers across environment instances and agent frameworks without retraining or task-time exploration, yielding up to 24.16%/16.22% and 17.49%/14.27% relative gains in pass@1/pass@4, respectively. Ablation studies show that these gains arise from combining tool-centered memory organization with capability-guided execution probing. These results establish provider-side tool memory as an effective and reusable paradigm for tool servers. Our code is in: https://github.com/PuppyKnightUniversity/ToolAtlas.",
+      "authors": [
+        "Yue Fang",
+        "Zhibang Yang",
+        "Fangkai Yang",
+        "Xiaoting Qin",
+        "Liqun Li",
+        "Qingwei Lin",
+        "Saravan Rajmohan",
+        "Dongmei Zhang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-07-13T06:01:41+00:00",
+      "link": "https://arxiv.org/pdf/2607.11126v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "tool-side memory for agents, supports search agents with reusable knowledge",
+      "llm_evidence_cn": "工具侧记忆为智能体提供可复用知识，支持搜索智能体",
+      "llm_evidence": "工具侧记忆为智能体提供可复用知识，支持搜索智能体",
+      "canonical_evidence": "工具侧记忆为智能体提供可复用知识，支持搜索智能体",
+      "llm_tldr_en": "Introduces ToolAtlas, a graph-based provider-side tool memory that agents query via adaptive traversal, enabling reusable tool knowledge across agents.",
+      "llm_tldr_cn": "论文指出当前智能体改进工具使用主要从智能体侧入手，导致知识难以共享。提出ToolAtlas框架，由工具提供方构建持久化的工具记忆图，记录工具能力、失败边界和组合方式，智能体通过自适应图遍历查询。在MCP基准上证明可显著提升工具使用效率和泛化能力，为搜索智能体的工具知识重用提供基础设施。",
+      "llm_tldr": "论文指出当前智能体改进工具使用主要从智能体侧入手，导致知识难以共享。提出ToolAtlas框架，由工具提供方构建持久化的工具记忆图，记录工具能力、失败边界和组合方式，智能体通过自适应图遍历查询。在MCP基准上证明可显著提升工具使用效率和泛化能力，为搜索智能体的工具知识重用提供基础设施。",
+      "llm_tags": [
+        "query:search-agent:composite"
+      ],
+      "matched_query_tag": "query:search-agent:composite",
+      "matched_query_text": "Papers central to 搜索智能体, especially work that connects or combines: l; multimodal search agents; deep research agents; search agents; agentic search; reinforcement learning for multi turn search, retrieval, and evidence collection; search agents with explicit working memory, evidence curation, and claim verification.",
+      "matched_requirement_id": "req-composite-search-agent",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.13474v1",
+      "source": "arxiv",
+      "title": "MyAG: A Graph-Based Framework for Designing and Analyzing Composable LLM Agent Systems",
+      "abstract": "We present MyAG, a graph-based framework for designing and analyzing composable LLM agent systems. Our framework separates agent system construction into three graph abstractions: a component graph for agents, environments, and modules; a workflow graph for execution control; and a search graph for runtime execution. This separation allows users to flexibly reuse the same components with different strategies. We further support hierarchical composition through recursive system nodes and provide monitoring and visualization tools for inspecting agent execution. Experiments on representative agent applications show that our framework supports flexible agent system design and helps analyze performance-efficiency tradeoffs. Our framework is publicly available and fully open-source.",
+      "authors": [
+        "Zhisong Zhang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-07-15T06:03:52+00:00",
+      "link": "https://arxiv.org/pdf/2607.13474v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "graph-based framework for designing and analyzing LLM agent systems, supports search graph",
+      "llm_evidence_cn": "基于图的LLM智能体系统设计与分析框架，支持搜索图",
+      "llm_evidence": "基于图的LLM智能体系统设计与分析框架，支持搜索图",
+      "canonical_evidence": "基于图的LLM智能体系统设计与分析框架，支持搜索图",
+      "llm_tldr_en": "MyAG provides a graph-based framework with three abstractions (component, workflow, search graphs) for designing composable LLM agent systems. It enables flexible reuse and hierarchical composition, directly supporting search agent development.",
+      "llm_tldr_cn": "该论文提出MyAG，一种基于图的三层抽象框架（组件图、工作流图、搜索图），用于设计可组合的LLM智能体系统。该框架支持灵活复用和层次化组合，并提供了执行监控工具，可直接应用于搜索智能体的构建与分析。",
+      "llm_tldr": "该论文提出MyAG，一种基于图的三层抽象框架（组件图、工作流图、搜索图），用于设计可组合的LLM智能体系统。该框架支持灵活复用和层次化组合，并提供了执行监控工具，可直接应用于搜索智能体的构建与分析。",
+      "llm_tags": [
+        "query:search-agent:composite"
+      ],
+      "matched_query_tag": "query:search-agent:composite",
+      "matched_query_text": "Papers central to 搜索智能体, especially work that connects or combines: l; multimodal search agents; deep research agents; search agents; agentic search; reinforcement learning for multi turn search, retrieval, and evidence collection; search agents with explicit working memory, evidence curation, and claim verification.",
+      "matched_requirement_id": "req-composite-search-agent",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.11810v1",
+      "source": "arxiv",
+      "title": "Supporting Reflection in LLM-based Exploratory Search",
+      "abstract": "Large Language Models (LLMs) can make exploratory search more efficient but may undermine the reflection and iterative sensemaking needed in unfamiliar domains. Existing LLM tools often prioritize rapid answers over supporting users in tracking how their understanding evolves and how well their strategies align with their goals. We present TrailLM, a system that helps users reconstruct and revisit their exploration paths to support reflection and metacognitive engagement during information seeking. By aligning LLM assistance with users' sensemaking workflows, TrailLM aims to preserve the benefits of LLM-based search while enhancing opportunities for critical reflection on one's own search process.",
+      "authors": [
+        "Giulia Di Fede",
+        "Salvatore Andolina"
+      ],
+      "primary_category": "cs.HC",
+      "categories": [
+        "cs.HC"
+      ],
+      "published": "2026-07-13T17:05:25+00:00",
+      "link": "https://arxiv.org/pdf/2607.11810v1",
+      "tags": [
+        "keyword:search-agent",
+        "query:search-agent"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "LLM-based exploratory search with reflection support",
+      "llm_evidence_cn": "基于LLM的探索性搜索结合反思支持",
+      "llm_evidence": "基于LLM的探索性搜索结合反思支持",
+      "canonical_evidence": "基于LLM的探索性搜索结合反思支持",
+      "llm_tldr_en": "TrailLM helps users reconstruct and revisit exploration paths in LLM-based search to support reflection and metacognitive engagement.",
+      "llm_tldr_cn": "该论文指出LLM在探索性搜索中可能削弱用户的反思与意义建构。提出TrailLM系统，帮助用户重建和回顾探索路径，支持元认知参与。通过对齐LLM辅助与用户的认知工作流，在保持搜索效率的同时增强批判性反思。这对设计更人性化的搜索智能体有直接借鉴价值。",
+      "llm_tldr": "该论文指出LLM在探索性搜索中可能削弱用户的反思与意义建构。提出TrailLM系统，帮助用户重建和回顾探索路径，支持元认知参与。通过对齐LLM辅助与用户的认知工作流，在保持搜索效率的同时增强批判性反思。这对设计更人性化的搜索智能体有直接借鉴价值。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "agentic search",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.14277v1",
+      "source": "arxiv",
+      "title": "Multi-Head Latent Control: A Unified Interface for LLM Agent Decision Making",
+      "abstract": "Large language models are increasingly deployed as agents, but reliable agentic behavior requires more than next-token prediction. At inference time, it is preferred that an agent can decide whether to proceed with its current reasoning, defer to a stronger model, request additional information, invoke external tools, or abstain under the given setup. Existing approaches address these decisions through prompt-level routing, external orchestration, or task-specific fine-tuning, which primarily rely on input-side signals, and are often costly and difficult to maintain as model backbones evolve. We ask whether such control decisions can be inferred directly from a model's latent generation process. We introduce Multi-Head Latent Control, a lightweight layer that reads hidden-state trajectories from a frozen LLM or VLM to produce deployment-time control signals. A Capability Head predicts whether the current model can solve the instance or should defer to a stronger collaborator, while a Resolution Head predicts appropriate resolution decision Clarification, Tool Use, Abstention, or Direct Answering. Both heads are trained only on latent traces from the same frozen LLM backbone, enabling post hoc adaptation without modifying the model. Across language and vision-language settings, Multi-Head Latent Control consistently improves the quality-cost tradeoff of multi-model systems, enabling early handoff from partial generations and more accurate intervention decisions. In routed execution (small + large model), it reduces large-model usage by up to 90.7 percent on AndroidWorld and 27-53 percent on average across benchmarks, while retaining most of large-model performance. Additionally, the learned control signals improve tool-use decision quality, yielding up to +158 percent relative score gain and 65.5 percent fewer missed-required tool calls.",
+      "authors": [
+        "Amirhosein Ghasemabadi",
+        "Ruichen Chen",
+        "Bahador Rashidi",
+        "Di Niu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-07-15T18:36:54+00:00",
+      "link": "https://arxiv.org/pdf/2607.14277v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "general LLM agent decision making for search agents",
+      "llm_evidence_cn": "通用LLM智能体决策，可用于搜索智能体",
+      "llm_evidence": "通用LLM智能体决策，可用于搜索智能体",
+      "canonical_evidence": "通用LLM智能体决策，可用于搜索智能体",
+      "llm_tldr_en": "Introduces Multi-Head Latent Control, a lightweight interface for LLM agents to make inference-time decisions like defer, tool-use, or abstain, by reading from the model's latent states. Applicable to search agent control.",
+      "llm_tldr_cn": "该论文提出多头潜在控制，一种轻量级接口，通过从模型潜在状态中读取信息，使LLM智能体能够做出推理时决策，如延迟、调用工具或弃权。该方法为搜索智能体的行为控制提供了一种通用且可迁移的方案。",
+      "llm_tldr": "该论文提出多头潜在控制，一种轻量级接口，通过从模型潜在状态中读取信息，使LLM智能体能够做出推理时决策，如延迟、调用工具或弃权。该方法为搜索智能体的行为控制提供了一种通用且可迁移的方案。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.16189v1",
+      "source": "arxiv",
+      "title": "Searching Videos as Trees: Self-Correcting Agents for Grounded Long Video QA",
+      "abstract": "Grounded long-video question answering (Grounded LVQA) requires answering a question about a long video while localizing the short evidence interval that supports the answer. Recent agentic methods frame this task as multi-turn exploration with a single crop_video(start, end) action, which supports coarse-to-fine narrowing but provides no primitive for fine-to-coarse backtracking. As a result, these agents typically converge prematurely and cannot recover from an early mistake. We propose VideoTreeSearch (VTS), a framework that casts grounded LVQA as iterative self-correcting search over an adaptive temporal tree. VTS constructs a non-uniform tree from visual scene boundaries so that each node corresponds to a semantically coherent segment, and trains an agent to navigate the tree through four discrete operations: zoom_in, zoom_out, shift, and answer. These operations expose backtracking and recovery as explicit, learnable primitives rather than implicit behaviors. To train this navigation, we introduce a trajectory synthesis pipeline that produces multi-step paths through the tree, including deliberate detours into incorrect branches followed by recovery. We use these trajectories for supervised fine-tuning, followed by reinforcement learning with grounding and answer-accuracy rewards. On three Grounded LVQA benchmarks (CG-Bench, Haystack-LVBench, Haystack-Ego4D), VTS outperforms the strongest prior agentic methods by +12.5 mIoU on CG-Bench and +7.4 T-F1 on Haystack-Ego4D. The learned policy also transfers to general long-video QA, surpassing all prior agentic baselines on Video-MME, MLVU, and LVBench by up to +7.1 accuracy points. Ablations confirm that self-correcting hierarchical search is the central mechanism behind these gains: removing either adaptive descent or explicit backtracking substantially degrades performance. Code is available at https://github.com/CeeZh/VTS.",
+      "authors": [
+        "Ce Zhang",
+        "Ziyang Wang",
+        "Yulu Pan",
+        "Oluwatumininu Oguntola",
+        "Pranav Wagh",
+        "Qiyu Wu",
+        "Hiromi Wakaki",
+        "Mohit Bansal",
+        "Gedas Bertasius"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-17T17:59:27+00:00",
+      "link": "https://arxiv.org/pdf/2607.16189v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "self-correcting search agents for video QA",
+      "llm_evidence_cn": "用于视频问答的自纠正搜索智能体",
+      "llm_evidence": "用于视频问答的自纠正搜索智能体",
+      "canonical_evidence": "用于视频问答的自纠正搜索智能体",
+      "llm_tldr_en": "VideoTreeSearch introduces adaptive temporal trees and self-correction for grounded long-video QA, enabling search agents to recover from mistakes via fine-to-coarse backtracking.",
+      "llm_tldr_cn": "针对长视频定位问答，现有智能体方法使用单一裁剪动作，缺乏从粗到精的反向回溯能力，容易过早收敛。本文提出VideoTreeSearch，将问答构建为在自适应时间树上的迭代自校正搜索。树节点对应语义一致的视频片段，并支持粗到精和精到粗的探索。该方法使智能体能从早期错误中恢复，显著提升定位和回答的准确性。",
+      "llm_tldr": "针对长视频定位问答，现有智能体方法使用单一裁剪动作，缺乏从粗到精的反向回溯能力，容易过早收敛。本文提出VideoTreeSearch，将问答构建为在自适应时间树上的迭代自校正搜索。树节点对应语义一致的视频片段，并支持粗到精和精到粗的探索。该方法使智能体能从早期错误中恢复，显著提升定位和回答的准确性。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.14547v1",
+      "source": "arxiv",
+      "title": "AdaTurn: Budget-Aware Test-Time Scaling for Active Visual Perception Agents",
+      "abstract": "Active visual agents solve fine-grained image tasks by interleaving reasoning with image-grounding actions across multiple turns. However, deployment-time rollout budgets are rarely fixed: some requests permit long rollouts, while others require the agent to act under a tight turn limit. Existing methods train the policy as if the rollout budget were hidden, so when the available budget is smaller than the trajectory the agent prefers, the interaction is often truncated before any valid answer is produced; we term this failure \\emph{catastrophic truncation}. To overcome this challenge, we present AdaTurn, a budget-aware framework that conditions the agent on the allowed number of turns and explicitly trains the boundary behavior induced by the budget. Our key component, Forced-Answer DAPO (FA-DAPO), converts the over-budget event from a masked or penalized failure into a trainable final-decision step, teaching the model to synthesize partial evidence when further tool use is no longer possible. We further randomize rollout budgets during both training and inference and introduce a load-balanced scheduler that makes such operations practical. AdaTurn substantially improves low-budget accuracy, for example raising VisualProbe-Medium from 36.7% to 47.6% at four turns, while preserving strong scaling at larger budgets and transferring effectively to multiple backbones and general multimodal benchmarks.",
+      "authors": [
+        "Susan Liang",
+        "Chao Huang",
+        "Filippos Bellos",
+        "Jing Bi",
+        "Jason J Corso",
+        "Chenliang Xu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-16T04:07:22+00:00",
+      "link": "https://arxiv.org/pdf/2607.14547v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multi-turn active perception agent with budget-aware control",
+      "llm_evidence_cn": "多轮主动感知智能体结合预算感知控制",
+      "llm_evidence": "多轮主动感知智能体结合预算感知控制",
+      "canonical_evidence": "多轮主动感知智能体结合预算感知控制",
+      "llm_tldr_en": "AdaTurn conditions active visual agents on allowed turn budgets, training boundary behaviors to avoid catastrophic truncation in multi-turn tasks.",
+      "llm_tldr_cn": "该论文针对主动视觉智能体在多轮交互中因预算不足导致截断失败的问题，提出AdaTurn框架。它通过将允许轮次作为条件输入，显式训练边界行为，使智能体能在不同预算下输出有效答案。实验证明该方法避免了灾难性截断，为搜索智能体的自适应多轮推理提供了可迁移技术。",
+      "llm_tldr": "该论文针对主动视觉智能体在多轮交互中因预算不足导致截断失败的问题，提出AdaTurn框架。它通过将允许轮次作为条件输入，显式训练边界行为，使智能体能在不同预算下输出有效答案。实验证明该方法避免了灾难性截断，为搜索智能体的自适应多轮推理提供了可迁移技术。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
