@@ -6,77 +6,59 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-25
-- 运行时间：2026-07-25 21:39:06 UTC
+- 最新运行日期：2026-07-26
+- 运行时间：2026-07-26 20:37:26 UTC
 - 运行状态：成功
-- 本次总论文数：19
-- 精读区：7
+- 本次总论文数：13
+- 精读区：1
 - 速读区：12
 
 ### 今日简报（AI）
-今日精选19篇论文，精读7篇，核心聚焦强化学习与自进化机制，两篇9.0分工作分别攻克连续动作空间合作任务与LLM污染检索证据选择难题。最值得关注的是自我进化默认动作策略和选择性证据采纳强化学习，均获9.0高分。建议后续探索SLPO的潜在推理缩放、Causal-AgentIR的因果记忆图像恢复及GRADRAG的多智能体RAG适配，以构建互补技术图谱。
-- 详情：[/202607/25/README](/202607/25/README)
+今天共处理13篇论文，精读1篇《Solar Open 2 Technical Report》（8.0/10），速读12篇（含jina-reranker-v3.5、AI代理幻觉与安全漂移、连续动作空间协作等）。最值关注的是Solar Open 2技术报告与jina-reranker-v3.5列表排序器，前者代表开源大模型进展，后者提升检索效率。普通读者可优先精读Solar Open 2，再按兴趣探索速读中的AI安全或强化学习方向。
+- 详情：[/202607/26/README](/202607/26/README)
 
 ### 精读区论文标签
-1. [A Self-Evolving Default Action for Cooperative Tasks with Continuous Action Space](/202607/25/2607.18597v1-a-self-evolving-default-action-for-cooperative-tasks-with-continuous-action-space)  
-   标签：评分：9.0/10、query:self-evolve
-   evidence：提出面向多智能体强化学习的自进化默认动作
-2. [Reinforcement Learning for Large Language Model Selective Evidence Adoption from Contaminated Retrieval Results](/202607/25/2607.20090v1-reinforcement-learning-for-large-language-model-selective-evidence-adoption-from-contaminated-retrieval-results)  
-   标签：评分：9.0/10、query:search-agent
-   evidence：使用强化学习从检索结果中选择性采纳证据
-3. [SciExplore: Evaluating Autonomous Agents from Scientific Navigation to Information Integration](/202607/25/2607.20926v1-sciexplore-evaluating-autonomous-agents-from-scientific-navigation-to-information-integration)  
-   标签：评分：9.0/10、query:search-agent
-   evidence：科学搜索智能体基准，涵盖多轮检索与合成
-4. [Sample-Efficient Learning from Agent Experience](/202607/25/2607.21051v1-sample-efficient-learning-from-agent-experience)  
-   标签：评分：9.0/10、query:self-evolve
-   evidence：提出经验蒸馏方法，无需额外环境交互即可从智能体经验中学习
-5. [AREX: Towards a Recursively Self-Improving Agent for Deep Research](/202607/25/2607.21461v1-arex-towards-a-recursively-self-improving-agent-for-deep-research)  
-   标签：评分：9.0/10、query:search-agent
-   evidence：直接提出深度研究智能体，含递归自我改进
-6. [Graph-Based Agentic AI with LangGraph: Workflow Pathways for Long-Running Stateful Business Processes](/202607/25/2607.19297v1-graph-based-agentic-ai-with-langgraph-workflow-pathways-for-long-running-stateful-business-processes)  
-   标签：评分：8.0/10、query:search-agent
-   evidence：具有证据门控的智能体检索增强生成与有状态长流程
-7. [AttriMem: Attribution-Guided Process Feedback for Agent Memory Learning](/202607/25/2607.21106v1-attrimem-attribution-guided-process-feedback-for-agent-memory-learning)  
-   标签：评分：8.0/10、query:search-agent
-   evidence：基于归因的过程反馈用于智能体记忆学习
+1. [Solar Open 2 Technical Report](/202607/26/2607.20062v1-solar-open-2-technical-report)  
+   标签：评分：8.0/10、query:self-evolve
+   evidence：专为长时域代理任务设计的语言模型，支持百万token上下文
 
 ### 速读区论文标签
-1. [SLPO: Scaling Latent Reasoning via a Surrogate Policy](/202607/25/2607.19691v1-slpo-scaling-latent-reasoning-via-a-surrogate-policy)  
-   标签：评分：8.0/10、query:self-evolve
-   evidence：使用替代策略对潜在推理进行强化学习蒸馏，实现测试时扩展
-2. [Causal-AgentIR: Self-Evolving Causal Memory for Adaptive Image Restoration Agents](/202607/25/2607.21125v1-causal-agentir-self-evolving-causal-memory-for-adaptive-image-restoration-agents)  
-   标签：评分：8.0/10、query:self-evolve
-   evidence：提出面向图像恢复智能体的自进化因果记忆
-3. [GRADRAG: Cross-Component Prompt Adaptation for Coordinated Multi-Agent RAG](/202607/25/2607.21324v1-gradrag-cross-component-prompt-adaptation-for-coordinated-multi-agent-rag)  
-   标签：评分：8.0/10、query:search-agent
-   evidence：多智能体RAG的证据策展与反馈，与证据收集和验证相关
-4. [PATS: Policy-Aware Training Scaffolding for Agentic Reinforcement Learning](/202607/25/2607.21419v1-pats-policy-aware-training-scaffolding-for-agentic-reinforcement-learning)  
-   标签：评分：8.0/10、query:self-evolve
-   evidence：策略感知的训练脚手架用于智能体强化学习
-5. [OpenForgeRL: Train Harness-native Agents in Any Environment](/202607/25/2607.21557v1-openforgerl-train-harness-native-agents-in-any-environment)  
-   标签：评分：8.0/10、query:self-evolve
-   evidence：用于训练多轮工具使用智能体的在策略强化学习框架
-6. [Behavioral Controllability of Agentic Models for Information Extraction: From Fixed Workflows to Reflective Agents](/202607/25/2607.15715v1-behavioral-controllability-of-agentic-models-for-information-extraction-from-fixed-workflows-to-reflective-agents)  
+1. [jina-reranker-v3.5: An Efficient Listwise Reranker with Hybrid Attention and Self-Distillation](/202607/26/2607.18152v1-jina-reranker-v35-an-efficient-listwise-reranker-with-hybrid-attention-and-self-distillation)  
    标签：评分：7.0/10、query:search-agent
-   evidence：比较具有记忆与工具使用的反思智能体在信息抽取中的表现
-7. [Auditing Provenance Sensitivity in LLM Agent Action Selection](/202607/25/2607.20827v1-auditing-provenance-sensitivity-in-llm-agent-action-selection)  
+   evidence：针对智能体检索流水线的列表重排器
+2. [Operational Hallucination and Safety Drift in AI Agents](/202607/26/2607.18366v1-operational-hallucination-and-safety-drift-in-ai-agents)  
    标签：评分：7.0/10、query:search-agent
-   evidence：审计LLM智能体动作选择中的证据来源
-8. [Is Deep Research Reliable? Misleading Knowledge Induces False Conclusions](/202607/25/2607.20891v1-is-deep-research-reliable-misleading-knowledge-induces-false-conclusions)  
-   标签：评分：7.0/10、query:search-agent
-   evidence：分析深度研究智能体在误导知识下的可靠性
-9. [Expert Behavior Prior Reinforcement Learning](/202607/25/2607.21302v1-expert-behavior-prior-reinforcement-learning)  
+   evidence：多轮LLM智能体执行中安全漂移和操作幻觉的实证研究
+3. [A Self-Evolving Default Action for Cooperative Tasks with Continuous Action Space](/202607/26/2607.18597v2-a-self-evolving-default-action-for-cooperative-tasks-with-continuous-action-space)  
    标签：评分：7.0/10、query:self-evolve
-   evidence：利用离线演示的行为先验提升在线RL，与长程智能体的在策略蒸馏相关
-10. [Fishing Out Free Riders: Shapley-Based Reward Attribution for Parallel Reasoning via Reinforcement Learning](/202607/25/2607.18979v1-fishing-out-free-riders-shapley-based-reward-attribution-for-parallel-reasoning-via-reinforcement-learning)  
+   evidence：多智能体强化学习中的自进化默认动作
+4. [AgentTrails: Towards Trust and Reuse for Agentic Tasks](/202607/26/2607.18816v1-agenttrails-towards-trust-and-reuse-for-agentic-tasks)  
+   标签：评分：7.0/10、query:search-agent
+   evidence：代理任务轨迹溯源，支持比较与复用
+5. [PoTRE: Test-Time Reasoning inspired by Cognitive Heterogeneity](/202607/26/2607.20268v1-potre-test-time-reasoning-inspired-by-cognitive-heterogeneity)  
+   标签：评分：7.0/10、query:self-evolve
+   evidence：包含频谱搜索代理的多智能体长程推理框架
+6. [ArbiGraph: Arbitrarily Scalable Verifiable Task Graphs for Evaluating Context Management](/202607/26/2607.20764v1-arbigraph-arbitrarily-scalable-verifiable-task-graphs-for-evaluating-context-management)  
+   标签：评分：7.0/10、query:search-agent
+   evidence：用于评估工具辅助智能体上下文管理的基准测试，与工作记忆相关
+7. [RoboHarness: Memory-Driven Orchestration of Heterogeneous Robot Policies for Long-Horizon Planning](/202607/26/2607.18060v1-roboharness-memory-driven-orchestration-of-heterogeneous-robot-policies-for-long-horizon-planning)  
    标签：评分：6.0/10、query:self-evolve
-   evidence：基于Shapley值的奖励分配用于智能体强化学习推理
-11. [JANUS: Foreseeing Latent Risk for Long-Horizon Agent Safety](/202607/25/2607.19913v1-janus-foreseeing-latent-risk-for-long-horizon-agent-safety)  
+   evidence：基于记忆的异构策略编排实现长程机器人规划
+8. [Breaking Feedback-Blindness: Utility-Augmented Transformer for Sequential Decision Making](/202607/26/2607.18910v1-breaking-feedback-blindness-utility-augmented-transformer-for-sequential-decision-making)  
    标签：评分：6.0/10、query:self-evolve
-   evidence：具有前瞻性和强化学习训练的长时间地平智能体安全
-12. [Beyond Episodic Evaluation: Memory Architectural Bottlenecks in Sequential Embodied Question Answering](/202607/25/2607.21571v1-beyond-episodic-evaluation-memory-architectural-bottlenecks-in-sequential-embodied-question-answering)  
+   evidence：利用奖励信号的序列决策Transformer
+9. [Fishing Out Free Riders: Shapley-Based Reward Attribution for Parallel Reasoning via Reinforcement Learning](/202607/26/2607.18979v1-fishing-out-free-riders-shapley-based-reward-attribution-for-parallel-reasoning-via-reinforcement-learning)  
+   标签：评分：6.0/10、query:self-evolve
+   evidence：使用Shapley值进行多路径推理的强化学习奖励分配
+10. [HACO: Hedged Agent Computing for Reliable LLM Systems](/202607/26/2607.19215v1-haco-hedged-agent-computing-for-reliable-llm-systems)  
+   标签：评分：6.0/10、query:self-evolve
+   evidence：长时工作流的运行时可靠性控制
+11. [PAGE-RAG: Evidence-Grounded Adaptive Graph Retrieval for Long-Document Question Answering](/202607/26/2607.19301v1-page-rag-evidence-grounded-adaptive-graph-retrieval-for-long-document-question-answering)  
    标签：评分：6.0/10、query:search-agent
-   evidence：用于顺序具身问答智能体的记忆架构
+   evidence：基于证据的自适应图检索，用于可靠长文档问答
+12. [From Agent Failures to Text Policies: What Works and What Breaks](/202607/26/2607.20668v1-from-agent-failures-to-text-policies-what-works-and-what-breaks)  
+   标签：评分：6.0/10、query:self-evolve
+   evidence：利用TextGrad反馈从代理轨迹学习策略
 
 
 <div class="dpr-home-promo-card">
