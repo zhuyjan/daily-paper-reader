@@ -6,59 +6,73 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-26
-- 运行时间：2026-07-26 20:37:26 UTC
+- 最新运行日期：2026-07-27
+- 运行时间：2026-07-27 21:37:40 UTC
 - 运行状态：成功
-- 本次总论文数：13
-- 精读区：1
-- 速读区：12
+- 本次总论文数：17
+- 精读区：7
+- 速读区：10
 
 ### 今日简报（AI）
-今天共处理13篇论文，精读1篇《Solar Open 2 Technical Report》（8.0/10），速读12篇（含jina-reranker-v3.5、AI代理幻觉与安全漂移、连续动作空间协作等）。最值关注的是Solar Open 2技术报告与jina-reranker-v3.5列表排序器，前者代表开源大模型进展，后者提升检索效率。普通读者可优先精读Solar Open 2，再按兴趣探索速读中的AI安全或强化学习方向。
-- 详情：[/202607/26/README](/202607/26/README)
+今日聚焦两款9分顶尖智能体论文：递归自我进化与轻量级Agent能力解锁。
+最值得关注AREX的递归自我改进研究及Nanbeige4.2-3B在紧凑模型中解锁Agent能力，同时Agentic RAG的可信与成本优化也不容忽视。
+建议优先精读两篇高分论文，了解Agent自我进化与小型化趋势，再速读Agentic RAG提升数据集成效率。
+- 详情：[/202607/27/README](/202607/27/README)
 
 ### 精读区论文标签
-1. [Solar Open 2 Technical Report](/202607/26/2607.20062v1-solar-open-2-technical-report)  
+1. [AREX: Towards a Recursively Self-Improving Agent for Deep Research](/202607/27/2607.21461v2-arex-towards-a-recursively-self-improving-agent-for-deep-research)  
+   标签：评分：9.0/10、query:search-agent
+   evidence：递归自改进的深度研究智能体
+2. [Nanbeige4.2-3B: Unlocking Agentic Capabilities in a Compact Mode](/202607/27/2607.22083v1-nanbeige42-3b-unlocking-agentic-capabilities-in-a-compact-mode)  
+   标签：评分：9.0/10、query:self-evolve
+   evidence：面向紧凑智能体模型的自生成轨迹构建与强化学习训练
+3. [Cross-Tokenizer On-Policy Distillation via Byte-Prefix Marginalization](/202607/27/2607.22334v1-cross-tokenizer-on-policy-distillation-via-byte-prefix-marginalization)  
+   标签：评分：9.0/10、query:self-evolve
+   evidence：跨分词器的在线蒸馏方法
+4. [Distilled Reinforcement Learning for LLM Post-training](/202607/27/2607.17247v1-distilled-reinforcement-learning-for-llm-post-training)  
    标签：评分：8.0/10、query:self-evolve
-   evidence：专为长时域代理任务设计的语言模型，支持百万token上下文
+   evidence：面向LLM后训练的在线策略蒸馏方法
+5. [TAP-RAG: Task-Aware Policy Control for Long-Document Multimodal Question Answering](/202607/27/2607.18917v1-tap-rag-task-aware-policy-control-for-long-document-multimodal-question-answering)  
+   标签：评分：8.0/10、query:search-agent
+   evidence：多模态RAG中的任务感知策略控制，类似强化学习用于搜索和证据收集
+6. [Solar Open 2 Technical Report](/202607/27/2607.20062v2-solar-open-2-technical-report)  
+   标签：评分：8.0/10、query:self-evolve
+   evidence：专为长程智能体任务构建的语言模型，支持100万token上下文
+7. [MemTools: A Unified Research Framework for Interoperable Agent Memory](/202607/27/2607.21404v1-memtools-a-unified-research-framework-for-interoperable-agent-memory)  
+   标签：评分：8.0/10、query:search-agent
+   evidence：智能体记忆框架，支持显式工作记忆和证据整理
 
 ### 速读区论文标签
-1. [jina-reranker-v3.5: An Efficient Listwise Reranker with Hybrid Attention and Self-Distillation](/202607/26/2607.18152v1-jina-reranker-v35-an-efficient-listwise-reranker-with-hybrid-attention-and-self-distillation)  
+1. [Towards Trustworthy and Cost-Efficient Data Integration: From Naïve RAG to Agentic RAG](/202607/27/2607.22319v1-towards-trustworthy-and-cost-efficient-data-integration-from-nave-rag-to-agentic-rag)  
+   标签：评分：8.0/10、query:search-agent
+   evidence：从RAG演进到智能体搜索，强调基于证据的推理
+2. [Agentic Context Management: Solving Agent Memory and Cost by Treating Them as Lifecycle and Architecture Problems](/202607/27/2607.21503v1-agentic-context-management-solving-agent-memory-and-cost-by-treating-them-as-lifecycle-and-architecture-problems)  
    标签：评分：7.0/10、query:search-agent
-   evidence：针对智能体检索流水线的列表重排器
-2. [Operational Hallucination and Safety Drift in AI Agents](/202607/26/2607.18366v1-operational-hallucination-and-safety-drift-in-ai-agents)  
-   标签：评分：7.0/10、query:search-agent
-   evidence：多轮LLM智能体执行中安全漂移和操作幻觉的实证研究
-3. [A Self-Evolving Default Action for Cooperative Tasks with Continuous Action Space](/202607/26/2607.18597v2-a-self-evolving-default-action-for-cooperative-tasks-with-continuous-action-space)  
+   evidence：智能体记忆生命周期管理，与证据策展和工作记忆相关
+3. [OpenForgeRL: Train Harness-native Agents in Any Environment](/202607/27/2607.21557v2-openforgerl-train-harness-native-agents-in-any-environment)  
    标签：评分：7.0/10、query:self-evolve
-   evidence：多智能体强化学习中的自进化默认动作
-4. [AgentTrails: Towards Trust and Reuse for Agentic Tasks](/202607/26/2607.18816v1-agenttrails-towards-trust-and-reuse-for-agentic-tasks)  
-   标签：评分：7.0/10、query:search-agent
-   evidence：代理任务轨迹溯源，支持比较与复用
-5. [PoTRE: Test-Time Reasoning inspired by Cognitive Heterogeneity](/202607/26/2607.20268v1-potre-test-time-reasoning-inspired-by-cognitive-heterogeneity)  
+   evidence：基于强化学习的智能体训练框架，支持长程轨迹
+4. [Learning on the Job: Continual Learning from Deployment Feedback for Frozen-Weights Agents](/202607/27/2607.22157v1-learning-on-the-job-continual-learning-from-deployment-feedback-for-frozen-weights-agents)  
    标签：评分：7.0/10、query:self-evolve
-   evidence：包含频谱搜索代理的多智能体长程推理框架
-6. [ArbiGraph: Arbitrarily Scalable Verifiable Task Graphs for Evaluating Context Management](/202607/26/2607.20764v1-arbigraph-arbitrarily-scalable-verifiable-task-graphs-for-evaluating-context-management)  
-   标签：评分：7.0/10、query:search-agent
-   evidence：用于评估工具辅助智能体上下文管理的基准测试，与工作记忆相关
-7. [RoboHarness: Memory-Driven Orchestration of Heterogeneous Robot Policies for Long-Horizon Planning](/202607/26/2607.18060v1-roboharness-memory-driven-orchestration-of-heterogeneous-robot-policies-for-long-horizon-planning)  
+   evidence：利用部署反馈进行无数据智能体训练
+5. [TRACE-ROUTER: Task-Consistent and Adaptive Online Routing for Agentic AI](/202607/27/2607.22465v1-trace-router-task-consistent-and-adaptive-online-routing-for-agentic-ai)  
+   标签：评分：7.0/10、query:self-evolve
+   evidence：使用上下文强盗进行长周期智能体工作流路由
+6. [Can AI Agents Really Complete RTL-to-GDS? Lessons from Benchmarking Tool-Interactive EDA Workflows](/202607/27/2607.17528v3-can-ai-agents-really-complete-rtl-to-gds-lessons-from-benchmarking-tool-interactive-eda-workflows)  
    标签：评分：6.0/10、query:self-evolve
-   evidence：基于记忆的异构策略编排实现长程机器人规划
-8. [Breaking Feedback-Blindness: Utility-Augmented Transformer for Sequential Decision Making](/202607/26/2607.18910v1-breaking-feedback-blindness-utility-augmented-transformer-for-sequential-decision-making)  
-   标签：评分：6.0/10、query:self-evolve
-   evidence：利用奖励信号的序列决策Transformer
-9. [Fishing Out Free Riders: Shapley-Based Reward Attribution for Parallel Reasoning via Reinforcement Learning](/202607/26/2607.18979v1-fishing-out-free-riders-shapley-based-reward-attribution-for-parallel-reasoning-via-reinforcement-learning)  
-   标签：评分：6.0/10、query:self-evolve
-   evidence：使用Shapley值进行多路径推理的强化学习奖励分配
-10. [HACO: Hedged Agent Computing for Reliable LLM Systems](/202607/26/2607.19215v1-haco-hedged-agent-computing-for-reliable-llm-systems)  
-   标签：评分：6.0/10、query:self-evolve
-   evidence：长时工作流的运行时可靠性控制
-11. [PAGE-RAG: Evidence-Grounded Adaptive Graph Retrieval for Long-Document Question Answering](/202607/26/2607.19301v1-page-rag-evidence-grounded-adaptive-graph-retrieval-for-long-document-question-answering)  
+   evidence：基准测试AI智能体在长时程工具交互EDA工作流中的表现
+7. [Personalized Recommendation Tool Learning via Autonomous Language Agents](/202607/27/2607.19739v1-personalized-recommendation-tool-learning-via-autonomous-language-agents)  
    标签：评分：6.0/10、query:search-agent
-   evidence：基于证据的自适应图检索，用于可靠长文档问答
-12. [From Agent Failures to Text Policies: What Works and What Breaks](/202607/26/2607.20668v1-from-agent-failures-to-text-policies-what-works-and-what-breaks)  
+   evidence：LLM智能体作为中央规划器与工具模型交互进行推荐
+8. [DocOps: A Verifiable Benchmark for Autonomous Agents in Complex Document Operations](/202607/27/2607.19865v1-docops-a-verifiable-benchmark-for-autonomous-agents-in-complex-document-operations)  
    标签：评分：6.0/10、query:self-evolve
-   evidence：利用TextGrad反馈从代理轨迹学习策略
+   evidence：自主智能体长程文档操作的可验证基准
+9. [Zero-Shot Mission-Level Evaluation for Aerial MLLM Agents](/202607/27/2607.22014v1-zero-shot-mission-level-evaluation-for-aerial-mllm-agents)  
+   标签：评分：6.0/10、query:search-agent
+   evidence：用于长时域任务的多模态空中智能体
+10. [A Self-Calibrating Agentic AI Framework for Autonomous Edge Resource Allocation](/202607/27/2607.22400v1-a-self-calibrating-agentic-ai-framework-for-autonomous-edge-resource-allocation)  
+   标签：评分：6.0/10、query:self-evolve
+   evidence：自校准智能体框架以实现自主完整性
 
 
 <div class="dpr-home-promo-card">

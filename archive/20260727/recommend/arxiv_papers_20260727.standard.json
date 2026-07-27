@@ -1,0 +1,819 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-27T21:27:13.163094+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 8,
+    "deep_cap": 7,
+    "deep_selected": 7,
+    "quick_candidates": 10,
+    "quick_skim_target": 12,
+    "quick_selected": 10
+  },
+  "deep_dive": [
+    {
+      "id": "2607.21461v2",
+      "source": "arxiv",
+      "title": "AREX: Towards a Recursively Self-Improving Agent for Deep Research",
+      "abstract": "Deep research requires agents to find answers that jointly satisfy multiple constraints. Discovering such answers is costly, whereas verifying a candidate can often be decomposed into tractable constraint-wise checks. This discovery--verification asymmetry suggests that a research agent should do more than simply search longer: it should recursively improve its current answer by verifying intermediate results and using the partially verified state to guide subsequent refinement. We introduce AREX, a family of Recursively Self-Improving (RSI) deep research agents. AREX alternates between an inner research loop that gathers evidence and constructs a provisional answer, and an outer self-improvement loop that audits the answer constraint-wise, identifies unresolved claims, and launches targeted follow-up research. To sustain RSI over long horizons, AREX learns an autonomous context-update tool that compresses growing interaction history into a compact improvement state preserving verified evidence and unresolved constraints, without relying on an external model. We train AREX on verified synthetic tasks and high-quality trajectories through agentic mid-training and long-horizon reinforcement learning. To mitigate sparse final rewards during long horizon learning, we emphasize key steps where decisive evidence is acquired or erroneous research directions are corrected. We instantiate a dense 4B model and a 122B-A10B Mixture-of-Experts model. Across BrowseComp, WideSearch, DeepSearchQA, Humanity's Last Exam (HLE), and other reasoning and tool-use benchmarks, AREX substantially outperforms comparable-scale baselines and remains competitive with models using substantially more activated parameters.",
+      "authors": [
+        "Shuqi Lu",
+        "Chaofan Li",
+        "Kun Luo",
+        "Zhang Zhang",
+        "Hui Wang",
+        "Hongwang Xiao",
+        "Lei Xiong",
+        "Jiahao Wang",
+        "Sen Wang",
+        "Xiyan Jiang",
+        "Wanli Li",
+        "Yuyang Hu",
+        "Hongjin Qian",
+        "Bingyu Yan",
+        "Jianlyu Chen",
+        "Ziyi Xia",
+        "Yingxia Shao",
+        "Kang Liu",
+        "Zhicheng Dou",
+        "Di He",
+        "Chaozhuo Li",
+        "Qiwei Ye",
+        "Zhongyuan Wang",
+        "Zheng Liu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-23T16:05:46+00:00",
+      "link": "https://arxiv.org/pdf/2607.21461v2",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "recursively self-improving deep research agent",
+      "llm_evidence_cn": "递归自改进的深度研究智能体",
+      "llm_evidence": "递归自改进的深度研究智能体",
+      "canonical_evidence": "递归自改进的深度研究智能体",
+      "llm_tldr_en": "AREX introduces a recursively self-improving agent for deep research that alternates between evidence gathering and constraint-wise verification to iteratively refine answers.",
+      "llm_tldr_cn": "深度研究要求智能体找到满足多重约束的答案，但发现昂贵而验证可分解。AREX提出递归自改进（RSI）框架，内循环收集证据构建候选，外循环按约束审计并引导改进。实验表明，该方法显著优于标准搜索基线。",
+      "llm_tldr": "深度研究要求智能体找到满足多重约束的答案，但发现昂贵而验证可分解。AREX提出递归自改进（RSI）框架，内循环收集证据构建候选，外循环按约束审计并引导改进。实验表明，该方法显著优于标准搜索基线。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "deep research agents",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.22083v1",
+      "source": "arxiv",
+      "title": "Nanbeige4.2-3B: Unlocking Agentic Capabilities in a Compact Mode",
+      "abstract": "We present Nanbeige4.2-3B, a compact general agentic model with 3B non-embedding parameters. It delivers strong performance across code-agent, office-agent, and complex tool-use tasks while maintaining highly competitive reasoning capabilities in mathematics, coding, and science. Nanbeige4.2-3B is pretrained from scratch on 28T tokens with a Looped Transformer that reuses the layer stack to increase capacity without adding parameters. For SFT data and trajectory construction, we expand the diversity of executable environments, task assets, and agentic scaffolds through real-world deployment and large-scale synthesis. Our RL pipeline applies mixed-mode RLHF over Think and Non-Think responses to improve overall model quality and reduce failure cases, length-controlled reasoning RL to balance accuracy and reasoning efficiency, and agentic RL with outcome and process rewards to stabilize long-horizon training. Extensive evaluations show that Nanbeige4.2-3B outperforms larger models, including Qwen3.5-9B and Gemma4-12B, across diverse agentic benchmarks while remaining competitive on reasoning and alignment tasks. Performance with OpenClaw further supports its use as a compact local personal assistant.",
+      "authors": [
+        "Nanbeige Lab",
+        ":",
+        "Chen Yang",
+        "Chengrui Huang",
+        "Fufeng Lan",
+        "Hanhui Chen",
+        "Hao Zhou",
+        "Huatong Song",
+        "Jiaqi Cao",
+        "Jiaying Zhu",
+        "Jinlin Niu",
+        "Kai Wang",
+        "Lisheng Huang",
+        "Qiliang Liang",
+        "Ran Le",
+        "Ruixiang Feng",
+        "Shuang Sun",
+        "Tao Gu",
+        "Tao Zhang",
+        "Tianyu Luo",
+        "Yang Song",
+        "Yun Xing",
+        "Yuntao Wen",
+        "Ziyao Xu",
+        "Zongchao Chen",
+        "Zongqiang Li"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-07-24T08:33:26+00:00",
+      "link": "https://arxiv.org/pdf/2607.22083v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Self-generated trajectory construction and RL training for compact agentic model",
+      "llm_evidence_cn": "面向紧凑智能体模型的自生成轨迹构建与强化学习训练",
+      "llm_evidence": "面向紧凑智能体模型的自生成轨迹构建与强化学习训练",
+      "canonical_evidence": "面向紧凑智能体模型的自生成轨迹构建与强化学习训练",
+      "llm_tldr_en": "Presents Nanbeige4.2-3B, a compact agentic model trained from scratch with Looped Transformer, large-scale synthetic trajectory construction, and mixed-mode RLHF for tool-use and reasoning tasks.",
+      "llm_tldr_cn": "面向紧凑型智能体模型，Nanbeige4.2-3B从零预训练，采用循环Transformer增加参数效率。通过真实部署和大规模合成扩展轨迹多样性，并设计混合模式RLHF同时优化思考和非思考响应，在代码、办公和复杂工具使用任务上达到领先水平，同时保持数学等推理能力。",
+      "llm_tldr": "面向紧凑型智能体模型，Nanbeige4.2-3B从零预训练，采用循环Transformer增加参数效率。通过真实部署和大规模合成扩展轨迹多样性，并设计混合模式RLHF同时优化思考和非思考响应，在代码、办公和复杂工具使用任务上达到领先水平，同时保持数学等推理能力。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "data free or self generated training for multi turn tool using agents",
+      "matched_requirement_id": "req-15",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.22334v1",
+      "source": "arxiv",
+      "title": "Cross-Tokenizer On-Policy Distillation via Byte-Prefix Marginalization",
+      "abstract": "Open-weight language models from different families exhibit complementary capabilities, motivating their consolidation into a compact student through on-policy distillation (OPD). However, full-vocabulary OPD typically assumes a shared tokenizer, while existing cross-tokenizer methods may discard teacher probability mass or assign it to student tokens with unrelated content. We introduce Byte-Prefix Marginalization (BPM), which re-expresses the teacher's next-token distribution over the student vocabulary in a shared byte space. Specifically, BPM assigns each teacher token's probability to the longest student token whose byte representation is a prefix of the teacher token's bytes, aggregates mass mapped to the same student token, and places otherwise unmatched mass in an explicit residual category. This produces a vocabulary-complete, byte-aligned, and mass-preserving target for dense OPD. The target exactly recovers the teacher-induced byte-prefix marginal when the relevant prefix does not span multiple teacher tokens (a condition satisfied at more than 99% of training positions) and uses a mass-preserving, chain-factorized lower bound otherwise. Across Qwen3-32B, GLM-Z1-9B-0414, and MiniMax-M2.7 as teachers, BPM consistently outperforms current cross-tokenizer methods on six mathematics and programming benchmarks, improving six-benchmark avg@8 by 3.7-6.6 points over the strongest baselines.",
+      "authors": [
+        "Hao Wang",
+        "Kun Yuan",
+        "Wenlin Zhong",
+        "Minglei Zhang",
+        "Han Xiao",
+        "Ming Sun",
+        "Honggang Qi"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-07-24T14:12:54+00:00",
+      "link": "https://arxiv.org/pdf/2607.22334v1",
+      "tags": [
+        "keyword:self-evolve"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "on-policy distillation across tokenizers",
+      "llm_evidence_cn": "跨分词器的在线蒸馏方法",
+      "llm_evidence": "跨分词器的在线蒸馏方法",
+      "canonical_evidence": "跨分词器的在线蒸馏方法",
+      "llm_tldr_en": "Introduces Byte-Prefix Marginalization (BPM) to perform on-policy distillation across different tokenizers by re-expressing teacher distribution in byte space, enabling compact student models that consolidate teacher capabilities.",
+      "llm_tldr_cn": "针对不同分词器家族的语言模型难以通过在线蒸馏合并的问题，本文提出字节前缀边际化（BPM）方法，在公共字节空间重新表达教师模型的下一词分布，从而将教师概率分配给正确的学生词元。实验表明BPM能够更准确地保留教师知识，使紧凑学生模型继承多个教师的互补能力。该方法为跨分词器模型蒸馏提供了通用解决方案，对多模型融合有重要意义。",
+      "llm_tldr": "针对不同分词器家族的语言模型难以通过在线蒸馏合并的问题，本文提出字节前缀边际化（BPM）方法，在公共字节空间重新表达教师模型的下一词分布，从而将教师概率分配给正确的学生词元。实验表明BPM能够更准确地保留教师知识，使紧凑学生模型继承多个教师的互补能力。该方法为跨分词器模型蒸馏提供了通用解决方案，对多模型融合有重要意义。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on-policy distillation",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.18917v1",
+      "source": "arxiv",
+      "title": "TAP-RAG: Task-Aware Policy Control for Long-Document Multimodal Question Answering",
+      "abstract": "Long-document multimodal question answering requires more than retrieving relevant chunks from a large document. Different queries require different evidence behavior. Existing multimodal RAG systems improve evidence access through text chunks, page images, graph links, or heterogeneous document elements, but they often apply a largely query-agnostic evidence-use strategy. We present TAP-RAG, a task-aware policy-controlled RAG framework for long-document multimodal QA. TAP-RAG contains a main controller, the Task-Aware Policy Controller (TAPC), and two policy-guided evidence executors: Task-Aware Query-Guided Flow Diffusion (TA-QFD) and Task-Aware Visual Enhancement (TAVE). For each query, TAPC predicts the task prior, estimates visual/local/global evidence signals, and produces an executable policy. TA-QFD then expands textual and structural evidence over the multimodal document graph, while TAVE selectively inspects page images when visual or layout evidence is needed. A guarded synthesis stage fuses text, visual, and structural evidence and abstains when support is insufficient. On DocBench and MMLongBench-Doc, TAP-RAG achieves the best overall accuracy among the compared systems, improving over a matched multimodal-RAG baseline by +9.1 points (61.1 to 70.2) and +4.5 points (42.2 to 46.7), respectively.",
+      "authors": [
+        "Zhong Ji",
+        "Keqi Jin",
+        "Yan Zhang",
+        "Jiasheng Li"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-21T09:59:13+00:00",
+      "link": "https://arxiv.org/pdf/2607.18917v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "task-aware policy control for evidence selection in multimodal RAG, akin to RL for search and evidence collection",
+      "llm_evidence_cn": "多模态RAG中的任务感知策略控制，类似强化学习用于搜索和证据收集",
+      "llm_evidence": "多模态RAG中的任务感知策略控制，类似强化学习用于搜索和证据收集",
+      "canonical_evidence": "多模态RAG中的任务感知策略控制，类似强化学习用于搜索和证据收集",
+      "llm_tldr_en": "TAP-RAG introduces a task-aware policy controller for long-document multimodal QA that adapts evidence behavior per query, improving retrieval and reasoning.",
+      "llm_tldr_cn": "多模态长文档问答中，不同查询需要不同的证据行为。本文提出TAP-RAG框架，包含任务感知策略控制器（TAPC）和两个策略引导的执行器，为每个查询动态选择证据。该方法在多个基准上显著提升了检索和推理质量，为多模态搜索智能体提供了有效的策略控制范式。",
+      "llm_tldr": "多模态长文档问答中，不同查询需要不同的证据行为。本文提出TAP-RAG框架，包含任务感知策略控制器（TAPC）和两个策略引导的执行器，为每个查询动态选择证据。该方法在多个基准上显著提升了检索和推理质量，为多模态搜索智能体提供了有效的策略控制范式。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "reinforcement learning for multi turn search, retrieval, and evidence collection",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.17247v1",
+      "source": "arxiv",
+      "title": "Distilled Reinforcement Learning for LLM Post-training",
+      "abstract": "Large language model (LLM) post-training is essential for improving reasoning, adaptation, and alignment. Existing methods mainly follow two paradigms: reinforcement learning (RL) and on-policy distillation (OPD). However, RL relies on coarse-grained outcome supervision, resulting in difficult credit assignment and limited capability to acquire new knowledge. OPD, meanwhile, unconditionally matches teacher logits through KL divergence, which creates a dilemma: similar teachers provide little new knowledge, while substantially different teachers often yield ineffective guidance, largely restricting OPD to within-family distillation. We propose Distilled Reinforcement Learning (Distilled RL), which integrates teacher supervision into the RL objective to provide fine-grained guidance, selectively transfer new knowledge and avoid unconditional imitation. Distilled RL contains three components: reverse importance sampling with clipping, negative sample reset, and sequence-level geometric normalization. Through a concise and interpretable case study, we demonstrate that Distilled RL can effectively transfer previously unavailable knowledge from a teacher model to a student model. Extensive experiments across both within-family and cross-family distillation settings show that Distilled RL substantially outperforms standard RL and OPD in terms of both pass@1 and pass@k. Our code is available at https://github.com/597358816/Distilled-RL.",
+      "authors": [
+        "Chen Wang",
+        "Zhaochun Li",
+        "Jionghao Bai",
+        "Yining Zhang",
+        "Hexuan Deng",
+        "Ge Lan",
+        "Yue Wang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-07-19T13:32:54+00:00",
+      "link": "https://arxiv.org/pdf/2607.17247v1",
+      "tags": [
+        "keyword:self-evolve",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "On-policy distillation method for LLM post-training",
+      "llm_evidence_cn": "面向LLM后训练的在线策略蒸馏方法",
+      "llm_evidence": "面向LLM后训练的在线策略蒸馏方法",
+      "canonical_evidence": "面向LLM后训练的在线策略蒸馏方法",
+      "llm_tldr_en": "Proposes Distilled RL that integrates teacher supervision into RL objective to overcome limitations of outcome-only RL and unconditional distillation, enabling fine-grained credit assignment and cross-family knowledge transfer.",
+      "llm_tldr_cn": "针对LLM后训练中强化学习依赖粗粒度结果监督导致信用分配困难、在线策略蒸馏受限于同类教师的问题，提出蒸馏强化学习（Distilled RL），将教师监督融入RL目标以提供细粒度过程反馈。实验表明该方法在推理和知识获取任务上优于纯RL和蒸馏基线，且支持跨模型家族知识迁移。",
+      "llm_tldr": "针对LLM后训练中强化学习依赖粗粒度结果监督导致信用分配困难、在线策略蒸馏受限于同类教师的问题，提出蒸馏强化学习（Distilled RL），将教师监督融入RL目标以提供细粒度过程反馈。实验表明该方法在推理和知识获取任务上优于纯RL和蒸馏基线，且支持跨模型家族知识迁移。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on-policy distillation",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.21404v1",
+      "source": "arxiv",
+      "title": "MemTools: A Unified Research Framework for Interoperable Agent Memory",
+      "abstract": "While memory systems are essential for agent architectures, pervasive architectural fragmentation restricts systematic research. Existing implementations typically couple different stages of the memory lifecycle, entangle evaluation logic with specific datasets, and provide limited support for the management of heterogeneous memory types. We introduce MemTools, an interoperability research framework that decouples memory system components from their underlying deployment environments. MemTools standardizes the memory lifecycle through declarative data contracts, enabling the interchangeable assembly of components across different systems. It orthogonally separates benchmark datasets from execution protocols to facilitate controlled assessments. Furthermore, MemTools provides a unified computational interface for coordinating symbolic, neural, and multimodal memory representations within a shared runtime. Empirical evaluations on cross-system component integration, evaluation protocol reconfiguration, and heterogeneous memory coordination demonstrate that MemTools enables systematic isolation and analysis of memory design variables. These findings suggest that MemTools provides a practical and extensible infrastructure for advancing principled research on agent memory.",
+      "authors": [
+        "Chengfeng Zhao",
+        "Jinhui Chen",
+        "Sirui Liang",
+        "Shizhu He",
+        "Yequan Wang",
+        "Jun Zhao",
+        "Kang Liu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-07-23T15:04:34+00:00",
+      "link": "https://arxiv.org/pdf/2607.21404v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "agent memory framework enabling explicit working memory and evidence curation",
+      "llm_evidence_cn": "智能体记忆框架，支持显式工作记忆和证据整理",
+      "llm_evidence": "智能体记忆框架，支持显式工作记忆和证据整理",
+      "canonical_evidence": "智能体记忆框架，支持显式工作记忆和证据整理",
+      "llm_tldr_en": "MemTools provides a unified framework for interoperable agent memory, decoupling memory lifecycle from deployment, enabling interchangeable components and controlled evaluation, which directly supports search agents with explicit working memory and evidence curation.",
+      "llm_tldr_cn": "智能体记忆系统的架构碎片化阻碍了系统研究。MemTools通过声明式数据契约解耦记忆组件与部署环境，实现组件的可互换装配。该框架将基准数据集与执行协议分离，支持受控评估。它为需要显式工作记忆、证据整理和声明验证的搜索智能体提供了统一的基础设施。",
+      "llm_tldr": "智能体记忆系统的架构碎片化阻碍了系统研究。MemTools通过声明式数据契约解耦记忆组件与部署环境，实现组件的可互换装配。该框架将基准数据集与执行协议分离，支持受控评估。它为需要显式工作记忆、证据整理和声明验证的搜索智能体提供了统一的基础设施。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.20062v2",
+      "source": "arxiv",
+      "title": "Solar Open 2 Technical Report",
+      "abstract": "We present Solar Open 2, a 250B-A15B Mixture-of-Experts language model built for long-horizon agentic tasks, scaled up from Solar Open 1 (Solar Open 100B). To hold entire agent trajectories in a single context, Solar Open 2 reaches a 1M-token window through a hybrid attention stack that interleaves one softmax layer among every three linear-attention layers, using no positional encoding and a gated delta rule extended to negative eigenvalues. To train at this scale under a fixed compute budget, we make training efficient in two ways: a stronger starting point, and higher-value data. For the starting point, we initialize Solar Open 2 from Solar Open 1, transferring the 5.69B-parameter shared skeleton that survives the architectural change and learning everything else through full pre-training. For the data, we curate for value per token: quality- and rarity-aware data curation and mixture-ratio optimization refine a 20T pool into a 10T mixture that, at equal token budget, outperforms the Solar Open 1 recipe. To build its agent skills, we train twelve domain specialists across purpose-built scenarios, then consolidate them into a single model by Multi-teacher On-Policy Distillation (MOPD). Against comparably sized open-weight models on English benchmarks, Solar Open 2 leads on MMLU-Pro, LiveCodeBench, and the APEX-Agents agentic suite, and stays competitive with the strongest (DeepSeek-V4-Flash and MiMo-V2.5) elsewhere. On Korean benchmarks, Solar Open 2 records the highest average of any model compared, including fast-tier closed APIs, and on Ko-GDPval, an in-house Korean officework-agent benchmark, it is competitive with DeepSeek-V4-Pro (1.6T) at less than a sixth of its size.",
+      "authors": [
+        "Sungrae Park",
+        "Sanghoon Kim",
+        "Gyoungjin Gim",
+        "Jungho Cho",
+        "Hyunwoong Ko",
+        "Minbyul Jeong",
+        "Minjeong Kim",
+        "Keunwoo Choi",
+        "Chaehun Shin",
+        "Chanwoong Yoon",
+        "Dongjun Kim",
+        "Eunwon Kim",
+        "Gyungin Shin",
+        "Hyeonju Lee",
+        "Hyungkyu Kang",
+        "Inseo Song",
+        "Jisu Bae",
+        "Jiyoon Han",
+        "Jiyun Lee",
+        "Joonkee Kim",
+        "Junyeop Lee",
+        "Mikyoung Cha",
+        "Sangwon Yu",
+        "Sehwan Joo",
+        "Seokyoon Kang",
+        "Seonghoon Yang",
+        "Seung Shin",
+        "Seunghyun Lee",
+        "Seungseop Lim",
+        "Seungyoun Shin",
+        "Sukyung Lee",
+        "Taegyeong Eo",
+        "Taehwan Oh",
+        "Taewhoo Lee",
+        "Wonho Song",
+        "Wonjun Oh",
+        "Wonseok Hwang",
+        "Yunsu Kim",
+        "Yura Shim",
+        "Hwalsuk Lee",
+        "Sunghun Kim",
+        "Du-Seong Chang",
+        "Kyunghyun Cho",
+        "Seungju Han",
+        "Yejin Choi",
+        "Junsuk Choe",
+        "Hwaran Lee",
+        "Minjeong Ban",
+        "Yun Taewon",
+        "Hwanjun Song",
+        "Jae-Gil Lee",
+        "KyungTae Lim",
+        "Alice Oh"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-07-22T12:08:41+00:00",
+      "link": "https://arxiv.org/pdf/2607.20062v2",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "language model built specifically for long-horizon agentic tasks with 1M-token context",
+      "llm_evidence_cn": "专为长程智能体任务构建的语言模型，支持100万token上下文",
+      "llm_evidence": "专为长程智能体任务构建的语言模型，支持100万token上下文",
+      "canonical_evidence": "专为长程智能体任务构建的语言模型，支持100万token上下文",
+      "llm_tldr_en": "Solar Open 2 is a 250B MoE model with 1M-token context window, designed for long-horizon agentic tasks, using hybrid attention and efficient training.",
+      "llm_tldr_cn": "长程智能体任务需要模型容纳完整轨迹。本文发布Solar Open 2，一个250B参数的混合专家模型，通过混合注意力机制实现100万token上下文窗口，并通过模型初始化与高质量数据实现高效训练。该模型在多项长程智能体基准上表现优越，为自主智能体的部署提供了基础架构。",
+      "llm_tldr": "长程智能体任务需要模型容纳完整轨迹。本文发布Solar Open 2，一个250B参数的混合专家模型，通过混合注意力机制实现100万token上下文窗口，并通过模型初始化与高质量数据实现高效训练。该模型在多项长程智能体基准上表现优越，为自主智能体的部署提供了基础架构。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.22319v1",
+      "source": "arxiv",
+      "title": "Towards Trustworthy and Cost-Efficient Data Integration: From Naïve RAG to Agentic RAG",
+      "abstract": "Large language models (LLMs) and AI agents have demonstrated strong potential for data integration in zero-shot and few-shot settings. However, they continue to face significant accuracy and cost challenges in enterprise environments due to a persistent knowledge gap. This paper envisions trustworthy, scalable, and cost-efficient integration through knowledge-grounded LLMs and agents operating within a retrieval-augmented generation (RAG) workflow. Here, trustworthiness refers to evidence-grounded, verifiable reasoning, where integration decisions are transparently supported by retrieved knowledge, robust against hallucination, and consistent across tasks. We trace the evolution from classic RAG to GraphRAG and KG-RAG (knowledge graph-based RAG), highlighting how these paradigms bridge parametric and contextual knowledge. Building on this trajectory, we explore the shift toward Agentic RAG, where autonomous multi-agent systems adaptively plan, retrieve, refine, and reason for complex integration tasks. We examine optimization strategies for cost-efficient integration, addressing computational bottlenecks in large-scale enterprise settings. Finally, we outline open challenges and future directions toward building reliable, explainable, and scalable knowledge-grounded integration systems.",
+      "authors": [
+        "Chuangtao Ma",
+        "Arijit Khan"
+      ],
+      "primary_category": "cs.DB",
+      "categories": [
+        "cs.DB",
+        "cs.AI"
+      ],
+      "published": "2026-07-24T13:58:44+00:00",
+      "link": "https://arxiv.org/pdf/2607.22319v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "transitions from RAG to agentic search with evidence-grounded reasoning",
+      "llm_evidence_cn": "从RAG演进到智能体搜索，强调基于证据的推理",
+      "llm_evidence": "从RAG演进到智能体搜索，强调基于证据的推理",
+      "canonical_evidence": "从RAG演进到智能体搜索，强调基于证据的推理",
+      "llm_tldr_en": "This paper traces the evolution from classic RAG to GraphRAG and KG-RAG, proposing agentic RAG for trustworthy, evidence-grounded data integration, directly addressing agentic search and evidence curation.",
+      "llm_tldr_cn": "大型语言模型和智能体在数据集成中面临准确性和成本挑战。本文从经典RAG演进到GraphRAG和KG-RAG，提出智能体RAG，通过检索增强生成实现可信、基于证据的推理。该方法强调可验证的集成决策，抗幻觉，并跨任务一致。它直接支持智能体搜索和证据整理的需求。",
+      "llm_tldr": "大型语言模型和智能体在数据集成中面临准确性和成本挑战。本文从经典RAG演进到GraphRAG和KG-RAG，提出智能体RAG，通过检索增强生成实现可信、基于证据的推理。该方法强调可验证的集成决策，抗幻觉，并跨任务一致。它直接支持智能体搜索和证据整理的需求。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "agentic search",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2607.21503v1",
+      "source": "arxiv",
+      "title": "Agentic Context Management: Solving Agent Memory and Cost by Treating Them as Lifecycle and Architecture Problems",
+      "abstract": "Production AI agents' failures are less often due to an inability to reason well and more often because they cannot manage what is in their reasoning context: conversation histories, large prompts, large tool definitions, and ballooning tool outputs. Agents drown in their own accumulating history while paying a token cost that grows every turn, producing missing recalls within and across conversations. The incumbent response treats this as a storage-and-retrieval problem. We argue that framing is too narrow. Actively managing what an agent holds in mind is a lifecycle, not merely a store: it spans deciding what to remember, extracting and structuring it, choosing the right store per data type, consolidating and forgetting while preserving provenance, deciding what is relevant now, anticipating what is needed next, and compacting context to a budget without losing what matters. In serious production this operates not over a single user but across an organizational scope hierarchy. We name this discipline Agentic Context Management (ACM) and decompose it into five primitives: architecting, ingesting, scoping, anticipating, and compacting & consolidation. We then make the economic case: naive context accumulation grows token cost quadratically in conversation length, crude summarization buys linear cost at the price of an accuracy cliff, and only validated compaction achieves linear cost with preserved fidelity. We describe a reference implementation, Maximem Synap, that realizes the five primitives as a multi-tenant service and reports 92% on LongMemEval and 93.2% on LoCoMo under the configuration detailed in Section 6. We close with dimensions existing benchmarks do not yet capture, latency, token efficiency, and context-rot resistance, and the frontier of decision-level and organization-level context the category points toward.",
+      "authors": [
+        "Gaurav Dadhich"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-07-23T16:51:31+00:00",
+      "link": "https://arxiv.org/pdf/2607.21503v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "agent memory management as lifecycle, related to evidence curation and working memory",
+      "llm_evidence_cn": "智能体记忆生命周期管理，与证据策展和工作记忆相关",
+      "llm_evidence": "智能体记忆生命周期管理，与证据策展和工作记忆相关",
+      "canonical_evidence": "智能体记忆生命周期管理，与证据策展和工作记忆相关",
+      "llm_tldr_en": "This paper redefines agent memory as a lifecycle management problem and proposes architecture for deciding what to remember, extracting, structuring, and consolidating context, addressing missing recalls and token cost.",
+      "llm_tldr_cn": "本文指出生产AI智能体的失败源于无法有效管理推理上下文，而非推理能力不足。为解决对话历史、工具输出等不断累积导致的消耗和遗忘问题，提出将上下文管理视为生命周期问题，涵盖记忆决策、提取、结构化、按数据类型选择存储和整合等环节。该方法在减少token消耗和提升长程记忆召回方面表现出色，为智能体的上下文管理提供了全新视角。",
+      "llm_tldr": "本文指出生产AI智能体的失败源于无法有效管理推理上下文，而非推理能力不足。为解决对话历史、工具输出等不断累积导致的消耗和遗忘问题，提出将上下文管理视为生命周期问题，涵盖记忆决策、提取、结构化、按数据类型选择存储和整合等环节。该方法在减少token消耗和提升长程记忆召回方面表现出色，为智能体的上下文管理提供了全新视角。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.17528v3",
+      "source": "arxiv",
+      "title": "Can AI Agents Really Complete RTL-to-GDS? Lessons from Benchmarking Tool-Interactive EDA Workflows",
+      "abstract": "Large language model (LLM) agents are extending electronic design automation (EDA) beyond static RTL generation toward long-horizon, tool-interactive workflows. Yet it remains unclear whether general-purpose coding agents, even with domain-specific EDA skills, can reliably execute an end-to-end RTL-to-GDS flow encompassing synthesis, physical implementation, and engineering change order (ECO) optimization. We evaluate AI agents on a PicoRV32 RTL-to-GDS flow using commercial EDA tools under two timing targets. Their performance is assessed using end-to-end design score, stage completion, and Token ROI, a cost-efficiency metric relating design quality to runtime and cost. Comparing three agent architectures and four foundation models, we derive three practical lessons. First, domain-specific skills improve agents' understanding of individual subtasks but do not ensure reliable completion of a long-horizon EDA flow. Second, agents that achieve similar design progress can still differ by up to 141 times in Token ROI, revealing substantial differences in runtime and cost efficiency. Third, low-level tool-interface mismatches are a major source of physical design failures, particularly when Tcl commands depend on the tool version or execution mode. These results suggest that robust Agentic EDA requires not only stronger models but also structured tool interfaces, persistent design context, controlled execution, and process-level evaluation.",
+      "authors": [
+        "Jinyuan Deng",
+        "Zhengrui Chen",
+        "Xufeng Wei",
+        "Tianyu Xing",
+        "Chenyi Wen",
+        "Qi Sun",
+        "Cheng Zhuo"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.AR",
+        "cs.LG"
+      ],
+      "published": "2026-07-20T04:08:06+00:00",
+      "link": "https://arxiv.org/pdf/2607.17528v3",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "benchmarking long-horizon tool-interactive EDA workflows for AI agents",
+      "llm_evidence_cn": "基准测试AI智能体在长时程工具交互EDA工作流中的表现",
+      "llm_evidence": "基准测试AI智能体在长时程工具交互EDA工作流中的表现",
+      "canonical_evidence": "基准测试AI智能体在长时程工具交互EDA工作流中的表现",
+      "llm_tldr_en": "Evaluates AI agents on long-horizon RTL-to-GDS EDA workflows, revealing limitations in end-to-end execution and proposing Token ROI for cost-efficiency.",
+      "llm_tldr_cn": "通用编程智能体能否可靠执行长时程工具交互式EDA工作流尚不明确。在PicoRV32 RTL到GDS流程上评估多种智能体架构，使用端到端设计得分和Token ROI等指标。结果发现即使最先进配置在处理高度耦合长任务时也表现有限。为长时程代理推理工作流评估提供了基准和方法。",
+      "llm_tldr": "通用编程智能体能否可靠执行长时程工具交互式EDA工作流尚不明确。在PicoRV32 RTL到GDS流程上评估多种智能体架构，使用端到端设计得分和Token ROI等指标。结果发现即使最先进配置在处理高度耦合长任务时也表现有限。为长时程代理推理工作流评估提供了基准和方法。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.21557v2",
+      "source": "arxiv",
+      "title": "OpenForgeRL: Train Harness-native Agents in Any Environment",
+      "abstract": "Modern AI agents rely on elaborate inference harnesses such as Claude Code, Codex, and OpenClaw to drive multi-turn reasoning, tool use, and access to external systems. While powerful, these complex harnesses also make agents hard to train end-to-end with open infrastructure, whose SFT/RL stacks cannot natively express stateful, multi-process harness inference. To address this, we present OpenForgeRL, an open-source framework for training harness-based agents end-to-end in diverse environments. OpenForgeRL achieves this with a lightweight proxy that serves the harness's model calls while recording them as training data for a standard RL codebase (e.g., veRL), and a Kubernetes orchestrator that runs each rollout in its own remote container, together enabling training on any harness in any environment at scale. By decoupling training and inference, OpenForgeRL allows researchers to easily train, study, and improve agents directly in the real harnesses and environments they are deployed with. We validate our framework across diverse, complex harnesses and environments, spanning tool/claw-based agents and multimodal GUI browser- and computer-use agents. Using only hundreds to a few thousand tasks, OpenForgeClaw reaches 31.7 pass^3 and 55.9 pass@3 on ClawEval and 33.7 on QwenClawBench. OpenForgeGUI reaches 37.7 on OSWorld-Verified, 63.0 on Online-Mind2Web, and 72.3 on WebVoyager. Both outperform open baselines of similar size on nearly all benchmarks, and in the GUI setting match or surpass models several times larger. Beyond benchmarks, we analyze how harness choice (e.g., ZeroClaw, OpenClaw, Codex) and RL shape agent behavior. We find that some harnesses are substantially harder to learn than others, and that RL improves agentic reliability, such as self-verification, tool coverage, and completing multi-step plans, though critical abilities such as error recovery remain weak.",
+      "authors": [
+        "Xiao Yu",
+        "Baolin Peng",
+        "Ruize Xu",
+        "Hao Zou",
+        "Qianhui Wu",
+        "Hao Cheng",
+        "Wenlin Yao",
+        "Nikhil Singh",
+        "Zhou Yu",
+        "Jianfeng Gao"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-07-23T17:38:30+00:00",
+      "link": "https://arxiv.org/pdf/2607.21557v2",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "framework for training harness-based agents with RL, enabling long-horizon agent trajectories",
+      "llm_evidence_cn": "基于强化学习的智能体训练框架，支持长程轨迹",
+      "llm_evidence": "基于强化学习的智能体训练框架，支持长程轨迹",
+      "canonical_evidence": "基于强化学习的智能体训练框架，支持长程轨迹",
+      "llm_tldr_en": "OpenForgeRL is an open-source framework that enables end-to-end training of harness-based agents using RL, supporting multi-turn reasoning and tool use in diverse environments.",
+      "llm_tldr_cn": "现有AI智能体依赖复杂的推理马甲，难以在开源基础设施上端到端训练。本文提出OpenForgeRL框架，通过轻量级代理和Kubernetes编排器，将马甲模型调用记录为标准RL训练数据，实现基于强化学习的智能体训练。该框架支持多种环境中的多轮推理和工具使用，推动了智能体训练的开放与可扩展性。",
+      "llm_tldr": "现有AI智能体依赖复杂的推理马甲，难以在开源基础设施上端到端训练。本文提出OpenForgeRL框架，通过轻量级代理和Kubernetes编排器，将马甲模型调用记录为标准RL训练数据，实现基于强化学习的智能体训练。该框架支持多种环境中的多轮推理和工具使用，推动了智能体训练的开放与可扩展性。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on policy reinforcement learning and distillation for long horizon agent trajectories",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.19739v1",
+      "source": "arxiv",
+      "title": "Personalized Recommendation Tool Learning via Autonomous Language Agents",
+      "abstract": "Although large language models (LLMs) have recently gained traction in recommender systems due to their strong reasoning capabilities and extensive world knowledge, previous LLM-based agents suffer from hallucination and context-length limitations, and thus are not suitable for full-ranking recommendation tasks. To circumvent these limitations through architectural design rather than modifying the LLM itself, we propose an agent-based recommendation framework, memory-based $\\textbf{P}$ersonalized $\\textbf{R}$ecommendation $\\textbf{T}$ool learning via autonomous language $\\textbf{A}$gents (PRTA), in which an LLM acts as a central planner interacting with multiple recommendation models as tools. The LLM-based agent is responsible for high-level reasoning and personalized tool selection, while traditional recommendation models perform full-ranking scoring, leveraging their scalability in modeling behavioral patterns. To support personalized tool selection, we design reflection mechanisms that enable the agent to evaluate and compare tools for each user based on user profiles and candidate ranked lists. Extensive experiments across three public datasets demonstrate the superiority of \\modelname over traditional recommendation and LLM-based baselines in improving full-ranking recommendation performance.",
+      "authors": [
+        "Mingdai Yang",
+        "Zhiwei Liu",
+        "Weizhi Zhang",
+        "Yibo Wang",
+        "Hao Peng",
+        "Philip Yu"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-07-22T04:10:41+00:00",
+      "link": "https://arxiv.org/pdf/2607.19739v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "LLM agent as central planner interacting with tool models for recommendation",
+      "llm_evidence_cn": "LLM智能体作为中央规划器与工具模型交互进行推荐",
+      "llm_evidence": "LLM智能体作为中央规划器与工具模型交互进行推荐",
+      "canonical_evidence": "LLM智能体作为中央规划器与工具模型交互进行推荐",
+      "llm_tldr_en": "Proposes PRTA, an agent-based recommendation framework where an LLM acts as central planner interacting with multiple recommendation tools, addressing hallucination and context limitations.",
+      "llm_tldr_cn": "针对LLM智能体在推荐系统中的幻觉和上下文限制问题，提出PRTA框架，通过LLM作为中央规划器与多个推荐工具交互来绕过这些限制。该方法在不修改LLM本身的情况下，利用工具增强推荐能力。实验表明该框架在推荐任务中有效。为工具学习智能体提供了新范式。",
+      "llm_tldr": "针对LLM智能体在推荐系统中的幻觉和上下文限制问题，提出PRTA框架，通过LLM作为中央规划器与多个推荐工具交互来绕过这些限制。该方法在不修改LLM本身的情况下，利用工具增强推荐能力。实验表明该框架在推荐任务中有效。为工具学习智能体提供了新范式。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "search agents",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.22157v1",
+      "source": "arxiv",
+      "title": "Learning on the Job: Continual Learning from Deployment Feedback for Frozen-Weights Agents",
+      "abstract": "AI agents encounter learning opportunities in every episode they run, and discard nearly all of them: the underlying models are frozen at deployment, so an agent that resolves a difficult request today starts from zero when it recurs tomorrow. Yet ordinary operation already produces feedback, in the form of outcome verdicts and after-the-fact corrections. We show that this feedback is a sufficient signal for continual learning when the frozen model is paired with an external memory that distils each episode into retrievable natural-language rules. On the banking domain of $τ$-bench, against a static-RAG control retrieving over the complete policy corpus, learning from the one-bit outcome verdict lifts single-trial success to 1.6$\\times$ the baseline, and learning from corrections to 2.6$\\times$, converting 22 of the 84 tasks the baseline never solves. The result spans the deployment spectrum, measured on Mistral Large, an open-weights model that organisations with data sovereignty requirements can self-host, and replicated on a frontier model, Claude Sonnet 5. The accumulated memory also transfers: each model, reading the store built by the other, rises above its own no-memory baseline. The harness, protocol, and data are released.",
+      "authors": [
+        "Valentin Tablan",
+        "Scott Taylor",
+        "Kristoffer Bernhem"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-24T10:01:00+00:00",
+      "link": "https://arxiv.org/pdf/2607.22157v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "data-free agent training using deployment feedback",
+      "llm_evidence_cn": "利用部署反馈进行无数据智能体训练",
+      "llm_evidence": "利用部署反馈进行无数据智能体训练",
+      "canonical_evidence": "利用部署反馈进行无数据智能体训练",
+      "llm_tldr_en": "Shows that deployment feedback (outcome verdicts) enables continual learning for frozen-weight agents paired with external memory, lifting success rate 1.6x in banking domain.",
+      "llm_tldr_cn": "传统智能体在部署后模型冻结，无法从每次交互中学习。本文提出利用部署反馈（如结果判定）与外部记忆结合，将经验蒸馏为可检索的自然语言规则，实现无额外数据的持续学习。在银行领域τ-bench上，仅凭单比特结果反馈将单次任务成功率提升1.6倍。",
+      "llm_tldr": "传统智能体在部署后模型冻结，无法从每次交互中学习。本文提出利用部署反馈（如结果判定）与外部记忆结合，将经验蒸馏为可检索的自然语言规则，实现无额外数据的持续学习。在银行领域τ-bench上，仅凭单比特结果反馈将单次任务成功率提升1.6倍。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "data-free agent training",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.19865v1",
+      "source": "arxiv",
+      "title": "DocOps: A Verifiable Benchmark for Autonomous Agents in Complex Document Operations",
+      "abstract": "As autonomous agents rapidly evolve, their ability to reliably manipulate ubiquitous digital documents has become critical for enabling general-purpose AI assistants and automating complex workspace workflows. In this paper, we introduce DocOps, a deterministically verifiable evaluation framework underpinned by a hierarchical taxonomy that deconstructs document operations inspired by real-world practices into atomic dimensions and escalating workflow complexities. Based on DocOps, we systematically evaluate representative closed- and open-source models across various agentic harnesses, revealing that even the most advanced frontier configurations still exhibit profound limitations when handling highly coupled, long-range tasks. Furthermore, a fine-grained analysis of existing agents' manipulation behaviors uncovers 3 key failure modes: long-term state tracking collapse, shallow semantic verification, and destructive editing of structural metadata. Ultimately, our work exposes the capability boundaries of agents in maintaining global document consistency, shedding light on the future design of robust, non-destructive agents for complex digital ecosystems.",
+      "authors": [
+        "Jiazhen Jiang",
+        "Boxi Cao",
+        "Lingyong Yan",
+        "Yaojie Lu",
+        "Hongyu Lin",
+        "Shuaiqiang Wang",
+        "Dawei Yin",
+        "Xianpei Han",
+        "Le Sun"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-07-22T07:52:59+00:00",
+      "link": "https://arxiv.org/pdf/2607.19865v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "benchmark for long-range document operations by autonomous agents",
+      "llm_evidence_cn": "自主智能体长程文档操作的可验证基准",
+      "llm_evidence": "自主智能体长程文档操作的可验证基准",
+      "canonical_evidence": "自主智能体长程文档操作的可验证基准",
+      "llm_tldr_en": "DocOps benchmark evaluates autonomous agents on complex document operations, revealing limitations in long-range tasks across various models and harnesses.",
+      "llm_tldr_cn": "自主智能体可靠操作文档对AI助手至关重要，但缺乏系统评估。提出DocOps，一个可验证基准，基于分层分类法将文档操作分解为原子维度。评估多种闭源和开源模型，发现即使最前沿配置在处理高度耦合长时程任务时仍表现不佳。为智能体长程操作提供了标准化测试平台。",
+      "llm_tldr": "自主智能体可靠操作文档对AI助手至关重要，但缺乏系统评估。提出DocOps，一个可验证基准，基于分层分类法将文档操作分解为原子维度。评估多种闭源和开源模型，发现即使最前沿配置在处理高度耦合长时程任务时仍表现不佳。为智能体长程操作提供了标准化测试平台。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "long-horizon agent reasoning",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.22465v1",
+      "source": "arxiv",
+      "title": "TRACE-ROUTER: Task-Consistent and Adaptive Online Routing for Agentic AI",
+      "abstract": "Routing to select large language models (LLMs) with different cost-quality trade-offs has become a fundamental deployment feature of enterprise AI. Existing routers, primarily make independent routing decisions for each LLM call. However, agentic applications execute as long-horizon workflows whose quality is determined only by a delayed, task-level outcome. This mismatch prevents per-call routers from correctly attributing feedback to individual routing decisions. Towards mitigating this, we present TRACE-Router, a task-level routing framework that aligns routing with the unit of supervision. TRACE-Router assigns each task to a model once at admission using a contextual bandit, pins all subsequent LLM calls to the selected backend, and updates its policy using the task's terminal reward, jointly accounting for accuracy and latency. By leveraging delayed task feedback, TRACE-Router learns routing policies that adapt to the workload while avoiding explicit task-complexity estimation. Across three agentic benchmarks, TRACE-Router consistently improves the accuracy-latency trade-off, achieving non-dominated Pareto frontier points. On tau2-Bench, it outperforms latency-matched interpolation between individual models by 7-8 accuracy points, while on Terminal-Bench it achieves 7.1 higher accuracy points than the strongest single model baseline with 36% lower latency.",
+      "authors": [
+        "Ritik Raj",
+        "Souvik Kundu",
+        "Sarbartha Banerjee",
+        "Dheemanth Joshi",
+        "Ishita Vohra",
+        "Tushar Krishna"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG",
+        "cs.MA"
+      ],
+      "published": "2026-07-24T16:29:06+00:00",
+      "link": "https://arxiv.org/pdf/2607.22465v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "contextual bandit for long-horizon agent workflow routing",
+      "llm_evidence_cn": "使用上下文强盗进行长周期智能体工作流路由",
+      "llm_evidence": "使用上下文强盗进行长周期智能体工作流路由",
+      "canonical_evidence": "使用上下文强盗进行长周期智能体工作流路由",
+      "llm_tldr_en": "Presents TRACE-Router, a task-level routing framework using contextual bandits for long-horizon agent workflows, aligning routing decisions with delayed task outcomes.",
+      "llm_tldr_cn": "该论文提出TRACE-Router，一种任务级路由框架，使用上下文强盗为长周期智能体工作流选择模型。它解决了每调用路由无法归因延迟奖励的问题，通过任务接纳时一次分配，并利用延迟任务级反馈更新策略。这直接支持了长周期智能体推理的在线学习与优化，与on-policy强化学习蒸馏的设定相似。",
+      "llm_tldr": "该论文提出TRACE-Router，一种任务级路由框架，使用上下文强盗为长周期智能体工作流选择模型。它解决了每调用路由无法归因延迟奖励的问题，通过任务接纳时一次分配，并利用延迟任务级反馈更新策略。这直接支持了长周期智能体推理的在线学习与优化，与on-policy强化学习蒸馏的设定相似。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "on policy reinforcement learning and distillation for long horizon agent trajectories",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.22014v1",
+      "source": "arxiv",
+      "title": "Zero-Shot Mission-Level Evaluation for Aerial MLLM Agents",
+      "abstract": "Multimodal Large Language Models (MLLMs) are emerging as core reasoning modules for embodied agents, yet it remains unclear how well general-purpose models can solve long-horizon embodied tasks from a single high-level instruction. We introduce MissionBench, a benchmark for mission-level evaluation of MLLMs in aerial 3D environments. It comprises 120 missions across five simulated 3D environments and four task families. Agents must autonomously plan, navigate, and report outcomes using only egocentric observations and its action history, without aerial-specific fine-tuning. Across 22 open- and closed-source MLLMs, the strongest model succeeds on fewer than 35% of missions compared to 84.4% human performance, highlighting the difficulty of multi-step embodied tasks. Despite large variations between model families, we observe gains from scaling, indicating that larger general-purpose models possess stronger zero-shot embodied capabilities. Our analysis shows that mission-level competence requires coordinating multiple capabilities beyond spatial perception, including multi-step planning and adaptive reasoning. This motivates closed-loop evaluation and highlights both the promise and risk of scaling-driven improvements for embodied AI.",
+      "authors": [
+        "Suman Navaratnarajah",
+        "Taehyoung Kim",
+        "Jona Ruthardt",
+        "Ishaan Bhimwal",
+        "Ryousuke Yamada",
+        "Yannik Blei",
+        "Wolfram Burgard",
+        "Yuki M Asano"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.CV",
+        "cs.RO"
+      ],
+      "published": "2026-07-24T06:22:50+00:00",
+      "link": "https://arxiv.org/pdf/2607.22014v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multimodal aerial agents for long-horizon tasks",
+      "llm_evidence_cn": "用于长时域任务的多模态空中智能体",
+      "llm_evidence": "用于长时域任务的多模态空中智能体",
+      "canonical_evidence": "用于长时域任务的多模态空中智能体",
+      "llm_tldr_en": "Introduces MissionBench for evaluating multimodal LLM agents on long-horizon aerial missions, finding strongest model succeeds under 35% vs 84.4% human.",
+      "llm_tldr_cn": "多模态大语言模型（MLLM）作为具身智能体的核心推理模块，其长时域任务能力未知。本文提出MissionBench，包含120个空中3D任务。22个MLLM中，最强模型成功率低于35%，远低于人类的84.4%，揭示多模态智能体在复杂长时域任务中的挑战。",
+      "llm_tldr": "多模态大语言模型（MLLM）作为具身智能体的核心推理模块，其长时域任务能力未知。本文提出MissionBench，包含120个空中3D任务。22个MLLM中，最强模型成功率低于35%，远低于人类的84.4%，揭示多模态智能体在复杂长时域任务中的挑战。",
+      "llm_tags": [
+        "query:search-agent"
+      ],
+      "matched_query_tag": "query:search-agent",
+      "matched_query_text": "multimodal search agents",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.22400v1",
+      "source": "arxiv",
+      "title": "A Self-Calibrating Agentic AI Framework for Autonomous Edge Resource Allocation",
+      "abstract": "Large Language Models (LLMs) are increasingly deployed as autonomous agents, transitioning from static conversational interfaces to dynamic systems capable of complex reasoning, tool execution, and decision-making. However, the operational reliability of these agentic AI systems is fundamentally challenged by the absence of reliable ground truth in open-ended environments and the risk of increasing operational drift over time. To address this challenge, we propose and experimentally evaluate an agentic AI framework, designed to enforce autonomous integrity within LLM-driven systems. We design a self-calibration mechanism that mitigates drift and dynamically approximates ground truth by incorporating an ARIMA forecaster, without requiring continuous human oversight. To demonstrate the effectiveness and reliability of our methodology, we apply it to the complex domain of profiling the resource usage of zero-knowledge workloads in edge computing networks. Experimental results show that the proposed self-calibrating agentic framework successfully profiles the zero-knowledge workloads, achieving a higher accuracy than baseline LLM agents by 91.7% for resource usage prediction and improving the prediction speed by 71.7% compared to pure profiling, establishing a robust foundation for deploying autonomous AI in decentralized infrastructures. Furthermore, the ground truth generation using the proposed ARIMA leaping algorithm is 52% faster than a standard ARIMA forecasting algorithm, while achieving the same accuracy.",
+      "authors": [
+        "Fin Gentzen",
+        "Marla Grunewald",
+        "Iulisloi Zacarias",
+        "Mounir Bensalem",
+        "Admela Jukan"
+      ],
+      "primary_category": "cs.NI",
+      "categories": [
+        "cs.NI",
+        "cs.AI"
+      ],
+      "published": "2026-07-24T15:21:54+00:00",
+      "link": "https://arxiv.org/pdf/2607.22400v1",
+      "tags": [
+        "keyword:search-agent",
+        "keyword:self-evolve",
+        "query:search-agent",
+        "query:self-evolve"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "self-calibrating agentic AI framework for autonomous integrity",
+      "llm_evidence_cn": "自校准智能体框架以实现自主完整性",
+      "llm_evidence": "自校准智能体框架以实现自主完整性",
+      "canonical_evidence": "自校准智能体框架以实现自主完整性",
+      "llm_tldr_en": "Proposes a self-calibrating agentic AI framework with ARIMA forecaster to mitigate operational drift and approximate ground truth without human intervention.",
+      "llm_tldr_cn": "该论文设计了一个自校准智能体AI框架，通过集成ARIMA预测器动态近似真实信号，缓解LLM驱动智能体在开放环境中的操作漂移。框架无需连续人工干预即可维护自主完整性，体现了自进化智能体的核心思想，即智能体通过自我校准来适应环境变化。在边缘资源分配任务上验证了有效性。",
+      "llm_tldr": "该论文设计了一个自校准智能体AI框架，通过集成ARIMA预测器动态近似真实信号，缓解LLM驱动智能体在开放环境中的操作漂移。框架无需连续人工干预即可维护自主完整性，体现了自进化智能体的核心思想，即智能体通过自我校准来适应环境变化。在边缘资源分配任务上验证了有效性。",
+      "llm_tags": [
+        "query:self-evolve"
+      ],
+      "matched_query_tag": "query:self-evolve",
+      "matched_query_text": "self-evolving agents",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
