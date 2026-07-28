@@ -1,15 +1,140 @@
 {
-  "generated_at": "2026-07-27T21:27:13.164517+00:00",
-  "updated_date": "20260727",
+  "generated_at": "2026-07-28T21:20:01.442361+00:00",
+  "updated_date": "20260728",
   "carryover_days": 9,
   "tag_states": {
     "search-agent": {
-      "updated_date": "20260727",
+      "updated_date": "20260728",
       "carryover_days": 9,
-      "items": []
+      "items": [
+        {
+          "id": "2607.24097v1",
+          "source": "arxiv",
+          "title": "MemChain: Learning Interpretable Memory Traces for Memory-Augmented LLM Agents",
+          "abstract": "Memory-augmented LLM agents typically answer queries by retrieving relevant memories and feeding them directly to an answer model. This retrieval-as-evidence paradigm assumes retrieved memories are already suitable for reasoning, leaving the answer model to resolve redundancy, conflicts, and weak relevance while incurring substantial context overhead in long-term memory tasks. We propose MemChain, a trainable post-retrieval memory policy that transforms retrieved candidates into answer-facing active memory, represented as a compact and grounded evidence context. Given a user query and retrieved candidates, MemChain first generates a question-conditioned evidence plan, then constructs an ordered grounded evidence trace that organizes retrieved memories according to their semantic roles and dependencies, and finally executes explicit memory actions to produce a concise evidence context for answer generation. To train the mediator, we introduce a two-stage learning framework. Supervised trace learning first teaches the policy to generate structurally valid plans, traces, actions, and evidence contexts. We then propose Trace-Guided Memory Policy Optimization (TMPO), a reinforcement learning objective that optimizes the memory policy using downstream answer quality while jointly encouraging trace grounding, evidence support, structural validity, and answer stability across multiple rollouts. Experiments on LoCoMo and LongMemEval-S demonstrate that MemChain consistently achieves state-of-the-art performance across both closed-source and open-weight frozen answer models while substantially reducing the memory context passed to the answer model.",
+          "authors": [
+            "Yiwen Ma",
+            "Songjun Tu",
+            "Qichao Zhang",
+            "Dong Li",
+            "Linjing Li",
+            "Dongbin Zhao"
+          ],
+          "primary_category": "cs.AI",
+          "categories": [
+            "cs.AI"
+          ],
+          "published": "2026-07-27T07:37:43+00:00",
+          "link": "https://arxiv.org/pdf/2607.24097v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "evidence curation and grounded evidence trace for memory-augmented agents",
+          "llm_evidence_cn": "为记忆增强智能体提供证据整理和可解释记忆轨迹",
+          "llm_evidence": "为记忆增强智能体提供证据整理和可解释记忆轨迹",
+          "canonical_evidence": "为记忆增强智能体提供证据整理和可解释记忆轨迹",
+          "llm_tldr_en": "MemChain transforms retrieved candidates into compact grounded evidence traces for memory-augmented LLM agents, reducing context overhead and improving interpretability.",
+          "llm_tldr_cn": "现有记忆增强智能体直接将检索结果作为证据，忽略了冗余、冲突和弱相关性，导致上下文开销大。本文提出MemChain，一种可训练的后检索记忆策略，通过生成问题条件化证据计划并构建有序的接地证据轨迹，将检索候选转化为面向答案的主动记忆。实验表明该方法能有效压缩上下文并提升回答质量，为智能体记忆管理提供了新思路。",
+          "llm_tldr": "现有记忆增强智能体直接将检索结果作为证据，忽略了冗余、冲突和弱相关性，导致上下文开销大。本文提出MemChain，一种可训练的后检索记忆策略，通过生成问题条件化证据计划并构建有序的接地证据轨迹，将检索候选转化为面向答案的主动记忆。实验表明该方法能有效压缩上下文并提升回答质量，为智能体记忆管理提供了新思路。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+          "matched_requirement_id": "req-7",
+          "selection_source": "carryover_cache",
+          "paper_id": "2607.24097v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2607.24475v1",
+          "source": "arxiv",
+          "title": "Robust Interpretation of Historical Documents in Knowledge Graphs Through Query Inference and Execution",
+          "abstract": "The emergence of Large Language Models (LLMs) has redefined how users interact with information in digital environments. However, their widespread and often indiscriminate integration has raised significant concerns regarding reliability and trustworthiness issues that are particularly critical when accessing digital libraries and historical archives. How can one leverage the generalization capacity of an LLM without losing the level of accountability required for an archival institution? In this paper, we present an agentic retrieval system designed to deliver more accurate and verifiable access to historical data while preserving much of the flexibility associated with unconstrained LLMs. As a contribution to historical document analysis, we compare traditional Retrieval-Augmented Generation (RAG) with an agentic GraphRAG architecture in their ability to deliver historical information under realistic conditions, including the presence of OCR and transcription errors.   We introduce a semi-symbolic framework that integrates word-spotting techniques for post-OCR correction with a knowledge graph representation that enables the agent to access information through synthesized queries. The interleaved collaboration between word spotting and code generation allows the agent to construct strong retrieval queries that are robust to misinterpretation and hallucination, while still leveraging approximate search when noise and uncertainty, common in historical document analysis, would otherwise hinder precise retrieval.",
+          "authors": [
+            "Sebastià Nicolau",
+            "Adrià Molina",
+            "Oriol Ramos Terrades",
+            "Josep Lladós"
+          ],
+          "primary_category": "cs.IR",
+          "categories": [
+            "cs.IR",
+            "cs.DL"
+          ],
+          "published": "2026-07-27T14:11:20+00:00",
+          "link": "https://arxiv.org/pdf/2607.24475v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "agentic retrieval system for accurate and verifiable access to historical data",
+          "llm_evidence_cn": "面向历史数据准确可验证访问的代理检索系统",
+          "llm_evidence": "面向历史数据准确可验证访问的代理检索系统",
+          "canonical_evidence": "面向历史数据准确可验证访问的代理检索系统",
+          "llm_tldr_en": "Presents an agentic retrieval system that combines LLM flexibility with archival accountability for robust historical document interpretation via knowledge graph query inference and execution.",
+          "llm_tldr_cn": "为了在利用LLM灵活性的同时保持档案机构所需的问责水平，本文提出了一个代理检索系统，用于历史文档的鲁棒解释。该系统通过知识图谱进行查询推理和执行，能够提供更准确和可验证的数据访问，同时保留无约束LLM的灵活性。该方法在历史档案领域展示了代理搜索的可行性和价值。",
+          "llm_tldr": "为了在利用LLM灵活性的同时保持档案机构所需的问责水平，本文提出了一个代理检索系统，用于历史文档的鲁棒解释。该系统通过知识图谱进行查询推理和执行，能够提供更准确和可验证的数据访问，同时保留无约束LLM的灵活性。该方法在历史档案领域展示了代理搜索的可行性和价值。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "agentic search",
+          "matched_requirement_id": "req-5",
+          "selection_source": "carryover_cache",
+          "paper_id": "2607.24475v1",
+          "carry_days": 1
+        },
+        {
+          "id": "2607.23278v1",
+          "source": "arxiv",
+          "title": "Co-Evolving Graph and Text Memory for Training-Free Multi-Hop Question Answering",
+          "abstract": "Multi-hop question answering requires coordinating relational and textual evidence across reasoning steps, a combination neither a text corpus nor a knowledge graph can supply alone. Prior work often emphasizes only part of this loop: graph-augmented RAG retrieves from a pre-built or query-updated graph, KGQA systems search within topic-centered subgraphs, and memory-augmented agents maintain evolving memories without continuously reconciling graph memory with textual context. We propose Co-E, a training-free system built around synchronized bidirectional graph-text working memory. A synchronization cycle consolidates textual memory, extracts relational triples into graph memory, and injects graph facts back into the generation context. Because both memories are maintained, they shape subsequent retrieval and generation. Evaluated on six multi-hop QA benchmarks, Co-E improves over comparable training-free open-backbone baselines and is competitive with larger or trained systems.",
+          "authors": [
+            "Hieu Man",
+            "Thien Huu Nguyen"
+          ],
+          "primary_category": "cs.CL",
+          "categories": [
+            "cs.CL",
+            "cs.MA"
+          ],
+          "published": "2026-07-25T16:29:38+00:00",
+          "link": "https://arxiv.org/pdf/2607.23278v1",
+          "tags": [
+            "keyword:search-agent",
+            "keyword:self-evolve",
+            "query:search-agent",
+            "query:self-evolve"
+          ],
+          "llm_score": 8.0,
+          "llm_evidence_en": "co-evolving graph-text memory for multi-hop QA with explicit evidence management",
+          "llm_evidence_cn": "协同进化图文本记忆用于多跳问答，带有显式证据管理",
+          "llm_evidence": "协同进化图文本记忆用于多跳问答，带有显式证据管理",
+          "canonical_evidence": "协同进化图文本记忆用于多跳问答，带有显式证据管理",
+          "llm_tldr_en": "Proposes Co-E, a training-free system with synchronized bidirectional graph-text working memory, enabling evidence consolidation and fact injection for multi-hop QA.",
+          "llm_tldr_cn": "该论文提出Co-E系统，通过同步双向图文本工作记忆实现多跳问答。系统循环整合文本记忆并提取关系三元组到图记忆，再将图事实注入生成上下文，无需训练。该方法为搜索智能体提供了显式工作记忆和证据管理的范例。",
+          "llm_tldr": "该论文提出Co-E系统，通过同步双向图文本工作记忆实现多跳问答。系统循环整合文本记忆并提取关系三元组到图记忆，再将图事实注入生成上下文，无需训练。该方法为搜索智能体提供了显式工作记忆和证据管理的范例。",
+          "llm_tags": [
+            "query:search-agent"
+          ],
+          "matched_query_tag": "query:search-agent",
+          "matched_query_text": "search agents with explicit working memory, evidence curation, and claim verification",
+          "matched_requirement_id": "req-7",
+          "selection_source": "carryover_cache",
+          "paper_id": "2607.23278v1",
+          "carry_days": 1
+        }
+      ]
     },
     "self-evolve": {
-      "updated_date": "20260727",
+      "updated_date": "20260728",
       "carryover_days": 9,
       "items": []
     }

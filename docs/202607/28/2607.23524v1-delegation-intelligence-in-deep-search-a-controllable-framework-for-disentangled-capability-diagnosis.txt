@@ -1,0 +1,647 @@
+Title: Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+URL Source: https://arxiv.org/pdf/2607.23524v1
+
+Published Time: Tue, 28 Jul 2026 00:58:23 GMT
+
+Number of Pages: 31
+
+Markdown Content:
+# Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis 
+
+Xinhao Yao 1,2* , Yuanzhuo Liu 1* , Changhao Wang 3, Yunfei Yu 4, Haoran Tan 2, Yuyao Zhang 2, Ruifeng Ren 2, Minlong Peng 1 and Yong Liu 21Tencent, 2Renmin University of China, 3UCAS, 4Independent Researcher, *Equal contribution. 
+
+Abstract: Deep search is becoming a core capability of modern agent systems, yet it is typically evaluated solely based on end-to-end answer accuracy. This coupled evaluation paradigm entangles retrieval quality, long-context comprehension, evidence verification, and tool-use decisions, making it difficult to determine whether a model truly knows when and how to delegate information seeking to search. To this end: ❶ We formalize this meta-capability as Delegation Intelligence in deep search and decompose it into complementary dimensions— Search Decision-Making (recognizing information insufficiency and deciding whether, when, and how to search) and Information Synthesis & Verification (aggregating evidence from multiple sources, judging source reliability, and synthesizing information under noisy, potentially adversarial conditions). ❷ To enable disentangled and reproducible measurement, we develop a controllable synthesis pipeline built on document-grounded reverse engineering. This yields a general recipe for constructing controlled deep-search evaluations rather than a single fixed dataset. ❸ As a concrete instantiation, we construct DelegSearchBench , together with a disentangled evaluation protocol 
+
+that isolates each capability dimension by varying document composition and tool access. ❹ Across representative models, we demonstrate that deep-search competence cannot be adequately characterized by final-answer accuracy alone. Models exhibit different mode-dependent weaknesses, substantial sensitivity to the position of supporting evidence even when all relevant evidence is available, and unstable reasoning trajectories across repeated attempts. Under partial-context settings, many models either answer prematurely despite insufficient evidence or over-rely on search while failing to retrieve and integrate the information required to reach the correct answer. These results validate the controllable synthesis pipeline as a principled means of exposing capability boundaries masked by standard end-to-end evaluations , showing that reliable deep-search agents require more than strong reasoning—they must also know how to reach correct answers through effective delegation. 
+
+## 1. Introduction 
+
+Over the past few years, language models have evolved into remarkably capable problem solvers, achieving strong performance on increasingly demanding mathematical, coding, and professional-knowledge benchmarks [ 10 , 28 , 29 , 32 ]. Yet such achievements primarily characterize models as powerful test-takers : they reward solving well-specified problems when the relevant information is already present in the prompt or encoded in model parameters [ 9 ]. Real-world information needs are rarely so self-contained. Evidence may be absent, scattered across sources, outdated, or entangled with plausible misinformation. A useful agent must therefore do more than reason over what it already has—it must recognize what it does not know and acquire the evidence needed to resolve that uncertainty. Deep search represents this transition from test-taking to active information seeking, extending static multi-hop reasoning [ 12 , 34 , 38 ] to iterative document navigation and open-web investigation [ 3, 35 , 36 ]. The central question is thus no longer only whether a model can produce the correct answer , but whether it can reach that answer through sound information-seeking decisions .
+
+> Corresponding author: liuyonggsai@ruc.edu.cn Our code and data will be available after internal review. arXiv:2607.23524v1 [cs.AI] 26 Jul 2026 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+Existing evaluations largely leave this question unanswered. Most deep-search benchmarks score the final response of an integrated system in which the model, retrieval backend, and tool interface are tightly coupled [ 5, 25 , 35 ]. A wrong answer may result from retrieval failure, poor long-context comprehension, misplaced trust in a source, or an incorrect decision not to search. Conversely, a correct answer may come from parametric memory, a lucky retrieval, or repeated sampling rather than effective search behavior. Collapsing these distinct trajectories into a single success rate makes failures difficult to diagnose and model capabilities difficult to compare. More fundamentally, it misses the defining challenge of deep search: deciding whether the available evidence is sufficient, determining when additional search is warranted, expressing the missing information need, and verifying the evidence returned .We formalize this meta-capability as Delegation Intelligence [17 , 26 , 30 , 33 ] in deep search (Section 3): the ability to make calibrated decisions about when and how information seeking should be delegated to search. Rather than treating retrieval as an unconditional preprocessing step, Delegation Intelligence views search as a cognitive resource whose use depends on the current evidence state . We decompose it into two complementary dimensions. Search Decision-Making measures whether a model recognizes evidence insufficiency and, when necessary, initiates and formulates an effective search. Information Synthesis & Verification measures whether it can integrate evidence across documents, assess source authority and timeliness, detect inconsistencies, and reject plausible distractors. Separating information acquisition from post-retrieval reasoning enables attributable capability diagnosis. Disentangling these capabilities requires precise control over the evidential environment: an evaluator must know not only the correct answer, but also which evidence is necessary, which documents are merely irrelevant, and why seemingly plausible alternatives should be rejected. To this end, we de-velop a controllable synthesis pipeline (Section 4) based on document-grounded reverse engineering. Starting from high-quality real-world documents as complete evidential hindsight, the pipeline works backward to synthesize a natural query, its answer, localized supporting evidence, and the required reasoning structure. It preserves topically related retrieved documents as natural noise, constructs evidence-anchored distractors by perturbing query-constrained dimensions such as source authority, publication time, entity, and version, and applies multi-step rejection filtering to ensure answerability, non-memorability, evidence-label correctness, and adversarial validity. By fixing the answer and its evidential structure before task construction, the pipeline turns document composition into an explicit experimental variable rather than an uncontrolled consequence of retrieval. It therefore provides a reusable recipe for constructing diagnostic deep-search evaluations, rather than merely producing a single benchmark. As a concrete instantiation, we introduce DelegSearchBench , and a disentangled protocol that varies document composition and tool availability. Our experiments (Section 5) reveal several capability boundaries hidden by endpoint accuracy. (1) Synthesis and verification are strongly mode-dependent: source authority, timeliness, internal consistency, multi-hop reasoning, and evidence sufficiency induce distinct model rankings and failure profiles. (2) When all required evidence is already available, most models remain sensitive to its position, with valid information buried among distractors often producing the largest degradation—a retrieval-independent manifestation of the lost-in-the-middle effect [ 22 ]. (3) Consistent gaps between Pass@1 and Pass@3 reveal unstable evidence localization and reasoning trajectories, echoing broader concerns about agent reliability across repeated attempts [ 39 ]. Most importantly, partial-context evaluation uncovers two opposing delegation failures: some models answer prematurely despite missing evidence, while others search aggressively but fail to retrieve or integrate what is needed. These results lead to our central insight : while search may be necessary, the mere invocation of  
+
+> Work in Progress 2Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+search does not constitute intelligence. Reliable deep search requires well-calibrated coordination among uncertainty awareness, evidence acquisition, and faithful synthesis. These findings highlight the importance of capability-decoupled evaluation and suggest that future agent benchmarks should assess not only task-level performance, but also the robustness, reliability, and stability of the underlying reasoning processes. 
+
+## 2. Related Work 
+
+Deep Information Seeking Tasks. ① For deep search scenarios that demand reasoning across dispersed evidence, multi-hop reasoning datasets form the foundational line of evaluation. This category covers representative knowledge-intensive multi-hop QA benchmarks: 2WikiMultihopQA [ 12 ], MuSiQue [ 34 ], Bamboogle [ 27 ], and HotpotQA [ 38 ]. Constructed from structured knowledge bases or curated text corpora, these benchmarks require strict multi-step reasoning. However, they are predominantly derived from Wikipedia-based sources, which are heavily represented in conventional LLM pre-training data. 
+
+② A growing body of work extends evaluation to navigable document environments and general agent scenarios, aiming for more realistic deep information-seeking and task completion capabilities. For pure information-seeking objectives, document-navigation benchmarks represented by WebWalkerQA [ 36 ], XBench [ 3], and Frames [ 18 ] introduce iterative retrieval dynamics into multi-hop evaluation. Moving beyond information acquisition alone, broader general web agent benchmarks (GAIA [ 25 ], HLE [ 2 ]) expand the scope to composite task completion. Compared with static multi-hop QA, these benchmarks more closely approximate real-world search behavior and agent workflows by incorporating iterative retrieval, path selection, and multi-tool coordination. However, they uniformly evaluate end-to-end system performance into a single task success rate, failing to disentangle retrieval backend quality and general task competence from a model’s intrinsic search-delegation abilities. ③ To robustly evaluate deep search systems that require complex reasoning and strategic search planning, benchmarks centered on browsing-based information seeking are essential. BrowseComp [ 35 ] and its extensions [ 4 , 41 ] are representative benchmarks explicitly designed for this purpose, featuring complex fact-finding queries with verifiable answers in a live web environment. ④ Existing deep browsing benchmarks, however, primarily focus on question-answering performance of integrated systems without standardized fixed corpora, complicating fair comparative assessments of retrieval methodologies and agent decision-making. BrowseComp-Plus [ 5] addresses this issue by providing a human-verified static document corpus, enabling more controlled and reproducible evaluation. Even so, no existing work systematically disentangles the core metacognitive dimensions of search delegation — including when to search, which sources to trust, and how to verify evidence — leaving a critical gap in fine-grained capability diagnosis. 
+
+Evaluation Focus. In the early era of question answering and text generation, task contexts were relatively static and well-defined, making output validation the primary focus of evaluation. Evaluation methods evolved from exact-match metrics and human judgments to the widely adopted LLM-as-a-Judge paradigm [ 11 , 20 ]. However, Dou et al. [8 , 9] highlight a mismatch between current model training paradigms and real-world applications: the models we optimize are adept at reasoning over what they “already know,” whereas what is truly required is the ability to solve tasks grounded in messy, dynamically evolving context. Besides, output-level verification can only assess superficial plausibility of results, without tracing the compliance or correctness of the underlying execution process, and thus fails to detect reward hacking, shortcut behaviors, or latent policy violations [ 24 , 31 ]. To address limited process visibility, Claw-Eval [ 40 ] shifts evaluation from final outputs to full execution trajectories. To capture inherent stochasticity in agent behavior, 𝜏 -bench [ 39 ] proposes a dual-metric framework—Pass@k and Pass all k—characterizing,  
+
+> Work in Progress 3Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+respectively, the upper bound of capability and the lower bound of consistency. Meanwhile, the timeliness bias of static benchmarks has also drawn attention [ 19 , 42 ]. Most agent benchmarks are released once with fixed task sets, which gradually drift away from real-world automation needs as tool ecosystems and business requirements evolve [7, 15]. 
+
+## 3. Delegation Intelligence in Deep Search 
+
+In this work, we argue that the essence of search agent intelligence lies not in a model’s ability to answer queries correctly using only its parametric knowledge, but in its ability to make sound decisions that lead to efficient and effective use of search tools. To formalize this meta-competency for systematic evaluation, we define: 
+
+Definition 3.1. Delegation Intelligence in deep search is a model’s metacognitive capacity to use search tools in open environments — autonomously gauging information needs, choosing cognitive routes, and vetting source reliability to achieve efficient acquisition and reasoning. Its core lies not in whether the model can produce the correct answer on its own, but in whether the model can make the right decisions about tool use: when to search, how to search, which sources to trust, and which reasoning path to follow .To operationalize this concept for empirical evaluation, we decompose Delegation Intelligence in deep search into two mutually complementary capability dimensions. Each dimension encompasses a set of fine-grained sub-capabilities: 
+
+• Search Decision-Making governs both the high-level selection of an overall problem-solving strategy and the tactical decisions for search execution. It first assesses whether the available contextual evidence is sufficient to answer a query. When the context is adequate, the model reasons directly from it; otherwise, it either initiates external web search to acquire or verify the required information or relies on parametric knowledge when retrieval is unnecessary. If web search is selected, it further decomposes complex queries into independently retrievable subproblems and reformulates ambiguous or underspecified queries to improve retrieval precision. 
+
+• Information Synthesis & Verification concerns post-retrieval information processing. It encom-passes three key capabilities: (i) evaluating source reliability using authority signals, publication timeliness, and cross-source consensus; (ii) integrating evidence from multiple documents; and (iii) identifying internal inconsistencies within individual documents. While this two-dimensional taxonomy defines the scope of Delegation Intelligence, most existing deep search benchmarks evaluate retrieval, reading comprehension, and reasoning as a tightly coupled end-to-end process. Such conflation prevents capability-specific attribution of model performance and renders the evaluation highly susceptible to retrieval-induced noise, thereby obscuring the model’s intrinsic reasoning and tool-use competence. To enable disentangled and fine-grained evaluation, we provide the complete message context—namely, the query together with a controlled document set containing supporting evidence, misleading distractors, and irrelevant background documents. This controlled setting [ 1, 6 , 14 , 37 ] isolates the model’s intrinsic reasoning and tool-use capabilities by eliminating confounding variance from external retrieval, shifting the evaluation focus from end-to-end system performance to intrinsic decision-making and information processing. Details of the construction are presented in the next section.  
+
+> Work in Progress 4Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+## 4. Controllable Synthesis Pipeline 
+
+Figure 1: Overview of the controllable synthesis pipeline: reverse-engineered query synthesis, evidence-aligned distractor generation, and multi-criteria rejection filtering. Items passing all automated filters enter the candidate benchmark pool, whose residual quality is subsequently assessed through a stratified human audit. Irrelevant retrieval documents from Stage A are preserved as natural background noise for search evaluation. See the main text for details. To realize this controlled evaluation setting, we develop a multi-stage synthesis pipeline (Figure 1) based on document-grounded reverse engineering. The key idea is to leverage high-quality real-world documents—such as technical reports, official announcements, and policy documents—as complete hindsight for benchmark construction. Unlike conventional forward-generation paradigms, which first formulate a query and subsequently retrieve or curate supporting evidence, our pipeline starts from authentic documents and works backward to synthesize the corresponding user query. During this process, the ground-truth answer, supporting evidence, reasoning structure, and targeted capability under evaluation are all explicitly specified in advance. This reverse design is crucial for controllability. Query-first pipelines often rely on incomplete, ambiguous, or unavailable evidence, and their evaluation results are therefore confounded by retrieval backend performance. In contrast, grounding task generation in finalized high-quality documents provides full prior knowledge of both the target answer and its evidential structure before task formulation, enabling more controlled and reliable evaluation.  
+
+> Work in Progress 5Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+4.1. Stage A: Reverse Engineering Synthesis 
+
+Stage A starts from a curated seed-query pool (see Appendix A for domain details.) rather than arbitrary prompts. These seeds are selected from high-quality real user queries and organized across broad domains and intent types, providing diverse entry points while keeping the upstream distribution aligned with realistic search behavior. Given a seed query, we first call a search backend to retrieve a pool of relevant documents. High-authority candidate documents (e.g., official reports) are then used as the synthesis substrate, while the remaining topically related documents are retained as natural retrieval noise (irrelevant_docs ). For each high-authority candidate, we generate subqueries that reveal what information needs the docu-ment can support. Finally, a strong generator model synthesizes across the candidate documents and sub-queries to produce a natural user query, a concise golden answer, supporting evidence in golden_docs ,and reasoning steps. In this way, the final query and answer are reverse-engineered [ 13 , 21 , 23 ] from verified evidence rather than freely hallucinated. We additionally apply lightweight constraints on the number of golden documents, reasoning hops, and independent information points to control sample complexity. The synthesized query is screened to ensure that it is natural, uniquely answerable, and free of shortcut cues such as copied answer tokens or source-specific identifiers. Concrete prompts, model configuration and representative examples are deferred to Appendix A.1. Stage A also assigns a shaping mode, which specifies the capability axis to be stressed and provides structural guidance for Stage B distractor generation: 
+
+∙ sufficiency : parallel aggregation across multiple golden documents; 
+
+∙ multi_hop : serial reasoning where one hop feeds into the next; 
+
+∙ authority : source-reliability judgment using visible source cues such as site_name, url, and writing style; 
+
+∙ publish_time : temporal reliability judgment based on publication time; 
+
+∙ intra_doc_consistency : consistency judgment within a single document; 
+
+∙ plain : no extra capability shaping, used as a control condition. This reverse-engineering design ensures: ❶ answerability , as each item is grounded in localized evidence and supported by contributing golden documents; ❷ non-triviality , as tasks are derived from realistic information-seeking structures rather than shallow templates; and ❸ retrieval realism , achieved by grounding synthesis in high-authority documents while retaining topically related retrieved documents as natural retrieval noise to preserve the ambiguity and diversity of real-world search scenarios. 
+
+4.2. Stage B: Evidence-Anchored Distractor 
+
+While the retrieved irrelevant_docs preserve natural background noise, they are insufficient for controlled evaluation of distraction discrimination: their misleading effect is incidental and may not target the evidence required by the golden answer. Stage B therefore uses a generator from a different model family to synthesize adversarial distractor_docs from the Stage-A supporting evidence. A valid distractor must satisfy a structural constraint: the dimension along which it differs from the golden evidence must be a dimension already pinned down by the query itself. Each distractor records its target  
+
+> Work in Progress 6Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+information, distractor type, and discriminating constraint, making the source of distraction explicit and auditable. Refer to Appendix A.2 for detailed implementation settings. For example, consider the query “What is the organizational carbon accounting boundary specified in ISO 14064-1:2018?”. A document describing the 2006 version of the same standard acts as a strong temporal distractor: the query explicitly pins the standard to its 2018 revision, so a rigorous model can identify and reject the outdated specification by cross-checking the version dimension. For an authority-focused case, take the query “According to FIFA’s official statistics, how many teams qualified for the 2026 FIFA World Cup?”. A third-party sports blog claiming 32 teams serves as a plausible but invalid distractor. Since the query explicitly anchors the data source to official FIFA statistics, the distractor deviates exactly on the source authority dimension that the query has already specified, rather than introducing unrelated factual errors. In both cases, distractors remain topically aligned and pass shallow keyword matching, but fail strict evidence verification. This design produces targeted, interpretable challenge samples that map cleanly to the synthesis modes defined in Stage A. 
+
+4.3. Stage C: Rejection Filtering 
+
+Stage C serves as a rejection filter rather than a final evaluation protocol. Its purpose is to remove structurally flawed synthesized items before they enter the benchmark pool. Each filtering step runs under a different controlled context , so the context itself determines what property is being tested. The filtering procedure consists of four views, where ⊕ denotes input composition. ① C1 uses query 
+
+⊕ golden_docs to test the upper-bound answerability of the item: if a verifier cannot recover the golden answer even when given the intended evidence, the query is ambiguous, the answer is wrong, or the evidence spans are insufficient, and the item should be rejected. ② C2 uses query alone, with no documents, to test the lower-bound non-memorability of the item: if strong models can recover the golden answer from the query alone, the item is considered susceptible to parametric knowledge leakage rather than requiring retrieval, and is therefore rejected. ③ C3 audits each irrelevant_doc 
+
+with query independently to ensure that documents labeled as irrelevant contain no supporting golden evidence. ④ C4 uses query ⊕ distractor_docs , to assess whether the distractors create a meaningful evidence-discrimination challenge. A useful distractor need not simply make models answer incorrectly; rather, it should force the model to rely on the correct evidence, inspect the query constraints, and perform retrieval-grounded reasoning instead of accepting superficially relevant documents. Implementation details are provided in Appendix A.3. Together, these stages ensure that the benchmark pool contains only items whose answerability, non-memorability, evidence labeling, and adversarial strength have passed explicit rejection criteria. 
+
+◇ Human Validation. Although the construction pipeline is largely automated, we conduct a lightweight, stratified post-construction audit as a final quality assurance measure. Importantly, human validation is primarily diagnostic rather than an exhaustive item-by-item acceptance or re-annotation stage: it provides an independent sanity check by estimating residual defect rates in the Stage-C-accepted candidate pool. The small number of items flagged as defective by the human majority are discarded from the final released pool without manual correction or re-annotation. We sample accepted items across domains, modes, and complexity levels to identify potential failure patterns and assess human confirmation of the primary quality labels. Detailed audit statistics are reported in Appendix B.  
+
+> Work in Progress 7
+
+Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis 
+
+## 5. Disentangled Evaluation Protocol 
+
+5.1. Overview and Settings 
+
+◇ Benchmark Overview. Building on the controllable synthesis pipeline, we construct DelegSearchBench ,a benchmark dedicated to the disentangled evaluation of Delegation Intelligence in deep search. The final pool comprises 429 items produced by the pipeline described above, spanning six capability modes. Detailed data distribution information is provided in the appendix. Building on this benchmark, we introduce a disentangled evaluation paradigm that independently measures the two core dimensions of Delegation Intelligence— Search Decision-Making and Information Synthesis & Verification —without confounding from external retrieval systems. By systematically varying the composition of the input document set and the availability of tool access, we isolate each capability dimension and obtain interpretable, attributable performance measurements. 
+
+Mode Model golden_first golden_mid golden_last 
+
+P@1 P@3 P@1 P@3 P@1 P@3 
+
+authority doubao-seed-2.0-pro 0.624 0.742 0.452 0.516 0.548 0.677 
+
+qwen3.7-plus 0.753 0.806 0.731 0.871 0.806 0.968 
+
+hunyuan-3-preview 0.731 0.871 0.602 0.742 0.624 0.742 
+
+glm-5.1 0.828 0.903 0.710 0.806 0.720 0.806 
+
+minimax-m2.7 0.871 0.903 0.688 0.806 0.699 0.839 
+
+deepseek-v4-pro 0.796 0.968 0.634 0.774 0.688 0.903 
+
+kimi-k2.6 0.871 0.935 0.731 0.806 0.763 0.839 
+
+gemini-3.1-pro-preview 0.925 0.968 0.935 1.000 0.892 0.935 
+
+gpt-5-mini 0.828 0.839 0.742 0.839 0.699 0.774 
+
+intra_doc. doubao-seed-2.0-pro 0.521 0.649 0.504 0.628 0.443 0.617 
+
+qwen3.7-plus 0.667 0.840 0.603 0.745 0.642 0.819 
+
+hunyuan-3-preview 0.585 0.713 0.539 0.649 0.543 0.702 
+
+glm-5.1 0.684 0.787 0.635 0.755 0.702 0.819 
+
+minimax-m2.7 0.684 0.840 0.578 0.723 0.592 0.745 
+
+deepseek-v4-pro 0.684 0.862 0.543 0.745 0.557 0.681 
+
+kimi-k2.6 0.745 0.883 0.635 0.809 0.649 0.798 
+
+gemini-3.1-pro-preview 0.713 0.809 0.635 0.755 0.621 0.691 
+
+gpt-5-mini 0.691 0.819 0.571 0.723 0.589 0.734 
+
+multi_hop doubao-seed-2.0-pro 0.603 0.709 0.511 0.646 0.527 0.658 
+
+qwen3.7-plus 0.709 0.848 0.624 0.734 0.654 0.759 
+
+hunyuan-3-preview 0.700 0.835 0.608 0.722 0.650 0.785 
+
+glm-5.1 0.751 0.899 0.700 0.785 0.726 0.835 
+
+minimax-m2.7 0.776 0.873 0.654 0.785 0.671 0.810 
+
+deepseek-v4-pro 0.789 0.924 0.641 0.785 0.671 0.861 
+
+kimi-k2.6 0.843 0.911 0.714 0.846 0.731 0.885 
+
+gemini-3.1-pro-preview 0.759 0.873 0.759 0.873 0.785 0.873 
+
+gpt-5-mini 0.797 0.899 0.620 0.734 0.688 0.797 
+
+plain doubao-seed-2.0-pro 0.429 0.548 0.349 0.476 0.405 0.595 
+
+qwen3.7-plus 0.563 0.667 0.476 0.643 0.532 0.690 
+
+hunyuan-3-preview 0.500 0.619 0.500 0.571 0.532 0.595 
+
+glm-5.1 0.627 0.667 0.603 0.690 0.603 0.714 
+
+minimax-m2.7 0.516 0.667 0.500 0.667 0.476 0.643 
+
+deepseek-v4-pro 0.675 0.833 0.508 0.714 0.484 0.643 
+
+kimi-k2.6 0.595 0.714 0.540 0.738 0.524 0.643 
+
+gemini-3.1-pro-preview 0.627 0.762 0.603 0.786 0.619 0.762 
+
+gpt-5-mini 0.595 0.667 0.468 0.595 0.476 0.571 
+
+publish_time doubao-seed-2.0-pro 0.597 0.698 0.481 0.605 0.473 0.523 
+
+qwen3.7-plus 0.643 0.756 0.570 0.709 0.632 0.779 
+
+hunyuan-3-preview 0.651 0.767 0.539 0.640 0.570 0.686 
+
+glm-5.1 0.705 0.791 0.663 0.767 0.709 0.802 
+
+minimax-m2.7 0.659 0.791 0.504 0.663 0.562 0.686 
+
+deepseek-v4-pro 0.643 0.791 0.504 0.686 0.523 0.651 
+
+kimi-k2.6 0.690 0.826 0.585 0.744 0.620 0.733 
+
+gemini-3.1-pro-preview 0.822 0.895 0.736 0.837 0.748 0.884 
+
+gpt-5-mini 0.616 0.721 0.430 0.535 0.504 0.593 
+
+sufficiency doubao-seed-2.0-pro 0.436 0.557 0.344 0.474 0.330 0.433 
+
+qwen3.7-plus 0.625 0.742 0.540 0.680 0.557 0.701 
+
+hunyuan-3-preview 0.495 0.639 0.402 0.546 0.409 0.515 
+
+glm-5.1 0.649 0.773 0.574 0.691 0.581 0.691 
+
+minimax-m2.7 0.622 0.742 0.512 0.649 0.491 0.649 
+
+deepseek-v4-pro 0.605 0.753 0.471 0.649 0.447 0.649 
+
+kimi-k2.6 0.701 0.876 0.619 0.794 0.567 0.711 
+
+gemini-3.1-pro-preview 0.742 0.866 0.708 0.814 0.718 0.784 
+
+gpt-5-mini 0.625 0.742 0.522 0.649 0.467 0.577 
+
+Table 1: Setting I results by shaping mode and model. For each evidence-position variant, we report Pass@1 and Pass@3. Best results per column are marked in bold .
+
+Evaluation Settings. Each item’s document pool (golden ∪ distractor ∪ irrelevant) can be presented 
+
+Work in Progress 8Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis 
+
+under two complementary settings that isolate the two complementary capability dimensions introduced in Section 3. Model outputs are judged by a held-out judge model deepseek-v4-flash that is never included in the target-model panel, avoiding direct self-evaluation. We synthesize data using recent GPT and Claude variants (gpt-5.2, claude-opus-4.6) and exclude evaluations of these models to avoid self-assessment bias. 
+
+① Setting I (Full-Context, search disabled) presents the model with the complete document pool (golden_docs ∪ distractor_docs ∪ irrelevant_docs ) directly in a single turn, with no search tool exposed. Since all required evidence is already provided and no search decision is involved, this setting isolates Information Synthesis & Verification by evaluating the model’s ability to synthesize cross-document evidence, assess source authority and timeliness, detect inconsistencies, and disregard distractor and irrelevant documents. We further construct three document-order variants with identical document sets but different presentation orders to evaluate robustness to evidence position. 
+
+② Setting II (Partial-Context, search enabled) provides only a deliberately incomplete subset of golden_docs ,omitting one or more evidence pieces required to fully answer the query, while retaining the complete 
+
+distractor_docs and irrelevant_docs sets and granting access to a search tool. The model must first determine whether the available evidence is sufficient to answer the question directly, choosing between directly answer and further search. This setup is explicitly designed to isolate Search Decision-Making . Because the withheld gold evidence is genuinely absent from the initial context, rather than embedded within the provided documents, the model cannot compensate for missing information through more exhaustive reading of the available context. Consequently, performance serves as a direct measure of the key capabilities: (1) recognizing genuine information insufficiency, (2) decomposing or reformulating queries to effectively target the missing evidence, and (3) exercising calibrated judgment in determining whether external retrieval is necessary. 
+
+5.2. Evaluation Results 
+
+◇ Setting I: We first evaluate models under Setting I, where the full document pool is provided and search is disabled. This setting isolates models’ ability to synthesize evidence and filter distractors without retrieval uncertainty . Table 1 reports the results for each shaping mode and model. We report both Pass@1 and Pass@3 under three evidence-position variants 1: golden_first , golden_mid , and golden_last .This dual set of metrics enables joint analysis of overall model performance and positional sensitivity toward supporting evidence. Several common patterns emerge from Table 1: ❶ The full-text reasoning performance of LLMs is highly mode-dependent , a consistent pattern across all evaluated models. Each mode paradigm introduces a distinct form of document interference, requiring specialized reasoning capabilities such as source attribution, temporal reasoning and multi-source information integration. Variations in interference complexity and capability requirements produce clear performance stratification, indicating that full-text information extraction and verification is not a homogeneous capability but a composite of multiple specialized reasoning competencies . Consequently, no existing model consistently achieves strong performance across all mode paradigms. ❷ Most models exhibit non-negligible sensitivity to the position of supporting evidence , a pattern consistent with the well-documented lost-in-the-middle       
+
+> 1Specifically, golden_first places the golden documents at the front of the input sequence, preceding all distractor and irrelevant documents; golden_mid inserts the golden document amid a mixture of noisy distractor texts; and golden_last
+> puts valid golden evidence after all distracting passages.
+> Work in Progress 9Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+[22 ] phenomenon. Across all task modes, on average and for most models, performance consistently peaks when golden documents are placed at the front of the input context ( golden_first ), and degrades substantially when evidence is embedded in the middle ( golden_mid ) or shifted to the end (golden_last ). In most settings, the sharpest performance drop occurs in the golden_mid condition, reflecting that models have the weakest ability to locate and utilize valid information buried among distractor passages. Critically, this positional bias persists even in our controlled full-context setting with retrieval uncertainty eliminated, confirming that it is an inherent limitation of the model’s context processing mechanism rather than a byproduct of retrieval errors . ❸ Pass@3 consistently exceeds Pass@1 across task modes and evidence positions, indicating substantial run-to-run variability in model performance. While repeated sampling increases the likelihood of obtaining a correct response, the observed gap suggests that many models do not reliably follow stable evidence-localization and reasoning trajectories across independent generations. For a genuinely competent agent, however, decision paths should be stable and convergent. A model prone to missing key evidence or deviating from correct reasoning under stochastic sampling perturbations cannot be said to have truly mastered the task . This instability is further amplified when golden evidence is not placed upfront, meaning multiple sampling only probabilistically alleviates the lost-in-the-middle effect, without resolving the inherent fragility of context utilization.                                                                                                                                       
+
+> Model Search Direct P@1 P@3
+> Hit@First Search Correct@ Search
+> multi_hop
+> doubao-seed-2.0-pro 0.308 0.692 0.154 0.231 0.500 0.500
+> qwen3.7-plus 0.462 0.538 0.282 0.462 0.389 0.611
+> hunyuan-3-preview 0.872 0.128 0.436 0.538 0.206 0.500
+> glm-5.1 0.795 0.205 0.564 0.769 0.452 0.710
+> minimax-m2.7 0.590 0.410 0.282 0.538 0.478 0.478
+> deepseek-v4-pro 0.154 0.846 0.103 0.308 0.333 0.667
+> kimi-k2.6 0.385 0.615 0.359 0.385 0.933 0.933
+> gemini-3.1-pro-preview 0.718 0.282 0.538 0.769 0.750 0.750
+> gpt-oss-120b 0.462 0.538 0.282 0.308 0.722 0.611
+> gpt-5-mini 0.615 0.385 0.308 0.462 0.708 0.500
+> claude-sonnet-4.6 0.941 0.059 0.824 0.846 0.938 0.875
+> sufficiency
+> doubao-seed-2.0-pro 0.050 0.950 0.000 0.000 0.333 0.000
+> qwen3.7-plus 0.433 0.567 0.150 0.250 0.500 0.346
+> hunyuan-3-preview 0.783 0.217 0.150 0.250 0.383 0.191
+> glm-5.1 0.467 0.533 0.250 0.500 0.464 0.536
+> minimax-m2.7 0.533 0.467 0.133 0.250 0.562 0.250
+> deepseek-v4-pro 0.317 0.683 0.200 0.350 0.684 0.368
+> kimi-k2.6 0.183 0.817 0.100 0.200 0.727 0.273
+> gemini-3.1-pro-preview 0.467 0.533 0.283 0.350 0.929 0.536
+> gpt-oss-120b 0.283 0.717 0.067 0.100 0.471 0.235
+> gpt-5-mini 0.583 0.417 0.233 0.450 0.657 0.343
+> claude-sonnet-4.6 0.895 0.105 0.474 0.500 0.647 0.529
+
+Table 2: Setting II results for tasks requiring missing-evidence recovery. Search /Direct : fraction of samples where the model selects search / direct answering (action distribution); P@1 /P@3 : overall Pass@1 and Pass@3 answer accuracy across all samples; Hit@FirstSearch : hit rate of at least one withheld golden document in the model’s first autonomous search, computed exclusively on samples with search actions; Correct@Search : final answer accuracy conditional on the model having performed a search action. The best result in each column is marked in bold .
+
+◇ Setting II: We then evaluate models in a partial-context retrieval environment. Since this setting is designed to test whether a model can notice missing evidence and proactively search for it, we restrict the evaluation to the two modes: multi_hop and sufficiency . For each item in this subset, the initial context contains only a deliberately selected subset of golden_docs , omitting at least one gold  
+
+> Work in Progress 10 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+document or evidence point required to fully answer the query. Meanwhile, all distractor_docs and 
+
+irrelevant_docs are still included, and the model is given access to the search tool. Importantly, this is not an open-world web search setting: the search backend retrieves the top-𝑘 documents from the current item’s document pool according to the model’s query. This choice keeps retrieval reproducible and prevents uncontrolled external-search variance, while still testing whether the model can decide to search and express the missing information need effectively. This construction makes the missing evidence genuinely absent from the initial context rather than merely hidden among long passages, so the model cannot solve the task by simply reading more carefully. At the same time, retaining the full distractor and irrelevant document sets preserves the noisy evidence environment of realistic search . Setting II therefore isolates search decision-making under controlled but non-oracle conditions: the model must recognize insufficiency, decide whether to call search, formulate a useful query, and integrate any retrieved evidence with the partial context already provided. Table 2 shows that this setting is substantially more challenging than full-context synthesis. ❶ Given the necessity of hidden evidence for task solving, models persist in resorting to direct response generation. 
+
+Premature answering continues to serve as a major failure mode, reflecting the models’ deficient ability to perceive inadequate evidence conditions . ❷ Search, however, is necessary but not suf-ficient . Models further show distinct delegation profiles. claude-sonnet-4.6 achieves a good final performance in both multi_hop (Pass@1 0.824, Pass@3 0.846) and sufficiency (Pass@1 0.474, Pass@3 0.500), combining a relatively high search rate with effective post-retrieval synthesis. By con-trast, doubao-seed-2.0-pro and deepseek-v4-pro frequently answer directly despite incomplete evidence, leading to high Direct rates and low final accuracy. hunyuan-3-preview exhibits the opposite behavior: it searches aggressively, but its lower Hit@Search and Correct@Search show that tool use alone is not enough. These results highlight that Delegation Intelligence requires calibrated search behavior: models must know when evidence is missing, how to retrieve the missing evidence, and how to integrate it with the noisy context already available. 
+
+◇ Summary. Taken together, the evaluation results demonstrate: (1) End-to-end agent benchmarks are insufficient for capability diagnosis because they conflate reasoning, retrieval, planning, and tool-use failures into a single success metric. We therefore advocate capability-decoupled evaluation under controlled settings. (2) Agent competence is inherently multi-dimensional. Different models exhibit distinct capability profiles, indicating that similar overall accuracy can mask fundamentally different reasoning bottlenecks . (3) Long-horizon agent evaluation should emphasize not only effectiveness but also stability . Large Pass@1–Pass@3 gaps suggest that current models often succeed through stochastic exploration rather than consistently reliable reasoning, making robustness across repeated executions an important evaluation objective. 
+
+## 6. Conclusion 
+
+We introduced Delegation Intelligence in deep search as a framework for evaluating deep-search agents beyond final-answer accuracy. We operationalized this framework through a controllable, document-grounded synthesis pipeline, and a protocol that varies evidence completeness, document order, and tool access. Our evaluation with DelegSearchBench reveals capability boundaries obscured by end-to-end scores: models exhibit mode-specific weaknesses, positional sensitivity despite complete evidence, unstable reasoning across attempts, and two opposing delegation failures—premature answering and ineffective searching. Reliable deep search therefore requires more than invoking a tool; it requires  
+
+> Work in Progress 11 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+calibrated coordination among recognizing uncertainty, acquiring appropriate evidence, and verifying and synthesizing that evidence faithfully. 
+
+## References 
+
+[1] Qingqing Cao, Mahyar Najibi, and Sachin Mehta. Ctrlsynth: Controllable image text synthesis for data-efficient multimodal learning. In Forty-second International Conference on Machine Learning ,2025. [2] Center for AI Safety, Scale AI, and HLE Contributors Consortium. A benchmark of expert-level academic questions to assess AI capabilities. Nature , 649:1139–1146, 2026. doi: 10.1038/s41586 -025-09962-4. URL https://arxiv.org/abs/2501.14249 .[3] Kaiyuan Chen, Yixin Ren, Yang Liu, Xiaobo Hu, Haotong Tian, Tianbao Xie, Fangfu Liu, Haoye Zhang, Hongzhang Liu, Yuan Gong, Chen Sun, Han Hou, Hui Yang, James Pan, Jianan Lou, Jiayi Mao, Jizheng Liu, Jinpeng Li, Kangyi Liu, Kenkun Liu, Rui Wang, Run Li, Tong Niu, Wenlong Zhang, Wenqi Yan, Xuanzheng Wang, Yuchen Zhang, Yi-Hsin Hung, Yuan Jiang, Zexuan Liu, Zihan Yin, Zijian Ma, and Zhiwen Mo. xbench: Tracking agents productivity scaling with profession-aligned real-world evaluations, 2025. URL https://arxiv.org/abs/2506.13651 .[4] Shan Chen, Pedro José Ferreira Moreira, Yuxin Xiao, Samuel Schmidgall, Jeremy L. Warner, Hugo Aerts, Thomas Hartvigsen, Jack Gallifant, and Danielle Bitterman. Medbrowsecomp: Benchmarking medical deep research and computer use. In NeurIPS 2025 Workshop on Evaluating the Evolving LLM Lifecycle: Benchmarks, Emergent Abilities, and Scaling , 2025. [5] Zijian Chen, Xueguang Ma, Shengyao Zhuang, Ping Nie, Kai Zou, Sahel Sharifymoghaddam, Andrew Liu, Joshua Green, Kshama Patel, Ruoxi Meng, Mingyi Su, Yanxi Li, Haoran Hong, Xinyu Shi, Xuye Liu, Hosna Oyarhoseini, Nandan Thakur, Crystina Zhang, Luyu Gao, Wenhu Chen, and Jimmy Lin. BrowseComp-plus: A fair and disentangled evaluation benchmark for deep search agents. In 
+
+Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) , pages 22349–22370, 2026. [6] Xiang Cheng, Yulan Hu, Xiangwen Zhang, Lu Xu, Lide Tan, Zheng Pan, Xin Li, and Yong Liu. Beyond itinerary planning—a real-world benchmark for multi-turn and tool-using travel tasks. In 
+
+Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) , pages 29200–29251, 2026. [7] Gangda Deng, Zhaoling Chen, Zhongming Yu, Haoyang Fan, Yuhong Liu, Yuxin Yang, Dhruv Parikh, Rajgopal Kannan, Le Cong, Mengdi Wang, Qian Zhang, Viktor Prasanna, Xiangru Tang, and Xingyao Wang. Evoclaw: Evaluating AI agents on continuous software evolution. In Forty-third International Conference on Machine Learning , 2026. [8] Shihan Dou, Yujiong Shen, Chenhao Huang, Junjie Ye, Jiayi Chen, Junzhe Wang, Qianyu He, Shichun Liu, Changze Lv, Jiahang Lin, Jiazheng Zhang, Ming Zhang, Shaofan Liu, Tao Ji, Zhangyue Yin, Cheng Zhang, Huaibing Xie, Jianglu Hu, Jingcheng Deng, Lincheng Li, Minda Hu, Shaolei Wang, Syrus Zhao, Weichao Wang, Yan Lei, Yang Liu, Yanling Xiao, Yiting Liu, Zenan Xu, Zhen Guo, Ziliang Zhao, Pluto Zhou, Tao Gui, Qi Zhang, Xuanjing Huang, Yu-Gang Jiang, Di Wang,  
+
+> Work in Progress 12 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+and Shunyu Yao. Cl-bench life: Can language models learn from real-life context?, 2026. URL 
+
+https://arxiv.org/abs/2604.27043 .[9] Shihan Dou, Ming Zhang, Zhangyue Yin, Chenhao Huang, Yujiong Shen, Junzhe Wang, Jiayi Chen, Yuchen Ni, Junjie Ye, Cheng Zhang, Huaibing Xie, Jianglu Hu, Shaolei Wang, Weichao Wang, Yanling Xiao, Yiting Liu, Zenan Xu, Zhen Guo, Pluto Zhou, Tao Gui, Zuxuan Wu, Xipeng Qiu, Qi Zhang, Xuanjing Huang, Yu-Gang Jiang, Di Wang, and Shunyu Yao. Cl-bench: A benchmark for context learning, 2026. URL https://arxiv.org/abs/2602.03587 .[10] GLM-5-Team, :, Aohan Zeng, Xin Lv, Zhenyu Hou, Zhengxiao Du, Qinkai Zheng, Bin Chen, Da Yin, Chendi Ge, Chenghua Huang, Chengxing Xie, Chenzheng Zhu, Congfeng Yin, Cunxiang Wang, Gengzheng Pan, Hao Zeng, Haoke Zhang, Haoran Wang, Huilong Chen, Jiajie Zhang, Jian Jiao, Jiaqi Guo, Jingsen Wang, Jingzhao Du, Jinzhu Wu, Kedong Wang, Lei Li, Lin Fan, Lucen Zhong, Mingdao Liu, Mingming Zhao, Pengfan Du, Qian Dong, Rui Lu, Shuang-Li, Shulin Cao, Song Liu, Ting Jiang, Xiaodong Chen, Xiaohan Zhang, Xuancheng Huang, Xuezhen Dong, Yabo Xu, Yao Wei, Yifan An, Yilin Niu, Yitong Zhu, Yuanhao Wen, Yukuo Cen, Yushi Bai, Zhongpei Qiao, Zihan Wang, Zikang Wang, Zilin Zhu, Ziqiang Liu, Zixuan Li, Bojie Wang, Bosi Wen, Can Huang, Changpeng Cai, Chao Yu, Chen Li, Chengwei Hu, Chenhui Zhang, Dan Zhang, Daoyan Lin, Dayong Yang, Di Wang, Ding Ai, Erle Zhu, Fangzhou Yi, Feiyu Chen, Guohong Wen, Hailong Sun, Haisha Zhao, Haiyi Hu, Hanchen Zhang, Hanrui Liu, Hanyu Zhang, Hao Peng, Hao Tai, Haobo Zhang, He Liu, Hongwei Wang, Hongxi Yan, Hongyu Ge, Huan Liu, Huanpeng Chu, Jia’ni Zhao, Jiachen Wang, Jiajing Zhao, Jiamin Ren, Jiapeng Wang, Jiaxin Zhang, Jiayi Gui, Jiayue Zhao, Jijie Li, Jing An, Jing Li, Jingwei Yuan, Jinhua Du, Jinxin Liu, Junkai Zhi, Junwen Duan, Kaiyue Zhou, Kangjian Wei, Ke Wang, Keyun Luo, Laiqiang Zhang, Leigang Sha, Liang Xu, Lindong Wu, Lintao Ding, Lu Chen, Minghao Li, Nianyi Lin, Pan Ta, Qiang Zou, Rongjun Song, Ruiqi Yang, Shangqing Tu, Shangtong Yang, Shaoxiang Wu, Shengyan Zhang, Shijie Li, Shuang Li, Shuyi Fan, Wei Qin, Wei Tian, Weining Zhang, Wenbo Yu, Wenjie Liang, Xiang Kuang, Xiangmeng Cheng, Xiangyang Li, Xiaoquan Yan, Xiaowei Hu, Xiaoying Ling, Xing Fan, Xingye Xia, Xinyuan Zhang, Xinze Zhang, Xirui Pan, Xu Zou, Xunkai Zhang, Yadi Liu, Yandong Wu, Yanfu Li, Yidong Wang, Yifan Zhu, Yijun Tan, Yilin Zhou, Yiming Pan, Ying Zhang, Yinpei Su, Yipeng Geng, Yong Yan, Yonglin Tan, Yuean Bi, Yuhan Shen, Yuhao Yang, Yujiang Li, Yunan Liu, Yunqing Wang, Yuntao Li, Yurong Wu, Yutao Zhang, Yuxi Duan, Yuxuan Zhang, Zezhen Liu, Zhengtao Jiang, Zhenhe Yan, Zheyu Zhang, Zhixiang Wei, Zhuo Chen, Zhuoer Feng, Zijun Yao, Ziwei Chai, Ziyuan Wang, Zuzhou Zhang, Bin Xu, Minlie Huang, Hongning Wang, Juanzi Li, Yuxiao Dong, and Jie Tang. Glm-5: from vibe coding to agentic engineering, 2026. URL https://arxiv.org/abs/2602.15763 .[11] Jiawei Gu, Xuhui Jiang, Zhichao Shi, Hexiang Tan, Xuehao Zhai, Chengjin Xu, Wei Li, Yinghan Shen, Shengjie Ma, Honghao Liu, Saizhuo Wang, Kun Zhang, Yuanzhuo Wang, Wen Gao, Lionel Ni, and Jian Guo. A survey on llm-as-a-judge, 2025. URL https://arxiv.org/abs/2411.15594 .[12] Xanh Ho, Anh-Khoa Duong Nguyen, Saku Sugawara, and Akiko Aizawa. Constructing a multi-hop QA dataset for comprehensive evaluation of reasoning steps. In Proceedings of the 28th International Conference on Computational Linguistics , pages 6609–6625, 2020. [13] Chen Hu, Haikuo Du, Heng Wang, Lin Lin, Mingrui Chen, Peng Liu, Ruihang Miao, Tianchi Yue, Wang You, Wei Ji, Wei Yuan, Wenjin Deng, Xiaojian Yuan, Xiaoyun Zhang, Xiangyu Liu, Xikai Liu, Yanming Xu, Yicheng Cao, Yifei Zhang, Yongyao Wang, Yubo Shu, Yurong Zhang, Yuxiang Zhang, Zheng Gong, Zhichao Chang, Binyan Li, Dan Ma, Furong Jia, Hongyuan Wang, Jiayu Liu, Jing  
+
+> Work in Progress 13 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+Bai, Junlan Liu, Manjiao Liu, Na Wang, Qiuping Wu, Qinxin Du, Shiwei Li, Wen Sun, Yifeng Gong, Yonglin Chen, Yuling Zhao, Yuxuan Lin, Ziqi Ren, Zixuan Wang, Aihu Zhang, Brian Li, Buyun Ma, Kang An, Li Xie, Mingliang Li, Pan Li, Shidong Yang, Xi Chen, Xiaojia Liu, Yuchu Luo, Yuan Song, YuanHao Ding, Yuanwei Liang, Zexi Li, Zhaoning Zhang, Zixin Zhang, Binxing Jiao, Daxin Jiang, Jiansheng Chen, Jing Li, Xiangyu Zhang, and Yibo Zhu. Step-deepresearch technical report, 2025. URL https://arxiv.org/abs/2512.20491 .[14] Yue Huang, Hang Hua, Yujun Zhou, Pengcheng Jing, Manish Nagireddy, Inkit Padhi, Greta Dolcetti, Zhangchen Xu, Subhajit Chaudhury, Ambrish Rawat, Liubov Nedoshivina, Pin-Yu Chen, Prasanna Sattigeri, and Xiangliang Zhang. Building a foundational guardrail for general agentic systems via synthetic data. In The Fourteenth International Conference on Learning Representations , 2026. [15] Naman Jain, King Han, Alex Gu, Wen-Ding Li, Fanjia Yan, Tianjun Zhang, Sida Wang, Armando Solar-Lezama, Koushik Sen, and Ion Stoica. Livecodebench: Holistic and contamination free evaluation of large language models for code. In The Thirteenth International Conference on Learning Representations , 2025. URL https://openreview.net/forum?id=chfJJYC3iL .[16] Song Jin, Juntian Zhang, Xun Zhang, Zeying Tian, Fei Jiang, Guojun Yin, Wei Lin, Yong Liu, and Rui Yan. DiningBench: A hierarchical multi-view benchmark for perception and reasoning in the dietary domain. In Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) , pages 35289–35310, 2026. [17] Nils Köbis, Zoe Rahwan, Raluca Rilla, Bramantyo Ibrahim Supriyatno, Clara Bersch, Tamer Ajaj, Jean-François Bonnefon, and Iyad Rahwan. Delegation to artificial intelligence can increase dishonest behaviour. Nature , 646(8083):126–134, 2025. [18] Satyapriya Krishna, Kalpesh Krishna, Anhad Mohananey, Steven Schwarcz, Adam Stambler, Shyam Upadhyay, and Manaal Faruqui. Fact, fetch, and reason: A unified evaluation of retrieval-augmented generation. In Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers) ,pages 4745–4759, 2025. [19] Chenxin Li, Zhengyang Tang, Mingxin Huang, Yunlong Lin, Shijue Huang, Shengyuan Liu, Bowen Ye, Rang Li, Lei Li, Benyou Wang, and Yixuan Yuan. Claw-eval-live: A live agent benchmark for evolving real-world workflows, 2026. URL https://arxiv.org/abs/2604.28139 .[20] Dawei Li, Bohan Jiang, Liangjie Huang, Alimohammad Beigi, Chengshuai Zhao, Zhen Tan, Amrita Bhattacharjee, Yuxuan Jiang, Canyu Chen, Tianhao Wu, Kai Shu, Lu Cheng, and Huan Liu. From generation to judgment: Opportunities and challenges of LLM-as-a-judge. In Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing , pages 2757–2791, 2025. [21] Minghao Li, Ying Zeng, Zhihao Cheng, Cong Ma, and Kai Jia. Reportbench: Evaluating deep research agents via academic survey tasks, 2025. URL https://arxiv.org/abs/2508.15804 .[22] Nelson F. Liu, Kevin Lin, John Hewitt, Ashwin Paranjape, Michele Bevilacqua, Fabio Petroni, and Percy Liang. Lost in the middle: How language models use long contexts. Transactions of the Association for Computational Linguistics , pages 157–173, 2024.  
+
+> Work in Progress 14 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+[23] Hongliang Lu, Yuhang Wen, Pengyu Cheng, Ruijin Ding, Jiaqi Guo, Haotian Xu, Chutian Wang, Haonan Chen, xiaoxi jiang, and guanjunjiang. Search self-play: Pushing the frontier of agent capa-bility without supervision. In The Fourteenth International Conference on Learning Representations ,2026. [24] Monte MacDiarmid, Benjamin Wright, Jonathan Uesato, Joe Benton, Jon Kutasov, Sara Price, Naia Bouscal, Sam Bowman, Trenton Bricken, Alex Cloud, Carson Denison, Johannes Gasteiger, Ryan Greenblatt, Jan Leike, Jack Lindsey, Vlad Mikulik, Ethan Perez, Alex Rodrigues, Drake Thomas, Albert Webson, Daniel Ziegler, and Evan Hubinger. Natural emergent misalignment from reward hacking in production rl, 2025. URL https://arxiv.org/abs/2511.18397 .[25] Grégoire Mialon, Clémentine Fourrier, Thomas Wolf, Yann LeCun, and Thomas Scialom. GAIA: a benchmark for general AI assistants. In The Twelfth International Conference on Learning Represen-tations , 2024. [26] Pu Ning, Quan Chen, Kun Tao, Xinyu Tang, Tianshu Wang, Qianggang Cao, Xinyu Kong, Zujie Wen, Zhiqiang Zhang, and Jun Zhou. Searchswarm: Towards delegation intelligence in agentic llms for long-horizon deep research, 2026. URL https://arxiv.org/abs/2606.09730 .[27] Ofir Press, Muru Zhang, Sewon Min, Ludwig Schmidt, Noah Smith, and Mike Lewis. Measuring and narrowing the compositionality gap in language models. In Findings of the Association for Computational Linguistics: EMNLP 2023 , pages 5687–5711, 2023. [28] David Rein, Betty Li Hou, Asa Cooper Stickland, Jackson Petty, Richard Yuanzhe Pang, Julien Dirani, Julian Michael, and Samuel R. Bowman. GPQA: A graduate-level google-proof q&a benchmark. In 
+
+First Conference on Language Modeling , 2024. [29] Z. Z. Ren, Zhihong Shao, Junxiao Song, Huajian Xin, Haocheng Wang, Wanjia Zhao, Liyue Zhang, Zhe Fu, Qihao Zhu, Dejian Yang, Z. F. Wu, Zhibin Gou, Shirong Ma, Hongxuan Tang, Yuxuan Liu, Wenjun Gao, Daya Guo, and Chong Ruan. Deepseek-prover-v2: Advancing formal mathematical reasoning via reinforcement learning for subgoal decomposition, 2025. URL https://arxiv.or g/abs/2504.21801 .[30] Jinzhu Song and Hengyu Lin. Exploring the effect of artificial intelligence intellect on consumer decision delegation: The role of trust, task objectivity, and anthropomorphism. Journal of Consumer Behaviour , 23(2):727–747, 2024. [31] Beth Barnes Sydney Von Arx, Lawrence Chan. Recent frontier models are reward hacking. https: //metr.org/blog/2025-06-05-recent-reward-hacking/ , 06 2025. [32] Kimi Team, Yifan Bai, Yiping Bao, Y. Charles, Cheng Chen, Guanduo Chen, Haiting Chen, Huarong Chen, Jiahao Chen, Ningxin Chen, Ruijue Chen, Yanru Chen, Yuankun Chen, Yutian Chen, Zhuofu Chen, Jialei Cui, Hao Ding, Mengnan Dong, Angang Du, Chenzhuang Du, Dikang Du, Yulun Du, Yu Fan, Yichen Feng, Kelin Fu, Bofei Gao, Chenxiao Gao, Hongcheng Gao, Peizhong Gao, Tong Gao, Yuyao Ge, Shangyi Geng, Qizheng Gu, Xinran Gu, Longyu Guan, Haiqing Guo, Jianhang Guo, Xiaoru Hao, Tianhong He, Weiran He, Wenyang He, Yunjia He, Chao Hong, Hao Hu, Yangyang Hu, Zhenxing Hu, Weixiao Huang, Zhiqi Huang, Zihao Huang, Tao Jiang, Zhejun Jiang, Xinyi Jin, Yongsheng Kang, Guokun Lai, Cheng Li, Fang Li, Haoyang Li, Ming Li, Wentao Li, Yang Li, Yanhao Li, Yiwei Li, Zhaowei Li, Zheming Li, Hongzhan Lin, Xiaohan Lin, Zongyu Lin, Chengyin  
+
+> Work in Progress 15 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+Liu, Chenyu Liu, Hongzhang Liu, Jingyuan Liu, Junqi Liu, Liang Liu, Shaowei Liu, T. Y. Liu, Tianwei Liu, Weizhou Liu, Yangyang Liu, Yibo Liu, Yiping Liu, Yue Liu, Zhengying Liu, Enzhe Lu, Haoyu Lu, Lijun Lu, Yashuo Luo, Shengling Ma, Xinyu Ma, Yingwei Ma, Shaoguang Mao, Jie Mei, Xin Men, Yibo Miao, Siyuan Pan, Yebo Peng, Ruoyu Qin, Zeyu Qin, Bowen Qu, Zeyu Shang, Lidong Shi, Shengyuan Shi, Feifan Song, Jianlin Su, Zhengyuan Su, Lin Sui, Xinjie Sun, Flood Sung, Yunpeng Tai, Heyi Tang, Jiawen Tao, Qifeng Teng, Chaoran Tian, Chensi Wang, Dinglu Wang, Feng Wang, Hailong Wang, Haiming Wang, Jianzhou Wang, Jiaxing Wang, Jinhong Wang, Shengjie Wang, Shuyi Wang, Si Wang, Xinyuan Wang, Yao Wang, Yejie Wang, Yiqin Wang, Yuxin Wang, Yuzhi Wang, Zhaoji Wang, Zhengtao Wang, Zhengtao Wang, Zhexu Wang, Chu Wei, Qianqian Wei, Haoning Wu, Wenhao Wu, Xingzhe Wu, Yuxin Wu, Chenjun Xiao, Jin Xie, Xiaotong Xie, Weimin Xiong, Boyu Xu, Jinjing Xu, L. H. Xu, Lin Xu, Suting Xu, Weixin Xu, Xinran Xu, Yangchuan Xu, Ziyao Xu, Jing Xu, Jing Xu, Junjie Yan, Yuzi Yan, Hao Yang, Xiaofei Yang, Yi Yang, Ying Yang, Zhen Yang, Zhilin Yang, Zonghan Yang, Haotian Yao, Xingcheng Yao, Wenjie Ye, Zhuorui Ye, Bohong Yin, Longhui Yu, Enming Yuan, Hongbang Yuan, Mengjie Yuan, Siyu Yuan, Haobing Zhan, Dehao Zhang, Hao Zhang, Wanlu Zhang, Xiaobin Zhang, Yadong Zhang, Yangkun Zhang, Yichi Zhang, Yizhi Zhang, Yongting Zhang, Yu Zhang, Yutao Zhang, Yutong Zhang, Zheng Zhang, Haotian Zhao, Yikai Zhao, Zijia Zhao, Huabin Zheng, Shaojie Zheng, Longguang Zhong, Jianren Zhou, Xinyu Zhou, Zaida Zhou, Jinguo Zhu, Zhen Zhu, Weiyu Zhuang, and Xinxing Zu. Kimi k2: Open agentic intelligence, 2026. URL https://arxiv.org/abs/2507.20534 .[33] Nenad Tomašev, Matija Franklin, and Simon Osindero. Intelligent ai delegation, 2026. URL 
+
+https://arxiv.org/abs/2602.11865 .[34] Harsh Trivedi, Niranjan Balasubramanian, Tushar Khot, and Ashish Sabharwal. Musique: Multihop questions via single-hop question composition. Transactions of the Association for Computational Linguistics , pages 539–554, 2022. [35] Jason Wei, Zhiqing Sun, Spencer Papay, Scott McKinney, Jeffrey Han, Isa Fulford, Hyung Won Chung, Alex Tachard Passos, William Fedus, and Amelia Glaese. Browsecomp: A simple yet challenging benchmark for browsing agents, 2025. URL https://arxiv.org/abs/2504.12516 .[36] Jialong Wu, Wenbiao Yin, Yong Jiang, Zhenglin Wang, Zekun Xi, Runnan Fang, Linhai Zhang, Yulan He, Deyu Zhou, Pengjun Xie, and Fei Huang. Webwalker: Benchmarking LLMs in web traversal. In 
+
+Workshop on Reasoning and Planning for Large Language Models , 2025. [37] Xiaorui Wu, Xiaofeng Mao, Fei Li, Xin Zhang, Xuanhong Li, Chong Teng, Donghong Ji, and Zhuang Li. TRIDENT: Enhancing large language model safety with tri-dimensional diversified red-teaming data synthesis. In Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) , pages 15077–15099, 2025. [38] Zhilin Yang, Peng Qi, Saizheng Zhang, Yoshua Bengio, William Cohen, Ruslan Salakhutdinov, and Christopher D. Manning. HotpotQA: A dataset for diverse, explainable multi-hop question answering. In Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing , pages 2369–2380, 2018. [39] Shunyu Yao, Noah Shinn, Pedram Razavi, and Karthik R Narasimhan. {$\tau$}-bench: A benchmark for \underline{T}ool-\underline{A}gent-\underline{U}ser interaction in real-world domains. In 
+
+The Thirteenth International Conference on Learning Representations , 2025.  
+
+> Work in Progress 16 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+[40] Bowen Ye, Rang Li, Qibin Yang, Yuanxin Liu, Linli Yao, Hanglong Lv, Zhihui Xie, Chenxin An, Lei Li, Lingpeng Kong, Qi Liu, Zhifang Sui, and Tong Yang. Claw-eval: Towards trustworthy evaluation of autonomous agents, 2026. URL https://arxiv.org/abs/2604.06132 .[41] Peilin Zhou, Bruce Leon, Xiang Ying, Can Zhang, Yifan Shao, Qichen Ye, Dading Chong, Zhiling Jin, Chenxuan Xie, Meng Cao, Yuxin Gu, Sixin Hong, Jing Ren, Jian Chen, Chao Liu, and Yining Hua. Browsecomp-zh: Benchmarking web browsing ability of large language models in chinese, 2025. URL https://arxiv.org/abs/2504.19314 .[42] Yutao Zhu, Xingshuo Zhang, Maosen Zhang, Jiajie Jin, Liancheng Zhang, Xiaoshuai Song, Kangzhi Zhao, Wencong Zeng, Ruiming Tang, Han Li, Ji-Rong Wen, and Zhicheng Dou. Gisa: A benchmark for general information-seeking assistant, 2026. URL https://arxiv.org/abs/2602.08543 . 
+
+> Work in Progress 17 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+## A. Pipeline Details 
+
+Seed query domain. As shown in Table 3, seed queries are drawn from several real-world domains inherited from the seed pool’s intent taxonomy, led by finance (18.2%), legal (14.0%), shopping (12.4%), entertainment (10.8%), academic knowledge (10.3%), and healthcare (9.9%), with a long tail of news, politics, technology, travel, and lifestyle domains — reflecting a realistic, non-uniform distribution of real user search intents rather than an artificially balanced sample. 
+
+Domain #Items %Finance & Economics 79 18.2 Legal 61 14.0 Shopping / Consumer Goods 54 12.4 Entertainment 47 10.8 Academic Knowledge 45 10.3 Healthcare 43 9.9 News & Current Events 25 5.7 Politics & Military 23 5.3 AI & Computer Science 20 4.6 Other (long-tail domains) 32 8.7 
+
+Table 3: Domain distribution of the current data pool. Long-tail minor domains are grouped into the “Other” category. 
+
+A.1. Stage A Prompts and Examples Seed-query expansion prompt. When additional seeds are needed, we expand the curated seed pool in a domain-aware manner. The generator is given several real seed queries from the same broad domain and asked to produce new queries that preserve the same high-level properties: 
+
+Input : domain label; several real seed-query examples from that domain. 
+
+Instruction : generate new self-contained factual search queries. The queries should be natural, domain-consistent, non-subjective, independent of previous context, free of relative-time expressions, and have a unique real-world answer. Cover different intent types when possible, such as factual lookup, causal analysis, comparison, and temporal information seeking. 
+
+Output : a list of candidate seed queries with lightweight domain and intent annotations. 
+
+Document-to-subquery prompt. After retrieving documents for a seed query, Stage A first analyzes each high-authority candidate document independently. The goal is not yet to produce the final benchmark query, but to expose what information needs the document can support: 
+
+Input : one high-authority candidate document, including title, source, publication time, and content snippet. 
+
+Instruction : write several search subqueries that a real user might ask if they needed the information contained in this document. Each subquery should correspond to a concrete factual point, comparison target, temporal condition, or reliability cue in the document. 
+
+Output : a short list of document-grounded subqueries.  
+
+> Work in Progress 18 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+Final reverse-engineering prompt. The final Stage A generator receives the original seed query, the retrieved candidate documents, the document-grounded subqueries, and lightweight complexity constraints. It then synthesizes the benchmark item by working backward from evidence to task:  
+
+> Input : seed query; high-authority candidate documents; topically related non-evidence documents; generated subqueries; target numbers of golden documents, reasoning hops, and independent infor-mation points.
+> Instruction : select the evidence documents needed to answer a non-trivial user query; synthesize a natural query whose answer is unique in the real world; avoid copying answer tokens, exact result values, or source-identifying clues into the query; provide a concise answer; cite localized evidence spans; and write reasoning steps that explain how the answer follows from the selected documents.
+> Output :
+
+query , golden_answer , golden_docs , irrelevant_docs , evidence_spans , and reasoning_steps .
+
+Representative example. For illustration, suppose a seed query concerns the financial performance of a listed company. The search backend retrieves an annual report, an official earnings announcement, and several related news articles. Stage A first generates subqueries from the high-authority documents, such as asking for the relevant reporting period, the reported revenue, or the comparable baseline. The final generator may then synthesize a user query that asks for a comparison over a specified period, with the annual report and earnings announcement selected as golden_docs . News articles that are related but not necessary for the answer are retained as irrelevant_docs . The output records the final answer, the exact evidence spans supporting it, and reasoning steps that show how the comparison is derived. 
+
+Synthesis model configuration. Unless otherwise specified, the current Stage-A construction uses 
+
+gpt-5.2 as the synthesis model. The same model is used for the three generation steps in Stage A: seed-query expansion, document-to-subquery generation, and final reverse-engineering synthesis. We keep this generator separate from the models evaluated in the downstream protocol: its role is to produce structured candidate items from retrieved documents, not to answer the final benchmark questions. The search backend supplies the retrieved document pool, while the generator only operates on the returned document metadata and snippets. This design makes the synthesized query , golden_answer ,
+
+golden_docs , irrelevant_docs , evidence_spans , and reasoning_steps auditable from the input documents. Stage B then uses a generator from a different model family to synthesize adversar-ial distractors, reducing single-model self-consistency bias between gold construction and distractor construction. 
+
+A.2. Stage B Prompts and Examples Distractor-generation objective. Stage B turns the evidence record produced by Stage A into an adversarial document set. Unlike irrelevant_docs , which are naturally retrieved but may only be weakly distracting, distractor_docs are synthesized to be both topically close to the query and invalid under careful evidence verification. The key requirement is that each distractor must differ from the corresponding golden evidence along a dimension that the query itself already constrains . This prevents arbitrary contradiction and makes the resulting challenge auditable: a model should be able to reject the distractor by checking the query constraints, source metadata, and localized evidence. 
+
+Model configuration. To reduce single-model self-consistency bias, Stage B uses a generator ( Claude-Opus-4.6 )from a model family different from the Stage-A synthesis model. The Stage-B generator is not used as an evaluated model in the downstream experiments. Its role is limited to producing candidate adversar-ial documents, each of which is subsequently checked by structured validity constraints and rejection  
+
+> Work in Progress 19 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+filtering. 
+
+Distractor-generation prompt. The Stage-B generator receives the Stage-A record and constructs adversarial but structurally valid distractors:  
+
+> Input :
+
+query ; golden_answer ; evidence_spans ; golden_docs with title, source, url, publica-tion time, and content snippets; Stage-A shaping mode; target evidence information points.  
+
+> Instruction : synthesize distractor documents that are topically plausible but do not support the golden answer. Each distractor should be near-duplicate in topic and entities, alter at least one key fact or reliability cue, and expose a clear discriminating signal through metadata or query-constrained content. Do not write self-referential phrases such as “synthetic document” or “test sample”.
+> Output :
+
+distractor_docs , where each document includes distractor_type , source_doc_key ,
+
+target_info_point , target_evidence_text , title , content , site_name , synthetic_url ,
+
+pseudo_publish_time , discriminating_constraint , conflict_hint ... 
+
+Distractor types. We instantiate several recurring distractor types, each corresponding to a com-mon failure mode in search-based reasoning. slot_mismatch keeps the document nearly identi-cal to the golden source but changes a key factual slot, such as a date, location, version, event, or numerical value. source_downgrade replaces an official or high-authority source with a lower-credibility source, such as a forum post, personal blog, or self-media article, while keeping the topic and wording superficially close. recency_trap gives the distractor a later publication time, mak-ing it appear newer while preserving an incorrect or second-hand claim. Other mode-specific pertur-bations include timeliness , authority_challenge , logical_one_sided , entity_confusion ,
+
+numeric_distortion , causal_narrative . These types are not mutually exclusive in spirit, but each generated document records a primary type for analysis. 
+
+Validity constraints. A distractor is retained only if it satisfies five conditions. First, it must be anchored to an actual evidence information point used by the query and golden_answer . Second, its difference from the golden evidence must lie on a dimension already constrained by the query, such as time, scope, entity, version, numerical condition, source authority, or publication time. Third, it must remain topically plausible and retrievable under similar search terms, rather than becoming an obviously irrelevant document. Fourth, it must contain an explicit audit trail: conflict_hint states the golden-side fact and the distractor-side alteration, while discriminating_constraint explains the authority, time, or source-type difference. Fifth, it must avoid leaking its synthetic nature or directly revealing which document is correct. Distractors that introduce unrelated facts, exploit dimensions not specified by the query, or require private annotation knowledge to reject are discarded. 
+
+Representative examples. A valid temporal distractor for the query “What is X company’s 2023 Q3 revenue?” can be a 2022 Q3 report from the same company: it is topically close, but violates the year-quarter constraint explicitly stated in the query. A valid authority distractor for “According to FIFA’s official statistics, how many teams qualified for the 2026 FIFA World Cup?” can be a third-party sports blog with a conflicting number, because the query pins the source to official FIFA statistics. A valid recency trap can be a later repost that claims to update an official announcement but changes a key value; careful models should prefer the original official source when the later post lacks comparable authority. In contrast, a blog post about ticket sales for the same tournament would be an invalid distractor: it is related to the topic but does not perturb the evidence dimension needed to answer the query.  
+
+> Work in Progress 20 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+A.3. Stage C Prompts and Examples Overall objective. Stage C is designed as a quality-control filter rather than an evaluation setting. Its goal is to reject synthesized items whose structure would make later evaluation ambiguous: items that cannot be answered from the intended evidence, can be answered without retrieval, contain mislabeled irrelevant documents, or include distractors that do not create a meaningful evidence-discrimination challenge. Each filter is run under a different controlled context so that the observed verifier behavior can be attributed to one specific property of the item. 
+
+Model configuration. Stage C uses multiple verifier models rather than relying on a single model judgment. The verifier pool includes models from different families and capability profiles, so that rejection decisions are less sensitive to one model’s idiosyncratic knowledge, instruction-following style, or evidence-reading bias. An item is retained only when the verifier outcomes are consistent with the intended property of each controlled view, which improves both the reasonableness and diversity of the final benchmark pool. 
+
+C1: Golden-evidence answerability. The first view tests whether the item is answerable under the most favorable valid context. 
+
+Input : query ⊕ golden_docs , verified with the candidate golden_answer and localized evidence_spans .
+
+Purpose : verify the upper-bound answerability of the item. If a strong verifier cannot recover the golden answer when given exactly the intended supporting evidence, then the synthesized query may be ambiguous, the answer may be incorrect, or the evidence spans may be incomplete. 
+
+Check : the verifier answers the query using only golden_docs , cites the evidence spans that support the answer, and judges whether the produced answer is semantically equivalent to golden_answer .
+
+Reject if : the verifier answer contradicts the golden answer, requires information outside golden_docs ,cannot cite localized support, or reports that multiple incompatible answers are possible. 
+
+C2: Query-only non-memorability. The second view tests whether the item genuinely requires external evidence rather than being solvable from parametric knowledge alone. 
+
+Input : query only, with no documents. The verifier is explicitly instructed not to browse or assume access to hidden evidence. 
+
+Purpose : estimate lower-bound non-memorability. If strong models can answer the query correctly without any supporting documents, the item is likely contaminated by public knowledge, overly famous facts, or answer-revealing query wording. 
+
+Check : the verifier attempts to answer from the query alone and reports its confidence. The result is compared against golden_answer .
+
+Reject if : the query-only answer is semantically equivalent to the golden answer with high confidence, or if the query contains shortcut cues such as exact answer tokens, unique source identifiers, or overly specific phrasing copied from the evidence. 
+
+C3: Irrelevant-document label audit. The third view checks whether documents labeled as retrieval noise are truly non-supporting. 
+
+Input : each candidate irrelevant_doc is audited independently with query . The verifier does not see the full golden document set, which prevents it from treating the irrelevant document as harmless merely because better evidence exists elsewhere. 
+
+Purpose : ensure that irrelevant_docs preserve realistic topical noise without accidentally con-taining evidence that supports, partially supports, or directly reveals the golden answer.  
+
+> Work in Progress 21 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+Check : for each document, the verifier determines whether it contains any answer-bearing span, paraphrase of a golden evidence point, or metadata cue sufficient to infer the golden answer. 
+
+Reject if : an irrelevant_doc alone can support the golden answer, provides a required intermediate fact, duplicates a golden evidence span, or conflicts with the “irrelevant” label in a way that would make document labels non-auditable. Depending on severity, either the document is removed from the pool or the entire item is discarded. 
+
+C4: Distractor challenge validation. The fourth view tests whether the synthesized distractors create a controlled evidence-discrimination challenge. 
+
+Input : query ⊕ distractor_docs , plus each distractor’s audit fields such as distractor_type ,
+
+conflict_hint , and discriminating_constraint . Golden documents are withheld in this view. 
+
+Purpose : validate adversarial strength and structural validity. A useful distractor should be plausible enough to tempt shallow keyword matching, but invalid for reasons that are recoverable from the query constraints, metadata, or internal content. 
+
+Check : the verifier inspects whether the distractor appears topically relevant, whether it would plausibly mislead a careless model, and whether its invalidity is explained by a query-constrained difference from the golden evidence. 
+
+Reject if : the distractor is obviously irrelevant, contradicts the query on an unconstrained dimension, requires private annotation knowledge to reject, directly leaks that it is artificial, or is so strong that it would make the benchmark underdetermined without access to unavailable evidence. Distractors that merely cause wrong answers through arbitrary hallucinated facts are discarded rather than counted as valid adversarial evidence. 
+
+Final acceptance rule. An item enters the benchmark pool only if it passes all four filtering views. C1 guarantees that the intended evidence is sufficient; C2 reduces memorization and shortcut leakage; C3 preserves the distinction between supporting evidence and retrieval noise; and C4 ensures that distractors are both challenging and interpretable. The accepted record therefore contains a query, golden answer, supporting documents, natural irrelevant documents, adversarial distractors, and audit fields whose roles are explicitly separated before the downstream evaluation protocol is applied.  
+
+> Work in Progress 22 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+## B. Human Validation of Dataset Quality 
+
+Because stages of our benchmark construction pipeline rely on LLMs, we conduct a stratified human audit to assess residual defects among items accepted by the automated pipeline. The audit is intended as an independent, diagnostic quality check rather than an exhaustive item-by-item acceptance, correction, or re-annotation stage. Following the spirit of prior benchmark validation protocols [ 6, 16 ], it evaluates the precision of the Stage-C-accepted candidate pool by examining the structural properties most relevant to downstream evaluation: answerability, human-visible shortcut leakage, document-label correctness, distractor validity, and overall item usability. Because rejected candidates are not included in the audit, this analysis identifies residual false acceptances but does not measure false rejections or the recall of the filtering pipeline. 
+
+B.1. Validation Setup Sampling strategy. The audit set is drawn exclusively from the Stage-C-accepted candidate pool. We use stratified sampling over capability mode, language, domain, and reasoning complexity, covering all six shaping modes. Specifically, we allocate approximately proportional quotas by mode according to the per-mode distribution in Table 6, while retaining at least five audited items for each mode. Within each mode, we further account for language ( zh /en , following the 268/161 bilingual distribution of the candidate pool), domain, the number of independent information points, and the number of distractor documents. We audit 100 accepted items in total. The same 100 items are evaluated across all validation dimensions , enabling cross-dimensional analysis at the item level. The two document-level dimensions— irrelevant-label correctness and distractor validity—are first assessed for each corresponding document and then aggregated into item-level judgments as described below. Because every audited item has already passed Stage A query screening and the Stage C rejection filters, all sampled items carry a positive pipeline decision by construction. The audit is not used to rerun or retroactively modify the Stage C filters. 
+
+Annotators and calibration. Each sampled item is independently reviewed by three bilingual Chinese– English graduate-student researchers with prior experience in search-based question answering and evidence verification. Before the formal audit, all annotators complete a calibration round on a disjoint 20-item pilot set sampled using the same stratification procedure. They first annotate the pilot items independently, then discuss disagreements with a fourth researcher acting as an adjudicator, and finally establish a written codebook specifying the decision criteria for each validation dimension. During the formal audit, annotators follow this codebook independently and do not communicate with one another. To reduce anchoring to the pipeline’s internal reasoning, all pipeline-generated explanatory fields are withheld during annotation. Annotators are shown the query, golden answer, model-visible docu-ment contents and metadata, and the pipeline-assigned document groups, including golden_docs ,
+
+irrelevant_docs , and distractor_docs . However, free-text fields generated by the construc-tion pipeline—including conflict_hint , discriminating_constraint , target_info_point ,
+
+distractor_type , and all Stage-A/B/C reasoning traces—are hidden from the annotation interface. Annotators therefore assess each property against the written codebook without access to the pipeline’s stated justification. For irrelevant-label correctness and distractor validity, each annotator first evaluates every corresponding  
+
+> Work in Progress 23 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+document independently. These document-level judgments are then collapsed into an item-level label: an item is assigned a positive label only when all audited documents in the corresponding group satisfy the required property. For every binary validation dimension, the final human judgment is determined by majority vote among the three annotators. 
+
+B.2. Validation Dimensions Answerability. Annotators determine whether the query can be answered using the provided golden_docs .A positive judgment requires that the golden answer be semantically supported by identifiable evidence in the golden documents and that no essential information be missing. An item is marked negative when the answer is unsupported, ambiguous, excessively specific, or dependent on information outside the designated golden documents. 
+
+Human-visible shortcut leakage. Annotators inspect the query for surface-level cues that could reveal the answer without requiring evidence-based reasoning, such as copied answer tokens, unique source identifiers, overly specific numerical values, or unnatural phrasing inherited from the source documents. This judgment does not attempt to determine whether a model has memorized the answer during pre-training, which cannot be reliably assessed by human inspection of the query. Instead, it complements the C2 query-only test: C2 evaluates whether a strong model can recover the answer without documents, whereas the human audit examines whether the query itself contains observable shortcut cues that would make the task artificially easy. 
+
+Document-label correctness. For each irrelevant_doc , annotators assess whether the document is genuinely non-supporting. A valid irrelevant document may be topically related to the query and resemble realistic retrieval noise, but it must not directly support the golden answer or provide an intermediate fact required to derive it. This dimension evaluates the boundary between golden_docs 
+
+and irrelevant_docs , which is essential for controlled comparison under both full-context and partial-context settings. 
+
+Distractor validity. For each distractor_doc , annotators assess whether the document is plausible, query-relevant, and invalid for an observable and auditable reason. A valid distractor should conflict with the golden evidence along a dimension constrained by the query, such as time, entity, version, numerical scope, source authority, or publication date. Using only the query, golden answer, and model-visible document content and metadata, annotators independently determine why the document should be rejected and which query constraint it violates. The pipeline-generated conflict_hint , discriminating_constraint , and distractor-type anno-tations remain hidden throughout this assessment. The audit therefore tests whether a genuine query-constrained rejection reason is visible in the item itself, rather than whether the pipeline’s internal explanation appears coherent. Distractors are marked invalid when they are obviously irrelevant, arbi-trarily fabricated, indistinguishable from valid evidence, or rejectable only through private annotation information unavailable to an evaluated model. 
+
+𝑦 answerable  
+
+> 𝑖
+
+∧ 𝑦 shortcut -free  
+
+> 𝑖
+
+∧ 𝑦 irrelevant -correct  
+
+> 𝑖
+
+∧ 𝑦 distractor -valid  
+
+> 𝑖
+
+. 
+
+> Work in Progress 24 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+Table 4: Human validation dimensions and audited pipeline properties. 
+
+Dimension Pipeline property Human decision Answerability C1 / golden_docs supported vs. unsupported Shortcut leakage (human-visible) Stage A query screening (C2 complement) no shortcut vs. shortcut Irrelevant label C3 / irrelevant_docs non-supporting vs. supporting Distractor validity C4 / distractor_docs valid vs. invalid Overall usability final item acceptance usable vs. unusable 
+
+B.3. Confirmation Metrics and Error Analysis 
+
+1
+
+𝑁 𝑑 𝑁 𝑑 ∑︁ 
+
+> 𝑖 =1
+
+ˆ𝑦 ,human  
+
+> 𝑖,𝑑
+
+.
+
+Its complement, 
+
+1 − Confirm 𝑑 ,
+
+is the observed residual defect rate for dimension (d) in the audited Stage-C-accepted sample. Because rejected candidates are not audited, this quantity estimates residual false acceptances among accepted items but does not measure false rejections or filtering recall. For the human-visible shortcut dimension, a positive pipeline decision corresponds to passing the Stage A shortcut-cue screening rather than the C2 non-memorability test. The human audit and C2 are complementary: the former evaluates observable leakage in the query wording, whereas the latter tests whether a model can recover the answer without documentary evidence. 
+
+1
+
+𝑁 
+
+> 𝑁
+
+∑︁ 
+
+> 𝑖 =1
+
+∑︀  
+
+> 𝑗
+
+𝑛 𝑖𝑗 (𝑛 𝑖𝑗 − 1) 
+
+𝑛 (𝑛 − 1) ,
+
+where (n=3) is the number of annotators and ( 𝑛 𝑖𝑗 ) is the number assigning category 
+
+(𝑗 ∈ positive , negative )
+
+to item (i). This metric summarizes descriptive inter-annotator consistency independently of the pipeline label. Because it is not chance-corrected, however, it may remain sensitive to the prevalence of positive judgments and should not be interpreted as a prevalence-adjusted reliability coefficient. We also report exact binomial 95% confidence intervals for the confirmation rates. Majority-negative judgments are operationally treated as potential residual defects. We inspect these cases and categorize the observed failure patterns, including insufficient evidence localization, answer ambiguity, human-visible shortcut leakage, mislabeled irrelevant documents, and weak or unauditable distractors. Table 5 reports the human confirmation results for each validation dimension. The high answerability confirmation rate indicates that most golden answers are sufficiently supported by the designated evidence. The shortcut-free confirmation rate suggests that observable leakage cues in the query are uncommon, complementing the C2 model-based non-memorability filter. The irrelevant-label results support the intended separation between supporting evidence and natural retrieval noise, while the distractor-validity                                      
+
+> Work in Progress 25 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+> Dimension Agree 95% CI 3/3 2/3 Disagree Pairwise Answerability 97/100 [0.915, 0.994] 89 830.940 Shortcut-free query 96/100 [0.901, 0.989] 88 840.933 Irrelevant label 95/100 [0.887, 0.984] 86 950.927 Distractor validity 96/100 [0.901, 0.989] 87 940.933 Overall usability 94/100 [0.874, 0.978] 84 10 60.920
+
+Table 5: Human confirmation results on the same 100 items sampled from the Stage-C-accepted candidate pool. Confirm denotes the proportion receiving a majority-positive human judgment. Pairwise denotes mean raw pairwise agreement among the three annotators. results indicate that most adversarial documents can be rejected through observable, query-constrained evidence rather than arbitrary contradiction. Raw pairwise agreement remains above 0.90 for each primary dimension, indicating that annotators generally apply the validation criteria consistently. The remaining majority-negative cases expose residual failure patterns involving evidence localization, ambiguous query wording, document mislabeling, or weak distractor construction. 
+
+B.4. Use of Human Feedback 
+
+Human validation serves as a diagnostic quality assessment of the Stage-C-accepted candidate pool. All confirmation rates and residual defect rates are computed on the complete audited sample before any human-flagged items are removed. An audited item is excluded from the final released benchmark if it receives a majority-negative judgment on at least one required quality dimension. Such items are removed without manual correction, regeneration, or re-annotation in place. Because the reported rates are computed before these exclusions, they characterize the quality of the pre-audit Stage-C-accepted candidate pool. They should not be interpreted as an unbiased estimate of the residual defect rate of the post-audit released benchmark, because the specific defects identified during the audit are subsequently removed. Estimating the residual defect rate of the released benchmark would require a separate audit sample drawn after this removal. At the aggregate level, recurring failure patterns are traced back to their corresponding construction stages and used to improve future pipeline iterations rather than to patch individual items. Answerability and shortcut issues inform Stage A synthesis and query-screening constraints; weak or arbitrary distractors inform Stage B generation rules; and mislabeled document groups inform Stage C rejection criteria. Human validation therefore provides both a transparent estimate of residual defects in the automated acceptance pool and actionable evidence for improving the controllable synthesis pipeline. 
+
+## C. Evaluation Details 
+
+◇ Scoring Protocol and Model Roles. We explicitly separate models used for benchmark construction from models used for evaluation. During data construction, Stage A uses a strong synthesis model (gpt-5.2 ) to reverse-engineer queries, golden answers, supporting documents, and reasoning traces from retrieved evidence. Stage B uses a generator from a different model family ( Claude-Opus-4.6 ) to  
+
+> Work in Progress 26 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+synthesize adversarial distractors, reducing single-model self-consistency bias between gold construction and distractor construction. Stage C further applies multiple verifier models from different families to filter structurally flawed items, improving the reliability and diversity of the final benchmark pool. For downstream evaluation, we evaluate a panel of target models spanning both open- and closed-weight families, including doubao-seed-2.0-pro , qwen3.7-plus , hunyuan-3-preview , glm-5.1 ,
+
+minimax-m2.7 , deepseek-v4-pro , gemini-3.1-pro-preview , kimi-k2.6 , gpt-5-mini ... in Setting I. Setting II uses the subset of this panel reported in Table 2. Model outputs are judged by a separate held-out judge model that is never included in the target-model panel, avoiding direct self-evaluation. For each model and each document-order variant, we draw 𝑁 = 3 repeated samples. Each response is independently judged for answer correctness, from which we report Pass@1 and Pass@3; when a single binary decision is needed for auxiliary analysis, we use the majority label across the three runs. Per-mode and per-setting scores are then aggregated over the corresponding item subsets. To keep the evaluation faithful to realistic retrieval, oracle construction-time annotations such as authority_label , verifier decisions, and internal evidence labels are withheld from the evaluated models and used only for offline analysis. The evaluated model observes only the fields that would normally be returned by a search backend: title , url , site_name , publish_time , and content .
+
+Setting I data. For the full-context evaluation, we use the final dataset produced by the complete synthe-sis pipeline. This pool contains 429 items across the six shaping modes used in the main experiments. Each record includes the synthesized query , golden_answer , golden_docs , irrelevant_docs ,
+
+distractor_docs , evidence_spans , reasoning_steps , and construction-time verification meta-data. On average, each item contains 2.76 golden documents, 1.56 irrelevant documents, and 4.54 distractor documents, yielding 8.86 context documents per item. The pool is bilingual, with 268 Chinese items and 161 English items. Table 6 reports the per-mode composition.     
+
+> Mode #Items #Golden #Irrelevant #Distractor
+
+plain 42 2.45 1.31 4.83 
+
+authority 31 2.87 1.94 5.16 
+
+publish_time 86 2.80 1.58 5.50 
+
+intra_doc_consistency 94 2.87 1.57 2.70 
+
+multi_hop 79 2.68 1.48 4.73 
+
+sufficiency 97 2.76 1.59 4.97 Overall 429 2.76 1.56 4.54 
+
+Table 6: Setting I data composition. Document-count columns report corpus-level averages over the finalized dataset. Every evaluated model in setting I, receives the complete document pool of an item, i.e., query ⊕
+
+(golden_docs ∪ distractor_docs ∪ irrelevant_docs ), and search is disabled. We construct three input-order variants for each item: golden_first , golden_mid , and golden_last . These variants keep the document set fixed while changing only the position of the supporting evidence, allowing us to measure synthesis and verification robustness independently of retrieval noise. 
+
+Setting II data. For the partial-context search-enabled evaluation, we further derive a smaller manually curated subset from the Setting I pool. We first restrict candidates to the two modes where missing- 
+
+> Work in Progress 27 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+evidence recovery is structurally meaningful: multi_hop and sufficiency . We then manually inspect these Setting I candidates and retain 33 items for which removing one or more golden documents creates a genuine information gap: the remaining context should be insufficient for a complete answer, while the withheld evidence should still be recoverable through a well-formed search query over the item-level document pool. It should be noted that the positional sequence of all documents contained in the context of every sample remains consistent during testing of different models .For each Setting II item, the initial context contains a partial subset of golden_docs , together with the complete distractor_docs and irrelevant_docs . At least one required golden evidence document or evidence point is withheld from the initial context. The search backend is restricted to the current item’s document pool, so the task remains reproducible and does not depend on live web retrieval. This design makes Setting II a targeted diagnostic set for search decision-making: the model must recognize evidence insufficiency, decide to search rather than answer prematurely, formulate a query that can retrieve the missing evidence, and integrate the returned evidence with the partial context.         
+
+> Setting #Items Modes Main purpose Setting I 429 all six modes full-context synthesis and verification Setting II 33
+
+multi_hop , sufficiency missing-evidence recovery with search 
+
+Table 7: Evaluation data used in the two disentangled settings. 
+
+C.1. Evaluation Prompts and Message Formats 
+
+We use the same research-assistant persona and citation convention across both settings. Documents expose only the fields available to the evaluated model— doc_id , title, URL, site name, publication time (regular expression parsing), and content (snippet)—and never expose construction-time labels such as golden , distractor , authority_label , or withheld . Each document body is truncated to at most 4,000 characters. The two settings differ only in document completeness, tool availability, and the resulting chat-message structure. 
+
+Setting I: full-context prompt. Search tools are not supplied. For each document-order variant, the model receives exactly two messages: 
+
+[{"role": "system", "content": "You are a helpful research assistant. Answer the user’s question based on the retrieved documents provided below. Base your answer on the information contained in these documents. When you use information from a document, cite its doc_id in square brackets, e.g. [web1]. Give a clear, accurate, and concise final answer." }, {"role": "user",  
+
+> Work in Progress 28 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+"content": "Question: {query} Retrieved documents: {serialized_documents} Answer the question above, citing the doc_ids you used." }]
+
+Here, serialized_documents contains the complete document pool in the order specified by golden_first ,
+
+golden_mid (golden_middle in the implementation), or golden_last . A document is serialized as: 
+
+Document {index} [{doc_id}] | title: {title} | site: {site_name} | url: {url} | publish_time: {publish_time} {content} 
+
+Missing metadata fields are omitted. No oracle document type is included in either the header or body. 
+
+Setting II: partial-context, search-enabled prompt. The system prompt is: 
+
+You are a helpful research assistant. You may call the ‘search(query)‘ tool when it helps you answer the user. Base your final answer on the documents you have. When you use information from a document, cite its doc_id in square brackets, e.g. [web1]. Give a clear, accurate, and concise final answer. 
+
+The exposed tool has one required natural-language argument: 
+
+{"type": "function", "function": { "name": "search", "description": "Search the web for documents relevant to the user’s question. Returns a JSON object with a ‘docs‘ array; each doc has ‘doc_id‘, ‘title‘, ‘url‘, ‘site_name‘, ‘publish_time‘, and ‘content‘.", "parameters": { "type": "object", "properties": { "query": { "type": "string", "description": "The search query in natural language."  
+
+> Work in Progress 29 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+}}, "required": ["query"], "additionalProperties": false }}}
+
+To present the initial partial context through the same interface as later retrieval results, the evaluation harness injects an initial tool exchange. This harness-generated call uses the original query and does not count toward the model’s search budget. The initial message sequence is: 
+
+[{"role": "system", "content": "{system_prompt_above}"}, {"role": "user", "content": "{query} When answering, cite the doc_ids you used in square brackets (e.g. [web1])." }, {"role": "assistant", "content": null, "tool_calls": [{ "id": "{call_id}", "type": "function", "function": { "name": "search", "arguments": "{\"query\": \"{query}\"}" }}] }, {"role": "tool", "tool_call_id": "{call_id}", "content": "{\"query\": \"{query}\", \"docs\": [ {\"doc_id\": \"...\", \"title\": \"...\", \"url\": \"...\", \"site_name\": \"...\", \"publish_time\": \"...\", \"content\": \"...\"} ]}" }] 
+
+> Work in Progress 30 Delegation Intelligence in Deep Search: A Controllable Framework for Disentangled Capability Diagnosis
+
+The initial tool payload contains the retained golden documents together with all distractor and irrelevant documents, in a reproducibly shuffled order; withheld golden documents are absent. After reading this context, the model may either return a final textual answer or issue search({"query": "..."}) . For every model-initiated search, the harness retrieves top-𝑘 documents from the item-level closed document pool and appends: 
+
+{"role": "assistant", "content": null, "tool_calls": [{"id": "{call_id}", "type": "function", "function": {"name": "search", "arguments": "{\"query\": \"{refined_query}\"}"}}]} {"role": "tool", "tool_call_id": "{call_id}", "content": "{\"query\": \"{refined_query}\", \"docs\": [...]}"} 
+
+Retrieved documents are assigned run-local public identifiers rs1 , rs2 , and so on, while their original identifiers remain hidden from the model. The interaction continues until the model commits a textual answer or reaches its search budget. In the latter case, tools are disabled and the following neutral user message requests a final answer: 
+
+Please give your final answer now based on the information you have. Remember to cite the doc_ids you used in square brackets (e.g. [web1]).
